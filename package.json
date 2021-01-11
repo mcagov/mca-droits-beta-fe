@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode development --config webpack.server.config.js && webpack --mode development --config webpack.config.js",
-    "start": "node ./dist/server.min.js"
+    "start": "node ./dist/server.js"
   },
   "repository": {
     "type": "git",

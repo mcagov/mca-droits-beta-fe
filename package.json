@@ -43,6 +43,6 @@
     "nunjucks": "^3.2.2"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/ctidigital/mca-droits-beta"
+    "registry": "https://npm.pkg.github.com/ctidigital/"
   }
 }

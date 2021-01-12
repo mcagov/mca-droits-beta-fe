@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ctidigital/mca-droits-beta.git"
+    "url": "https://github.com/ctidigital/mca-droits-beta.git"
   },
   "author": "CTI Digital",
   "license": "ISC",

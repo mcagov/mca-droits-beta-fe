@@ -41,5 +41,8 @@
     "express": "^4.17.1",
     "govuk-frontend": "^3.10.2",
     "nunjucks": "^3.2.2"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@ctidigital"
   }
 }

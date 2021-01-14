@@ -4,19 +4,21 @@ const PORT = process.env.PORT || 5000
 
 // NPM dependencies
 const express = require('express')
-const startRoute = require('./app/routes/start')
-const removedPropertyCheckRoute = require('./app/routes/removed-property-check')
+const startRoute = require('./routes/start')
+const removedPropertyCheckRoute = require('./routes/removed-property-check')
 const path = require('path')
 const nunjucks = require('nunjucks')
 
 // Local dependencies
-const config = require('./app/src/config.js')
+const config = require('./app/scripts/config.js')
 
 const app = express()
 
 app.use(express.static('dist'))
 // Redirect any asset requests to the relevant location in the gov uk frontend kit
 app.use('/assets', express.static('./node_modules/govuk-frontend/govuk/assets'))
+
+app.set('views','./app/views');
 
 // Nunjucks config
 app.set("view engine", "html")

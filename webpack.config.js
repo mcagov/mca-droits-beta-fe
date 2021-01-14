@@ -1,7 +1,6 @@
 /* eslint-disable */
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtraWatchWebpackPlugin = require('extra-watch-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -74,13 +73,6 @@ module.exports = (env) => {
         host: 'localhost',
         port: 3000,
         server: { baseDir: ['dist'] },
-      }),
-      new ExtraWatchWebpackPlugin({
-        dirs: [
-          'app/templates/pages',
-          'app/templates/partials',
-          'app/templates/components'
-        ]
       }),
       new CopyWebpackPlugin({
         patterns: [{ from: 'assets/**/*', to: '.', noErrorOnMissing: true }]

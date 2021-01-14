@@ -1,1 +1,8 @@
-@import 'node_modules/govuk-frontend/govuk/all';
+// global styles for <a> and <p> tags
+$govuk-global-styles: true;
+
+@import '~govuk-frontend/govuk/all';
+
+p {
+  color: red !important;
+}

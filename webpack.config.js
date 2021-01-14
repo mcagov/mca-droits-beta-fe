@@ -5,8 +5,9 @@ const ExtraWatchWebpackPlugin = require('extra-watch-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
-const generatePages = require('./app/templates/generate-pages');
+//const generatePages = require('./app/views/generate-pages');
 
 const PATHS = {
   src: path.join(__dirname, './app'),
@@ -64,14 +65,15 @@ module.exports = (env) => {
     },
     devtool: 'source-map',
     plugins: [
-      ...generatePages.generatePages(path.resolve(__dirname, PATHS.views)),
+      //...generatePages.generatePages(path.resolve(__dirname, PATHS.views)),
+      new CleanWebpackPlugin(),
       new MiniCssExtractPlugin({
         filename: 'assets/css/[name].css'
       }),
       new BrowserSyncPlugin({
         host: 'localhost',
         port: 3000,
-        server: { baseDir: ['dist'] }
+        server: { baseDir: ['dist'] },
       }),
       new ExtraWatchWebpackPlugin({
         dirs: [

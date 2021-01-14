@@ -8,7 +8,7 @@ module.exports = {
   serviceName: 'Report wreck and salvage',
 
   // Default port that app runs on
-  port: '3000',
+  port: '5000',
 
   // Enable or disable password protection on production
   useAuth: 'true',

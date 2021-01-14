@@ -1,6 +1,6 @@
 // Core dependencies
 const fs = require('fs')
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 5000
 
 // NPM dependencies
 const express = require('express')

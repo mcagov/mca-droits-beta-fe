@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="en" class="govuk-template ">
-  <head>
-    <title>Example - GOV.UK</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  </head>
-  <body>
+  {% include "app/templates/partials/head.njk" %}  
     <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
       <div class="govuk-accordion__section ">
         <div class="govuk-accordion__section-header">
@@ -55,5 +49,4 @@
         </div>
       </div>
     </div>
-  </body>
-</html>
+  {% include "app/templates/partials/footer.njk" %} 

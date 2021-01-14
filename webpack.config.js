@@ -1,19 +1,10 @@
 /* eslint-disable */
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtraWatchWebpackPlugin = require('extra-watch-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
-const generatePages = require('./app/templates/generate-pages');
-
-const PATHS = {
-  src: path.join(__dirname, './app'),
-  dist: path.join(__dirname, './dist'),
-  views: path.join(__dirname, './app/templates/pages'),
-  assets: 'assets/'
-};
 
 module.exports = (env) => {
   const devMode = !env || !env.production;
@@ -64,7 +55,6 @@ module.exports = (env) => {
     },
     devtool: 'source-map',
     plugins: [
-      ...generatePages.generatePages(path.resolve(__dirname, PATHS.views)),
       new MiniCssExtractPlugin({
         filename: 'assets/css/[name].css'
       }),
@@ -72,13 +62,6 @@ module.exports = (env) => {
         host: 'localhost',
         port: 3000,
         server: { baseDir: ['dist'] }
-      }),
-      new ExtraWatchWebpackPlugin({
-        dirs: [
-          'app/templates/pages',
-          'app/templates/partials',
-          'app/templates/components'
-        ]
       }),
       new CopyWebpackPlugin({
         patterns: [{ from: 'assets/**/*', to: '.', noErrorOnMissing: true }]

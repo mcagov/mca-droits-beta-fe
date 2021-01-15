@@ -3,7 +3,7 @@ import { Router } from 'express';
 const route = Router();
 
 export default function (app) {
-  app.use('/removed-property-check', route);
+  app.use('/report/removed-property-check', route);
 
   route.get('/', function (req, res, next) {
     res.render('report/removed-property-check.html');

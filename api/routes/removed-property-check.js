@@ -6,7 +6,7 @@ export default function (app) {
   app.use('/removed-property-check', route);
 
   route.get('/', function (req, res, next) {
-    res.render('pages/removed-property-check.html');
+    res.render('report/removed-property-check.html');
   });
 
   route.post('/', function (req, res) {

@@ -6,6 +6,6 @@ export default function (app) {
   app.use('/', route);
 
   route.get('/', function (req, res, next) {
-    res.render('pages/start.html');
+    res.render('report/start.html');
   });
 }

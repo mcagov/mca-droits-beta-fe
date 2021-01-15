@@ -29,10 +29,10 @@
 {% from "govuk/components/textarea/macro.njk"         import govukTextarea %}
 {% from "govuk/components/warning-text/macro.njk"     import govukWarningText %}
 {% from 'govuk/components/phase-banner/macro.njk'     import govukPhaseBanner %}
-{% from 'partials/address.njk'                        import address %}
+{% from 'includes/address.njk'                        import address %}
 
 {% block head %}
-  {% include "partials/head.html" %}
+  {% include "includes/head.html" %}
 {% endblock %}
 
 {% block pageTitle %}
@@ -40,7 +40,7 @@
 {% endblock %}
 
 {% block header %}
-  {% include "partials/cookie-banner.html" %}
+  {% include "includes/cookie-banner.html" %}
   {# Set serviceName in config.js. #}
   {{ govukHeader({
     homepageUrl: "/",
@@ -77,7 +77,7 @@
 
 {% block bodyEnd %}
   {% block scripts %}
-    {% include "partials/scripts.html" %}
+    {% include "includes/scripts.html" %}
     {% block pageScripts %}{% endblock %}
   {% endblock %}
 {% endblock %}

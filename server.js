@@ -1,46 +1,51 @@
-// Core dependencies
-const fs = require('fs')
-const PORT = process.env.PORT || 5000
-
 // NPM dependencies
-const express = require('express')
-const startRoute = require('./routes/start')
-const removedPropertyCheckRoute = require('./routes/removed-property-check')
-const path = require('path')
-const nunjucks = require('nunjucks')
+import express from 'express';
+import bodyParser from 'body-parser';
+import nunjucks from 'nunjucks';
+import routes from './api';
+
+// Core dependencies
+const PORT = process.env.PORT || 5000;
 
 // Local dependencies
-const config = require('./app/js/config.js')
+import config from './app/js/config.js';
 
-const app = express()
+const app = express();
 
-app.use(express.static('dist'))
+app.use(
+  bodyParser.urlencoded({
+    extended: false
+  })
+);
+
+app.use(bodyParser.json());
+
+app.use(express.static('dist'));
+
 // Redirect any asset requests to the relevant location in the gov uk frontend kit
-app.use('/assets', express.static('./node_modules/govuk-frontend/govuk/assets'))
+app.use(
+  '/assets',
+  express.static('./node_modules/govuk-frontend/govuk/assets')
+);
 
-app.set('views','./app/views');
+app.set('views', './app/views');
 
 // Nunjucks config
-app.set("view engine", "html")
+app.set('view engine', 'html');
 
-nunjucks.configure([
-  "node_modules/govuk-frontend/",
-  'app/views/'
-],
-{
+nunjucks.configure(['node_modules/govuk-frontend/', 'app/views/'], {
   autoescape: false,
   express: app,
-  watch:true
-})
+  watch: true
+});
 
 // Add variables that are available in all views
-app.locals.serviceName = config.serviceName
+app.locals.serviceName = config.serviceName;
 
-// Routes - may need importing from a main 'routes' script, rather than individually?
-app.use('/', startRoute)
-app.use('/removed-property-check', removedPropertyCheckRoute)
-        
+// Load API routes
+app.use('/', routes());
+
 app.listen(PORT, () => {
-    console.log(`App listening on ${PORT} - url: http://localhost:${PORT}`)
-    console.log('Press Ctrl+C to quit.')
-})
+  console.log(`App listening on ${PORT} - url: http://localhost:${PORT}`);
+  console.log('Press Ctrl+C to quit.');
+});

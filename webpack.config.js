@@ -6,14 +6,6 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
-//const generatePages = require('./app/views/generate-pages');
-
-const PATHS = {
-  src: path.join(__dirname, './app'),
-  dist: path.join(__dirname, './dist'),
-  views: path.join(__dirname, './app/templates/pages'),
-  assets: 'assets/'
-};
 
 module.exports = (env) => {
   const devMode = !env || !env.production;
@@ -21,7 +13,7 @@ module.exports = (env) => {
   return {
     mode: devMode ? 'development' : 'production',
     entry: {
-      main: './app/src/index.js'
+      main: './app/js/index.js'
     },
     output: {
       path: path.join(__dirname, 'dist'),
@@ -64,7 +56,6 @@ module.exports = (env) => {
     },
     devtool: 'source-map',
     plugins: [
-      //...generatePages.generatePages(path.resolve(__dirname, PATHS.views)),
       new CleanWebpackPlugin(),
       new MiniCssExtractPlugin({
         filename: 'assets/css/[name].css'
@@ -72,7 +63,8 @@ module.exports = (env) => {
       new BrowserSyncPlugin({
         host: 'localhost',
         port: 3000,
-        server: { baseDir: ['dist'] },
+        proxy: 'http://localhost:5000/',
+        files: ['dist/css/*.css', 'dist/js/*.js']
       }),
       new CopyWebpackPlugin({
         patterns: [{ from: 'assets/**/*', to: '.', noErrorOnMissing: true }]

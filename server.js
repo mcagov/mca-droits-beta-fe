@@ -10,7 +10,7 @@ const path = require('path')
 const nunjucks = require('nunjucks')
 
 // Local dependencies
-const config = require('./app/scripts/config.js')
+const config = require('./app/js/config.js')
 
 const app = express()
 

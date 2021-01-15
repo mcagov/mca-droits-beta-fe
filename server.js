@@ -29,7 +29,8 @@ nunjucks.configure([
 ],
 {
   autoescape: false,
-  express: app
+  express: app,
+  watch:true
 })
 
 // Add variables that are available in all views

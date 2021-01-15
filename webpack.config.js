@@ -64,7 +64,7 @@ module.exports = (env) => {
         host: 'localhost',
         port: 3000,
         proxy: 'http://localhost:5000/',
-        files: ['dist/css/*.css', 'dist/js/*.js']
+        files: ['dist/css/*.css', 'dist/js/*.js', 'app/views/**/*.html']
       }),
       new CopyWebpackPlugin({
         patterns: [{ from: 'assets/**/*', to: '.', noErrorOnMissing: true }]

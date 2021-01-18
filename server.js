@@ -11,15 +11,17 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 
+// Support for parsing data in POSTs
+app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
-    extended: false
+    extended: true
   })
 );
 
-app.use(bodyParser.json());
-
 app.use(express.static('dist'));
+
+app.set('trust proxy', 1); // needed for secure cookies on heroku
 
 // Redirect any asset requests to the relevant location in the gov uk frontend kit
 app.use(
@@ -46,9 +48,12 @@ app.set('views', './app/views');
 const sessionName = Buffer.from(config.serviceName, 'utf8').toString('hex');
 const sessionOptions = {
   secret: sessionName,
+  resave: false,
+  saveUninitialized: true,
+  unset: 'destroy',
   cookie: {
     maxAge: 1000 * 60 * 60 * 4, // 4 hours
-    secure: true
+    secure: false
   }
 };
 
@@ -65,11 +70,10 @@ app.use(
 // Automatically store all data users enter
 app.use(autoStoreData);
 
-// Clear all data in session if you open /prototype-admin/clear-data
-app.post('/prototype-admin/clear-data', function (req, res) {
-  req.session.data = {};
-  res.render('prototype-admin/clear-data-success');
-});
+// Redirect all POSTs to GETs - this allows users to use POST for autoStoreData
+// app.post(/^\/([^.]+)$/, function (req, res) {
+//   res.redirect('/' + req.params[0]);
+// });
 
 // Load API routes
 app.use('/', routes());

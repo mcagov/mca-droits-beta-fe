@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+
+{% block pageTitle %}
+  Date of find
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "includes/phase-banner.html" %}
+  <a class="govuk-back-link" href="/report/removed-property-check">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <form class="form" action="/report/personal" method="post">
+
+        {{ govukDateInput({
+          id: "wreck-find-date",
+          namePrefix: "wreck-find-date",
+          fieldset: {
+            legend: {
+              text: "When did you find the wreck material?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          hint: {
+            text: "For example, 12 11 2019"
+          },
+          items: [
+            {
+              name: "day",
+              classes: "govuk-input--width-2",
+              value: data["wreck-find-date-day"]
+            },
+            {
+              name: "month",
+              classes: "govuk-input--width-2",
+              value: data["wreck-find-date-month"]
+            },
+            {
+              name: "year",
+              classes: "govuk-input--width-4",
+              value: data["wreck-find-date-year"]
+            }
+          ]
+        }) }}
+
+        <button class="govuk-button" data-module="govuk-button">Continue</button>
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

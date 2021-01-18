@@ -4,7 +4,7 @@ import nunjucks from 'nunjucks';
 
 import routes from './api';
 import sessionInMemory from 'express-session';
-import { autoStoreData, addCheckedFunction } from './utils';
+import { autoStoreData, addCheckedFunction, matchRoutes } from './utils';
 import config from './app/js/config.js';
 
 const PORT = process.env.PORT || 5000;
@@ -70,13 +70,18 @@ app.use(
 // Automatically store all data users enter
 app.use(autoStoreData);
 
-// Redirect all POSTs to GETs - this allows users to use POST for autoStoreData
-// app.post(/^\/([^.]+)$/, function (req, res) {
-//   res.redirect('/' + req.params[0]);
-// });
-
 // Load API routes
 app.use('/', routes());
+
+app.get(/^([^.]+)$/, function (req, res, next) {
+  matchRoutes(req, res, next);
+});
+// Redirect all POSTs to GETs - this allows users to use POST for autoStoreData
+app.post(/^\/([^.]+)$/, function (req, res) {
+  console.log(req.params[0]);
+
+  res.redirect('/' + req.params[0]);
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on ${PORT} - url: http://localhost:${PORT}`);

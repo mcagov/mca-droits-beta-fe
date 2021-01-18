@@ -20,6 +20,9 @@ module.exports = (env) => {
       filename: 'assets/js/[name].js',
       library: '[name]Module'
     },
+    resolve: {
+      extensions: ['js', 'json', 'scss', 'css', 'njk'],
+    },
     module: {
       rules: [
         {
@@ -35,7 +38,11 @@ module.exports = (env) => {
           test: /\.js$/,
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
+            presets: ['@babel/preset-env',
+                      {
+                        'plugins': ['@babel/plugin-proposal-class-properties']
+                      }
+                    ]
           }
         },
         {

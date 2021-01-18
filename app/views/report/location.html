@@ -182,12 +182,12 @@
                 {
                   value: "E",
                   text: "E",
-                  <!--selected: checked("location-longitude-decimal-minutes-direction", "E")-->
+                  selected: checked("location-longitude-decimal-minutes-direction", "E")
                 },
                 {
                   value: "W",
                   text: "W",
-                  <!--selected: checked("location-longitude-decimal-minutes-direction", "W")-->
+                  selected: checked("location-longitude-decimal-minutes-direction", "W")
                 }
               ]
             }) }}
@@ -267,12 +267,12 @@
                 {
                   value: "N",
                   text: "N",
-                  <!--selected: checked("location-latitude-degrees-direction", "N")-->
+                  selected: checked("location-latitude-degrees-direction", "N")
                 },
                 {
                   value: "S",
                   text: "S",
-                  <!--selected: checked("location-latitude-degrees-direction", "S")-->
+                  selected: checked("location-latitude-degrees-direction", "S")
                 }
               ]
             }) }}
@@ -347,12 +347,12 @@
                 {
                   value: "E",
                   text: "E",
-                  <!--selected: checked("location-longitude-degrees-direction", "E")-->
+                  selected: checked("location-longitude-degrees-direction", "E")
                 },
                 {
                   value: "W",
                   text: "W",
-                  <!--selected: checked("location-longitude-degrees-direction", "W")-->
+                  selected: checked("location-longitude-degrees-direction", "W")
                 }
               ]
             }) }}
@@ -362,7 +362,7 @@
         {% endset -%}
 
         {% set mapInput %}
-          <div class="govuk-!-margin-bottom-5">
+          <div class="govuk-!-margin-bottom-5" data-js="editable-map">
             <div id="location-map-input" class="row-prototype-map-select govuk-!-margin-bottom-1"></div>
 
             <ul class="leaflet-legend govuk-!-margin-top-0">
@@ -427,7 +427,7 @@
             hint: {
               html: "For example <em>53.76385° &nbsp;&nbsp; -3.73904°</em>."
             },
-              <!--checked: checked("location", "coords-decimal")-->
+              checked: checked("location", "coords-decimal")
             },
             {
               value: "coords-decimal-minutes",
@@ -438,7 +438,7 @@
               hint: {
               html: "For example <em>53° 45.831' N &nbsp;&nbsp; 3° 44.342' W</em>."
             },
-              <!--checked: checked("location", "coords-decimal-minutes")-->
+              checked: checked("location", "coords-decimal-minutes")
             },
             {
               value: "coords-sexagesimal",
@@ -449,7 +449,7 @@
             hint: {
               html: "For example <em>53° 45′ 49″ N &nbsp;&nbsp; 3° 44′ 20″ W</em>."
             },
-              <!--checked: checked("location", "coords-sexagesimal")-->
+              checked: checked("location", "coords-sexagesimal")
             },
             {
               value: "what-3-words",
@@ -460,7 +460,7 @@
               hint: {
                 html: "For example <em>lock.spout.radar</em>."
               },
-              <!--checked: checked("location", "coords-sexagesimal")-->
+              checked: checked("location", "coords-sexagesimal")
             },
             {
               value: "map",
@@ -471,7 +471,7 @@
               hint: {
               text: "Draw the area of the find on a map."
             },
-              <!--checked: checked("location", "map")-->
+              checked: checked("location", "map")
             },
             {
               value: "description",
@@ -482,7 +482,7 @@
               hint: {
               text: "Provide a description of the find location."
             },
-              <!--checked: checked("location", "description")-->
+              checked: checked("location", "description")
             }
           ]
         }) }}

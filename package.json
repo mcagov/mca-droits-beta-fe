@@ -22,6 +22,7 @@
   "homepage": "https://github.com/ctidigital/mca-droits-beta#readme",
   "devDependencies": {
     "@babel/core": "^7.11.6",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/preset-env": "^7.11.5",
     "autoprefixer": "^10.0.0",
     "babel-loader": "^8.1.0",
@@ -55,7 +56,8 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "govuk-frontend": "^3.10.2"
+    "govuk-frontend": "^3.10.2",
+    "leaflet": "^1.7.1"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/ctidigital/"

@@ -7,4 +7,5 @@ document.body.className = document.body.className
   ? document.body.className + ' js-enabled'
   : 'js-enabled';
 
-console.log('App script loaded');
+// Components
+import "./components/editableMap.js"

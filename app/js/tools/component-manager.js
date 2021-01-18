@@ -1,4 +1,4 @@
-import {$} from 'Utilities/selector';
+import {$} from '../utilities/selector.js';
 
 class ComponentManager {
   constructor(component, selector, ...args) {

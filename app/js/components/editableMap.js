@@ -1,29 +1,28 @@
-import { $, $1, closest } from "Utilities/selector";
+import { $, $1, closest } from "../utilities/selector.js";
 
-import ComponentManager from "Tools/component-manager";
-import LoadManager, { QUEUE } from "Tools/load-manager";
+import ComponentManager from "../tools/component-manager.js";
+import LoadManager, { QUEUE } from "../tools/load-manager.js";
 
-/*
-    HOW THIS COMPONENT WORKS
-    Please add a quick summary describing the purpose of this JS component
-    This helps with future developments on the component
-    bonus points for including comments especially for complex functions
-*/
+import L from "leaflet";
 
-export class Map {
+export class EditableMap {
   constructor(el) {
     if (!el) return;
 
     this.el = el;
 
-    // Example of single element selector, behaves like querySelector
-    this.elementOne = $1("[data-js~=example-elementOne]", this.el);
+    this.locationMapInput = $1('#location-map-input', this.el);
+
+    this.latitude = $1('#map-latitude-input');
+    this.longitude = $1('#map-longitude-input');
+    this.radius = $1('#map-radius-input');
 
     LoadManager.queue(this.init.bind(this), QUEUE.RESOURCES)
   }
 
   init() {
-    this.initEditableMap();
+    this.initEditableMap(this.locationMapInput, this.latitude, this.longitude, this.radius)
+    console.log('map script')
   }
 
   initEditableMap (mapID, latitudeInput, longitudeInput, radiusInput) {
@@ -135,5 +134,5 @@ export class Map {
 }
 
 export default LoadManager.queue(() => {
-  new ComponentManager(Map, "[data-js~=map]")
+  new ComponentManager(EditableMap, "[data-js~=editable-map]")
 }, QUEUE.DOM)

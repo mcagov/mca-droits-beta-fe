@@ -1,15 +1,5 @@
-import { Router } from 'express';
-
-const route = Router();
-
 export default function (app) {
-  app.use('/report/removed-property-check', route);
-
-  route.get('/', function (req, res, next) {
-    res.render('report/removed-property-check.html');
-  });
-
-  route.post('/', function (req, res) {
+  app.post('/report/removed-property-check-answer', function (req, res) {
     // Get the answer from session data
     // The name between the quotes is the same as the 'name' attribute on the input elements
     // However in JavaScript we can't use hyphens in variable names

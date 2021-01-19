@@ -15,11 +15,20 @@ export class EditableMap {
     this.longitude = $1('#map-longitude-input');
     this.radius = $1('#map-radius-input');
 
+    this.locationRadio = [...$('input[type=\'radio\'][name=\'location\']')];
+
     LoadManager.queue(this.init.bind(this), QUEUE.RESOURCES)
   }
 
   init() {
-    this.initEditableMap(this.locationMapInput, this.latitude, this.longitude, this.radius)
+    var map = this.initEditableMap(this.locationMapInput, this.latitude, this.longitude, this.radius)
+
+    // When the radios open, invalidate the map size so Leaflet re-renders the map.
+    this.locationRadio.forEach(el => {
+      el.addEventListener('input', function() {
+      map.invalidateSize()
+      })
+    })
   }
 
   initEditableMap (mapID, latitudeInput, longitudeInput, radiusInput) {
@@ -104,8 +113,8 @@ export class EditableMap {
         radiusInput.value = ''
       }
     })
-  
-    return map
+    
+    return map;
   }
 
 }

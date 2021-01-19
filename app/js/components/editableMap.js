@@ -3,8 +3,6 @@ import { $, $1, closest } from "../utilities/selector.js";
 import ComponentManager from "../tools/component-manager.js";
 import LoadManager, { QUEUE } from "../tools/load-manager.js";
 
-import L from "leaflet";
-
 export class EditableMap {
   constructor(el) {
     if (!el) return;

@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 // Add variables that are available in all views
-app.locals.serviceName = config.serviceName
+app.locals.serviceName = config.serviceName;
 
 // Support for parsing data in POSTs
 app.use(bodyParser.json());
@@ -81,8 +81,6 @@ app.get(/^([^.]+)$/, function (req, res, next) {
 });
 // Redirect all POSTs to GETs - this allows users to use POST for autoStoreData
 app.post(/^\/([^.]+)$/, function (req, res) {
-  console.log(req.params[0]);
-
   res.redirect('/' + req.params[0]);
 });
 

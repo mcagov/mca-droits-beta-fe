@@ -20,7 +20,6 @@ export class EditableMap {
 
   init() {
     this.initEditableMap(this.locationMapInput, this.latitude, this.longitude, this.radius)
-    console.log('map script')
   }
 
   initEditableMap (mapID, latitudeInput, longitudeInput, radiusInput) {
@@ -86,17 +85,7 @@ export class EditableMap {
       map.addControl(drawControlEditOnly)
     })
   
-    // map.on(L.Draw.Event.EDITSTART, function (e) {
-    //   window.dontLeaveWhenEditing = (event) => {
-    //     event.preventDefault()
-    //     event.returnValue = ''
-    //   }
-  
-    //   window.addEventListener('beforeunload', window.dontLeaveWhenEditing)
-    // })
-  
     map.on(L.Draw.Event.EDITED, function (e) {
-      // window.removeEventListener('beforeunload', window.dontLeaveWhenEditing)
   
       e.layers.eachLayer(function (layer) {
         latitudeInput.value = layer.getLatLng().lat
@@ -104,15 +93,6 @@ export class EditableMap {
         radiusInput.value = layer.getRadius()
       })
     })
-  
-    // map.on(L.Draw.Event.DELETESTART, function (e) {
-    //   window.dontLeaveWhenEditing = (event) => {
-    //     event.preventDefault()
-    //     event.returnValue = ''
-    //   }
-  
-    //   // window.addEventListener('beforeunload', window.dontLeaveWhenEditing)
-    // })
   
     map.on(L.Draw.Event.DELETED, function (e) {
       if (editableLayers.getLayers().length === 0) {
@@ -123,7 +103,6 @@ export class EditableMap {
         longitudeInput.value = ''
         radiusInput.value = ''
       }
-      // window.removeEventListener('beforeunload', window.dontLeaveWhenEditing)
     })
   
     return map

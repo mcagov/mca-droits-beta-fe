@@ -4,5 +4,6 @@ $govuk-global-styles: true;
 @import '~govuk-frontend/govuk/all';
 
 // Components 
+@import './components/coordinate-inputs.scss';
 @import './components/map.scss';
 

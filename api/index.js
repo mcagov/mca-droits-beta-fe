@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import clearData from './routes/clear-data';
+import clearSession from './routes/clear-session';
 import removedPropertyCheck from './routes/removed-property-check';
 
 export default () => {
   const app = Router();
 
-  clearData(app);
+  clearSession(app);
   removedPropertyCheck(app);
 
   return app;

@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+
+{% block pageTitle %}
+  Shipwreck location
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "includes/phase-banner.html" %}
+  <a class="govuk-back-link" href="/report/vessel-information">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <form class="form" action="/report/salvaged-from" method="post">
+
+        {% if errorSummary.length > 0 %}
+            {{ govukErrorSummary({
+                titleText: "There is a problem",
+                errorList: errorSummary
+            }) }}
+        {% endif %}
+        {{ govukRadios({
+          idPrefix: "removed-from",
+          name: "removed-from",
+          fieldset: {
+            legend: {
+              text: "Where was the wreck material found?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+              value: "shipwreck",
+              text: "Shipwreck",
+              checked: checked("removed-from", "shipwreck"),
+              hint: {
+                text: "The material was recovered from the site of a shipwreck."
+              }
+            },
+            {
+              value: "seabed",
+              text: "Seabed",
+              checked: checked("removed-from", "seabed"),
+              hint: {
+                text: "The material was recovered from outside the vicinity of a known shipwreck."
+              }
+            },
+            {
+              value: "afloat",
+              text: "Afloat",
+              checked: checked("removed-from", "afloat"),
+              hint: {
+                text: "The material recovered from the surface of the sea."
+              }
+            },
+            {
+              value: "ashore",
+              text: "Sea shore",
+              checked: checked("removed-from", "ashore"),
+              hint: {
+                text: "The material recovered from land such as a beach."
+              }
+            }
+          ],
+          errorMessage: errors["removed-from"]
+        }) }}
+
+        <button class="govuk-button" data-module="govuk-button">Continue</button>
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

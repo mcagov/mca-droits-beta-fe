@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Wreck material not removed
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "includes/phase-banner.html" %}
+  <a class="govuk-back-link" href="/report/removed-property-check">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-xl">
+        You do not need to report this wreck material
+      </h1>
+
+      <p>This is a paragraph of text. It explains in more detail what has happened and wraps across several lines.</p>
+
+      <p>This paragraph has a link to <a href="/url/of/onward/page">find out more about this subject</a>.</p>
+
+    </div>
+  </div>
+
+{% endblock %}

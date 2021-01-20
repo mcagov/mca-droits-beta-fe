@@ -23,7 +23,13 @@
     <div class="govuk-grid-column-full">
 
       <form class="form" action="/report/location-answer" method="post">
-
+        {% if errorSummary.length > 0 %}
+            {{ govukErrorSummary({
+                titleText: "There is a problem",
+                errorList: errorSummary
+            }) }}
+        {% endif %}
+        
         {% set decimalInput %}
           {% call govukFieldset({
             classes: "row-prototype-coordinate-input"

@@ -1,5 +1,9 @@
+const { body, validationResult } = require('express-validator');
+import { formatValidationErrors } from '../../utils';
+
 export default function (app) {
-  app.post('/report/location-answer', function (req, res) {
+  app.post(
+    '/report/location-answer', function (req, res) {
     // Standardise the location data so we can show it more easily later.
     const type = req.session.data.location
     
@@ -90,74 +94,11 @@ export default function (app) {
         req.session.data['location-given'].longitude = ''
     }
 
-    if(req.session.data['location-standard'].latitude !== false &&
-      req.session.data['location-standard'].longitude !== false
-    ) {
-      console.log('value provided');
+    if (parseInt(req.session.data['location-standard'].latitude) && parseInt(req.session.data['location-standard'].longitude)) {
+      return res.redirect('/report/depth');
     } else {
-      console.log('no value given');
+      console.log('error');
+      return res.redirect('/report/location');
     }
-
-    // VALIDATION //
-    /*const hasValue = true;
-
-    switch(hasValue) {
-      case 'coords-decimal':
-        if (req.session.data['location-latitude-decimal'] && req.session.data['location-longitude-decimal']) {
-          console.log('coords-decimal')
-          break
-        }
-      case 'coords-decimal-minutes':
-        var latD = req.session.data['location-latitude-decimal-minutes-degree']
-        var latM = req.session.data['location-latitude-decimal-minutes-minute']
-        var latDir = req.session.data['location-latitude-decimal-minutes-direction']
-        var lonD = req.session.data['location-longitude-decimal-minutes-degree']
-        var lonM = req.session.data['location-longitude-decimal-minutes-minute']
-        var lonDir = req.session.data['location-longitude-decimal-minutes-direction']
-        console.log('coords-decimal-minutes')
-        break
-      case 'coords-sexagesimal':
-        var latD = req.session.data['location-latitude-degrees-degree']
-        var latM = req.session.data['location-latitude-degrees-minute']
-        var latS = req.session.data['location-latitude-degrees-second']
-        var latDir = req.session.data['location-latitude-degrees-direction']
-        var lonD = req.session.data['location-longitude-degrees-degree']
-        var lonM = req.session.data['location-longitude-degrees-minute']
-        var lonS = req.session.data['location-longitude-degrees-second']
-        var lonDir = req.session.data['location-longitude-degrees-direction']
-        console.log('coords-sexagesimal')
-        break
-      case 'what3words':
-        req.session.data['3wa']
-        console.log('3wa')
-        break
-      case 'map':
-        req.session.data['map-latitude-input']
-        req.session.data['map-longitude-input']
-        req.session.data['map-radius-input']
-        console.log('map')
-        break
-      case 'description':
-        req.session.data['location-description']
-        console.log('description')
-        break
-      default:
-        // VALIDATION ERROR SUMMARY CODE HERE? //
-        console.log('no values entered');
-        /*req.session.data['location-standard'].latitude = 0
-        req.session.data['location-standard'].longitude = 0
-        req.session.data['location-standard'].radius = 0
-  
-        req.session.data['location-given'].latitude = ''
-        req.session.data['location-given'].longitude = ''
-    }*/
-
-    /*if(req.session.data['location-description']) {
-      console.log('Description added');
-    } else {
-      console.log('No value given');
-    }*/
-  
-    //res.redirect('/report/depth')
   })
 }

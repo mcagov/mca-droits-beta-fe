@@ -1,5 +1,5 @@
 {
-  "name": "mca-droits-beta",
+  "name": "@ctidigital/mca-droits-beta",
   "version": "1.0.0",
   "description": "Maritime and Coastguard Agency - Receiver of Wreck web application for reporting wreck material recovered from the sea and shores of the UK",
   "main": "app.js",
@@ -43,6 +43,6 @@
     "nunjucks": "^3.2.2"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/@ctidigital/"
+    "registry": "https://npm.pkg.github.com/@ctidigital"
   }
 }

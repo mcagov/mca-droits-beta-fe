@@ -1,0 +1,7 @@
+{% macro address(addressLines) %}
+  {% for line in addressLines %}
+    {% if line %}
+      {{ line }}<br>
+    {% endif %}
+  {% endfor %}
+{% endmacro %}

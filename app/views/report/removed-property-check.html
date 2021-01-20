@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block pageTitle %}
+  Wreck material removed
+{% endblock %}
+
+
+{% block beforeContent %}
+  {% include "includes/phase-banner.html" %}
+  <a class="govuk-back-link" href="/report/start">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <form class="form" action="/report/removed-property-check-answer" method="post">
+        {% if errorSummary.length > 0 %}
+            {{ govukErrorSummary({
+                titleText: "There is a problem",
+                errorList: errorSummary
+            }) }}
+        {% endif %}
+        {{ govukRadios({
+          classes: "govuk-radios--inline",
+          idPrefix: "removed-property",
+          name: "removed-property",
+          fieldset: {
+            legend: {
+              text: "Have you removed the wreck material from the location found?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes",
+              checked: checked("removed-property", "yes")
+            },
+            {
+              value: "no",
+              text: "No",
+              checked: checked("removed-property", "no")
+            }
+          ],
+          errorMessage: errors["removed-property"]
+        }) }}
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

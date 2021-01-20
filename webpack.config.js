@@ -1,76 +1,90 @@
+/* eslint-disable */
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-//const CopyPlugin = require('copy-webpack-plugin');
 
-const srcPath = path.resolve(__dirname, './app');
-const buildPath = path.resolve(__dirname, 'dist');
-const scriptsSrc = path.join(srcPath, '/assets/scripts');
-const stylesSrc = path.join(srcPath, '/assets/scss');
-const imagesSrc = path.join(srcPath, '/assets/images');
+module.exports = (env) => {
+  const devMode = !env || !env.production;
 
-module.exports = {
-  entry: {
-    main: './app/app.js',
-  },
-  output: {
-    path: path.join(__dirname, 'dist'),
-    publicPath: '/',
-    filename: '[name].min.js'
-  },
-  target: 'web',
-  devtool: 'source-map',
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        include: scriptsSrc,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader"
-        }
-      },
-      {
-        test: /\.(sa|sc|c)ss$/,
-        include: stylesSrc,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              url: false,
-            }
-          },
-          {
-            loader: 'sass-loader',
-          }
-        ]
-      },
-      {
-        test: /\.(png|jpg|gif|svg)$/i,
-        use: {
-          loader: 'file-loader',
+  return {
+    mode: devMode ? 'development' : 'production',
+    entry: {
+      main: './app/js/index.js'
+    },
+    output: {
+      path: path.join(__dirname, 'dist'),
+      filename: 'assets/js/[name].js',
+      library: '[name]Module'
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(sa|sc|c)ss$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            { loader: 'css-loader', options: { sourceMap: true, url: false } },
+            { loader: 'postcss-loader', options: { sourceMap: true } },
+            { loader: 'sass-loader', options: { sourceMap: true } }
+          ]
+        },
+        {
+          test: /\.js$/,
+          loader: 'babel-loader',
           options: {
-            name: '[path][name].[ext]',
-            context: imagesSrc,
-            outputPath: path.join(buildPath, "assets/images/")
+            presets: ['@babel/preset-env']
           }
+        },
+        {
+          test: /\.(png|jpg|gif)$/i,
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                limit: 8192
+              }
+            }
+          ]
         }
-      },
-    ]
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: 'ROW reporting form',
-      template: path.join(srcPath, "views/index.html"),
-      filename: "./index.html",
-      excludeChunks: [ 'server' ]
-    }), 
-    new MiniCssExtractPlugin({
-      filename: "app.min.css"
-    }),
-  ]
+      ]
+    },
+    stats: {
+      colors: true
+    },
+    devtool: 'source-map',
+    plugins: [
+      new CleanWebpackPlugin(),
+      new MiniCssExtractPlugin({
+        filename: 'assets/css/[name].css'
+      }),
+      new BrowserSyncPlugin({
+        host: 'localhost',
+        port: 3000,
+        proxy: 'http://localhost:5000/',
+        files: ['dist/css/*.css', 'dist/js/*.js', 'app/views/**/*.html']
+      }),
+      new CopyWebpackPlugin({
+        patterns: [{ from: 'assets/**/*', to: '.', noErrorOnMissing: true }]
+      })
+    ],
+    optimization: {
+      minimize: !devMode,
+      minimizer: [
+        new TerserPlugin({
+          sourceMap: true,
+          parallel: true
+        }),
+        new OptimizeCSSAssetsPlugin({
+          cssProcessorOptions: {
+            map: {
+              inline: false
+            }
+          }
+        })
+      ]
+    }
+  };
 };

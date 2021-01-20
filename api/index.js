@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import clearData from './routes/clear-data';
+import clearSession from './routes/clear-session';
 import removedPropertyCheck from './routes/removed-property-check';
 import locationAnswer from './routes/location-answer';
 import salvagedFrom from './routes/salvaged-from';
@@ -7,7 +7,7 @@ import salvagedFrom from './routes/salvaged-from';
 export default () => {
   const app = Router();
 
-  clearData(app);
+  clearSession(app);
   removedPropertyCheck(app);
   locationAnswer(app);
   salvagedFrom(app);

@@ -5,6 +5,7 @@ import findDate from './routes/find-date';
 import salvagedFrom from './routes/salvaged-from';
 import depth from './routes/depth';
 import personal from './routes/personal';
+import vesselDescription from './routes/vessel-description';
 
 export default () => {
   const app = Router();
@@ -15,6 +16,7 @@ export default () => {
   personal(app);
   salvagedFrom(app);
   depth(app);
+  vesselDescription(app);
 
   return app;
 };

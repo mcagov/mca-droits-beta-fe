@@ -4,29 +4,24 @@ import { formatValidationErrors } from '../../utils';
 
 export default function (app) {
   app.post(
-    '/report/depth',
+    '/report/vessel-description',
     [
-      body('vessel-depth')
+      body('vessel-description')
         .exists()
         .notEmpty()
-        .isDecimal()
-        .withMessage('Please enter a number')
+        .withMessage('Please enter a description')
     ],
     function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
-
-      if (!errors) {
-        req.session.data['vessel-depth'] = req.body['vessel-depth'];
-        console.log(req.session.data);
-        res.redirect('vessel-description');
-
-      } else {
-        return res.render('report/depth', {
+      if (errors) {
+        return res.render('report/vessel-description', {
           errors,
           errorSummary: Object.values(errors),
           values: req.body
         });
       }
+
+      res.render('report/property-summary');
     }
   );
 }

@@ -24,6 +24,12 @@ export default function (app) {
     ],
     function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
+      const session = req.session.data['wreck-find-date'];
+      const body = req.body;
+
+      for (let key in session) {
+        session[key] = body[`wreck-find-date-${key}`];
+      }
 
       if (!errors) {
         return res.render('report/personal');

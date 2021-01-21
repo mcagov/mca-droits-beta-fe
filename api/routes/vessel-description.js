@@ -6,22 +6,25 @@ export default function (app) {
   app.post(
     '/report/vessel-description',
     [
-      body('vessel-description')
+      body('wreck-description')
         .exists()
         .notEmpty()
-        .withMessage('Please enter a description')
+        .withMessage('Enter a description')
     ],
     function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
-      if (errors) {
+
+      if (!errors) {
+        req.session.data['wreck-description'] = req.body['wreck-description'];
+        res.redirect('property-summary');
+
+      } else {
         return res.render('report/vessel-description', {
           errors,
           errorSummary: Object.values(errors),
           values: req.body
         });
       }
-
-      res.render('report/property-summary');
     }
   );
 }

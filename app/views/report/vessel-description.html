@@ -22,7 +22,12 @@
     <div class="govuk-grid-column-two-thirds">
 
       <form class="form" action="/report/vessel-description" method="post">
-
+        {% if errorSummary.length > 0 %}
+            {{ govukErrorSummary({
+                titleText: "There is a problem",
+                errorList: errorSummary
+            }) }}
+        {% endif %}
         {{ govukTextarea({
           name: "wreck-description",
           id: "wreck-description",

@@ -17,7 +17,6 @@ export default function (app) {
 
       if (!errors) {
         req.session.data['vessel-depth'] = req.body['vessel-depth'];
-        console.log(req.session.data);
         res.redirect('vessel-description');
 
       } else {

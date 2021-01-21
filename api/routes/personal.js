@@ -17,14 +17,14 @@ export default function (app) {
         .isEmpty()
         .withMessage('Enter your email address')
         .isEmail()
-        .withMessage('Please enter a valid email address'),
+        .withMessage('Enter an email address in the correct format, like name@example.com'),
       body('telephone-number')
         .exists()
         .not()
         .isEmpty()
         .withMessage('Enter your telephone number')
         .isInt()
-        .withMessage('Must be a number'),
+        .withMessage('Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192'),
       body('address-line-1')
         .exists()
         .not()
@@ -44,7 +44,7 @@ export default function (app) {
         .exists()
         .not()
         .isEmpty()
-        .withMessage('Enter your postcode')
+        .withMessage('Enter a real postcode')
         .isPostalCode(['GB'])
         .withMessage('Please enter a valid postcode')
     ],

@@ -20,7 +20,7 @@ Example usage:
 export default {
   'report-date': '',
   'removed-property': '',
-  'find-date': {
+  'wreck-find-date': {
     day: '',
     month: '',
     year: ''

@@ -4,6 +4,7 @@ import removedPropertyCheck from './routes/removed-property-check';
 import locationAnswer from './routes/location-answer';
 import findDate from './routes/find-date';
 import salvagedFrom from './routes/salvaged-from';
+import depth from './routes/depth';
 
 export default () => {
   const app = Router();
@@ -13,6 +14,7 @@ export default () => {
   locationAnswer(app);
   findDate(app);
   salvagedFrom(app);
+  depth(app);
 
   return app;
 };

@@ -21,7 +21,28 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      <form class="form" action="/report/personal" method="post">
+      <form class="form" action="/report/find-date-answer" method="post">
+
+        {% if errorSummary.length > 0 %}
+          {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errorSummary
+          }) }}
+        {% endif %}
+
+        {% set dateInputDayClass = "govuk-input--width-2" %}
+        {% set dateInputMonthClass = "govuk-input--width-2" %}
+        {% set dateInputYearClass = "govuk-input--width-4" %}
+
+        {% if errors["wreck-find-date-day"] %}
+          {% set dateInputDayClass = dateInputDayClass + " govuk-input--error" %}
+        {% endif %}
+        {% if errors["wreck-find-date-month"] %}
+          {% set dateInputMonthClass = dateInputMonthClass + " govuk-input--error" %}
+        {% endif %}
+        {% if errors["wreck-find-date-year"] %}
+          {% set dateInputYearClass = dateInputYearClass + " govuk-input--error" %}
+        {% endif %}
 
         {{ govukDateInput({
           id: "wreck-find-date",
@@ -39,23 +60,28 @@
           items: [
             {
               name: "day",
-              classes: "govuk-input--width-2",
+              classes: dateInputDayClass,
               value: data["wreck-find-date-day"]
             },
             {
               name: "month",
-              classes: "govuk-input--width-2",
+              classes: dateInputDayClass,
               value: data["wreck-find-date-month"]
             },
             {
               name: "year",
-              classes: "govuk-input--width-4",
+              classes: dateInputYearClass,
               value: data["wreck-find-date-year"]
             }
-          ]
+          ],
+          errorMessage: errors["wreck-find-date"]
         }) }}
 
-        <button class="govuk-button" data-module="govuk-button">Continue</button>
+        
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
 
       </form>
 

@@ -4,7 +4,7 @@ import nunjucks from 'nunjucks';
 
 import routes from './api';
 import sessionInMemory from 'express-session';
-import { autoStoreData, addCheckedFunction, matchRoutes } from './utils';
+import { sessionData, addCheckedFunction, matchRoutes } from './utils';
 import config from './app/js/config.js';
 
 const PORT = process.env.PORT || 5000;
@@ -70,8 +70,8 @@ app.use(
   )
 );
 
-// Automatically store all data users enter
-app.use(autoStoreData);
+// Manage session data. Assigns default values to data
+app.use(sessionData);
 
 // Load API routes
 app.use('/', routes());
@@ -79,7 +79,7 @@ app.use('/', routes());
 app.get(/^([^.]+)$/, function (req, res, next) {
   matchRoutes(req, res, next);
 });
-// Redirect all POSTs to GETs - this allows users to use POST for autoStoreData
+// Redirect all POSTs to GETs
 app.post(/^\/([^.]+)$/, function (req, res) {
   res.redirect('/' + req.params[0]);
 });

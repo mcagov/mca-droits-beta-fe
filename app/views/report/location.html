@@ -93,7 +93,8 @@
               },
               attributes: {
                 inputmode: "numeric"
-              }
+              },
+              errorMessage: errors["location-latitude-decimal-minutes-degree"]
             }) }}
 
             {{ govukInput({
@@ -110,7 +111,8 @@
               },
               attributes: {
                 inputmode: "numeric"
-              }
+              },
+              errorMessage: errors["location-latitude-decimal-minutes-minute"]
             }) }}
 
             {{ govukSelect({
@@ -156,7 +158,8 @@
               },
               attributes: {
                 inputmode: "numeric"
-              }
+              },
+              errorMessage: errors["location-longitude-decimal-minutes-degree"]
             }) }}
 
             {{ govukInput({
@@ -173,7 +176,8 @@
               },
               attributes: {
                 inputmode: "numeric"
-              }
+              },
+              errorMessage: errors["location-longitude-decimal-minutes-minute"]
             }) }}
 
             {{ govukSelect({
@@ -224,7 +228,8 @@
               },
               attributes: {
                 inputmode: "numeric"
-              }
+              },
+              errorMessage: errors["location-latitude-degrees-degree"]
             }) }}
 
             {{ govukInput({
@@ -241,7 +246,8 @@
               },
               attributes: {
                 inputmode: "numeric"
-              }
+              },
+              errorMessage: errors["location-latitude-degrees-minute"]
             }) }}
 
             {{ govukInput({
@@ -258,7 +264,8 @@
               },
               attributes: {
                 inputmode: "numeric"
-              }
+              },
+              errorMessage: errors["location-latitude-degrees-second"]
             }) }}
 
             {{ govukSelect({
@@ -304,7 +311,8 @@
               },
               attributes: {
                 inputmode: "numeric"
-              }
+              },
+              errorMessage: errors["location-longitude-degrees-degree"]
             }) }}
 
             {{ govukInput({
@@ -321,7 +329,8 @@
               },
               attributes: {
                 inputmode: "numeric"
-              }
+              },
+              errorMessage: errors["location-longitude-degrees-minute"]
             }) }}
 
             {{ govukInput({
@@ -338,7 +347,8 @@
               },
               attributes: {
                 inputmode: "numeric"
-              }
+              },
+              errorMessage: errors["location-longitude-degrees-second"]
             }) }}
 
             {{ govukSelect({
@@ -391,7 +401,9 @@
           <input type=hidden name="map-latitude-input" id="map-latitude-input" value="{{ data['location']['map-latitude-input'] }}">
           <input type=hidden name="map-longitude-input" id="map-longitude-input" value="{{ data['location']['map-longitude-input'] }}">
           <input type=hidden name="map-radius-input" id="map-radius-input" value="{{ data['location']['map-radius-input'] }}">
-
+          <span id="map-radius-input-error" class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> 
+          </span>
         {% endset -%}
 
         {% set descriptionInput %}
@@ -404,7 +416,8 @@
             },
             hint: {
               text: "You should include any known coordinates, distances and directions."
-            }
+            },
+            errorMessage: errors["location-description"]
           }) }}
         {% endset -%}
 

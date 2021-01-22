@@ -9,3 +9,4 @@ document.body.className = document.body.className
 
 // Components
 import "./components/editableMap.js"
+import "./components/vesselInformation.js"

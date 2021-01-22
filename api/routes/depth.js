@@ -31,8 +31,11 @@ export default function (app) {
     ],
     function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
+
       if (!errors) {
-        res.redirect('report/vessel-description');
+        req.session.data['vessel-depth'] = req.body['vessel-depth'];
+        res.redirect('vessel-description');
+
       } else {
         return res.render('report/depth', {
           errors,

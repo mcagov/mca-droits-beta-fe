@@ -4,23 +4,29 @@ import { formatValidationErrors } from '../../utils';
 
 export default function (app) {
   app.post(
-    '/report/salvaged-from',
+    '/report/known-wreck-answer',
     [
-      body('removed-from')
+      body('known-wreck')
         .exists()
         .not()
         .isEmpty()
-        .withMessage('Please state where the wreck material was found')
+        .withMessage('Select yes if you know which shipwreck this wreck material has come from')
     ],
     function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
-      
-      if (!errors) {
-        req.session.data['removed-from'] = req.body['removed-from'];
-        res.render('report/location');
 
+      if (!errors) {
+        req.session.data['known-wreck'] = req.body['known-wreck'];
+
+        const value = req.session.data['known-wreck'];
+
+        if (value === 'yes') {
+          res.redirect('vessel-information');
+        } else {
+          res.redirect('salvaged-from');
+        }
       } else {
-        return res.render('report/salvaged-from', {
+        return res.render('report/known-wreck', {
           errors,
           errorSummary: Object.values(errors),
           values: req.body

@@ -10,10 +10,11 @@ export default function (app) {
         .exists()
         .not()
         .isEmpty()
-        .withMessage('You must choose an option')
+        .withMessage('Select yes if you know which shipwreck this wreck material has come from')
     ],
     function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
+
       if (!errors) {
         req.session.data['known-wreck'] = req.body['known-wreck'];
 
@@ -25,7 +26,7 @@ export default function (app) {
           res.redirect('salvaged-from');
         }
       } else {
-        return res.render('report/removed-property-check', {
+        return res.render('report/known-wreck', {
           errors,
           errorSummary: Object.values(errors),
           values: req.body

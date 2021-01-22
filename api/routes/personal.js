@@ -58,7 +58,7 @@ export default function (app) {
       }
 
       if (!errors) {
-        res.render('report/known-wreck');
+        res.redirect('known-wreck');
       } else {
         return res.render('report/personal', {
           errors,

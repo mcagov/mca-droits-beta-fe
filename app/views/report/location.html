@@ -37,7 +37,7 @@
             {{ govukInput({
               id: "location-latitude-decimal",
               name: "location-latitude-decimal",
-              value: data["location-latitude-decimal"],
+              value: data["location"]["location-latitude-decimal"],
               classes: "govuk-input--width-5",
               label: {
                 text: "Latitude"
@@ -47,13 +47,14 @@
               },
               attributes: {
                 inputmode: "numeric"
-              }
+              },
+              errorMessage: errors["location-latitude-decimal"]
             }) }}
 
             {{ govukInput({
               id: "location-longitude-decimal",
               name: "location-longitude-decimal",
-              value: data["location-longitude-decimal"],
+              value: data["location"]["location-longitude-decimal"],
               classes: "govuk-input--width-5",
               label: {
                 text: "Longitude"
@@ -63,14 +64,12 @@
               },
               attributes: {
                 inputmode: "numeric"
-              }
+              },
+              errorMessage: errors["location-longitude-decimal"]
             }) }}
 
           {% endcall %}
         {% endset -%}
-
-
-
 
 
         {% set decimalMinuteInput %}
@@ -83,7 +82,7 @@
             {{ govukInput({
               id: "location-latitude-decimal-minutes-degree",
               name: "location-latitude-decimal-minutes-degree",
-              value: data["location-latitude-decimal-minutes-degree"],
+              value: data["location"]["location-latitude-decimal-minutes-degree"],
               classes: "govuk-input--width-2",
               label: {
                 text: "Degree",
@@ -100,7 +99,7 @@
             {{ govukInput({
               id: "location-latitude-decimal-minutes-minute",
               name: "location-latitude-decimal-minutes-minute",
-              value: data["location-latitude-decimal-minutes-minute"],
+              value: data["location"]["location-latitude-decimal-minutes-minute"],
               classes: "govuk-input--width-5",
               label: {
                 text: "Minute",
@@ -125,12 +124,12 @@
                 {
                   value: "N",
                   text: "N",
-                  selected: checked("location-latitude-decimal-minutes-direction", "N")
+                  selected: checked("['location']['location-latitude-decimal-minutes-direction']", "N")
                 },
                 {
                   value: "S",
                   text: "S",
-                  selected: checked("location-latitude-decimal-minutes-direction", "S")
+                  selected: checked("['location']['location-latitude-decimal-minutes-direction']", "S")
                 }
               ]
             }) }}
@@ -146,7 +145,7 @@
             {{ govukInput({
               id: "location-longitude-decimal-minutes-degree",
               name: "location-longitude-decimal-minutes-degree",
-              value: data["location-longitude-decimal-minutes-degree"],
+              value: data["location"]["location-longitude-decimal-minutes-degree"],
               classes: "govuk-input--width-2",
               label: {
                 text: "Degree",
@@ -163,7 +162,7 @@
             {{ govukInput({
               id: "location-longitude-decimal-minutes-minute",
               name: "location-longitude-decimal-minutes-minute",
-              value: data["location-longitude-decimal-minutes-minute"],
+              value: data["location"]["location-longitude-decimal-minutes-minute"],
               classes: "govuk-input--width-5",
               label: {
                 text: "Minute",
@@ -188,12 +187,12 @@
                 {
                   value: "E",
                   text: "E",
-                  selected: checked("location-longitude-decimal-minutes-direction", "E")
+                  selected: checked("['location']['location-longitude-decimal-minutes-direction']", "E")
                 },
                 {
                   value: "W",
                   text: "W",
-                  selected: checked("location-longitude-decimal-minutes-direction", "W")
+                  selected: checked("['location']['location-longitude-decimal-minutes-direction']", "W")
                 }
               ]
             }) }}
@@ -214,7 +213,7 @@
             {{ govukInput({
               id: "location-latitude-degrees-degree",
               name: "location-latitude-degrees-degree",
-              value: data["location-latitude-degrees-degree"],
+              value: data["location"]["location-latitude-degrees-degree"],
               classes: "govuk-input--width-2",
               label: {
                 text: "Degree",
@@ -231,7 +230,7 @@
             {{ govukInput({
               id: "location-latitude-degrees-minute",
               name: "location-latitude-degrees-minute",
-              value: data["location-latitude-degrees-minute"],
+              value: data["location"]["location-latitude-degrees-minute"],
               classes: "govuk-input--width-2",
               label: {
                 text: "Minute",
@@ -248,7 +247,7 @@
             {{ govukInput({
               id: "location-latitude-degrees-second",
               name: "location-latitude-degrees-second",
-              value: data["location-latitude-degrees-second"],
+              value: data["location"]["location-latitude-degrees-second"],
               classes: "govuk-input--width-2",
               label: {
                 text: "Second",
@@ -273,12 +272,12 @@
                 {
                   value: "N",
                   text: "N",
-                  selected: checked("location-latitude-degrees-direction", "N")
+                  selected: checked("['location']['location-latitude-degrees-direction']", "N")
                 },
                 {
                   value: "S",
                   text: "S",
-                  selected: checked("location-latitude-degrees-direction", "S")
+                  selected: checked("['location']['location-latitude-degrees-direction']", "S")
                 }
               ]
             }) }}
@@ -294,7 +293,7 @@
             {{ govukInput({
               id: "location-longitude-degrees-degree",
               name: "location-longitude-degrees-degree",
-              value: data["location-longitude-degrees-degree"],
+              value: data["location"]["location-longitude-degrees-degree"],
               classes: "govuk-input--width-2",
               label: {
                 text: "Degree",
@@ -311,7 +310,7 @@
             {{ govukInput({
               id: "location-longitude-degrees-minute",
               name: "location-longitude-degrees-minute",
-              value: data["location-longitude-degrees-minute"],
+              value: data["location"]["location-longitude-degrees-minute"],
               classes: "govuk-input--width-2",
               label: {
                 text: "Minute",
@@ -328,7 +327,7 @@
             {{ govukInput({
               id: "location-longitude-degrees-second",
               name: "location-longitude-degrees-second",
-              value: data["location-longitude-degrees-second"],
+              value: data["location"]["location-longitude-degrees-second"],
               classes: "govuk-input--width-2",
               label: {
                 text: "Second",
@@ -353,12 +352,12 @@
                 {
                   value: "E",
                   text: "E",
-                  selected: checked("location-longitude-degrees-direction", "E")
+                  selected: checked("['location']['location-longitude-degrees-direction']", "E")
                 },
                 {
                   value: "W",
                   text: "W",
-                  selected: checked("location-longitude-degrees-direction", "W")
+                  selected: checked("['location']['location-longitude-degrees-direction']", "W")
                 }
               ]
             }) }}
@@ -389,9 +388,9 @@
             </ul>
           </div>
 
-          <input type=hidden name="map-latitude-input" id="map-latitude-input" value="{{ data['map-latitude-input'] }}">
-          <input type=hidden name="map-longitude-input" id="map-longitude-input" value="{{ data['map-longitude-input'] }}">
-          <input type=hidden name="map-radius-input" id="map-radius-input" value="{{ data['map-radius-input'] }}">
+          <input type=hidden name="map-latitude-input" id="map-latitude-input" value="{{ data['location']['map-latitude-input'] }}">
+          <input type=hidden name="map-longitude-input" id="map-longitude-input" value="{{ data['location']['map-longitude-input'] }}">
+          <input type=hidden name="map-radius-input" id="map-radius-input" value="{{ data['location']['map-radius-input'] }}">
 
         {% endset -%}
 
@@ -399,7 +398,7 @@
           {{ govukTextarea({
             name: "location-description",
             id: "location-description",
-            value: data["location-description"],
+            value: data["location"]["location-description"],
             label: {
               text: "Where was the wreck material found?"
             },
@@ -411,8 +410,8 @@
 
 
         {{ govukRadios({
-          idPrefix: "location",
-          name: "location",
+          idPrefix: "location-type",
+          name: "location-type",
           hint: {
             html: "Choose the most appropriate format. This information will only be used in relation to this report and will not be made public."
           },
@@ -433,7 +432,7 @@
             hint: {
               html: "For example <em>53.76385° &nbsp;&nbsp; -3.73904°</em>."
             },
-              checked: checked("location", "coords-decimal")
+              checked: checked("['location']['location-type']", "coords-decimal")
             },
             {
               value: "coords-decimal-minutes",
@@ -444,7 +443,7 @@
               hint: {
               html: "For example <em>53° 45.831' N &nbsp;&nbsp; 3° 44.342' W</em>."
             },
-              checked: checked("location", "coords-decimal-minutes")
+              checked: checked("['location']['location-type']", "coords-decimal-minutes")
             },
             {
               value: "coords-sexagesimal",
@@ -455,7 +454,7 @@
             hint: {
               html: "For example <em>53° 45′ 49″ N &nbsp;&nbsp; 3° 44′ 20″ W</em>."
             },
-              checked: checked("location", "coords-sexagesimal")
+              checked: checked("['location']['location-type']", "coords-sexagesimal")
             },
             {
               value: "what-3-words",
@@ -466,7 +465,7 @@
               hint: {
                 html: "For example <em>lock.spout.radar</em>."
               },
-              checked: checked("location", "coords-sexagesimal")
+              checked: checked("['location']['location-type']", "what-3-words")
             },
             {
               value: "map",
@@ -477,7 +476,7 @@
               hint: {
               text: "Draw the area of the find on a map."
             },
-              checked: checked("location", "map")
+              checked: checked("['location']['location-type']", "map")
             },
             {
               value: "description",
@@ -488,7 +487,7 @@
               hint: {
               text: "Provide a description of the find location."
             },
-              checked: checked("location", "description")
+              checked: checked("['location']['location-type']", "description")
             }
           ]
         }) }}

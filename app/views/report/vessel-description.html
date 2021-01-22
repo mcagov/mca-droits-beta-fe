@@ -8,12 +8,12 @@
 
 
 {% block pageTitle %}
-  Shipwreck location
+  Shipwreck information
 {% endblock %}
 
 {% block beforeContent %}
   {% include "includes/phase-banner.html" %}
-  <a class="govuk-back-link" href="/report/location">Back</a>
+  <a class="govuk-back-link" href="/report/depth">Back</a>
 {% endblock %}
 
 {% block content %}
@@ -21,34 +21,26 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      <form class="form" action="/report/depth-answer" method="post">
+      <form class="form" action="/report/vessel-description-answer" method="post">
         {% if errorSummary.length > 0 %}
             {{ govukErrorSummary({
                 titleText: "There is a problem",
                 errorList: errorSummary
             }) }}
         {% endif %}
-        {{ govukInput({
+        {{ govukTextarea({
+          name: "wreck-description",
+          id: "wreck-description",
+          value: data["wreck-description"],
           label: {
-            text: "At what depth was the item found?",
+            text: "Please provide a detailed description of the shipwreck on the seabed",
             classes: "govuk-label--l",
             isPageHeading: true
           },
           hint: {
-            text: "Please provide an approximate depth."
+            text: "You should include as much information as possible, including condition, type, orientation, dimensions, propulsion and cargo."
           },
-          suffix: {
-            text: "meters"
-          },
-          id: "vessel-depth",
-          name: "vessel-depth",
-          classes: "govuk-input--width-5",
-<<<<<<< HEAD
-          value: data["vessel-depth"]
-=======
-          value: data["vessel-depth"],
-          errorMessage: errors["vessel-depth"]
->>>>>>> b413fc8e09e965e9614669d7ddf4a1eafeb5a5ab
+          errorMessage: errors["wreck-description"]
         }) }}
 
         <button class="govuk-button" data-module="govuk-button">Continue</button>

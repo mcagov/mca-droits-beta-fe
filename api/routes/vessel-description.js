@@ -3,41 +3,40 @@ const { body, validationResult } = require('express-validator');
 import { formatValidationErrors } from '../../utils';
 
 export default function (app) {
-  app.all('/report/depth', function (req, res) {
+  app.all('/report/vessel-description', function (req, res) {
     // Get the answer from session data
     // The name between the quotes is the same as the 'name' attribute on the input elements
     // However in JavaScript we can't use hyphens in variable names
   
     const salvagedFrom = req.session.data['removed-from']
   
-    var depthResponses = ['shipwreck', 'seabed']
+    var descriptionResponses = ['shipwreck']
   
-    // If it's not one of the depth responses, skip this question.
-    if (depthResponses.includes(salvagedFrom)) {
-      res.render('report/depth')
+    // If it's not one of the description responses, skip this question.
+    if (descriptionResponses.includes(salvagedFrom)) {
+      res.render('report/vessel-description')
     } else {
-      res.redirect('/report/vessel-description')
+      res.redirect('/report/property-summary')
     }
   })
 
   app.post(
-    '/report/depth-answer',
+    '/report/vessel-description-answer',
     [
-      body('vessel-depth')
+      body('wreck-description')
         .exists()
         .notEmpty()
-        .isDecimal()
-        .withMessage('Please enter a number')
+        .withMessage('Enter a description')
     ],
     function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
 
       if (!errors) {
-        req.session.data['vessel-depth'] = req.body['vessel-depth'];
-        res.redirect('vessel-description');
+        req.session.data['wreck-description'] = req.body['wreck-description'];
+        res.redirect('property-summary');
 
       } else {
-        return res.render('report/depth', {
+        return res.render('report/vessel-description', {
           errors,
           errorSummary: Object.values(errors),
           values: req.body

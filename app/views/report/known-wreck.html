@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block pageTitle %}
+  Shipwreck
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "includes/phase-banner.html" %}
+  <a class="govuk-back-link" href="/report/personal">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <form class="form" action="/report/known-wreck-answer" method="post">
+        {% if errorSummary.length > 0 %}
+            {{ govukErrorSummary({
+                titleText: "There is a problem",
+                errorList: errorSummary
+            }) }}
+        {% endif %}
+        {{ govukRadios({
+          classes: "govuk-radios--inline",
+          idPrefix: "known-wreck",
+          name: "known-wreck",
+          fieldset: {
+            legend: {
+              text: "Do you know which shipwreck this wreck material has come from?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes",
+              checked: checked("known-wreck", "yes")
+            },
+            {
+              value: "no",
+              text: "No",
+              checked: checked("known-wreck", "no")
+            }
+          ],
+          errorMessage: errors["known-wreck"]
+        }) }}
+
+
+        <button class="govuk-button" data-module="govuk-button">Continue</button>
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

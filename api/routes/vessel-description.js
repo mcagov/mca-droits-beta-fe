@@ -3,8 +3,25 @@ const { body, validationResult } = require('express-validator');
 import { formatValidationErrors } from '../../utils';
 
 export default function (app) {
+  app.all('/report/vessel-description', function (req, res) {
+    // Get the answer from session data
+    // The name between the quotes is the same as the 'name' attribute on the input elements
+    // However in JavaScript we can't use hyphens in variable names
+  
+    const salvagedFrom = req.session.data['removed-from']
+  
+    var descriptionResponses = ['shipwreck']
+  
+    // If it's not one of the description responses, skip this question.
+    if (descriptionResponses.includes(salvagedFrom)) {
+      res.render('report/vessel-description')
+    } else {
+      res.redirect('/report/property-summary')
+    }
+  })
+
   app.post(
-    '/report/vessel-description',
+    '/report/vessel-description-answer',
     [
       body('wreck-description')
         .exists()

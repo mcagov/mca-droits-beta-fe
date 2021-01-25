@@ -21,7 +21,7 @@ module.exports = (env) => {
       library: '[name]Module'
     },
     resolve: {
-      extensions: ['js', 'json', 'scss', 'css', 'njk'],
+      extensions: ['.js', '.json', '.scss', '.css', '.njk'],
     },
     module: {
       rules: [

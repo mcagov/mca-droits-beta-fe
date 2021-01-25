@@ -56,6 +56,7 @@
   },
   "dependencies": {
     "accessible-autocomplete": "^2.0.3",
+    "axios": "^0.21.1",
     "express": "^4.17.1",
     "govuk-frontend": "^3.10.2"
   },

@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import nunjucks from 'nunjucks';
+import path from 'path';
 
 import routes from './api';
 import sessionInMemory from 'express-session';
@@ -22,30 +23,32 @@ app.use(
   })
 );
 
-app.use(express.static('dist'));
-
 app.set('trust proxy', 1); // needed for secure cookies on heroku
-
-// Redirect any asset requests to the relevant location in the gov uk frontend kit
-app.use(
-  '/assets',
-  express.static('./node_modules/govuk-frontend/govuk/assets')
-);
-
-// Nunjucks config
-app.set('view engine', 'html');
 
 // Configure nunjucks environment
 const nunjucksAppEnv = nunjucks.configure(
-  ['node_modules/govuk-frontend/', 'app/views/'],
+  [
+    path.join(__dirname, './node_modules/govuk-frontend/'),
+    path.join(__dirname, './app/views/')
+  ],
   {
     autoescape: false,
     express: app,
-    watch: true
+    watch: process.env.NODE_ENV === 'development' ? true : false
   }
 );
 addCheckedFunction(nunjucksAppEnv);
-app.set('views', './app/views');
+
+// Set views engine
+app.set('view engine', 'html');
+
+app.use(express.static(path.join(__dirname, './dist')));
+app.use(
+  '/assets',
+  express.static(
+    path.join(__dirname, './node_modules/govuk-frontend/govuk/assets')
+  )
+);
 
 // Session uses service name to avoid clashes with other prototypes
 const sessionName = Buffer.from(config.serviceName, 'utf8').toString('hex');

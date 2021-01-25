@@ -3,12 +3,10 @@
   "version": "1.0.0",
   "description": "Maritime and Coastguard Agency - Receiver of Wreck web application for reporting wreck material recovered from the sea and shores of the UK",
   "scripts": {
-    "server": "nodemon -r esm server.js",
-    "build": "webpack",
-    "build:prod": "webpack --env.production",
+    "start": "node -r esm server.js",
     "watch": "webpack --watch",
-    "watch:prod": "webpack --watch --env.production",
-    "dev": "concurrently \"npm run server\" \"npm run watch\""
+    "build": "webpack --env.production",
+    "dev": "concurrently \"npm run start\" \"npm run watch\""
   },
   "repository": {
     "type": "git",

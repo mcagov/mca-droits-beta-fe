@@ -20,7 +20,9 @@
     "url": "https://github.com/ctidigital/mca-droits-beta/issues"
   },
   "homepage": "https://github.com/ctidigital/mca-droits-beta#readme",
-  "devDependencies": {
+  "dependencies": {
+    "accessible-autocomplete": "^2.0.3",
+    "axios": "^0.21.1",
     "@babel/core": "^7.11.6",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/preset-env": "^7.11.5",
@@ -34,13 +36,14 @@
     "copy-webpack-plugin": "^6.1.0",
     "css-loader": "^4.3.0",
     "esm": "^3.2.25",
+    "express": "^4.17.1",
     "express-session": "^1.17.1",
     "express-validator": "^6.9.2",
     "file-loader": "^6.1.0",
+    "govuk-frontend": "^3.10.2",
     "keypather": "^3.1.0",
     "mini-css-extract-plugin": "^0.11.2",
     "node-sass": "^4.14.1",
-    "nodemon": "^2.0.7",
     "nunjucks": "^3.2.2",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "postcss": "^8.0.5",
@@ -54,11 +57,8 @@
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
-  "dependencies": {
-    "accessible-autocomplete": "^2.0.3",
-    "axios": "^0.21.1",
-    "express": "^4.17.1",
-    "govuk-frontend": "^3.10.2"
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/ctidigital/"

@@ -3,12 +3,10 @@
   "version": "1.0.0",
   "description": "Maritime and Coastguard Agency - Receiver of Wreck web application for reporting wreck material recovered from the sea and shores of the UK",
   "scripts": {
-    "server": "nodemon -r esm server.js",
-    "build": "webpack",
-    "build:prod": "webpack --env.production",
+    "start": "node -r esm server.js",
     "watch": "webpack --watch",
-    "watch:prod": "webpack --watch --env.production",
-    "dev": "concurrently \"npm run server\" \"npm run watch\""
+    "build": "webpack --env.production",
+    "dev": "concurrently \"npm run start\" \"npm run watch\""
   },
   "repository": {
     "type": "git",
@@ -20,7 +18,7 @@
     "url": "https://github.com/ctidigital/mca-droits-beta/issues"
   },
   "homepage": "https://github.com/ctidigital/mca-droits-beta#readme",
-  "devDependencies": {
+  "dependencies": {
     "@babel/core": "^7.11.6",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/preset-env": "^7.11.5",
@@ -34,13 +32,14 @@
     "copy-webpack-plugin": "^6.1.0",
     "css-loader": "^4.3.0",
     "esm": "^3.2.25",
+    "express": "^4.17.1",
     "express-session": "^1.17.1",
     "express-validator": "^6.9.2",
     "file-loader": "^6.1.0",
+    "govuk-frontend": "^3.10.2",
     "keypather": "^3.1.0",
     "mini-css-extract-plugin": "^0.11.2",
     "node-sass": "^4.14.1",
-    "nodemon": "^2.0.7",
     "nunjucks": "^3.2.2",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "postcss": "^8.0.5",
@@ -54,9 +53,8 @@
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
-  "dependencies": {
-    "express": "^4.17.1",
-    "govuk-frontend": "^3.10.2"
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/ctidigital/"

@@ -18,7 +18,11 @@ Example usage:
 */
 
 export default {
-  'wreck-find-date': {},
+  'wreck-find-date': {
+    day : '',
+    month : '',
+    year : ''
+  },
   personal: {},
   location: {
     'location-standard': {},

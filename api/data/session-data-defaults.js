@@ -23,7 +23,16 @@ export default {
     month : '',
     year : ''
   },
-  personal: {},
+  personal: {
+    'full-name': '',
+    email: '',
+    'telephone-number': '',
+    'address-line-1': '',
+    'address-line-2': '',
+    'address-town': '',
+    'address-county': '',
+    'address-postcode': ''
+  },
   location: {
     'location-standard': {},
     'location-given': {}

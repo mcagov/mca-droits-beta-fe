@@ -58,6 +58,7 @@ export default function (app) {
       }
 
       if (!errors) {
+        console.log(req.session.data);
         res.redirect('known-wreck');
       } else {
         return res.render('report/personal', {

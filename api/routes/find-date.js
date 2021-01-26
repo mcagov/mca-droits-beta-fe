@@ -27,6 +27,7 @@ export default function (app) {
       const session = req.session.data['wreck-find-date'];
       const body = req.body;
 
+      // loop through default session data keys defined in /api/data/session-data-defaults.js
       for (let key in session) {
         session[key] = body[`wreck-find-date-${key}`];
       }

@@ -23,5 +23,8 @@ export default {
   location: {
     'location-standard': {},
     'location-given': {}
+  },
+  material: {
+    
   }
 };

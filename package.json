@@ -6,7 +6,7 @@
     "start": "node -r esm server.js",
     "watch": "webpack --watch",
     "build": "webpack --env.production",
-    "dev": "concurrently \"npm run start\" \"npm run watch\""
+    "dev": "export NODE_ENV=development && concurrently \"nodemon -r esm server.js\" \"npm run watch\""
   },
   "repository": {
     "type": "git",

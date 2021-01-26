@@ -1,0 +1,137 @@
+{% extends "layout.html" %}
+
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+
+{% block pageTitle %}
+  Description of wreck material
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "includes/phase-banner.html" %}
+  <a class="govuk-back-link" href="/report/property-summary">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% set propertyName = "property" %}
+      {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
+
+      <form class="form" action="/report/property-summary" method="post">
+
+        {% set addressHtml %}
+          {% set addressLines = [
+            data["address-line-1"],
+            data["address-line-2"],
+            data["address-town"],
+            data["address-county"],
+            data["address-postcode"]
+          ] %}
+
+          {{ address(addressLines) }}
+        {% endset %}
+
+        {% set otherAddressHtml %}
+          {% call govukFieldset({
+            legend: {
+              text: "Storage address",
+              classes: "govuk-visually-hidden"
+            }
+          }) %}
+
+            {{ govukInput({
+              label: {
+                text: 'Building and street (line 1)'
+              },
+              id: "address-line-1",
+              autocomplete: "address-line1",
+              name: propertyNamePrefix + "[address-line-1]",
+              value: data[propertyName][propertyID]["address-line-1"]
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: 'Building and street (line 2)'
+              },
+              id: "address-line-2",
+              autocomplete: "address-line2",
+              name: propertyNamePrefix + "[address-line-2]",
+              value: data[propertyName][propertyID]["address-line-2"]
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: "Town or city"
+              },
+              classes: "govuk-!-width-two-thirds",
+              id: "address-town",
+              autocomplete: "address-level2",
+              name: propertyNamePrefix + "[address-town]",
+              value: data[propertyName][propertyID]["address-town"]
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: "County"
+              },
+              classes: "govuk-!-width-two-thirds",
+              id: "address-county",
+              name: propertyNamePrefix + "[address-county]",
+              value: data[propertyName][propertyID]["address-county"]
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: "Postcode"
+              },
+              classes: "govuk-input--width-10",
+              id: "address-postcode",
+              autocomplete: "postal-code",
+              name: propertyNamePrefix + "[address-postcode]",
+              value: data[propertyName][propertyID]["address-postcode"]
+            }) }}
+
+          {% endcall %}
+        {% endset %}
+
+        {{ govukRadios({
+          idPrefix: "storage-address",
+          name: propertyNamePrefix + "[storage-address]",
+          value: data[propertyName][propertyID]["storage-address"],
+          fieldset: {
+            legend: {
+              text: "Where is this item being stored?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+              value: "personal",
+              html: addressHtml,
+              checked: checked("['property']['" + propertyID + "']['storage-address']", "personal")
+            },
+            {
+              value: "custom",
+              text: "A different address",
+              checked: checked("['property']['" + propertyID + "']['storage-address']", "custom"),
+              conditional: {
+              html: otherAddressHtml
+            }
+            }
+          ]
+        }) }}
+
+        <input type="hidden" name="property-added-flash" value=true>
+
+        <button class="govuk-button" data-module="govuk-button">Continue</button>
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

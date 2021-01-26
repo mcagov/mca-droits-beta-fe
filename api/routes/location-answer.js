@@ -276,7 +276,6 @@ export default function (app) {
           session['location-given'].longitude = '';
       }
       const errors = formatValidationErrors(validationResult(req));
-      console.log(session);
 
       if (!errors) {
         return res.redirect('depth');

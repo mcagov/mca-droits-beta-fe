@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import nunjucks from 'nunjucks';
 import path from 'path';
+import edt from 'express-debug';
 
 import routes from './api';
 import sessionInMemory from 'express-session';
@@ -76,6 +77,9 @@ app.use(
 // Manage session data. Assigns default values to data
 app.use(sessionData);
 
+// Logs req.session data
+if (process.env.NODE_ENV === 'development') edt(app, { panels: ['session'] });
+
 // Load API routes
 app.use('/', routes());
 
@@ -86,7 +90,6 @@ app.get(/^([^.]+)$/, function (req, res, next) {
 app.post(/^\/([^.]+)$/, function (req, res) {
   res.redirect('/' + req.params[0]);
 });
-
 app.listen(PORT, () => {
   console.log(`App listening on ${PORT} - url: http://localhost:${PORT}`);
   console.log('Press Ctrl+C to quit.');

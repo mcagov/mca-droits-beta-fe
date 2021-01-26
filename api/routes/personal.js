@@ -53,12 +53,12 @@ export default function (app) {
       const session = req.session.data.personal;
       const body = req.body;
 
+      // loop through default session data keys defined in /api/data/session-data-defaults.js
       for (let key in session) {
         session[key] = body[key];
       }
 
       if (!errors) {
-        console.log(req.session.data);
         res.redirect('known-wreck');
       } else {
         return res.render('report/personal', {

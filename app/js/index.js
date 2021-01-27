@@ -8,4 +8,5 @@ document.body.className = document.body.className
   : 'js-enabled';
 
 // Components
-import "./components/editableMap.js"
+import './components/editableMap.js';
+import './components/what3words.js';

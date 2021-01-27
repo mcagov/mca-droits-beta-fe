@@ -376,6 +376,23 @@
 
         {% endset -%}
 
+        {% set w3wInput %}
+            <div id="wreck-name-autocomplete" class="govuk-body" data-value="">
+              <div class="autocomplete__wrapper govuk-input--width-20">
+                <div class="govuk-form-group" data-js="w3w">
+                  {{ govukInput({
+                    id: "w3w-name",
+                    name: "w3w-name",
+                    value: data["location"]["w3w-name"],
+                    classes: "govuk-input--width-20",
+                    errorMessage: errors["w3w-name"]
+                  }) }}
+                  <ul class="autocomplete__menu autocomplete__menu--inline autocomplete__menu--hidden" id="w3w__listbox" role="listbox"></ul>
+                </div>
+              </div>
+            </div>
+        {% endset -%}
+
         {% set mapInput %}
           <div class="govuk-!-margin-bottom-5" data-js="editable-map">
             <div id="location-map-input" class="row-prototype-map-select govuk-!-margin-bottom-1"></div>
@@ -473,7 +490,7 @@
               value: "what-3-words",
               text: "what3words",
               conditional: {
-                html: '<what3words-autosuggest autosuggest-focus="54.093409, -2.89479" />'
+                html: w3wInput
               },
               hint: {
                 html: "For example <em>lock.spout.radar</em>."

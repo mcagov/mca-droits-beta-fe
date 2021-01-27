@@ -1,5 +1,9 @@
-const { body, validationResult } = require('express-validator');
+import { body, validationResult } from 'express-validator';
+const api = require('@what3words/api');
+
 import { formatValidationErrors } from '../../utils';
+
+api.setOptions({ key: '0LFRBQX2' });
 
 export default function (app) {
   app.post(
@@ -38,6 +42,8 @@ export default function (app) {
           ].longitude = `${session['location-standard'].longitude}°`;
 
           // handle errors
+          //TODO Errors need to be displayed underneath all inputs, they currently break layout
+          //Need to be similar to find-date page
           await body('location-latitude-decimal')
             .exists()
             .not()
@@ -228,7 +234,24 @@ export default function (app) {
           break;
 
         case 'what-3-words':
-          session['3wa'] = reqBody['3wa'];
+          session['w3w-name'] = reqBody['w3w-name'];
+
+          await api.convertToCoordinates(session['w3w-name']).then((data) => {
+            session['location-standard'].latitude = data.coordinates.lat;
+            session['location-standard'].longitude = data.coordinates.lng;
+
+            session['location-given'].latitude = `${data.coordinates.lat}° N `;
+            session['location-given'].longitude = `${data.coordinates.lng}° W`;
+          });
+
+          //TODO Errors need to check if a w3w value has been made (eg. lock.spout.radar)
+          await body('w3w-name')
+            .exists()
+            .not()
+            .isEmpty()
+            .withMessage('Enter what3words')
+            .run(req);
+
           break;
         case 'map':
           session['map-latitude-input'] = reqBody['map-latitude-input'];

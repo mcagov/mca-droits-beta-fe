@@ -6,7 +6,7 @@
     "start": "node -r esm server.js",
     "watch": "webpack --watch",
     "build": "webpack --env.production",
-    "dev": "export NODE_ENV=development && concurrently \"nodemon -r esm server.js\" \"npm run watch\""
+    "dev": "cross-env NODE_ENV=development && concurrently \"nodemon -r esm server.js\" \"npm run watch\""
   },
   "repository": {
     "type": "git",
@@ -57,6 +57,7 @@
     "webpack-cli": "^3.3.12"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodemon": "^2.0.7"
   },
   "publishConfig": {

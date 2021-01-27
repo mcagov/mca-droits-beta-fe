@@ -19,7 +19,9 @@ export default function (app) {
       if (rawPropertyID === 'new') {
         // Generate the new ID and increment the counter for next time.
         // Explaination of why we append an "i": https://stackoverflow.com/a/22198251
+        console.log(req.session.data);
         propertyID = 'i' + req.session.data['property-id-counter']
+        console.log(propertyID);
         req.session.data['property-id-counter']++
       } else {
         // Otherwise we check if we're getting an existing ID and throw a 404 otherwise.
@@ -32,10 +34,9 @@ export default function (app) {
 
       res.render('report/property-form', { propertyID: propertyID })
     }
+  )
 
-  );
-
-  router.all('/report/property-form-image/:prop_id', function (req, res) {
+  app.all('/report/property-form-image/:prop_id', function (req, res) {
     var rawPropertyID = req.params.prop_id
     var property = req.session.data.property
   
@@ -47,19 +48,5 @@ export default function (app) {
     }
   
     res.render('report/property-form-image', { propertyID: propertyID, propertyItem: propertyItem });
-  })
-  
-  router.all('/report/property-form-address/:prop_id', function (req, res) {
-    var rawPropertyID = req.params.prop_id
-    var property = req.session.data.property
-  
-    if (property[rawPropertyID] !== undefined) {
-      propertyID = rawPropertyID;
-      propertyItem = property[propertyID];
-    } else {
-      res.redirect('/report/property-summary');
-    }
-  
-    res.render('report/property-form-address', { propertyID: propertyID, propertyItem: propertyItem });
   })
 }

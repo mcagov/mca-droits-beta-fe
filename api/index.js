@@ -9,6 +9,7 @@ import personal from './routes/personal';
 import vesselDescription from './routes/vessel-description';
 import knownWreck from './routes/known-wreck';
 import salvageAward from './routes/salvage-award';
+import propertyForm from './routes/property-form';
 
 export default () => {
   const app = Router();
@@ -23,6 +24,7 @@ export default () => {
   depth(app);
   vesselDescription(app);
   salvageAward(app);
+  propertyForm(app);
 
   return app;
 };

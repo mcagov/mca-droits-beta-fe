@@ -18,10 +18,11 @@ Example usage:
 */
 
 export default {
+  'report-date': {},
   'wreck-find-date': {
-    day : '',
-    month : '',
-    year : ''
+    day: '',
+    month: '',
+    year: ''
   },
   personal: {
     'full-name': '',

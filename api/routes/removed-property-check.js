@@ -24,7 +24,6 @@ export default function (app) {
           month = date.getMonth() + 1,
           year = date.getFullYear();
 
-        req.session.data['report-date'] = {};
         req.session.data['report-date']['day'] = ('0' + day).slice(-2);
         req.session.data['report-date']['month'] = ('0' + month).slice(-2);
         req.session.data['report-date']['year'] = year;

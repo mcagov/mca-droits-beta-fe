@@ -20,7 +20,7 @@
       {% set propertyName = "property" %}
       {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
 
-      <form class="form" action="/report/property-summary" method="post">
+      <form class="form" action="/report/property-form-address-answer/{{ propertyID }}" method="post">
 
         {% set addressHtml %}
           {% set addressLines = [

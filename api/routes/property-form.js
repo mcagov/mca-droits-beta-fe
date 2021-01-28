@@ -34,40 +34,6 @@ export default function (app) {
       res.render('report/property-form', { propertyID: propertyID });
     }
   )
-
-  app.all('/report/property-form-image/:prop_id', function (req, res) {
-    var rawPropertyID = req.params.prop_id
-    req.session.data.property[rawPropertyID] = req.body.property[rawPropertyID];
-    var property = req.session.data.property
-    var propertyID;
-    var propertyItem;
-
-    if (property[rawPropertyID] !== undefined) {
-      propertyID = rawPropertyID;
-      propertyItem = property[propertyID];
-    } else {
-      res.redirect('/report/property-summary');
-    }
-
-    res.render('report/property-form-image', { propertyID: propertyID, propertyItem: propertyItem });
-  })
-
-  app.all('/report/property-form-address/:prop_id', function (req, res) {
-    var rawPropertyID = req.params.prop_id;
-    var propertyID;
-    var propertyItem;
-    var property = req.session.data.property
-    console.log(req.session.data);
-  
-    if (property[rawPropertyID] !== undefined) {
-      propertyID = rawPropertyID;
-      propertyItem = property[propertyID];
-    } else {
-      res.redirect('/report/property-summary');
-    }
-  
-    res.render('report/property-form-address', { propertyID: propertyID, propertyItem: propertyItem });
-  })
   
   app.get('/report/property-delete/:prop_id', function (req, res) {
     // This is a janky router to try simulate a delete page for property. It contains many flaws.
@@ -105,22 +71,4 @@ export default function (app) {
     res.redirect('/report/property-summary')
   })
   
-  app.get('/report/property-summary', function (req, res) {
-    var removedFlash = false
-    var addedFlash = false
-  
-    // These are set as hidden fields.
-    if (req.session.data['property-added-flash'] !== undefined && req.session.data['property-added-flash']) {
-      addedFlash = true
-      req.session.data['property-added-flash'] = false
-    }
-  
-    // These are set as hidden fields.
-    if (req.session.data['property-removed-flash'] !== undefined && req.session.data['property-removed-flash']) {
-      removedFlash = true
-      req.session.data['property-removed-flash'] = false
-    }
-  
-    res.render('report/property-summary', { addedFlash: addedFlash, removedFlash: removedFlash })
-  })
 }

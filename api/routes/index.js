@@ -8,7 +8,10 @@ import depth from './depth';
 import personal from './personal';
 import vesselDescription from './vessel-description';
 import knownWreck from './known-wreck';
+import propertySummary from './property-summary';
 import propertyForm from './property-form';
+import propertyFormImage from './property-form-image';
+import propertyFormAddress from './property-form-address';
 import salvageAward from './salvage-award';
 import checkYourAnswers from './check-your-answers';
 
@@ -24,7 +27,10 @@ export default () => {
   salvagedFrom(app);
   depth(app);
   vesselDescription(app);
+  propertySummary(app);
   propertyForm(app);
+  propertyFormImage(app);
+  propertyFormAddress(app);
   salvageAward(app);
   checkYourAnswers(app);
 

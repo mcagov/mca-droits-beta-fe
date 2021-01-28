@@ -35,7 +35,11 @@ export default {
     'address-postcode': ''
   },
   location: {
-    'location-standard': {},
-    'location-given': {}
+    'location-standard': {
+      latitude: '',
+      longitude: ''
+    },
+    'location-given': {},
+    'location-description': ''
   }
 };

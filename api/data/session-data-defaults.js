@@ -18,10 +18,11 @@ Example usage:
 */
 
 export default {
+  'report-date': {},
   'wreck-find-date': {
-    day : '',
-    month : '',
-    year : ''
+    day: '',
+    month: '',
+    year: ''
   },
   personal: {
     'full-name': '',
@@ -33,11 +34,11 @@ export default {
     'address-county': '',
     'address-postcode': ''
   },
-  location: {
-    'location-standard': {},
-    'location-given': {}
+  'location-standard': {
+    latitude: '',
+    longitude: ''
   },
-  property: {
-    
-  }
+  'location-given': {},
+  'location-description': '',
+  property: {}
 };

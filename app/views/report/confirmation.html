@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% block pageTitle %}
+  Report submitted
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "includes/phase-banner.html" %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <div class="govuk-panel govuk-panel--confirmation">
+        <h1 class="govuk-panel__title">Report submitted</h1>
+        <div class="govuk-panel__body">
+          Your reference:
+          <br>
+          <strong>034/20</strong>
+        </div>
+      </div>
+
+      <p>
+        We have sent you a confirmation email with a copy of your report.
+      </p>
+
+      <p>
+        {{ govukButton({
+          text: "Print a copy of your report",
+          classes: "govuk-button--secondary hide-on-print",
+          attributes: {
+            "onClick": "window.print()"
+          }
+        }) }}
+      </p>
+
+      <div class="show-on-print">
+        <hr class="govuk-!-margin-top-9 govuk-!-margin-bottom-9">
+        {% include 'includes/report-summary.html' %}
+      </div>
+
+      <p>We have sent your report to the Receiver of Wreck.</p>
+
+      <h2 class="govuk-heading-m">What happens next</h2>
+
+      {% if data["property-possession"] == "no" %}
+        <p>You have opted to deliver the salvaged wreck material to the Receiver of Wreck. The wreck material should be
+          delivered to the following address:</p>
+
+        <p>
+          Spring Place<br/>
+          105 Commercial Road<br/>
+          Southampton<br/>
+          SO15 1EG<br/>
+          United Kingdom<br/>
+        </p>
+
+        {{ govukWarningText({
+          html: 'You must <a href="#">contact the Receiver of Wreck</a> if it is not possible to deliver the wreck material within 5 working days.',
+          iconFallbackText: "Warning"
+        }) }}
+
+      {% endif %}
+
+      <p>The Receiver of Wreck may contact you to request further information and to keep you informed of the progress
+        of this report.</p>
+
+    </div>
+  </div>
+
+{% endblock %}

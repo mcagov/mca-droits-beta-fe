@@ -37,7 +37,7 @@ export default {
     'location-standard': {},
     'location-given': {}
   },
-  material: {
+  property: {
     
   }
 };

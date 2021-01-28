@@ -24,11 +24,11 @@
 
         {% set addressHtml %}
           {% set addressLines = [
-            data["address-line-1"],
-            data["address-line-2"],
-            data["address-town"],
-            data["address-county"],
-            data["address-postcode"]
+            data["personal"]["address-line-1"],
+            data["personal"]["address-line-2"],
+            data["personal"]["address-town"],
+            data["personal"]["address-county"],
+            data["personal"]["address-postcode"]
           ] %}
 
           {{ address(addressLines) }}

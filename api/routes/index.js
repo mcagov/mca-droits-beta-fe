@@ -8,7 +8,7 @@ import depth from './depth';
 import personal from './personal';
 import vesselDescription from './vessel-description';
 import knownWreck from './known-wreck';
-import propertyForm from './routes/property-form';
+import propertyForm from './property-form';
 import salvageAward from './salvage-award';
 import checkYourAnswers from './check-your-answers';
 

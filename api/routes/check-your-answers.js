@@ -4,7 +4,7 @@ import { formatValidationErrors } from '../../utils';
 
 export default function (app) {
   app.post(
-    '/report/confirmation',
+    '/report/check-your-answers',
     [
       body('property-declaration')
         .exists()
@@ -14,6 +14,9 @@ export default function (app) {
     ],
     function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
+
+      req.session.data.redirectToCheckAnswers = null;
+
       if (errors) {
         return res.render('report/check-your-answers', {
           errors,
@@ -23,6 +26,8 @@ export default function (app) {
       } else {
         // Final data to post to server
         const data = JSON.stringify(req.session.data);
+
+        res.redirect('/report/confirmation');
       }
     }
   );

@@ -20,7 +20,13 @@
       {% set propertyName = "property" %}
       {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
 
-      <form class="form" action="/report/property-form-image/{{ propertyID }}" method="post">
+      <form class="form" action="/report/property-form-answer/{{ propertyID }}" method="post">
+        {% if errorSummary.length > 0 %}
+          {{ govukErrorSummary({
+              titleText: "There is a problem",
+              errorList: errorSummary
+          }) }}
+        {% endif %}
 
         {{ govukTextarea({
           id: "property-description",
@@ -33,7 +39,8 @@
           },
           hint: {
             text: "This should include descriptions of identifying marks, weight, dimensions, colour, condition and age."
-          }
+          },
+          errorMessage: errors["property-description"]
         }) }}
 
         {{ govukInput({
@@ -46,7 +53,8 @@
           id: "property-quantity",
           name: propertyNamePrefix + "[quantity]",
           value: data[propertyName][propertyID]["quantity"],
-          classes: "govuk-input--width-3"
+          classes: "govuk-input--width-3",
+          errorMessage: errors["property-quanity"]
         }) }}
 
         {% set valueInput %}

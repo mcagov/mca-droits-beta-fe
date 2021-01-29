@@ -34,6 +34,44 @@ export default function (app) {
       res.render('report/property-form', { propertyID: propertyID });
     }
   )
+
+  app.post(
+    '/report/property-form-answer/:prop_id',
+    [
+      body('property-description')
+        .exists()
+        .not()
+        .isEmpty()
+        .withMessage('Enter a description of the item'),
+      body('property-quanity')
+        .exists()
+        .not()
+        .isEmpty()
+        .withMessage('Enter how many items have been found that match this description')
+    ],
+    function (req, res) {
+      var rawPropertyID = req.params.prop_id;
+      var property = req.session.data.property;
+      var propertyID;
+      var propertyItem;
+
+      if (property[rawPropertyID] !== undefined) {
+        propertyID = rawPropertyID;
+        propertyItem = property[propertyID];
+      } 
+      
+      if (!errors) {
+        res.render('report/property-form-image', { propertyID: propertyID, propertyItem: propertyItem });
+      }
+      else {
+        return res.render('report/property-form', {
+          errors,
+          errorSummary: Object.values(errors),
+          values: req.body
+        });
+      }
+    }
+  )
   
   app.get('/report/property-delete/:prop_id', function (req, res) {
     // This is a janky router to try simulate a delete page for property. It contains many flaws.

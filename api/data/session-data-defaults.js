@@ -34,11 +34,13 @@ export default {
     'address-county': '',
     'address-postcode': ''
   },
-  'location-standard': {
-    latitude: '',
-    longitude: ''
+  location: {
+    'location-standard': {
+      latitude: '',
+      longitude: ''
+    },
+    'location-given': {},
+    'location-description': ''
   },
-  'location-given': {},
-  'location-description': '',
   property: {}
 };

@@ -23,4 +23,9 @@ export default function (app) {
   
     res.render('report/property-summary', { addedFlash: addedFlash, removedFlash: removedFlash })
   })
+
+  app.get('/report/salvage', function (req, res) {
+  
+    res.render('report/salvage-award', { addedFlash: addedFlash, removedFlash: removedFlash })
+  })
 }

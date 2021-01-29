@@ -20,7 +20,7 @@
       {% set propertyName = "property" %}
       {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
 
-      <form class="form" action="/report/property-form-answer/{{ propertyID }}" method="post">
+      <form class="form" action="/report/property-form/{{ propertyID }}" method="post">
         {% if errorSummary.length > 0 %}
           {{ govukErrorSummary({
               titleText: "There is a problem",
@@ -54,7 +54,7 @@
           name: propertyNamePrefix + "[quantity]",
           value: data[propertyName][propertyID]["quantity"],
           classes: "govuk-input--width-3",
-          errorMessage: errors["property-quanity"]
+          errorMessage: errors["property-quantity"]
         }) }}
 
         {% set valueInput %}
@@ -98,7 +98,8 @@
               text: "No",
               checked: checked("value-known", "no")
             }
-          ]
+          ],
+          errorMessage: errors["value-known"]
         }) }}
 
         <button class="govuk-button" data-module="govuk-button">Continue</button>

@@ -5,6 +5,7 @@ $govuk-global-styles: true;
 @import 'accessible-autocomplete';
 
 // Components
-@import './components/coordinate-inputs.scss';
-@import './components/map.scss';
-@import './components/check-answers.scss';
+@import './components/coordinate-inputs';
+@import './components/map';
+@import './components/check-answers';
+@import './components/confirmation';

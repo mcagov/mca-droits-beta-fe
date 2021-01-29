@@ -1,0 +1,23 @@
+.show-on-print {
+  display: none;
+}
+
+@media print {
+  .show-on-print {
+    display: initial;
+  }
+
+  .hide-on-print {
+    display: none;
+  }
+
+  body footer,
+  .govuk-phase-banner,
+  .visuallyhidden,
+  #global-cookie-message,
+  #skiplink-container,
+  .govuk-summary-list__actions,
+  .govuk-back-link {
+    display: none !important;
+  }
+}

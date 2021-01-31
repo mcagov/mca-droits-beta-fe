@@ -23,7 +23,13 @@
 
       <h1 class="govuk-heading-xl">Vessel information</h1>
 
-      <form class="form" action="/report/salvaged-from" method="post">
+      <form class="form" action="/report/vessel-information-answer" method="post">
+        {% if errorSummary.length > 0 %}
+            {{ govukErrorSummary({
+                titleText: "There is a problem",
+                errorList: errorSummary
+            }) }}
+        {% endif %}
 
         <div class="govuk-form-group">
           <label for="wreck-name" class="govuk-label">What is the name of the vessel?</label>

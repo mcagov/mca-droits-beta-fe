@@ -18,17 +18,15 @@ export class VesselInformation {
   }
 
   init() {
-    this.initAutocomplete()
-  }
-
-  initAutocomplete() {
+    // DEV NOTE:
+    // May need improving if possible - only provides accurate matches after querying 2-3 letters
     accessibleAutocomplete({
       element: document.querySelector('#wreck-name-autocomplete'),
       id: 'wreck-name',
       name: 'wreck-name',
       required: true,
       showNoOptionsFound: false,
-      source: this.customSuggest,
+      source: this.fetchData,
       defaultValue: document.getElementById('wreck-name-autocomplete').dataset.value,
       templates: {
         inputValue: this.inputValueTemplate,
@@ -51,37 +49,38 @@ export class VesselInformation {
   }
 
   suggestionTemplate (result) {
-    return result && result.name +
-      ' (<span>' + result.constructed + '-' + result.sunk + '</span>)'
+    return result && result.name; /*+
+      ' (<span>' + result.constructed + '-' + result.sunk + '</span>)'*/
   }
 
-  fetchData() {
+  fetchData(query, syncResults) {
+    // DEV NOTE:
+    // Need confirmation on API data - currently only returns vessel names
     const url = "https://datahub.admiralty.co.uk/server/rest/services/Hosted/INSPIRE_Wrecks_Points/FeatureServer/0/query?where=1%3D1&outFields=latitude,longitude,objnam,globalid&returnGeometry=false&outSR=4326&f=json";
-
     axios.get(url)
     .then((resp) => {
         if(resp.data) {
-          console.log(resp.data);
-          return resp.data.features;
+          var data = resp.data.features;
+          let results = [];
+
+          data.forEach(function(item) {
+            var obj = {'name': item.attributes.objnam};
+            results.push(obj);
+          });
+
+          return syncResults (query
+            ? results.filter(function (result) {
+              if (result.name !== ' ') {
+                return result.name.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+              }
+            })
+            : []
+          )
         }
     })
     .catch((err) => {
         console.log(err);
     })
-  }
-
-  customSuggest (query, syncResults) {
-    // 'this' returns undefined inside this function (??)
-    // var results = this.data;
-
-    syncResults(query
-      ? results.filter(function (result) {
-        if (result.attributes.objnam) {
-          return result.attributes.objnam.toLowerCase().indexOf(query.toLowerCase()) !== -1
-        }
-      })
-      : []
-    )
   }
 }
 

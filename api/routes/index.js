@@ -3,6 +3,7 @@ import clearSession from './clear-session';
 import removedPropertyCheck from './removed-property-check';
 import locationAnswer from './location-answer';
 import findDate from './find-date';
+import vesselInformation from './vessel-information';
 import salvagedFrom from './salvaged-from';
 import depth from './depth';
 import personal from './personal';
@@ -24,6 +25,7 @@ export default () => {
   findDate(app);
   personal(app);
   knownWreck(app);
+  vesselInformation(app);
   salvagedFrom(app);
   depth(app);
   vesselDescription(app);

@@ -77,12 +77,12 @@ export class VesselInformation {
             : []
           )
         }
-    })
-    .catch((err) => {
-        console.log(err);
-    })
+      })
+      .catch((err) => {
+          console.log(err);
+      })
+    }
   }
-}
 
 export default LoadManager.queue(() => {
   new ComponentManager(VesselInformation, "[data-js~=vessel-information]")

@@ -8,7 +8,6 @@ export default function (app) {
     var removedFlash = false
     var addedFlash = false
     
-    console.log(req.session.data);
     // These are set as hidden fields.
     if (req.session.data['property-added-flash'] !== undefined && req.session.data['property-added-flash']) {
       addedFlash = true

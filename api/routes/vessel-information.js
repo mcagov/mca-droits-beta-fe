@@ -17,7 +17,7 @@ export default function (app) {
       
       if (!errors) {
         req.session.data['wreck-name'] = req.body['wreck-name'];
-        res.render('report/salvaged-from');
+        res.redirect('salvaged-from');
 
       } else {
         return res.render('report/vessel-information', {

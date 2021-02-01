@@ -10,9 +10,6 @@ export default function (app) {
       // Instantiate a counter for the ID in the session data to avoid duplicates.
       req.session.data['property-id-counter'] = req.session.data['property-id-counter'] !== undefined ? req.session.data['property-id-counter'] : 0;
 
-      // Instantiate the property object itself in the session data so we can assume its existance later.
-      //req.session.data.property = req.session.data.property !== undefined ? req.session.data.property : {};
-
       var rawPropertyID = req.params.prop_id;
       var property = req.session.data.property;
 
@@ -36,10 +33,6 @@ export default function (app) {
   )
   
   app.get('/report/property-delete/:prop_id', function (req, res) {
-    // This is a janky router to try simulate a delete page for property. It contains many flaws.
-  
-    // Instantiate the property object itself in the session data so we can assume its existance later.
-    req.session.data.property = req.session.data.property !== undefined ? req.session.data.property : {}
   
     var rawPropertyID = req.params.prop_id
     var property = req.session.data.property
@@ -55,14 +48,9 @@ export default function (app) {
   })
   
   app.get('/report/property-delete-action/:prop_id', function (req, res) {
-    // This is a janky router to try simulate a delete page for property. It contains many flaws.
-  
-    // Instantiate the property object itself in the session data so we can assume its existance later.
-    req.session.data.property = req.session.data.property !== undefined ? req.session.data.property : {}
   
     var rawPropertyID = req.params.prop_id
     var property = req.session.data.property
-    var propertyItem = null
   
     if (property[rawPropertyID] !== undefined) {
       delete property[rawPropertyID]

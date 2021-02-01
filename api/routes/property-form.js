@@ -37,8 +37,8 @@ export default function (app) {
 
   app.post(
     '/report/property-form/:prop_id',
-    [
-      body('property-description')
+    /*[
+      body('property' + '[' + req.params.prop_id + '][description]')
         .exists()
         .not()
         .isEmpty()
@@ -54,9 +54,8 @@ export default function (app) {
         .not()
         .isEmpty()
         .withMessage('Select yes if you know the approximate value of the items that match this description')
-    ],
-    function (req, res) {
-      const errors = formatValidationErrors(validationResult(req));
+    ],*/
+    async (req, res, next) => {      
       var rawPropertyID = req.params.prop_id;
       req.session.data.property[rawPropertyID] = req.body.property[rawPropertyID];
       
@@ -67,7 +66,28 @@ export default function (app) {
       if (property[rawPropertyID] !== undefined && property[rawPropertyID] !== 'new') {
         propertyID = rawPropertyID;
         propertyItem = property[propertyID];
+
+        await body('property' + '[' + propertyID + '][description]')
+        .exists()
+        .not()
+        .isEmpty()
+        .withMessage('Enter a description of the item')
+        .run(req);
+      await body('property' + '[' + propertyID + '][quantity]')
+        .exists()
+        .not()
+        .isEmpty()
+        .withMessage('Enter how many items have been found that match this description')
+        .run(req);
+      await body('value-known')
+        .exists()
+        .not()
+        .isEmpty()
+        .withMessage('Select yes if you know the approximate value of the items that match this description')
+        .run(req);
       } 
+
+      const errors = formatValidationErrors(validationResult(req));
       
       if (!errors) {
         res.render('report/property-form-image', { propertyID: propertyID, propertyItem: propertyItem });

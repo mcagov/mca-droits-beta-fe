@@ -129,32 +129,38 @@
 
 
       {% if itemsAdded > 0 %}
-        <div class="row-prototype-declaration-wrapper govuk-!-padding-5 govuk-!-margin-bottom-6">
-          <div class="govuk-checkboxes">
-            <div class="govuk-checkboxes__item">
-              <input class="govuk-checkboxes__input" id="property-declaration" name="property-declaration" type="checkbox" value="property-declaration">
-              <label class="govuk-label govuk-checkboxes__label" for="property-declaration">
-                I confirm that I hold in my possession the items detailed in this form and under the Merchant Shipping Act 1995 I confirm I agree to:
-              </label>
-            </div>
-          </div>
+      <form class="form" action="/report/property-summary" method="post" novalidate>
+        {% if errorSummary.length > 0 %}
+          {{ govukErrorSummary({
+              titleText: "There is a problem",
+              errorList: errorSummary
+          }) }}
+        {% endif %}
+        <div class="declaration-wrapper govuk-!-padding-5 govuk-!-margin-bottom-6">
+          {{ govukCheckboxes({
+            idPrefix: "property-declaration",
+            name: "property-declaration",
+            items: [
+              {
+                value: "true",
+                text: "I confirm that I hold in my possession the items detailed in this form and under the Merchant Shipping Act 1995 I confirm I agree to:"
+              }
+            ],
+            errorMessage: errors["property-declaration"]
+          }) }}
           <p></p>
-          <ul class="govuk-list govuk-list--bullet">
-            <li>Take all reasonable care of the recovered wreck material and understand that the Maritime and Coastguard Agency and the Receiver of Wreck may recover any costs associated with loss or damage of the items whilst in my possession</li>
-            <li>Allow the Receiver of Wreck, or any other person appointed by the Receiver, access to the wreck material at all reasonable times and will inform the Receiver if the wreck material changes location</li>
-            <li>Not remove the wreck material from the United Kingdom</li>
-            <li>Surrender the wreck material to the Receiver of Wreck at any time I am requested to</li>
-            <li>Not hold the Maritime and Coastguard Agency and the Receiver of Wreck responsible for any costs involved in the storage or care of the recovered wreck material</li>
-          </ul>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>Take all reasonable care of the recovered wreck material and understand that the Maritime and Coastguard Agency and the Receiver of Wreck may recover any costs associated with loss or damage of the items whilst in my possession</li>
+              <li>Allow the Receiver of Wreck, or any other person appointed by the Receiver, access to the wreck material at all reasonable times and will inform the Receiver if the wreck material changes location</li>
+              <li>Not remove the wreck material from the United Kingdom</li>
+              <li>Surrender the wreck material to the Receiver of Wreck at any time I am requested to</li>
+              <li>Not hold the Maritime and Coastguard Agency and the Receiver of Wreck responsible for any costs involved in the storage or care of the recovered wreck material</li>
+            </ul>
 
-          <p>You may not assume title or ownership of any of the declared wreck material until advised by the Receiver of Wreck.</p>
+            <p>You may not assume title or ownership of any of the declared wreck material until advised by the Receiver of Wreck.</p>
 
-          <p>This undertaking has no influence on any decision the Receiver of Wreck may take in respect of claims to ownership of the wreck material recovered.</p>
-        </div>
-      {% endif %}
-
-      {% if itemsAdded > 0 %}
-        <form class="form" action="/report/salvage-award" method="post">
+            <p>This undertaking has no influence on any decision the Receiver of Wreck may take in respect of claims to ownership of the wreck material recovered.</p>
+          </div>
 
           {{ govukButton({
             text: "Accept and continue",

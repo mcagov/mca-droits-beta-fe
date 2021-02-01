@@ -34,24 +34,6 @@ export default function (app) {
 
   app.post(
     '/report/property-form/:prop_id',
-    /*[
-      body('property' + '[' + req.params.prop_id + '][description]')
-        .exists()
-        .not()
-        .isEmpty()
-        .withMessage('Enter a description of the item'),
-      body('property-quantity')
-        .exists()
-        .not()
-        .isEmpty()
-        .isNumeric()
-        .withMessage('Enter how many items have been found that match this description'),
-      body('value-known')
-        .exists()
-        .not()
-        .isEmpty()
-        .withMessage('Select yes if you know the approximate value of the items that match this description')
-    ],*/
     async (req, res, next) => {      
       var rawPropertyID = req.params.prop_id;
       req.session.data.property[rawPropertyID] = req.body.property[rawPropertyID];

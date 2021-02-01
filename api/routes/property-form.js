@@ -64,7 +64,7 @@ export default function (app) {
         propertyID = rawPropertyID;
         propertyItem = property[propertyID];
 
-        await body('property' + '[' + propertyID + '][description]')
+      await body('property' + '[' + propertyID + '][description]')
         .exists()
         .not()
         .isEmpty()

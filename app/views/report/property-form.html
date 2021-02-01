@@ -31,7 +31,7 @@
         {% endif %}
 
         {{ govukTextarea({
-          id: "property-description",
+          id: "property." + propertyID + ".description",
           name: propertyNamePrefix + "[description]",
           value: data[propertyName][propertyID]["description"],
           label: {
@@ -42,7 +42,7 @@
           hint: {
             text: "This should include descriptions of identifying marks, weight, dimensions, colour, condition and age."
           },
-          errorMessage: errors[propertyNamePrefix + "[description"]
+          errorMessage: errors["property." + propertyID + ".description"]
         }) }}
 
         {{ govukInput({
@@ -52,11 +52,11 @@
           hint: {
             text: "Include only the items that you are reporting at this time."
           },
-          id: "property-quantity",
+          id: "property." + propertyID + ".quantity",
           name: propertyNamePrefix + "[quantity]",
           value: data[propertyName][propertyID]["quantity"],
           classes: "govuk-input--width-3",
-          errorMessage: errors[propertyNamePrefix + "[quantity]"]
+          errorMessage: errors["property." + propertyID + ".quantity"]
         }) }}
 
         {% set valueInput %}

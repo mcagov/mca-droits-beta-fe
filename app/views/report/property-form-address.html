@@ -21,6 +21,12 @@
       {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
 
       <form class="form" action="/report/property-form-address-answer/{{ propertyID }}" method="post">
+        {% if errorSummary.length > 0 %}
+          {{ govukErrorSummary({
+              titleText: "There is a problem",
+              errorList: errorSummary
+          }) }}
+        {% endif %}
 
         {% set addressHtml %}
           {% set addressLines = [
@@ -49,7 +55,8 @@
               id: "address-line-1",
               autocomplete: "address-line1",
               name: propertyNamePrefix + "[address-line-1]",
-              value: data[propertyName][propertyID]["address-line-1"]
+              value: data[propertyName][propertyID]["address-line-1"],
+              errorMessage: errors["address-line-1"]
             }) }}
 
             {{ govukInput({
@@ -70,7 +77,8 @@
               id: "address-town",
               autocomplete: "address-level2",
               name: propertyNamePrefix + "[address-town]",
-              value: data[propertyName][propertyID]["address-town"]
+              value: data[propertyName][propertyID]["address-town"],
+              errorMessage: errors["address-town"]
             }) }}
 
             {{ govukInput({
@@ -80,7 +88,8 @@
               classes: "govuk-!-width-two-thirds",
               id: "address-county",
               name: propertyNamePrefix + "[address-county]",
-              value: data[propertyName][propertyID]["address-county"]
+              value: data[propertyName][propertyID]["address-county"],
+              errorMessage: errors["address-county"]
             }) }}
 
             {{ govukInput({
@@ -91,7 +100,8 @@
               id: "address-postcode",
               autocomplete: "postal-code",
               name: propertyNamePrefix + "[address-postcode]",
-              value: data[propertyName][propertyID]["address-postcode"]
+              value: data[propertyName][propertyID]["address-postcode"],
+              errorMessage: errors["address-postcode"]
             }) }}
 
           {% endcall %}

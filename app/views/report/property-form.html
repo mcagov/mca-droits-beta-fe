@@ -88,7 +88,7 @@
             {
               value: "yes",
               text: "Yes",
-              checked: checked("value-known", "yes"),
+              checked: checked("['property']['" + propertyID + "']['value-known']", "yes"),
               conditional: {
                 html: valueInput
               }
@@ -96,7 +96,7 @@
             {
               value: "no",
               text: "No",
-              checked: checked("value-known", "no")
+              checked: checked("['property']['" + propertyID + "']['value-known']", "no")
             }
           ],
           errorMessage: errors["value-known"]

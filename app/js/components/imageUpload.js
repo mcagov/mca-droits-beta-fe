@@ -32,7 +32,8 @@ export class ImageUpload {
       file.append('image', this.photoUpload.files[0]);
 
       await axios.post(`/report/property-form-image-upload/${id}`, file, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true
       });
 
       // this.handleImageSwap(res.image);

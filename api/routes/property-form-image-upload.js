@@ -1,18 +1,22 @@
 const { body, validationResult } = require('express-validator');
 import path from 'path';
+import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
+import multer from 'multer';
 import { imageUpload } from '../../services';
 import { formatValidationErrors } from '../../utils';
-var multer = require('multer');
-var storage = multer.diskStorage({
+
+const storage = multer.diskStorage({
   destination: function (req, file, cb) {
+    const path = `./uploads`;
+    fs.mkdirSync(path, { recursive: true });
     cb(null, './uploads');
   },
   filename: function (req, file, cb) {
     cb(null, `${uuidv4()}${path.extname(file.originalname)}`);
   }
 });
-var upload = multer({
+const upload = multer({
   storage: storage,
   limits: { fileSize: 5000000 },
   fileFilter: fileFilter
@@ -41,8 +45,11 @@ export default function (app) {
     function (req, res) {
       const id = req.params.prop_id;
       // imageUpload(req.files.image);
-      console.log(req.session.data, req.file.filename);
-      req.session.data.test = 'test';
+      console.log(req.file);
+
+      console.log('[before]:', req.session.data.property[id]);
+      req.session.data.property[id].image = req.file.filename;
+      console.log('[after]:', req.session.data.property[id]);
     }
   );
 }

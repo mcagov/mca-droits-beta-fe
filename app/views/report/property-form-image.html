@@ -35,7 +35,7 @@
         }) }}
       {% endset %}
 
-      <form class="form" action="/report/property-form-address/{{ propertyID }}" method="post">
+      <form class="form" action="/report/property-form-address/{{ propertyID }}" method="post" data-js="image-upload">
         <h1 class="govuk-heading-xl">Provide a photo of the item</h1>
 
         <!-- <p class="govuk-body-l">Provide an image of the following item:</p> -->
@@ -43,7 +43,7 @@
           text: data[propertyName][propertyID]["description"]
         }) }}
 
-        <div id="photo-upload-initial" class="image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6">
+        <div class="photo-upload__container--initial image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6">
 
           <div class="govuk-form-group">
             <label class="govuk-label govuk-label--l" for="{{ propertyNamePrefix }}[image]">
@@ -57,14 +57,21 @@
               html: photoGuidance
             }) }}
 
-            <input class="govuk-file-upload" id="property-image" name="image-dummy" type="file">
+            {{ govukFileUpload({
+              id: "property-image",
+              name: "property-image",
+              hint: {
+                  text: "Accepted file types: jpg, jpeg, png.<br/>Maximum file size: 5MB"
+              },
+              errorMessage: errors["property-image"],
+              classes: "photo-upload__upload"
+            }) }}
           </div>
-          <p class="file-info">Accepted file types: jpg, jpeg, png<br/>Maximum file size: 5MB</p>
 
-          <a id="photo-upload-upload-button" class="govuk-button" data-module="govuk-button">Upload file</a>
+          <a class="photo-upload__button govuk-button" data-module="govuk-button"  data-id={{ propertyID }}>Upload file</a>
         </div>
 
-        <div id="photo-upload-uploaded" class="image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" style="display: none;">
+        <div class="photo-upload__container--uploaded image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" style="display: none;">
           <h2 class="govuk-heading-l">Selected image</h2>
 
           <p class="govuk-body">Make sure your photo meets the guidelines below before submitting. If it does not, this may delay the closure of this report.</p>
@@ -75,8 +82,8 @@
           }) }}
 
           <div>
-            <img id="photo-upload-image" class="govuk-!-margin-bottom-6" src="{{ data[propertyName][propertyID]['image'] }}" width="300px" />
-            <input id="photo-upload-input" type="hidden" name="{{ propertyNamePrefix }}[image]" value="{{ data[propertyName][propertyID]['image'] }}">
+            <img class="photo-upload__result govuk-!-margin-bottom-6" src="{{ data[propertyName][propertyID]['image'] }}" width="300px" />
+            <input class="" type="hidden" name="{{ propertyNamePrefix }}[image]" value="{{ data[propertyName][propertyID]['image'] }}">
           </div>
           
           <a id="photo-upload-change-button" class="govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button">Upload a different image</a>

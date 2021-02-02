@@ -52,11 +52,11 @@
               label: {
                 text: 'Building and street (line 1)'
               },
-              id: "address-line-1",
+              id: "property." + propertyID + "['address-line-1']",
               autocomplete: "address-line1",
               name: propertyNamePrefix + "[address-line-1]",
               value: data[propertyName][propertyID]["address-line-1"],
-              errorMessage: errors["address-line-1"]
+              errorMessage: errors["property." + propertyID + "['address-line-1']"]
             }) }}
 
             {{ govukInput({
@@ -74,11 +74,11 @@
                 text: "Town or city"
               },
               classes: "govuk-!-width-two-thirds",
-              id: "address-town",
+              id: "property." + propertyID + "['address-town']",
               autocomplete: "address-level2",
               name: propertyNamePrefix + "[address-town]",
               value: data[propertyName][propertyID]["address-town"],
-              errorMessage: errors["address-town"]
+              errorMessage: errors["property." + propertyID + "['address-town']"]
             }) }}
 
             {{ govukInput({
@@ -86,10 +86,10 @@
                 text: "County"
               },
               classes: "govuk-!-width-two-thirds",
-              id: "address-county",
+              id: "property." + propertyID + "['address-county']",
               name: propertyNamePrefix + "[address-county]",
               value: data[propertyName][propertyID]["address-county"],
-              errorMessage: errors["address-county"]
+              errorMessage: errors["property." + propertyID + "['address-county']"]
             }) }}
 
             {{ govukInput({
@@ -97,11 +97,11 @@
                 text: "Postcode"
               },
               classes: "govuk-input--width-10",
-              id: "address-postcode",
+              id: "property." + propertyID + "['address-postcode']",
               autocomplete: "postal-code",
               name: propertyNamePrefix + "[address-postcode]",
               value: data[propertyName][propertyID]["address-postcode"],
-              errorMessage: errors["address-postcode"]
+              errorMessage: errors["property." + propertyID + "['address-postcode']"]
             }) }}
 
           {% endcall %}

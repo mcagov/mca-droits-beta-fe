@@ -45,11 +45,9 @@ export default function (app) {
     function (req, res) {
       const id = req.params.prop_id;
       // imageUpload(req.files.image);
-      console.log(req.file);
-
-      console.log('[before]:', req.session.data.property[id]);
       req.session.data.property[id].image = req.file.filename;
-      console.log('[after]:', req.session.data.property[id]);
+      req.session.save();
+      res.json(req.file.filename);
     }
   );
 }

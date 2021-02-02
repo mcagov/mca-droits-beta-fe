@@ -24,23 +24,28 @@ export class ImageUpload {
   }
   uploadPhoto() {
     this.uploadButton.addEventListener('click', async () => {
-      console.log('fe', this.photoUpload.files[0]);
-
       const id = this.uploadButton.dataset.id;
 
       const file = new FormData();
       file.append('image', this.photoUpload.files[0]);
-
-      await axios.post(`/report/property-form-image-upload/${id}`, file, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        withCredentials: true
-      });
-
-      // this.handleImageSwap(res.image);
+      try {
+        const res = await axios.post(
+          `/report/property-form-image-upload/${id}`,
+          file,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+            withCredentials: true
+          }
+        );
+        console.log(res.data);
+        this.handleImageSwap(`/uploads/${res.data}`);
+      } catch (err) {
+        console.error(err);
+      }
     });
   }
-  handleImageSwap() {
-    this.photoResult.src = 'https://via.placeholder.com/500';
+  handleImageSwap(src) {
+    this.photoResult.src = src;
     this.containerInitial.style.display = 'none';
     this.containerUploaded.style.display = 'block';
   }

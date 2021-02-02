@@ -45,6 +45,7 @@ addCheckedFunction(nunjucksAppEnv);
 app.set('view engine', 'html');
 
 app.use(express.static(path.join(__dirname, './dist')));
+app.use(express.static(path.join(__dirname, './uploads')));
 app.use(
   '/assets',
   express.static(

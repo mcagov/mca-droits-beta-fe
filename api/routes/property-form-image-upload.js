@@ -56,7 +56,7 @@ export default function (app) {
       const id = req.params.prop_id;
       req.session.data.property[id].image = req.file.filename;
       req.session.save();
-      res.json(req.file.filename);
+      res.json(req.file.path);
     }
   );
 }

@@ -12,6 +12,8 @@ import knownWreck from './known-wreck';
 import propertySummary from './property-summary';
 import propertyForm from './property-form';
 import propertyFormImage from './property-form-image';
+import propertyFormImageUpload from './property-form-image-upload';
+import propertyFormImageDelete from './property-form-image-delete';
 import propertyFormAddress from './property-form-address';
 import salvageAward from './salvage-award';
 import checkYourAnswers from './check-your-answers';
@@ -32,6 +34,8 @@ export default () => {
   propertySummary(app);
   propertyForm(app);
   propertyFormImage(app);
+  propertyFormImageUpload(app);
+  propertyFormImageDelete(app);
   propertyFormAddress(app);
   salvageAward(app);
   checkYourAnswers(app);

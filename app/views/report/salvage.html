@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block pageTitle %}
+  Salvage
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "includes/phase-banner.html" %}
+  <a class="govuk-back-link" href="/report/property-summary">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <form class="form" action="/report/check-your-answers" method="post">
+
+        {% set salvageServices %}
+        {{ govukTextarea({
+          id: "salvage-services",
+          name: "salvage-services",
+          value: data["salvage-services"],
+          label: {
+            text: "Please describe the services rendered on behalf of the owner of the wreck material"
+          },
+          hint: {
+            text: "Provide as much detail as possible including the nature, duration and any costs incurred."
+          }
+        }) }}
+        {% endset -%}
+
+        {{ govukRadios({
+          idPrefix: "claim-salvage",
+          name: "claim-salvage",
+          fieldset: {
+            legend: {
+              text: "Do you wish to claim a salvage award?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes",
+              checked: checked("claim-salvage", "yes"),
+              conditional: {
+                html: salvageServices
+              }
+            },
+            {
+              value: "no",
+              text: "No",
+              checked: checked("claim-salvage", "no")
+            }
+          ]
+        }) }}
+
+        <button class="govuk-button" data-module="govuk-button">Continue</button>
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

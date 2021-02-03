@@ -36,13 +36,21 @@ export default function (app) {
     '/report/property-form/:prop_id',
     async (req, res, next) => {      
       var rawPropertyID = req.params.prop_id;
-      req.session.data.property[rawPropertyID] = req.body.property[rawPropertyID];
-      
+
+      if(!req.session.data.property[rawPropertyID]) {
+        req.session.data.property[rawPropertyID] = req.body.property[rawPropertyID];
+      }
+
+      req.session.data.property[rawPropertyID].description = req.body.property[rawPropertyID].description;
+      req.session.data.property[rawPropertyID]['quantity'] = req.body.property[rawPropertyID].quantity;
+      req.session.data.property[rawPropertyID]['value-known'] = req.body['value-known'];
+      req.session.data.property[rawPropertyID]['value'] = req.body.property[rawPropertyID].value;
+
       var property = req.session.data.property;
       var propertyID;
       var propertyItem;
 
-      if (property[rawPropertyID] !== undefined && property[rawPropertyID] !== 'new') {
+      if (property[rawPropertyID] !== undefined) {
         propertyID = rawPropertyID;
         propertyItem = property[propertyID];
 
@@ -65,7 +73,6 @@ export default function (app) {
         .withMessage('Select yes if you know the approximate value of the items that match this description')
         .run(req);
       } 
-
       const errors = formatValidationErrors(validationResult(req));
       
       if (!errors) {

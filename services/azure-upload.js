@@ -1,4 +1,5 @@
 import { BlobServiceClient } from '@azure/storage-blob';
+import fs from 'fs';
 const CONNECTION_STRING = require('../config/keys');
 const mime = require('mime-types');
 
@@ -24,19 +25,26 @@ export const azureUpload = async (image, imageName) => {
   console.log('\nUploading to Azure storage as blob:\n\t', blobName);
 
   // Upload data to the blob
-  const data = image;
   const blobOptions = {
     blobHTTPHeaders: { blobContentType: mime.lookup(imageName) }
   };
-  blockBlobClient.uploadStream(data, undefined, undefined, blobOptions);
-  // const uploadBlobResponse = await blockBlobClient.uploadStream(
-  //   data,
-  //   undefined,
-  //   undefined,
-  //   blobOptions
-  // );
-  // console.log(
-  //   'Blob was uploaded successfully. requestId: ',
-  //   uploadBlobResponse.requestId
-  // );
+
+  const uploadBlobResponse = await blockBlobClient.uploadStream(
+    image,
+    undefined,
+    undefined,
+    blobOptions
+  );
+  console.log(
+    '\nBlob was uploaded successfully. requestId: ',
+    uploadBlobResponse.requestId
+  );
+
+  // Delete temp image from /uploads
+  fs.unlink(image.path, (err) => {
+    if (err) console.log(err);
+    else {
+      console.log(`\nDeleted file: ${imageName}`);
+    }
+  });
 };

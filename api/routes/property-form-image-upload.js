@@ -45,6 +45,14 @@ export default function (app) {
     function (req, res) {
       console.log('[req.file]', req.file);
 
+      ///Quick test for logic to upload image to azure
+      ///and delete temp image when complete
+
+      // const data = fs.createReadStream(
+      //   `${path.resolve(__dirname + '/../../uploads/')}/${req.file.filename}`
+      // );
+      // azureUpload(data, req.file.filename);
+
       const id = req.params.prop_id;
       req.session.data.property[id].image = req.file.filename;
       req.session.save();

@@ -71,7 +71,7 @@
           <a class="photo-upload__button govuk-button" data-module="govuk-button"  data-id={{ propertyID }}>Upload file</a>
         </div>
 
-        <div class="photo-upload__container--uploaded image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" style="display: none;">
+        <div class="photo-upload__container--uploaded image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" style="display: block;">
           <h2 class="govuk-heading-l">Selected image</h2>
 
           <p class="govuk-body">Make sure your photo meets the guidelines below before submitting. If it does not, this may delay the closure of this report.</p>
@@ -83,7 +83,6 @@
 
           <div>
             <img class="photo-upload__result govuk-!-margin-bottom-6" src="{{ data[propertyName][propertyID]['image'] }}" width="300px" />
-            <input class="" type="hidden" name="{{ propertyNamePrefix }}[image]" value="{{ data[propertyName][propertyID]['image'] }}">
           </div>
           
           <a id="photo-upload-change-button" class="govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button">Upload a different image</a>

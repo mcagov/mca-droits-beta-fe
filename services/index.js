@@ -1,1 +1,1 @@
-export { imageUpload } from './image-upload';
+export { azureUpload } from './azure-upload';

@@ -2,12 +2,12 @@ import { BlobServiceClient } from '@azure/storage-blob';
 const CONNECTION_STRING = require('../config/keys');
 import { v4 as uuidv4 } from 'uuid';
 
-export const imageUpload = async (image) => {
+export const azureUpload = async (image, imageName) => {
   // Create the BlobServiceClient object which will be used to create a container client
   const blobServiceClient = BlobServiceClient.fromConnectionString(
     CONNECTION_STRING
   );
-  console.log('[imageUpload]', image);
+  console.log('[azureUpload]', image);
 
   // Container name
   const containerName = 'report-uploads';
@@ -16,8 +16,7 @@ export const imageUpload = async (image) => {
   const containerClient = blobServiceClient.getContainerClient(containerName);
 
   // Create a unique name for the blob
-  const blobName = image.name + uuidv4();
-  console.log(blobName);
+  const blobName = imageName;
 
   // Get a block blob client
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
@@ -25,10 +24,13 @@ export const imageUpload = async (image) => {
   console.log('\nUploading to Azure storage as blob:\n\t', blobName);
 
   // Upload data to the blob
-  // const data = image.data;
-  // const uploadBlobResponse = await blockBlobClient.upload(data, data.length);
-  // console.log(
-  //   'Blob was uploaded successfully. requestId: ',
-  //   uploadBlobResponse.requestId
-  // );
+  const data = image;
+  const uploadBlobResponse = await blockBlobClient.upload(
+    data,
+    imageName.length
+  );
+  console.log(
+    'Blob was uploaded successfully. requestId: ',
+    uploadBlobResponse.requestId
+  );
 };

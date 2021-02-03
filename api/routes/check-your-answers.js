@@ -1,5 +1,7 @@
 const { body, validationResult } = require('express-validator');
-
+import fs from 'fs';
+import path from 'path';
+import { azureUpload } from '../../services';
 import { formatValidationErrors } from '../../utils';
 
 export default function (app) {
@@ -25,9 +27,19 @@ export default function (app) {
         });
       } else {
         // Final data to post to server
-        const data = JSON.stringify(req.session.data);
+        // const data = JSON.stringify(req.session.data);
 
-        res.redirect('/report/confirmation');
+        // res.redirect('/report/confirmation');
+        // console.log(`/uploads/${req.session.data.property.i0.image}`);
+
+        const data = fs.readFileSync(
+          `${path.resolve(__dirname + '/../../uploads/')}/${
+            req.session.data.property.i0.image
+          }`,
+          { encoding: 'utf8', flag: 'r' }
+        );
+        console.log(data);
+        azureUpload(data, req.session.data.property.i0.image);
       }
     }
   );

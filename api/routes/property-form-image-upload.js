@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import multer from 'multer';
-import { imageUpload } from '../../services';
+import { azureUpload } from '../../services';
 import { formatValidationErrors } from '../../utils';
 
 const storage = multer.diskStorage({
@@ -44,7 +44,8 @@ export default function (app) {
     upload.single('image'),
     function (req, res) {
       const id = req.params.prop_id;
-      // imageUpload(req.files.image);
+      console.log(req.file);
+      azureUpload(req.file, req.file.filename);
       req.session.data.property[id].image = req.file.filename;
       req.session.save();
       res.json(req.file.filename);

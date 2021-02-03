@@ -88,7 +88,7 @@
               {% if property['image'] == "" %}
                 <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--blue">Not provided</strong></td>
               {% else %}
-                <td class="govuk-table__cell"><img src="{{ property['image'] }}" width="100" loading="lazy"/></td>
+                <td class="govuk-table__cell"><img src="/uploads/{{ property['image'] }}" width="100" loading="lazy"/></td>
               {% endif %}
               {% if property['storage-address'] == "personal" %}
                 <td class="govuk-table__cell">

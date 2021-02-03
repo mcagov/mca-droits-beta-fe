@@ -23,6 +23,8 @@
       {% set propertyName = "property" %}
       {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
       {% set photoGuidance %}
+      {% set imagePath = "/uploads/" +  data[propertyName][propertyID]['image'] %}
+
         <h3 class="govuk-heading-m">Your photo should include:</h3>
         <ul class="govuk-list govuk-list--bullet">
           <li>Clear colour image of the whole item</li>
@@ -82,7 +84,7 @@
           }) }}
 
           <div>
-            <img class="photo-upload__result govuk-!-margin-bottom-6" src="{{ data[propertyName][propertyID]['image'] }}" width="300px" />
+            <img class="photo-upload__result govuk-!-margin-bottom-6" src="{{ imagePath }}" width="300px" />
           </div>
           
           <a class="photo-upload__button-change govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button">Upload a different image</a>

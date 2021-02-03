@@ -23,6 +23,30 @@ export default function (app) {
     res.render('report/property-summary', { addedFlash: addedFlash, removedFlash: removedFlash })
   })
 
+  app.post(
+    '/report/property-summary', 
+    [
+      body('property-declaration')
+        .exists()
+        .not()
+        .isEmpty()
+        .withMessage('Select to confirm you are happy with the declaration')
+    ],
+    function(req, res) {
+      const errors = formatValidationErrors(validationResult(req));
+
+      if (!errors) {
+        res.redirect('salvage-award');
+
+      } else {
+        return res.render('report/property-summary', {
+          errors,
+          errorSummary: Object.values(errors),
+          values: req.body
+        });
+      }
+  })
+
   app.get('/report/salvage', function (req, res) {
   
     res.render('report/salvage-award', { addedFlash: addedFlash, removedFlash: removedFlash })

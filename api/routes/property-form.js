@@ -23,7 +23,6 @@ export default function (app) {
         // Otherwise we check if we're getting an existing ID and throw a 404 otherwise.
         if (property[rawPropertyID] !== undefined) {
           propertyID = rawPropertyID;
-          console.log(req.session.data.property);
         } else {
           res.redirect('/report/property-summary');
         }

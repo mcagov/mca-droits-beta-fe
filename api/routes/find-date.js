@@ -4,7 +4,7 @@ import { formatValidationErrors } from '../../utils';
 
 export default function (app) {
   app.post(
-    '/report/find-date-answer',
+    '/report/find-date',
     [
       body('wreck-find-date-day')
         .exists()

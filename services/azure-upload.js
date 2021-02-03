@@ -1,6 +1,6 @@
 import { BlobServiceClient } from '@azure/storage-blob';
 const CONNECTION_STRING = require('../config/keys');
-import { v4 as uuidv4 } from 'uuid';
+const mime = require('mime-types');
 
 export const azureUpload = async (image, imageName) => {
   // Create the BlobServiceClient object which will be used to create a container client
@@ -25,12 +25,18 @@ export const azureUpload = async (image, imageName) => {
 
   // Upload data to the blob
   const data = image;
-  const uploadBlobResponse = await blockBlobClient.upload(
-    data,
-    imageName.length
-  );
-  console.log(
-    'Blob was uploaded successfully. requestId: ',
-    uploadBlobResponse.requestId
-  );
+  const blobOptions = {
+    blobHTTPHeaders: { blobContentType: mime.lookup(imageName) }
+  };
+  blockBlobClient.uploadStream(data, undefined, undefined, blobOptions);
+  // const uploadBlobResponse = await blockBlobClient.uploadStream(
+  //   data,
+  //   undefined,
+  //   undefined,
+  //   blobOptions
+  // );
+  // console.log(
+  //   'Blob was uploaded successfully. requestId: ',
+  //   uploadBlobResponse.requestId
+  // );
 };

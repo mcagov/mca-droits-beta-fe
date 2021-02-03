@@ -32,11 +32,10 @@ export default function (app) {
         // res.redirect('/report/confirmation');
         // console.log(`/uploads/${req.session.data.property.i0.image}`);
 
-        const data = fs.readFileSync(
+        const data = fs.createReadStream(
           `${path.resolve(__dirname + '/../../uploads/')}/${
             req.session.data.property.i0.image
-          }`,
-          { encoding: 'utf8', flag: 'r' }
+          }`
         );
         console.log(data);
         azureUpload(data, req.session.data.property.i0.image);

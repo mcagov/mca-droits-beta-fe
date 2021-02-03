@@ -43,9 +43,9 @@ export default function (app) {
     '/report/property-form-image-upload/:prop_id',
     upload.single('image'),
     function (req, res) {
+      console.log('[req.file]', req.file);
+
       const id = req.params.prop_id;
-      console.log(req.file);
-      azureUpload(req.file, req.file.filename);
       req.session.data.property[id].image = req.file.filename;
       req.session.save();
       res.json(req.file.filename);

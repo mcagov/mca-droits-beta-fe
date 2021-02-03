@@ -37,7 +37,6 @@ export class ImageUpload {
             withCredentials: true
           }
         );
-        console.log(res.data);
         this.handleImageSwap(`/uploads/${res.data}`);
       } catch (err) {
         console.error(err);

@@ -1,4 +1,4 @@
-import { createElement, render } from 'preact';
+import { createElement, render } from 'preact'; /** @jsx createElement */
 import Autocomplete from './autocomplete';
 
 function w3wAutocomplete(options) {
@@ -8,21 +8,8 @@ function w3wAutocomplete(options) {
   if (!options.id) {
     throw new Error('id is not defined');
   }
-  if (!options.source) {
-    throw new Error('source is not defined');
-  }
-  if (Array.isArray(options.source)) {
-    options.source = createSimpleEngine(options.source);
-  }
   render(<Autocomplete {...options} />, options.element);
 }
-
-const createSimpleEngine = (values) => (query, syncResults) => {
-  var matches = values.filter(
-    (r) => r.toLowerCase().indexOf(query.toLowerCase()) !== -1
-  );
-  syncResults(matches);
-};
 
 w3wAutocomplete.enhanceSelectElement = (configurationOptions) => {
   if (!configurationOptions.selectElement) {

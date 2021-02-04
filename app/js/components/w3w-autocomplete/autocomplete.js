@@ -1,5 +1,4 @@
 import { createElement, Component } from 'preact'; /** @jsx createElement */
-import DropdownArrowDown from './dropdown-arrow-down';
 
 const IS_PREACT = process.env.COMPONENT_LIBRARY === 'PREACT';
 const IS_REACT = process.env.COMPONENT_LIBRARY === 'REACT';
@@ -48,15 +47,12 @@ export default class Autocomplete extends Component {
   static defaultProps = {
     autoselect: false,
     cssNamespace: 'autocomplete',
-    defaultValue: '',
     displayMenu: 'inline',
     minLength: 0,
     name: 'input-autocomplete',
     placeholder: '',
     onConfirm: () => {},
     confirmOnBlur: true,
-    showNoOptionsFound: true,
-    showAllValues: false,
     required: false,
     tNoResults: () => 'No results found',
     tAssistiveHint: () =>
@@ -73,8 +69,8 @@ export default class Autocomplete extends Component {
       hovered: null,
       menuOpen: false,
       options: props.defaultValue ? [props.defaultValue] : [],
-      query: props.defaultValue,
       validChoiceMade: false,
+      query: props.defaultValue,
       selected: null,
       ariaHint: true
     };
@@ -100,14 +96,6 @@ export default class Autocomplete extends Component {
 
     this.pollInputElement = this.pollInputElement.bind(this);
     this.getDirectInputChanges = this.getDirectInputChanges.bind(this);
-  }
-
-  isQueryAnOption(query, options) {
-    return (
-      options
-        .map((entry) => this.templateInputValue(entry).toLowerCase())
-        .indexOf(query.toLowerCase()) !== -1
-    );
   }
 
   componentDidMount() {
@@ -154,24 +142,36 @@ export default class Autocomplete extends Component {
       const inputElement = this.elementReferences[focused];
       inputElement.setSelectionRange(0, inputElement.value.length);
     }
+
+    const query = this.state.query;
+    console.log('[query]:', query);
+
+    // check if query has '.'
+    if (query.includes('.')) {
+      // check if query has 2 dots
+      if (
+        query.match(/\./g).length > 1 &&
+        this.state.focused === -1 &&
+        this.state.hovered === null
+      ) {
+        what3words.api.autosuggest(query).then((res) => {
+          if (
+            res.suggestions.length &&
+            JSON.stringify(res.suggestions) !==
+              JSON.stringify(this.state.options)
+          ) {
+            console.log('[suggestions]:', res.suggestions);
+            this.setState({
+              options: res.suggestions
+            });
+          }
+        });
+      }
+    }
   }
 
   hasAutoselect() {
     return isIosDevice() ? false : this.props.autoselect;
-  }
-
-  // This template is used when converting from a state.options object into a state.query.
-  templateInputValue(value) {
-    const inputValueTemplate =
-      this.props.templates && this.props.templates.inputValue;
-    return inputValueTemplate ? inputValueTemplate(value) : value;
-  }
-
-  // This template is used when displaying results / suggestions.
-  templateSuggestion(value) {
-    const suggestionTemplate =
-      this.props.templates && this.props.templates.suggestion;
-    return suggestionTemplate ? suggestionTemplate(value) : value;
   }
 
   handleComponentBlur(newState) {
@@ -188,7 +188,7 @@ export default class Autocomplete extends Component {
       menuOpen: newState.menuOpen || false,
       query: newQuery,
       selected: null,
-      validChoiceMade: this.isQueryAnOption(newQuery, options)
+      validChoiceMade: true
     });
   }
 
@@ -210,50 +210,41 @@ export default class Autocomplete extends Component {
       const keepMenuOpen = menuOpen && isIosDevice();
       this.handleComponentBlur({
         menuOpen: keepMenuOpen,
-        query: this.templateInputValue(options[selected])
+        query: this.state.option
       });
     }
   }
 
   handleInputBlur(event) {
-    const { focused, menuOpen, options, query, selected } = this.state;
+    const { focused, menuOpen } = this.state;
     const focusingAnOption = focused !== -1;
     if (!focusingAnOption) {
       const keepMenuOpen = menuOpen && isIosDevice();
-      const newQuery = isIosDevice()
-        ? query
-        : this.templateInputValue(options[selected]);
       this.handleComponentBlur({
-        menuOpen: keepMenuOpen,
-        query: newQuery
+        menuOpen: keepMenuOpen
       });
     }
   }
 
   handleInputChange(event) {
-    const { minLength, source, showAllValues } = this.props;
-    const autoselect = this.hasAutoselect();
     const query = event.target.value;
     const queryEmpty = query.length === 0;
     const queryChanged = this.state.query.length !== query.length;
-    const queryLongEnough = query.length >= minLength;
+    const queryLongEnough = query.length >= 0;
 
     this.setState({
       query,
       ariaHint: queryEmpty
     });
 
-    const searchForOptions =
-      showAllValues || (!queryEmpty && queryChanged && queryLongEnough);
+    const searchForOptions = !queryEmpty && queryChanged && queryLongEnough;
     if (searchForOptions) {
-      source(query, (options) => {
-        const optionsAvailable = options.length > 0;
-        this.setState({
-          menuOpen: optionsAvailable,
-          options,
-          selected: autoselect && optionsAvailable ? 0 : -1,
-          validChoiceMade: false
-        });
+      const optionsAvailable = this.state.options.length > 0;
+      this.setState({
+        menuOpen: optionsAvailable,
+        options: this.state.options,
+        selected: optionsAvailable ? 0 : -1,
+        validChoiceMade: false
       });
     } else if (queryEmpty || !queryLongEnough) {
       this.setState({
@@ -268,10 +259,9 @@ export default class Autocomplete extends Component {
   }
 
   handleInputFocus(event) {
-    const { query, validChoiceMade, options } = this.state;
+    const { query, options } = this.state;
     const { minLength } = this.props;
-    const shouldReopenMenu =
-      !validChoiceMade && query.length >= minLength && options.length > 0;
+    const shouldReopenMenu = query.length >= minLength && options.length > 0;
 
     if (shouldReopenMenu) {
       this.setState(({ menuOpen }) => ({
@@ -304,13 +294,14 @@ export default class Autocomplete extends Component {
 
   handleOptionClick(event, index) {
     const selectedOption = this.state.options[index];
-    const newQuery = this.templateInputValue(selectedOption);
+    console.log(selectedOption);
+
     this.props.onConfirm(selectedOption);
     this.setState({
       focused: -1,
       hovered: null,
       menuOpen: false,
-      query: newQuery,
+      query: selectedOption.words,
       selected: -1,
       validChoiceMade: true
     });
@@ -340,16 +331,14 @@ export default class Autocomplete extends Component {
   handleDownArrow(event) {
     event.preventDefault();
     // if not open, open
-    if (this.props.showAllValues && this.state.menuOpen === false) {
+    if (this.state.menuOpen === false) {
       event.preventDefault();
-      this.props.source('', (options) => {
-        this.setState({
-          menuOpen: true,
-          options,
-          selected: 0,
-          focused: 0,
-          hovered: null
-        });
+      this.setState({
+        menuOpen: true,
+        options,
+        selected: 0,
+        focused: 0,
+        hovered: null
       });
     } else if (this.state.menuOpen === true) {
       const { menuOpen, options, selected } = this.state;
@@ -363,11 +352,7 @@ export default class Autocomplete extends Component {
 
   handleSpace(event) {
     // if not open, open
-    if (
-      this.props.showAllValues &&
-      this.state.menuOpen === false &&
-      this.state.query === ''
-    ) {
+    if (this.state.menuOpen === false && this.state.query === '') {
       event.preventDefault();
       this.props.source('', (options) => {
         this.setState({
@@ -440,7 +425,6 @@ export default class Autocomplete extends Component {
       name,
       placeholder,
       required,
-      showAllValues,
       tNoResults,
       tAssistiveHint
     } = this.props;
@@ -451,21 +435,9 @@ export default class Autocomplete extends Component {
       options,
       query,
       selected,
-      ariaHint,
-      validChoiceMade
+      ariaHint
     } = this.state;
     const autoselect = this.hasAutoselect();
-
-    const inputFocused = focused === -1;
-    const noOptionsAvailable = options.length === 0;
-    const queryNotEmpty = query.length !== 0;
-    const queryLongEnough = query.length >= minLength;
-    const showNoOptionsFound =
-      this.props.showNoOptionsFound &&
-      inputFocused &&
-      noOptionsAvailable &&
-      queryNotEmpty &&
-      queryLongEnough;
 
     const wrapperClassName = `${cssNamespace}__wrapper`;
 
@@ -481,22 +453,12 @@ export default class Autocomplete extends Component {
 
     const menuClassName = `${cssNamespace}__menu`;
     const menuModifierDisplayMenu = `${menuClassName}--${displayMenu}`;
-    const menuIsVisible = menuOpen || showNoOptionsFound;
+    const menuIsVisible = menuOpen;
     const menuModifierVisibility = `${menuClassName}--${
       menuIsVisible ? 'visible' : 'hidden'
     }`;
 
     const optionClassName = `${cssNamespace}__option`;
-
-    const hintClassName = `${cssNamespace}__hint`;
-    const selectedOptionText = this.templateInputValue(options[selected]);
-    const optionBeginsWithQuery =
-      selectedOptionText &&
-      selectedOptionText.toLowerCase().indexOf(query.toLowerCase()) === 0;
-    const hintValue =
-      optionBeginsWithQuery && autoselect
-        ? query + selectedOptionText.substr(query.length)
-        : '';
 
     const assistiveHintID = id + '__assistiveHint';
     const ariaDescribedProp = ariaHint
@@ -507,17 +469,6 @@ export default class Autocomplete extends Component {
 
     return (
       <div className={wrapperClassName} onKeyDown={this.handleKeyDown}>
-        {hintValue && (
-          <span>
-            <input
-              className={hintClassName}
-              readonly
-              tabIndex="-1"
-              value={hintValue}
-            />
-          </span>
-        )}
-
         <input
           aria-expanded={menuOpen ? 'true' : 'false'}
           aria-activedescendant={
@@ -570,9 +521,6 @@ export default class Autocomplete extends Component {
               <li
                 aria-selected={focused === index ? 'true' : 'false'}
                 className={`${optionClassName}${optionModifierFocused}${optionModifierOdd}`}
-                dangerouslySetInnerHTML={{
-                  __html: this.templateSuggestion(option) + iosPosinsetHtml
-                }}
                 id={`${id}__option--${index}`}
                 key={index}
                 onBlur={(event) => this.handleOptionBlur(event, index)}
@@ -588,15 +536,11 @@ export default class Autocomplete extends Component {
                 tabIndex="-1"
                 aria-posinset={index + 1}
                 aria-setsize={options.length}
-              />
+              >
+                {option.words + iosPosinsetHtml}
+              </li>
             );
           })}
-
-          {showNoOptionsFound && (
-            <li className={`${optionClassName} ${optionClassName}--no-results`}>
-              {tNoResults()}
-            </li>
-          )}
         </ul>
 
         <span id={assistiveHintID} style={{ display: 'none' }}>

@@ -22,7 +22,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
 
-      <form class="form" action="/report/location-answer" method="post">
+      <form class="form" action="/report/location-answer" method="post" autocomplete="off" >
         {% if errorSummary.length > 0 %}
             {{ govukErrorSummary({
                 titleText: "There is a problem",
@@ -376,21 +376,8 @@
 
         {% endset -%}
 
-        {% set w3wInput %}
-            <div id="wreck-name-autocomplete" class="govuk-body" data-value="">
-              <div class="autocomplete__wrapper govuk-input--width-20">
-                <div class="govuk-form-group" data-js="w3w">
-                  {{ govukInput({
-                    id: "w3w-name",
-                    name: "w3w-name",
-                    value: data["location"]["w3w-name"],
-                    classes: "govuk-input--width-20",
-                    errorMessage: errors["w3w-name"]
-                  }) }}
-                  <ul class="autocomplete__menu autocomplete__menu--inline autocomplete__menu--hidden" id="w3w__listbox" role="listbox"></ul>
-                </div>
-              </div>
-            </div>
+        {% set w3wInput %}            
+          <div id="w3w-autocomplete" class="govuk-body" data-value="{{ data['w3w-name'] }}" data-js="w3w"></div>
         {% endset -%}
 
         {% set mapInput %}

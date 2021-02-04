@@ -23,7 +23,9 @@
       {% set propertyName = "property" %}
       {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
       {% set photoGuidance %}
+      {% if data[propertyName][propertyID]['image'] %}
       {% set imagePath = "/uploads/" +  data[propertyName][propertyID]['image'] %}
+      {% endif %}
 
         <h3 class="govuk-heading-m">Your photo should include:</h3>
         <ul class="govuk-list govuk-list--bullet">

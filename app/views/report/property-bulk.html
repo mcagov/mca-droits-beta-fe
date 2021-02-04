@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% block pageTitle %}
+  Upload wreck material
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "includes/phase-banner.html" %}
+  <a class="govuk-back-link" href="/report/property-summary">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <form class="form" action="/report/property-bulk" method="post" enctype="multipart/form-data">
+
+        <h1 class="govuk-heading-xl">Upload wreck material</h1>
+
+        <p class="govuk-body-l">Upload a spreadsheet file to add wreck material to your report in bulk.</p>
+
+        {{ govukWarningText({
+          text: "You should only use this form to add wreck material from a single shipwreck.",
+          iconFallbackText: "Warning"
+        }) }}
+
+        <p class="govuk-body">The file must be formatted appropriately, with each item of wreck material listed beneath
+          the following named columns:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>Description</li>
+          <li>Quantity</li>
+          <li>Total value</li>
+          <li>Storage address (if different to your address)</li>
+        </ul>
+
+        {{ govukInsetText({
+          html: 'You can populate the <a href="/public/downloads/bulk-property-upload-template.csv">bulk wreck material upload template</a> with your wreck material and then upload it to this form.'
+        }) }}
+
+        {{ govukFileUpload({
+          id: "bulk-upload-file",
+          name: "bulk-upload-file",
+          label: {
+            text: "Upload a file"
+          }
+        }) }}
+
+        <button class="govuk-button" data-module="govuk-button">Upload</button>
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

@@ -10,6 +10,7 @@ import personal from './personal';
 import vesselDescription from './vessel-description';
 import knownWreck from './known-wreck';
 import propertySummary from './property-summary';
+import propertyBulk from './property-bulk';
 import propertyForm from './property-form';
 import propertyFormImage from './property-form-image';
 import propertyFormImageUpload from './property-form-image-upload';
@@ -32,6 +33,7 @@ export default () => {
   depth(app);
   vesselDescription(app);
   propertySummary(app);
+  propertyBulk(app);
   propertyForm(app);
   propertyFormImage(app);
   propertyFormImageUpload(app);

@@ -7,122 +7,6 @@ import { azureUpload } from '../../services';
 import { formatValidationErrors } from '../../utils';
 const csv = require('fast-csv');
 
-/*const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const path = `./uploads/csv`;
-    fs.mkdirSync(path, { recursive: true });
-    cb(null, './uploads/csv');
-  },
-  filename: function (req, file, cb) {
-    cb(null, `${uuidv4()}${path.extname(file.originalname)}`);
-  }
-});
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 5000000 },
-  fileFilter: fileFilter
-});
-
-function fileFilter(req, file, cb) {
-  // Allowed ext
-  //const filetypes = /csv/;
-
-  // Check ext
-  //const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  // Check mime
-  const mimetype = filetypes.test(file.mimetype);
-
-  if (mimetype) {
-    return cb(null, true);
-  } else {
-    cb('Error: The selected file must be a CSV');
-  }
-}*/
-
-/*export default function (app) {
-  app.post(
-    '/report/property-bulk', (req, res) => {
-
-      const storage = multer.diskStorage({
-        destination: function (req, file, cb) {
-          const path = `./uploads`;
-          fs.mkdirSync(path, { recursive: true });
-          cb(null, './uploads');
-        },
-        filename: function (req, file, cb) {
-          cb(null, `${uuidv4()}${path.extname(file.originalname)}`);
-        }
-      });
-
-      const upload = multer({
-        storage: storage,
-        limits: { fileSize: 5000000 },
-        fileFilter: fileFilter
-      }).single('bulk-upload-file');
-      
-      function fileFilter(req, file, cb) {
-        // Allowed ext
-        const filetypes = /csv/;
-      
-        // Check ext
-        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-        // Check mime
-        const mimetype = filetypes.test(file.mimetype);
-      
-        if (mimetype && extname) {
-          return cb(null, true);
-        } else {
-          cb('Error: The selected file must be a CSV');
-        }
-      }
-
-      upload(req, res, function(err) {
-        console.log(req.file);
-
-        if (req.fileValidationError) {
-          return res.send(req.fileValidationError);
-        }
-        else if (!req.file) {
-            return res.send('Please select a file to upload');
-        }
-        else if (err instanceof multer.MulterError) {
-            return res.send(err);
-        }
-        else if (err) {
-            return res.send(err);
-        }
-
-        // Display uploaded image for user validation
-        res.send(`You have uploaded this file: <p>${req.file.path}</p>`);
-  
-        /*const fileRows = [];
-        csv.fromPath(req.file.path)
-          .on("data", function (data) {
-            fileRows.push(data); // push each row
-          })
-          .on("end", function () {
-            console.log(fileRows); //contains array of arrays. Each inner array represents row of the csv file, with each element of it a column
-            //fs.unlinkSync(req.file.path);   // remove temp file
-            //process "fileRows" and respond
-          })*/
-  
-        ///Quick test for logic to upload image to azure
-        ///and delete temp image when complete
-  
-        // const data = fs.createReadStream(
-        //   `${path.resolve(__dirname + '/../../uploads/')}/${req.file.filename}`
-        // );
-        // azureUpload(data, req.file.filename);
-  
-        /*const id = req.params.prop_id;
-        req.session.data.property[id].image = req.file.filename;
-        req.session.save();
-        res.json(req.file.path);
-      })
-    }
-  );
-}*/
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const path = `./uploads`;
@@ -151,7 +35,6 @@ function fileFilter(req, file, cb) {
   if (extname) {
     return cb(null, true);
   } else {
-    console.log(file.mimetype);
     cb('Error: The selected file must be a CSV');
   }
 }
@@ -168,13 +51,43 @@ export default function (app) {
             fileRows.push(data); // push each row
           })
           .on("end", function () {
-            console.log(fileRows); //contains array of objects. Each object represents row of the csv file, with each element of it a column
+            //console.log(fileRows); //contains array of objects. Each object represents row of the csv file, with each element of it a column
             fs.unlinkSync(req.file.path);   // remove temp file
-            //process "fileRows" and respond 
-             
-            let bulkUpload = fileRows;
-            req.session.data['bulk-upload'] = bulkUpload;
+            
+            //process "fileRows" and respond  
+            let fileUpload = fileRows;
+            // Create a Map rather than an Object to ensure the items are output in the 
+            // correct order when we loop through them in the template
+            req.session.data['bulk-upload'] = {};
+            const sessionBulkUpload = req.session.data['bulk-upload'];
 
+            fileUpload.forEach((obj, index) => {
+              // Create a bulk upload ID for each item
+              let itemID = 'bu' + index;
+              // Build up the session data object for each item
+              sessionBulkUpload[itemID] = {};
+              const item = sessionBulkUpload[itemID];
+              item['description'] = obj['Description'];
+              item['quantity'] = obj['Quantity'];
+              item['value'] = obj['Total value'];
+
+              if(obj['Storage address line 1'] && obj['Postcode']) {
+                item['storage-address'] = 'custom';
+                item['address-details'] = {};
+                item['address-details']['address-line-1'] = obj['Storage address line 1'];
+                item['address-details']['address-line-2'] = obj['Storage address line 2'];
+                item['address-details']['address-town'] = obj['Town'];
+                item['address-details']['address-county'] = obj['County'];
+                item['address-details']['address-postcode'] = obj['Postcode'];
+              } else {
+                item['storage-address'] = 'personal';
+              }
+
+            }); 
+
+            req.session.data['property'] = sessionBulkUpload;
+            var bulkUpload = sessionBulkUpload;
+            console.log(req.session.data);
             res.render('report/property-bulk-confirm', { bulkUpload: bulkUpload });
           })
     });

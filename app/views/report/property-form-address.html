@@ -55,7 +55,7 @@
               id: "property." + propertyID + "['address-line-1']",
               autocomplete: "address-line1",
               name: propertyNamePrefix + "[address-line-1]",
-              value: data[propertyName][propertyID]["address-line-1"],
+              value: data[propertyName][propertyID]["address-details"]["address-line-1"],
               errorMessage: errors["property." + propertyID + "['address-line-1']"]
             }) }}
 
@@ -66,7 +66,7 @@
               id: "address-line-2",
               autocomplete: "address-line2",
               name: propertyNamePrefix + "[address-line-2]",
-              value: data[propertyName][propertyID]["address-line-2"]
+              value: data[propertyName][propertyID]["address-details"]["address-line-2"]
             }) }}
 
             {{ govukInput({
@@ -77,7 +77,7 @@
               id: "property." + propertyID + "['address-town']",
               autocomplete: "address-level2",
               name: propertyNamePrefix + "[address-town]",
-              value: data[propertyName][propertyID]["address-town"],
+              value: data[propertyName][propertyID]["address-details"]["address-town"],
               errorMessage: errors["property." + propertyID + "['address-town']"]
             }) }}
 
@@ -88,7 +88,7 @@
               classes: "govuk-!-width-two-thirds",
               id: "property." + propertyID + "['address-county']",
               name: propertyNamePrefix + "[address-county]",
-              value: data[propertyName][propertyID]["address-county"],
+              value: data[propertyName][propertyID]["address-details"]["address-county"],
               errorMessage: errors["property." + propertyID + "['address-county']"]
             }) }}
 
@@ -100,7 +100,7 @@
               id: "property." + propertyID + "['address-postcode']",
               autocomplete: "postal-code",
               name: propertyNamePrefix + "[address-postcode]",
-              value: data[propertyName][propertyID]["address-postcode"],
+              value: data[propertyName][propertyID]["address-details"]["address-postcode"],
               errorMessage: errors["property." + propertyID + "['address-postcode']"]
             }) }}
 

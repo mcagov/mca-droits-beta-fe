@@ -31,32 +31,26 @@
           </tr>
           </thead>
           <tbody class="govuk-table__body">
-          {% for item in bulkUpload %}
+          {% for id, item in bulkUpload %}
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">
-                <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Description:</strong> {{ item.Description }}</p>
-                <input type=hidden name=property[bu1][description] value="{{ item.Description }}">
+                <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Description:</strong> {{ item.description }}</p>
+                <input type=hidden name=property[{{ id }}][description] value="{{ item.Description }}">
 
-                <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Quantity:</strong> {{ item.Quantity }}</p>
-                <input type=hidden name=property[bu1][quantity] value="{{ item.Quantity }}">
+                <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Quantity:</strong> {{ item.quantity }}</p>
+                <input type=hidden name=property[{{ id }}][quantity] value="{{ item.quantity }}">
 
-                <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Value:</strong> £{{ item['Total value'] }}</p>
-                <input type=hidden name=property[bu1][value] value="{{ item['Total value'] }}">
+                <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Value:</strong> £{{ item.value }}</p>
+                <input type=hidden name=property[{{ id }}][value] value="{{ item.value }}">
 
                 <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Address:</strong>
-                  {% set addressLines = [
-                    'Example Organisation',
-                    'Address Line 2',
-                    'Southampton',
-                    'SO15 1AB'
-                  ] %}
-                  {{ address(addressLines) }}</p>
+                  {{ address(item['address-details']) }}</p>
 
-                <input type=hidden name=property[bu1][storage-address] value="custom">
-                <input type=hidden name=property[bu1][address-line-1] value="Example Organisation">
-                <input type=hidden name=property[bu1][address-line-2] value="Address Line 2">
-                <input type=hidden name=property[bu1][address-town] value="Southampton">
-                <input type=hidden name=property[bu1][address-postcode] value="SO15 1AB">
+                <input type=hidden name=property[{{ id }}][address-details] value="custom">
+                <input type=hidden name=property[{{ id }}][address-details][address-line-1] value={{ item['address-details']['address-line-1'] }}>
+                <input type=hidden name=property[{{ id }}][address-details][address-line-2] value={{ item['address-details']['address-line-2'] }}>
+                <input type=hidden name=property{{ id }}][address-details][town] value={{ item['address-details']['town'] }}>
+                <input type=hidden name=property[{{ id }}][address-details][postcode] value={{ item['address-details']['postcode'] }}>
               </td>
               <td class="govuk-table__cell">
                 {{ govukFileUpload({

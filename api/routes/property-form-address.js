@@ -32,14 +32,15 @@ export default function (app) {
     }
     
     if (bodyProperty['storage-address'] === 'custom') {
-      for (let key in bodyProperty) {
+      /*for (let key in bodyProperty) {
         property[rawPropertyID][key] = bodyProperty[key];
-      }
+      }*/
 
-      req.session.data.property[rawPropertyID]['address-line-1'] = req.body.property[rawPropertyID]['address-line-1'];
-      req.session.data.property[rawPropertyID]['address-town'] = req.body.property[rawPropertyID]['address-town'];
-      req.session.data.property[rawPropertyID]['address-county'] = req.body.property[rawPropertyID]['address-county'];
-      req.session.data.property[rawPropertyID]['address-postcode'] = req.body.property[rawPropertyID]['address-postcode'];
+      req.session.data.property[rawPropertyID]['address-details'] = {};
+      req.session.data.property[rawPropertyID]['address-details']['address-line-1'] = req.body.property[rawPropertyID]['address-line-1'];
+      req.session.data.property[rawPropertyID]['address-details']['address-town'] = req.body.property[rawPropertyID]['address-town'];
+      req.session.data.property[rawPropertyID]['address-details']['address-county'] = req.body.property[rawPropertyID]['address-county'];
+      req.session.data.property[rawPropertyID]['address-details']['address-postcode'] = req.body.property[rawPropertyID]['address-postcode'];
     }
 
     var propertyID;

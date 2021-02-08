@@ -7,16 +7,10 @@ export class What3Words {
   constructor(el) {
     if (!el) return;
 
-    this.el = el;
-
-    this.input = $1('#w3w-autocomplete', this.el);
-
     LoadManager.queue(this.init.bind(this), QUEUE.RESOURCES);
   }
 
   init() {
-    var self = this;
-
     w3wAutocomplete({
       element: document.querySelector('#w3w-autocomplete'),
       id: 'w3w-name',
@@ -25,42 +19,6 @@ export class What3Words {
       source: this.fetchData,
       defaultValue: document.getElementById('w3w-autocomplete').dataset.value
     });
-
-    // this.input.addEventListener('keyup', (e) => {
-    //   what3words.api.autosuggest(e.target.value).then(function (res) {
-    //     self.autoSuggest.innerHTML = null;
-
-    //     if (res.suggestions.length) {
-    //       self.toggleAutosuggest('show');
-    //     } else {
-    //       self.toggleAutosuggest('hide');
-    //     }
-
-    //     res.suggestions.map((i, index) => {
-    //       self.autoSuggest.innerHTML += `<li class="autocomplete__option" id="wreck-name__option--${index}" role="option" tabindex="0"><span class="govuk-body govuk-!-font-size-19 govuk-!-font-weight-bold">${i.words}</span><br/><span class="govuk-body govuk-!-font-size-14">${i.nearestPlace}</span></li>`;
-    //     });
-
-    //     $('.autocomplete__option').forEach((el) =>
-    //       el.addEventListener('click', (e) => {
-    //         const w3wName = e.target.childNodes[0].innerText;
-
-    //         self.input.value = w3wName;
-    //         self.toggleAutosuggest('hide');
-    //       })
-    //     );
-    //   });
-    // });
-  }
-  toggleAutosuggest(type) {
-    const classes = this.autoSuggest.classList;
-
-    if (type === 'show') {
-      classes.remove('autocomplete__menu--hidden');
-      classes.add('autocomplete__menu--visible');
-    } else if (type === 'hide') {
-      classes.remove('autocomplete__menu--visible');
-      classes.add('autocomplete__menu--hidden');
-    }
   }
 }
 export default LoadManager.queue(() => {

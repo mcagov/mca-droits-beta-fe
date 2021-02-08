@@ -376,9 +376,9 @@
 
         {% endset -%}
 
-        {% set w3wInput %}            
-          <div id="w3w-autocomplete" class="govuk-body" data-value="{{ data['w3w-name'] }}" data-js="w3w"></div>
-        {% endset -%}
+        {# {% set w3wInput %}            
+          <div id="w3w-autocomplete" class="govuk-!-width-one-third" data-value="{{ data['location']['w3w-name'] }}" data-js="w3w"></div>
+        {% endset -%} #}
 
         {% set mapInput %}
           <div class="govuk-!-margin-bottom-5" data-js="editable-map">
@@ -472,17 +472,6 @@
               html: "For example <em>53° 45′ 49″ N &nbsp;&nbsp; 3° 44′ 20″ W</em>."
             },
               checked: checked("['location']['location-type']", "coords-sexagesimal")
-            },
-            {
-              value: "what-3-words",
-              text: "what3words",
-              conditional: {
-                html: w3wInput
-              },
-              hint: {
-                html: "For example <em>lock.spout.radar</em>."
-              },
-              checked: checked("['location']['location-type']", "what-3-words")
             },
             {
               value: "map",

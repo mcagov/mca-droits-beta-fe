@@ -1,4 +1,5 @@
-import { createElement, Component } from 'preact'; /** @jsx createElement */
+import { createElement, Component } from 'preact';
+/** @jsx createElement */ import AwesomeDebouncePromise from 'awesome-debounce-promise';
 
 const IS_PREACT = process.env.COMPONENT_LIBRARY === 'PREACT';
 const IS_REACT = process.env.COMPONENT_LIBRARY === 'REACT';
@@ -43,6 +44,11 @@ function onChangeCrossLibrary(handler) {
   }
 }
 
+const searchAPIDebounced = AwesomeDebouncePromise(
+  what3words.api.autosuggest,
+  500
+);
+
 export default class Autocomplete extends Component {
   static defaultProps = {
     autoselect: false,
@@ -51,9 +57,7 @@ export default class Autocomplete extends Component {
     minLength: 0,
     name: 'input-autocomplete',
     placeholder: '',
-    onConfirm: () => {},
     confirmOnBlur: true,
-    required: false,
     tNoResults: () => 'No results found',
     tAssistiveHint: () =>
       'When autocomplete results are available use up and down arrows to review and enter to select.  Touch device users, explore by touch or with swipe gestures.'
@@ -142,32 +146,6 @@ export default class Autocomplete extends Component {
       const inputElement = this.elementReferences[focused];
       inputElement.setSelectionRange(0, inputElement.value.length);
     }
-
-    const query = this.state.query;
-    console.log('[query]:', query);
-
-    // check if query has '.'
-    if (query.includes('.')) {
-      // check if query has 2 dots
-      if (
-        query.match(/\./g).length > 1 &&
-        this.state.focused === -1 &&
-        this.state.hovered === null
-      ) {
-        what3words.api.autosuggest(query).then((res) => {
-          if (
-            res.suggestions.length &&
-            JSON.stringify(res.suggestions) !==
-              JSON.stringify(this.state.options)
-          ) {
-            console.log('[suggestions]:', res.suggestions);
-            this.setState({
-              options: res.suggestions
-            });
-          }
-        });
-      }
-    }
   }
 
   hasAutoselect() {
@@ -175,11 +153,10 @@ export default class Autocomplete extends Component {
   }
 
   handleComponentBlur(newState) {
-    const { options, query, selected } = this.state;
+    const { query } = this.state;
     let newQuery;
     if (this.props.confirmOnBlur) {
       newQuery = newState.query || query;
-      this.props.onConfirm(options[selected]);
     } else {
       newQuery = query;
     }
@@ -199,7 +176,7 @@ export default class Autocomplete extends Component {
   }
 
   handleOptionBlur(event, index) {
-    const { focused, menuOpen, options, selected } = this.state;
+    const { focused, menuOpen } = this.state;
     const focusingOutsideComponent = event.relatedTarget === null;
     const focusingInput = event.relatedTarget === this.elementReferences[-1];
     const focusingAnotherOption = focused !== index && focused !== -1;
@@ -226,7 +203,7 @@ export default class Autocomplete extends Component {
     }
   }
 
-  handleInputChange(event) {
+  async handleInputChange(event) {
     const query = event.target.value;
     const queryEmpty = query.length === 0;
     const queryChanged = this.state.query.length !== query.length;
@@ -236,6 +213,26 @@ export default class Autocomplete extends Component {
       query,
       ariaHint: queryEmpty
     });
+
+    // check if query has dots
+    if (query.includes('.')) {
+      // call api if query has 2 dots
+      if (query.match(/\./g).length > 1) {
+        const res = await searchAPIDebounced(query);
+
+        // if there are results from api
+        if (res.suggestions.length) {
+          this.setState({
+            options: res.suggestions
+          });
+        }
+        // empty autocomplete
+      } else {
+        this.setState({
+          options: []
+        });
+      }
+    }
 
     const searchForOptions = !queryEmpty && queryChanged && queryLongEnough;
     if (searchForOptions) {
@@ -294,9 +291,7 @@ export default class Autocomplete extends Component {
 
   handleOptionClick(event, index) {
     const selectedOption = this.state.options[index];
-    console.log(selectedOption);
 
-    this.props.onConfirm(selectedOption);
     this.setState({
       focused: -1,
       hovered: null,
@@ -375,6 +370,7 @@ export default class Autocomplete extends Component {
       if (hasSelectedOption) {
         this.handleOptionClick(event, this.state.selected);
       }
+      this.setState({ menuOpen: false });
     }
   }
 
@@ -421,11 +417,8 @@ export default class Autocomplete extends Component {
       cssNamespace,
       displayMenu,
       id,
-      minLength,
       name,
       placeholder,
-      required,
-      tNoResults,
       tAssistiveHint
     } = this.props;
     const {
@@ -437,7 +430,6 @@ export default class Autocomplete extends Component {
       selected,
       ariaHint
     } = this.state;
-    const autoselect = this.hasAutoselect();
 
     const wrapperClassName = `${cssNamespace}__wrapper`;
 
@@ -491,7 +483,6 @@ export default class Autocomplete extends Component {
           }}
           type="text"
           role="combobox"
-          required={required}
           value={query}
         />
 
@@ -537,7 +528,14 @@ export default class Autocomplete extends Component {
                 aria-posinset={index + 1}
                 aria-setsize={options.length}
               >
-                {option.words + iosPosinsetHtml}
+                <span class="govuk-body govuk-!-font-size-19 govuk-!-font-weight-bold">
+                  {option.words}
+                </span>
+                <br />
+                <span class="govuk-body govuk-!-font-size-14">
+                  {option.nearestPlace}
+                </span>
+                {iosPosinsetHtml}
               </li>
             );
           })}

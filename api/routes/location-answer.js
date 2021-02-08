@@ -233,26 +233,46 @@ export default function (app) {
 
           break;
 
-        case 'what-3-words':
-          session['w3w-name'] = reqBody['w3w-name'];
+        // case 'what-3-words':
+        //   session['w3w-name'] = req.body['w3w-name'];
 
-          await api.convertToCoordinates(session['w3w-name']).then((data) => {
-            session['location-standard'].latitude = data.coordinates.lat;
-            session['location-standard'].longitude = data.coordinates.lng;
+        //   const checkInput = await check('w3w-name')
+        //     .exists()
+        //     .not()
+        //     .isEmpty()
+        //     .run(req);
 
-            session['location-given'].latitude = `${data.coordinates.lat}° N `;
-            session['location-given'].longitude = `${data.coordinates.lng}° W`;
-          });
+        //   await api
+        //     .convertToCoordinates(session['w3w-name'])
+        //     .then((data) => {
+        //       session['location-standard'].latitude = data.coordinates.lat;
+        //       session['location-standard'].longitude = data.coordinates.lng;
 
-          //TODO Errors need to check if a w3w value has been made (eg. lock.spout.radar)
-          await body('w3w-name')
-            .exists()
-            .not()
-            .isEmpty()
-            .withMessage('Enter what3words')
-            .run(req);
+        //       session[
+        //         'location-given'
+        //       ].latitude = `${data.coordinates.lat}° N `;
+        //       session[
+        //         'location-given'
+        //       ].longitude = `${data.coordinates.lng}° W`;
+        //     })
+        //     .catch(function (error) {
+        //       for (var prop in error) {
+        //         if (error[prop].code.length && !checkInput.isEmpty()) {
+        //           let errors = formatValidationErrors(validationResult(req));
 
-          break;
+        //           errors['w3w-name'].text = error[prop].message;
+
+        //           return res.render('report/location', {
+        //             errors,
+        //             errorSummary: Object.values(errors),
+        //             values: req.body
+        //           });
+        //         }
+        //         break;
+        //       }
+        //     });
+
+        //   break;
         case 'map':
           session['map-latitude-input'] = reqBody['map-latitude-input'];
           session['map-longitude-input'] = reqBody['map-longitude-input'];

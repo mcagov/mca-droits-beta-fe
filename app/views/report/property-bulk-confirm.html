@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+
+{% block pageTitle %}
+  Confirm  wreck material upload
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "includes/phase-banner.html" %}
+  <a class="govuk-back-link" href="/report/property-bulk">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+      <h1 class="govuk-heading-xl">Confirm upload</h1>
+
+      <p class="govuk-body-l">Confirm the wreck material to be added and attach any photos you have for each item.</p>
+
+      <form class="form" action="/report/property-summary" method="post">
+
+        <table class="govuk-table">
+          <caption class="govuk-table__caption">Uploaded wreck material</caption>
+          <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Information</th>
+            <th scope="col" class="govuk-table__header">Image</th>
+          </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+          {% for item in bulkUpload %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Description:</strong> {{ item.Description }}</p>
+                <input type=hidden name=property[bu1][description] value="{{ item.Description }}">
+
+                <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Quantity:</strong> {{ item.Quantity }}</p>
+                <input type=hidden name=property[bu1][quantity] value="{{ item.Quantity }}">
+
+                <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Value:</strong> £{{ item['Total value'] }}</p>
+                <input type=hidden name=property[bu1][value] value="{{ item['Total value'] }}">
+
+                <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Address:</strong>
+                  {% set addressLines = [
+                    'Example Organisation',
+                    'Address Line 2',
+                    'Southampton',
+                    'SO15 1AB'
+                  ] %}
+                  {{ address(addressLines) }}</p>
+
+                <input type=hidden name=property[bu1][storage-address] value="custom">
+                <input type=hidden name=property[bu1][address-line-1] value="Example Organisation">
+                <input type=hidden name=property[bu1][address-line-2] value="Address Line 2">
+                <input type=hidden name=property[bu1][address-town] value="Southampton">
+                <input type=hidden name=property[bu1][address-postcode] value="SO15 1AB">
+              </td>
+              <td class="govuk-table__cell">
+                {{ govukFileUpload({
+                  id: "image-bu1",
+                  name: "property[bu1][dummy]",
+                  label: {
+                    text: "Upload an image"
+                  }
+                }) }}
+                <input type=hidden name=property[bu1][image] value="">
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+
+        <input type="hidden" name="property-added-flash" value=true>
+
+        <button class="govuk-button" data-module="govuk-button">Add items to report</button>
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

@@ -170,7 +170,12 @@ export default function (app) {
           .on("end", function () {
             console.log(fileRows); //contains array of objects. Each object represents row of the csv file, with each element of it a column
             fs.unlinkSync(req.file.path);   // remove temp file
-            //process "fileRows" and respond            
+            //process "fileRows" and respond 
+             
+            let bulkUpload = fileRows;
+            req.session.data['bulk-upload'] = bulkUpload;
+
+            res.render('report/property-bulk-confirm', { bulkUpload: bulkUpload });
           })
     });
   }

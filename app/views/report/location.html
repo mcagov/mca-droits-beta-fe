@@ -29,16 +29,33 @@
                 errorList: errorSummary
             }) }}
         {% endif %}
+
+        {% set locationLatitudeDecimalClass = "govuk-input--width-5" %}
+        {% set locationLongitudeDecimalClass = "govuk-input--width-5" %}
+
+        {% if errors["location-latitude-decimal"] %}
+          {% set locationLatitudeDecimalClass = locationLatitudeDecimalClass + " govuk-input--error" %}
+        {% endif %}
+        {% if errors["location-longitude-decimal"] %}
+          {% set locationLongitudeDecimalClass = locationLongitudeDecimalClass + " govuk-input--error" %}
+        {% endif %}     
         
+        {# Coordinates (Decimal degrees) #}
         {% set decimalInput %}
+          
+          <span class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> {{ errors["coords-decimal"].text }}
+          </span>
+
           {% call govukFieldset({
             classes: "row-prototype-coordinate-input"
           }) %}
+
             {{ govukInput({
               id: "location-latitude-decimal",
               name: "location-latitude-decimal",
               value: data["location"]["location-latitude-decimal"],
-              classes: "govuk-input--width-5",
+              classes: locationLatitudeDecimalClass,
               label: {
                 text: "Latitude"
               },
@@ -47,15 +64,14 @@
               },
               attributes: {
                 inputmode: "numeric"
-              },
-              errorMessage: errors["location-latitude-decimal"]
+              }
             }) }}
 
             {{ govukInput({
               id: "location-longitude-decimal",
               name: "location-longitude-decimal",
               value: data["location"]["location-longitude-decimal"],
-              classes: "govuk-input--width-5",
+              classes: locationLongitudeDecimalClass,
               label: {
                 text: "Longitude"
               },
@@ -64,26 +80,49 @@
               },
               attributes: {
                 inputmode: "numeric"
-              },
-              errorMessage: errors["location-longitude-decimal"]
+              }
             }) }}
 
           {% endcall %}
         {% endset -%}
 
+        {% set locationLatitudeDecimalMinutesDegreeClass = "govuk-input--width-5" %}
+        {% set locationLatitudeDecimalMinutesMinuteClass = "govuk-input--width-5" %}
+        {% set locationLongitudeDecimalMinutesDegreeClass = "govuk-input--width-5" %}
+        {% set locationLongitudeDecimalMinutesMinuteClass = "govuk-input--width-5" %}
 
+        {% if errors["location-latitude-decimal-minutes-degree"] %}
+          {% set locationLatitudeDecimalMinutesDegreeClass = locationLatitudeDecimalMinutesDegreeClass + " govuk-input--error" %}
+        {% endif %}
+        {% if errors["location-latitude-decimal-minutes-minute"] %}
+          {% set locationLatitudeDecimalMinutesMinuteClass = locationLatitudeDecimalMinutesMinuteClass + " govuk-input--error" %}
+        {% endif %}   
+        {% if errors["location-longitude-decimal-minutes-degree"] %}
+          {% set locationLongitudeDecimalMinutesDegreeClass = locationLongitudeDecimalMinutesDegreeClass + " govuk-input--error" %}
+        {% endif %}
+        {% if errors["location-longitude-decimal-minutes-minute"] %}
+          {% set locationLongitudeDecimalMinutesMinuteClass = locationLongitudeDecimalMinutesMinuteClass + " govuk-input--error" %}
+        {% endif %}   
+
+        {# Coordinates (Degrees and decimal minutes) #}
         {% set decimalMinuteInput %}
+
+          <span class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> {{ errors["coords-decimal-minutes"].text }}
+          </span>
+
           {% call govukFieldset({
             legend: {
               text: "Latitude"
             },
             classes: "row-prototype-coordinate-input"
           }) %}
+
             {{ govukInput({
               id: "location-latitude-decimal-minutes-degree",
               name: "location-latitude-decimal-minutes-degree",
               value: data["location"]["location-latitude-decimal-minutes-degree"],
-              classes: "govuk-input--width-2",
+              classes: locationLatitudeDecimalMinutesDegreeClass,
               label: {
                 text: "Degree",
                 classes: "govuk-visually-hidden"
@@ -93,15 +132,14 @@
               },
               attributes: {
                 inputmode: "numeric"
-              },
-              errorMessage: errors["location-latitude-decimal-minutes-degree"]
+              }
             }) }}
 
             {{ govukInput({
               id: "location-latitude-decimal-minutes-minute",
               name: "location-latitude-decimal-minutes-minute",
               value: data["location"]["location-latitude-decimal-minutes-minute"],
-              classes: "govuk-input--width-5",
+              classes: locationLatitudeDecimalMinutesMinuteClass,
               label: {
                 text: "Minute",
                 classes: "govuk-visually-hidden"
@@ -111,8 +149,7 @@
               },
               attributes: {
                 inputmode: "numeric"
-              },
-              errorMessage: errors["location-latitude-decimal-minutes-minute"]
+              }
             }) }}
 
             {{ govukSelect({
@@ -148,7 +185,7 @@
               id: "location-longitude-decimal-minutes-degree",
               name: "location-longitude-decimal-minutes-degree",
               value: data["location"]["location-longitude-decimal-minutes-degree"],
-              classes: "govuk-input--width-2",
+              classes: locationLongitudeDecimalMinutesDegreeClass,
               label: {
                 text: "Degree",
                 classes: "govuk-visually-hidden"
@@ -158,15 +195,14 @@
               },
               attributes: {
                 inputmode: "numeric"
-              },
-              errorMessage: errors["location-longitude-decimal-minutes-degree"]
+              }
             }) }}
 
             {{ govukInput({
               id: "location-longitude-decimal-minutes-minute",
               name: "location-longitude-decimal-minutes-minute",
               value: data["location"]["location-longitude-decimal-minutes-minute"],
-              classes: "govuk-input--width-5",
+              classes: locationLongitudeDecimalMinutesMinuteClass,
               label: {
                 text: "Minute",
                 classes: "govuk-visually-hidden"
@@ -176,8 +212,7 @@
               },
               attributes: {
                 inputmode: "numeric"
-              },
-              errorMessage: errors["location-longitude-decimal-minutes-minute"]
+              }
             }) }}
 
             {{ govukSelect({
@@ -204,21 +239,51 @@
           {% endcall %}
         {% endset -%}
 
+        {% set locationLatitudeDegreesDegreeClass = "govuk-input--width-2" %}
+        {% set locationLatitudeDegreesMinuteClass = "govuk-input--width-2" %}
+        {% set locationLatitudeDegreesSecondClass = "govuk-input--width-2" %}
+        {% set locationLongitudeDegreesDegreeClass = "govuk-input--width-2" %}
+        {% set locationLongitudeDegreesMinuteClass = "govuk-input--width-2" %}
+        {% set locationLongitudeDegreesSecondClass = "govuk-input--width-2" %}
 
+        {% if errors["location-latitude-degrees-degree"] %}
+          {% set locationLatitudeDegreesDegreeClass = locationLatitudeDegreesDegreeClass + " govuk-input--error" %}
+        {% endif %}
+        {% if errors["location-latitude-degrees-minute"] %}
+          {% set locationLatitudeDegreesMinuteClass = locationLatitudeDegreesMinuteClass + " govuk-input--error" %}
+        {% endif %}   
+        {% if errors["location-latitude-degrees-second"] %}
+          {% set locationLatitudeDegreesSecondClass = locationLatitudeDegreesSecondClass + " govuk-input--error" %}
+        {% endif %}
+        {% if errors["location-longitude-degrees-degree"] %}
+          {% set locationLongitudeDegreesDegreeClass = locationLongitudeDegreesDegreeClass + " govuk-input--error" %}
+        {% endif %}
+        {% if errors["location-longitude-degrees-minute"] %}
+          {% set locationLongitudeDegreesMinuteClass = locationLongitudeDegreesMinuteClass + " govuk-input--error" %}
+        {% endif %}   
+        {% if errors["location-longitude-degrees-second"] %}
+          {% set locationLongitudeDegreesSecondClass = locationLongitudeDegreesSecondClass + " govuk-input--error" %}
+        {% endif %}
 
-
+        {# Coordinates (Degrees, minutes and seconds) #}
         {% set degreeInput %}
+
+          <span class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> {{ errors["coords-sexagesimal"].text }}
+          </span>
+
           {% call govukFieldset({
             legend: {
               text: "Latitude"
             },
             classes: "row-prototype-coordinate-input"
           }) %}
+
             {{ govukInput({
               id: "location-latitude-degrees-degree",
               name: "location-latitude-degrees-degree",
               value: data["location"]["location-latitude-degrees-degree"],
-              classes: "govuk-input--width-2",
+              classes: locationLatitudeDegreesDegreeClass,
               label: {
                 text: "Degree",
                 classes: "govuk-visually-hidden"
@@ -228,15 +293,14 @@
               },
               attributes: {
                 inputmode: "numeric"
-              },
-              errorMessage: errors["location-latitude-degrees-degree"]
+              }
             }) }}
 
             {{ govukInput({
               id: "location-latitude-degrees-minute",
               name: "location-latitude-degrees-minute",
               value: data["location"]["location-latitude-degrees-minute"],
-              classes: "govuk-input--width-2",
+              classes: locationLatitudeDegreesMinuteClass,
               label: {
                 text: "Minute",
                 classes: "govuk-visually-hidden"
@@ -246,15 +310,14 @@
               },
               attributes: {
                 inputmode: "numeric"
-              },
-              errorMessage: errors["location-latitude-degrees-minute"]
+              }
             }) }}
 
             {{ govukInput({
               id: "location-latitude-degrees-second",
               name: "location-latitude-degrees-second",
               value: data["location"]["location-latitude-degrees-second"],
-              classes: "govuk-input--width-2",
+              classes: locationLatitudeDegreesSecondClass,
               label: {
                 text: "Second",
                 classes: "govuk-visually-hidden"
@@ -264,8 +327,7 @@
               },
               attributes: {
                 inputmode: "numeric"
-              },
-              errorMessage: errors["location-latitude-degrees-second"]
+              }
             }) }}
 
             {{ govukSelect({
@@ -301,7 +363,7 @@
               id: "location-longitude-degrees-degree",
               name: "location-longitude-degrees-degree",
               value: data["location"]["location-longitude-degrees-degree"],
-              classes: "govuk-input--width-2",
+              classes: locationLongitudeDegreesDegreeClass,
               label: {
                 text: "Degree",
                 classes: "govuk-visually-hidden"
@@ -311,15 +373,14 @@
               },
               attributes: {
                 inputmode: "numeric"
-              },
-              errorMessage: errors["location-longitude-degrees-degree"]
+              }
             }) }}
 
             {{ govukInput({
               id: "location-longitude-degrees-minute",
               name: "location-longitude-degrees-minute",
               value: data["location"]["location-longitude-degrees-minute"],
-              classes: "govuk-input--width-2",
+              classes: locationLongitudeDegreesMinuteClass,
               label: {
                 text: "Minute",
                 classes: "govuk-visually-hidden"
@@ -329,15 +390,14 @@
               },
               attributes: {
                 inputmode: "numeric"
-              },
-              errorMessage: errors["location-longitude-degrees-minute"]
+              }
             }) }}
 
             {{ govukInput({
               id: "location-longitude-degrees-second",
               name: "location-longitude-degrees-second",
               value: data["location"]["location-longitude-degrees-second"],
-              classes: "govuk-input--width-2",
+              classes: locationLongitudeDegreesSecondClass,
               label: {
                 text: "Second",
                 classes: "govuk-visually-hidden"
@@ -347,8 +407,7 @@
               },
               attributes: {
                 inputmode: "numeric"
-              },
-              errorMessage: errors["location-longitude-degrees-second"]
+              }
             }) }}
 
             {{ govukSelect({

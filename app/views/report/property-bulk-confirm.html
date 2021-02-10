@@ -19,60 +19,61 @@
       <h1 class="govuk-heading-xl">Confirm upload</h1>
 
       <p class="govuk-body-l">Confirm the wreck material to be added and attach any photos you have for each item.</p>
+      <div class="form-wrapper" data-js="bulk-upload">
+        <form class="form" action="/report/property-summary" method="post" enctype="multipart/form-data" data-js="bulk-form-element">
 
-      <form class="form" action="/report/property-summary" method="post">
-
-        <table class="govuk-table">
-          <caption class="govuk-table__caption">Uploaded wreck material</caption>
-          <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header">Information</th>
-            <th scope="col" class="govuk-table__header">Image</th>
-          </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-          {% for id, item in bulkUpload %}
+          <table class="govuk-table">
+            <caption class="govuk-table__caption">Uploaded wreck material</caption>
+            <thead class="govuk-table__head">
             <tr class="govuk-table__row">
-              <td class="govuk-table__cell">
-                <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Description:</strong> {{ item.description }}</p>
-                <input type=hidden name=property[{{ id }}][description] value="{{ item.Description }}">
-
-                <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Quantity:</strong> {{ item.quantity }}</p>
-                <input type=hidden name=property[{{ id }}][quantity] value="{{ item.quantity }}">
-
-                <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Value:</strong> £{{ item.value }}</p>
-                <input type=hidden name=property[{{ id }}][value] value="{{ item.value }}">
-
-                <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Address:</strong>
-                  {{ address(item['address-details']) }}</p>
-
-                <input type=hidden name=property[{{ id }}][address-details] value="custom">
-                <input type=hidden name=property[{{ id }}][address-details][address-line-1] value={{ item['address-details']['address-line-1'] }}>
-                <input type=hidden name=property[{{ id }}][address-details][address-line-2] value={{ item['address-details']['address-line-2'] }}>
-                <input type=hidden name=property{{ id }}][address-details][town] value={{ item['address-details']['town'] }}>
-                <input type=hidden name=property[{{ id }}][address-details][postcode] value={{ item['address-details']['postcode'] }}>
-              </td>
-              <td class="govuk-table__cell">
-                {{ govukFileUpload({
-                  id: "image-bu1",
-                  name: "property[bu1][dummy]",
-                  label: {
-                    text: "Upload an image"
-                  }
-                }) }}
-                <input type=hidden name=property[bu1][image] value="">
-              </td>
+              <th scope="col" class="govuk-table__header">Information</th>
+              <th scope="col" class="govuk-table__header">Image</th>
             </tr>
-          {% endfor %}
-          </tbody>
-        </table>
+            </thead>
+            <tbody class="govuk-table__body">
+            {% for id, item in bulkUpload %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Description:</strong> {{ item.description }}</p>
+                  <input type=hidden name=property[{{ id }}][description] value="{{ item.description }}">
 
-        <input type="hidden" name="property-added-flash" value=true>
+                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Quantity:</strong> {{ item.quantity }}</p>
+                  <input type=hidden name=property[{{ id }}][quantity] value="{{ item.quantity }}">
 
-        <button class="govuk-button" data-module="govuk-button">Add items to report</button>
+                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Value:</strong> £{{ item.value }}</p>
+                  <input type=hidden name=property[{{ id }}][value] value="{{ item.value }}">
 
-      </form>
+                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Address:</strong>
+                    {{ address(item['address-details']) }}</p>
 
+                  <input type=hidden name=property[{{ id }}][address-details] value="custom">
+                  <input type=hidden name=property[{{ id }}][address-details][address-line-1] value={{ item['address-details']['address-line-1'] }}>
+                  <input type=hidden name=property[{{ id }}][address-details][address-line-2] value={{ item['address-details']['address-line-2'] }}>
+                  <input type=hidden name=property{{ id }}][address-details][town] value={{ item['address-details']['town'] }}>
+                  <input type=hidden name=property[{{ id }}][address-details][postcode] value={{ item['address-details']['postcode'] }}>
+                </td>
+                <td class="govuk-table__cell">
+                  {{ govukFileUpload({
+                    id: id, 
+                    name: "property-image",
+                    hint: {
+                        text: "Accepted file types: jpg, jpeg, png.<br/>Maximum file size: 5MB"
+                    },
+                    classes: "photo-upload__upload"
+                  }) }}
+                  <input type=hidden name=property[{{ id }}][image] value="">
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+
+          <input type="hidden" name="property-added-flash" value=true>
+          <a class="photo-upload__button govuk-button" data-module="govuk-button">Upload images</a>
+          <button disabled="disabled" aria-disabled="true" class="govuk-button govuk-button--disabled" data-module="govuk-button" data-js="bulk-add-btn">Add items to report</button>
+
+        </form>
+      </div>
     </div>
   </div>
 

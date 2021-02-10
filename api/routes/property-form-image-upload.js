@@ -16,6 +16,7 @@ const storage = multer.diskStorage({
     cb(null, `${uuidv4()}${path.extname(file.originalname)}`);
   }
 });
+
 const upload = multer({
   storage: storage,
   limits: { fileSize: 5000000 },
@@ -59,4 +60,27 @@ export default function (app) {
       res.json(req.file.path);
     }
   );
+
+  app.post(
+    '/report/property-bulk-upload',
+    upload.array('property-image'),
+    function(req, res) {
+
+      let idArray;
+      if (req.files.length > 1) {
+        idArray = req.body.IDs;
+      } else {
+        idArray = [];
+        idArray.push(req.body.IDs)
+      }
+
+      idArray.forEach((imageId, index) => {
+        let id = imageId;
+        req.session.data.property[id].image = req.files[index].filename;
+      })
+
+      req.session.save();
+      res.redirect('property-summary');
+      
+    });
 }

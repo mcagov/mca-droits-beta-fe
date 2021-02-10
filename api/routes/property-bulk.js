@@ -44,7 +44,6 @@ export default function (app) {
     "/report/property-bulk",
     upload.single("bulk-upload-file"),
     function(req,res){
-      console.log(req.file.path);
       const fileRows = [];
         csv.parseFile(req.file.path, { headers: true })
           .on("data", function (data) {
@@ -56,8 +55,7 @@ export default function (app) {
             
             //process "fileRows" and respond  
             let fileUpload = fileRows;
-            // Create a Map rather than an Object to ensure the items are output in the 
-            // correct order when we loop through them in the template
+
             req.session.data['bulk-upload'] = {};
             const sessionBulkUpload = req.session.data['bulk-upload'];
 
@@ -87,10 +85,9 @@ export default function (app) {
 
             req.session.data['property'] = sessionBulkUpload;
             var bulkUpload = sessionBulkUpload;
-            console.log(req.session.data);
             res.render('report/property-bulk-confirm', { bulkUpload: bulkUpload });
           })
     });
-  }
+}
 
 

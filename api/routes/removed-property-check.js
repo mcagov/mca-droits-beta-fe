@@ -10,7 +10,7 @@ export default function (app) {
         .exists()
         .not()
         .isEmpty()
-        .withMessage('You must choose an option')
+        .withMessage('Select yes if you have removed the wreck material')
     ],
     function (req, res) {
       const errors = formatValidationErrors(validationResult(req));

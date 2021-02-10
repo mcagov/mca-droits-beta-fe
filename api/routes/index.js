@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import clearSession from './clear-session';
 import removedPropertyCheck from './removed-property-check';
-import locationAnswer from './location-answer';
+import location from './location';
 import findDate from './find-date';
 import vesselInformation from './vessel-information';
 import salvagedFrom from './salvaged-from';
@@ -23,7 +23,7 @@ export default () => {
 
   clearSession(app);
   removedPropertyCheck(app);
-  locationAnswer(app);
+  location(app);
   findDate(app);
   personal(app);
   knownWreck(app);

@@ -4,3 +4,4 @@ package-lock.json
 .DS_Store
 /config/keys_dev.js
 /uploads/**/*
+.vscode/launch.json

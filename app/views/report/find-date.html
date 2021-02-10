@@ -1,11 +1,6 @@
 {% extends "layout.html" %}
 
-{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
-
 
 {% block pageTitle %}
   Date of find
@@ -21,7 +16,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      <form class="form" action="/report/find-date" method="post">
+      <form class="form" action="/report/find-date" method="post" novalidate>
 
         {% if errorSummary.length > 0 %}
           {{ govukErrorSummary({

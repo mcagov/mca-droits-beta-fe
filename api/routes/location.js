@@ -1,4 +1,4 @@
-import { body, check, validationResult } from 'express-validator';
+import { body, validationResult } from 'express-validator';
 import {
   formatValidationErrors,
   multiErrors,
@@ -46,7 +46,7 @@ export default function (app) {
             'location-given'
           ].longitude = `${session['location-standard'].longitude}°`;
 
-          await check('location-latitude-decimal')
+          await body('location-latitude-decimal')
             .exists()
             .not()
             .isEmpty()

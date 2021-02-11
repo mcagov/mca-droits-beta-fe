@@ -35,19 +35,20 @@ export class BulkUpload {
         }
       });
 
-      try {
-        const res = await axios.post(
-          `/report/property-bulk-upload`,
-          formData,
-          {
-            headers: { 'Content-Type': 'multipart/form-data' },
-            withCredentials: true
-          }
-        );
+      axios.post(
+        `/report/property-bulk-upload`,
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          withCredentials: true
+        }
+      )
+      .then((response) => {
         this.removeDisabledState();
-      } catch (err) {
-        console.error(err);
-      }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
 
     }); 
   }

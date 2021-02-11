@@ -8,14 +8,20 @@
 npm install
 ```
 
+#### Starts server
+
+```bash
+npm run start
+```
+
 #### Starts both express server and frontend
 
 ```bash
 npm run dev
 ```
 
-#### Build for production
+#### Build static assets for production
 
 ```bash
-npm run build:prod
+npm run build
 ```

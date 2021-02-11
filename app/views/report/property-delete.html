@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+
+{% block pageTitle %}
+  Remove wreck material
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "includes/phase-banner.html" %}
+  <a class="govuk-back-link" href="/report/property-summary">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <form class="form" action="/report/property-delete-action/{{ propertyID }}" method="post">
+
+
+        <h1 class="govuk-heading-xl">Remove wreck material</h1>
+
+        {{ govukWarningText({
+          text: "Are you sure you want to remove this item of wreck material?",
+          iconFallbackText: "Warning"
+        }) }}
+
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+              text: "Description"
+            },
+              value: {
+              text: propertyItem["description"]
+            }
+            },
+            {
+              key: {
+              text: "Quantity"
+            },
+              value: {
+              text: propertyItem["quantity"]
+            }
+            },
+            {
+              key: {
+              text: "Value"
+            },
+              value: {
+              text: "£" + propertyItem["value"]
+            }
+            },
+            {
+              key: {
+              text: "Image"
+            },
+              value: {
+              text: propertyItem["image"]
+            }
+            }
+          ]
+        }) }}
+
+        <input type="hidden" name="property-removed-flash" value=true>
+
+        {{ govukButton({
+          text: "Remove wreck material",
+          classes: "govuk-button--warning govuk-!-margin-right-5"
+        }) }}
+
+        {{ govukButton({
+          text: "Cancel and go back",
+          classes: "govuk-button--secondary",
+          href: "/report/property-summary"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

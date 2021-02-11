@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% block pageTitle %}
+  Description of wreck material
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "includes/phase-banner.html" %}
+  <a class="govuk-back-link" href="/report/property-summary">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% set propertyName = "property" %}
+      {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
+      {% set photoGuidance %}
+      {% set imagePath = "/uploads/" +  data[propertyName][propertyID]['image'] %}
+
+        <h3 class="govuk-heading-m">Your photo should include:</h3>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>Clear colour image of the whole item</li>
+          <li>Only contain the item listed above (images of other items should be added separately)</li>
+          <li>Show any markings on the item</li>
+        </ul>
+        <p class="govuk-body">Only one image can be added per item however if more are required to show multiple angles or markings please email them to row@mcga.gov.uk and include the report number issued when this report is completed.</p>
+        {{ govukInsetText({
+          text: "Reports cannot be closed without an image of each item, which are a clear permanent record of all items recovered. They aid in identification and in some cases can assist an owner in identifying their property."
+        }) }}
+      {% endset %}
+
+      <form class="form" action="/report/property-form-address/{{ propertyID }}" method="post" data-js="image-upload">
+        <h1 class="govuk-heading-xl">Provide a photo of the item</h1>
+
+        <!-- <p class="govuk-body-l">Provide an image of the following item:</p> -->
+        {{ govukInsetText({
+          text: data[propertyName][propertyID]["description"]
+        }) }}
+
+        <div class="photo-upload__container--initial image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6">
+
+          <div class="govuk-form-group">
+            <label class="govuk-label govuk-label--l" for="{{ propertyNamePrefix }}[image]">
+              Select a photo
+            </label>
+
+            <p class="govuk-body">Make sure your photo meets the guidelines below before submitting. If it does not, this may delay the closure of this report.</p>
+
+            {{ govukDetails({
+              summaryText: "Guidance for providing item photos",
+              html: photoGuidance
+            }) }}
+
+            {{ govukFileUpload({
+              id: "property-image",
+              name: "property-image",
+              hint: {
+                  text: "Accepted file types: jpg, jpeg, png.<br/>Maximum file size: 5MB"
+              },
+              errorMessage: errors["property-image"],
+              classes: "photo-upload__upload"
+            }) }}
+          </div>
+
+          <a class="photo-upload__button govuk-button" data-module="govuk-button"  data-id={{ propertyID }}>Upload file</a>
+        </div>
+
+        <div class="photo-upload__container--uploaded image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" style="display: none;">
+          <h2 class="govuk-heading-l">Selected image</h2>
+
+          <p class="govuk-body">Make sure your photo meets the guidelines below before submitting. If it does not, this may delay the closure of this report.</p>
+
+          {{ govukDetails({
+            summaryText: "Guidance for providing item photos",
+            html: photoGuidance
+          }) }}
+
+          <div>
+            <img class="photo-upload__result govuk-!-margin-bottom-6" src="{{ imagePath }}" width="300px" />
+          </div>
+          
+          <a class="photo-upload__button-change govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button">Upload a different image</a>
+        </div>
+
+        <button class="govuk-button" data-module="govuk-button" id="photo-upload-continue">Continue</button>
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

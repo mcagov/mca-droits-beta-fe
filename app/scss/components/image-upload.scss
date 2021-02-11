@@ -1,0 +1,20 @@
+.image-upload-wrapper {
+  background-color: govuk-colour('light-grey');
+
+  .govuk-button {
+    margin-bottom: 0;
+  }
+
+  .govuk-form-group {
+    margin-bottom: 1em;
+  }
+  .govuk-file-upload {
+    background-color: lighten(govuk-colour('light-grey'), 2);
+    border: 1px dashed $govuk-border-colour;
+    padding: 1em;
+  }
+
+  .file-info {
+    color: $govuk-secondary-text-colour;
+  }
+}

@@ -3,12 +3,10 @@
   "version": "1.0.0",
   "description": "Maritime and Coastguard Agency - Receiver of Wreck web application for reporting wreck material recovered from the sea and shores of the UK",
   "scripts": {
-    "server": "nodemon -r esm server.js",
-    "build": "webpack",
-    "build:prod": "webpack --env.production",
+    "start": "cross-env NODE_ENV=production node -r esm server.js",
     "watch": "webpack --watch",
-    "watch:prod": "webpack --watch --env.production",
-    "dev": "concurrently \"npm run server\" \"npm run watch\""
+    "build": "webpack --env.production",
+    "dev": "cross-env NODE_ENV=development concurrently \"nodemon -r esm server.js\" \"npm run watch\""
   },
   "repository": {
     "type": "git",
@@ -20,10 +18,18 @@
     "url": "https://github.com/ctidigital/mca-droits-beta/issues"
   },
   "homepage": "https://github.com/ctidigital/mca-droits-beta#readme",
-  "devDependencies": {
+  "dependencies": {
+    "@azure/storage-blob": "^12.4.0",
     "@babel/core": "^7.11.6",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-transform-react-jsx": "^7.12.13",
     "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.12.13",
+    "@what3words/api": "^3.1.1",
+    "accessible-autocomplete": "^2.0.3",
     "autoprefixer": "^10.0.0",
+    "awesome-debounce-promise": "^2.1.0",
+    "axios": "^0.21.1",
     "babel-loader": "^8.1.0",
     "body-parser": "^1.19.0",
     "browser-sync": "^2.26.12",
@@ -32,30 +38,38 @@
     "concurrently": "^5.3.0",
     "copy-webpack-plugin": "^6.1.0",
     "css-loader": "^4.3.0",
+    "dotenv": "^8.2.0",
     "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "express-debug": "^1.1.1",
     "express-session": "^1.17.1",
     "express-validator": "^6.9.2",
     "file-loader": "^6.1.0",
+    "govuk-frontend": "^3.10.2",
     "keypather": "^3.1.0",
+    "mime-types": "^2.1.28",
     "mini-css-extract-plugin": "^0.11.2",
+    "multer": "^1.4.2",
     "node-sass": "^4.14.1",
-    "nodemon": "^2.0.7",
     "nunjucks": "^3.2.2",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "postcss": "^8.0.5",
     "postcss-loader": "^4.0.2",
     "postcss-preset-env": "^6.7.0",
+    "preact": "^8.3.1",
     "precss": "^4.0.0",
     "sass-loader": "^10.0.2",
     "style-loader": "^1.2.1",
     "terser-webpack-plugin": "^4.2.1",
     "url-loader": "^4.1.0",
+    "uuid": "^8.3.2",
+    "validator": "^13.5.2",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
-  "dependencies": {
-    "express": "^4.17.1",
-    "govuk-frontend": "^3.10.2"
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.7"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@ctidigital"

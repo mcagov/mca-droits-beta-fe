@@ -7,4 +7,9 @@ document.body.className = document.body.className
   ? document.body.className + ' js-enabled'
   : 'js-enabled';
 
-console.log('App script loaded');
+// Components
+import './components/editableMap.js';
+import './components/vesselInformation.js';
+import './components/staticMap.js';
+import './components/what3words.js';
+import './components/imageUpload.js';

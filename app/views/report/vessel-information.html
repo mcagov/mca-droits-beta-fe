@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+
+{% block pageTitle %}
+  Vessel information
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "includes/phase-banner.html" %}
+  <a class="govuk-back-link" href="/report/known-wreck">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-xl">Vessel information</h1>
+
+      <form class="form" action="/report/vessel-information-answer" method="post">
+        {% if errorSummary.length > 0 %}
+            {{ govukErrorSummary({
+                titleText: "There is a problem",
+                errorList: errorSummary
+            }) }}
+        {% endif %}
+
+        <div class="govuk-form-group">
+          <label for="wreck-name" class="govuk-label">What is the name of the vessel?</label>
+          <div id="wreck-name-hint" class="govuk-hint">
+            If the name of the vessel is not known, please provide an informal name.
+          </div>
+          <div id="wreck-name-autocomplete" class="govuk-body" data-value="{{ data['wreck-name'] }}" data-js="vessel-information"></div>
+          {#
+            The 'unknown' text shown when using the control with a default value is a known bug:
+            https://github.com/alphagov/accessible-autocomplete/issues/424
+          #}
+        </div>
+
+        {{ govukInput({
+          label: {
+            text: "If known, what year was the vessel constructed?"
+          },
+          hint: {
+            text: "For example, 1889"
+          },
+          id: "wreck-construction-year",
+          name: "wreck-construction-year",
+          classes: "govuk-input--width-4",
+          value: data["wreck-construction-year"]
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "If known, what year did the vessel sink?"
+          },
+          hint: {
+            text: "For example, 1902"
+          },
+          id: "wreck-sunk-year",
+          name: "wreck-sunk-year",
+          classes: "govuk-input--width-4",
+          value: data["wreck-sunk-year"]
+        }) }}
+
+        <button class="govuk-button" data-module="govuk-button">Continue</button>
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

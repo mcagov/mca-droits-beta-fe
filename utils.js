@@ -1,52 +1,12 @@
 import getKeypath from 'keypather/get';
 import sessionDataDefaults from './api/data/session-data-defaults';
+import validator from 'validator';
 
-// Store data from POST body or GET query in session
-const storeData = (input, data) => {
-  for (const i in input) {
-    // any input where the name starts with _ is ignored
-    if (i.indexOf('_') === 0) {
-      continue;
-    }
-
-    const val = input[i];
-
-    // Delete values when users unselect checkboxes
-    if (val === '_unchecked' || val === ['_unchecked']) {
-      delete data[i];
-      continue;
-    }
-
-    // Remove _unchecked from arrays of checkboxes
-    if (Array.isArray(val)) {
-      const index = val.indexOf('_unchecked');
-      if (index !== -1) {
-        val.splice(index, 1);
-      }
-    } else if (typeof val === 'object') {
-      // Store nested objects that aren't arrays
-      if (typeof data[i] !== 'object') {
-        data[i] = {};
-      }
-
-      // Add nested values
-      storeData(val, data[i]);
-      continue;
-    }
-
-    data[i] = val;
-  }
-};
-
-export const autoStoreData = (req, res, next) => {
+export const sessionData = (req, res, next) => {
   if (!req.session.data) {
     req.session.data = {};
   }
-
   req.session.data = Object.assign({}, sessionDataDefaults, req.session.data);
-
-  storeData(req.body, req.session.data);
-  storeData(req.query, req.session.data);
 
   // Send session data to all views
 
@@ -149,4 +109,69 @@ export const formatValidationErrors = (errorsInstance) => {
     };
   });
   return formattedErrors;
+};
+
+/**
+ *
+ * @param {Object} errors - errors obj
+ * @param {string} multiErrorName - name of single error obj that will be passed to template
+ * @param {string} prefix - prefix of req body vals, used for filtering
+ * @param {number} maxInputLength - total amount of inputs, used for showing default msg when all inputs empty
+ * @param {string} errorMessagePrefix - prefix shown at start of error messages
+ * @param {string} errorMessageJoin - word to join individual errors
+ * @param {string} errorMessageAll - error msg shown when all inputs empty
+ */
+export const multiErrors = (
+  errors,
+  multiErrorName,
+  prefix,
+  maxInputLength,
+  errorMessagePrefix,
+  errorMessageJoin,
+  errorMessageAll
+) => {
+  const filteredErrors = Object.values(errors).filter((error) =>
+    error.id.includes(`${prefix}-`)
+  );
+
+  if (filteredErrors) {
+    const firstError = filteredErrors[0].id;
+
+    // Get the first error message and merge it into a single error message.
+    errors[multiErrorName] = {
+      id: multiErrorName,
+      href: `#${firstError}`
+    };
+
+    // Construct a single error message based on all three error messages.
+
+    errors[multiErrorName].text = errorMessagePrefix;
+    if (filteredErrors.length === maxInputLength) {
+      errors[multiErrorName].text += errorMessageAll;
+    } else {
+      errors[multiErrorName].text += filteredErrors
+        .map((error) => error.text.replace(errorMessagePrefix, ''))
+        .join(errorMessageJoin);
+    }
+  }
+  let errorSummary = Object.values(errors);
+  errorSummary = errorSummary.filter(
+    (error) => !error.id.includes(`${prefix}-`)
+  );
+
+  return errorSummary;
+};
+
+/**
+ *
+ * @param {Object} val - req.body value
+ * @param {Object} error - error obj
+ * @param {string} msg - msg string
+ */
+export const validationNumberCheck = (val, error, msg = 'Enter a number') => {
+  if (val.length) {
+    if (!validator.isNumeric(val)) {
+      error.text = msg;
+    }
+  }
 };

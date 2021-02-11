@@ -68,6 +68,9 @@ export default function (app) {
               item['description'] = obj['Description'];
               item['quantity'] = obj['Quantity'];
               item['value'] = obj['Total value'];
+              if (obj['Total value']) {
+                item['value-known'] = 'yes';
+              };
 
               if(obj['Storage address line 1'] && obj['Postcode']) {
                 item['storage-address'] = 'custom';

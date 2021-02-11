@@ -1,7 +1,7 @@
 {% macro address(addressLines) %}
-  {% for key, value in addressLines %}
-    {% if value %}
-      {{ value }}<br>
+  {% for line in addressLines %}
+    {% if line %}
+      {{ line }}<br>
     {% endif %}
   {% endfor %}
 {% endmacro %}

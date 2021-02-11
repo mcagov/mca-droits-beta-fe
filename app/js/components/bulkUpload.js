@@ -26,6 +26,8 @@ export class BulkUpload {
     this.uploadButton.addEventListener('click', async () => {
       let formData = new FormData(this.form);
 
+      // Loop through each file-upload input and grab the selected file data,
+      // and the input id (which is the unique id for the wreck item)
       this.photoUploadInputs.forEach((input) => {
         let file = input.files;
         if (file.length > 0) {
@@ -36,7 +38,8 @@ export class BulkUpload {
       });
 
       axios.post(
-        `/report/property-bulk-upload`,
+        // Post route handled in routes/property-form-image-upload.js
+        `/report/property-bulk-image-upload`,
         formData,
         {
           headers: { 'Content-Type': 'multipart/form-data' },
@@ -44,6 +47,7 @@ export class BulkUpload {
         }
       )
       .then((response) => {
+        // Allow user to continue through form when images have uploaded
         this.removeDisabledState();
       })
       .catch((error) => {

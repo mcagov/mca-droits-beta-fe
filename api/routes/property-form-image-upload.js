@@ -62,10 +62,12 @@ export default function (app) {
   );
 
   app.post(
-    '/report/property-bulk-upload',
+    '/report/property-bulk-image-upload',
     upload.array('property-image'),
     function(req, res) {
-
+      // FormData is passed in as a string for single items, and an array for
+      // more than one item. Here we covert the string to an array if only one
+      // item contains an uploaded image. 
       let idArray;
       if (req.files.length > 1) {
         idArray = req.body.IDs;
@@ -74,6 +76,8 @@ export default function (app) {
         idArray.push(req.body.IDs)
       }
 
+      // Loop through the item IDs and match each ID to the associated 
+      // image (stored in req.files) using the array indexes.
       idArray.forEach((imageId, index) => {
         let id = imageId;
         req.session.data.property[id].image = req.files[index].filename;

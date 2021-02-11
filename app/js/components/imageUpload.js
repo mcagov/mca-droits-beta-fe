@@ -17,6 +17,8 @@ export class ImageUpload {
     this.photoUpload = $1('.photo-upload__upload', this.el);
     this.photoResult = $1('.photo-upload__result', this.el);
     this.uploadButtonChange = $1('.photo-upload__button-change', this.el);
+    this.errorBlock = $('.upload-error', this.el);
+    this.errorText = $('.upload-error__text', this.el);
 
     LoadManager.queue(this.init.bind(this), QUEUE.RESOURCES);
   }
@@ -40,11 +42,17 @@ export class ImageUpload {
             withCredentials: true
           }
         );
-
-        this.imageSelected(`/${res.data}`);
-        this.imagePath = res.data;
-      } catch (err) {
-        console.error(err);
+        if (res.data.error) {
+          this.errorText.forEach((i) => (i.innerText = res.data.error.text));
+          this.scrollToTop();
+          this.errorBlock.forEach((i) => (i.style.display = 'block'));
+        } else {
+          this.errorBlock.forEach((i) => (i.style.display = 'none'));
+          this.imageSelected(`/${res.data}`);
+          this.imagePath = res.data;
+        }
+      } catch (reqError) {
+        console.error(reqError);
       }
     });
   }
@@ -55,19 +63,24 @@ export class ImageUpload {
   }
   selectAltImageEvent() {
     this.uploadButtonChange.addEventListener('click', async () => {
-      this.containerUploaded.style.display = 'none';
-      this.containerInitial.style.display = 'block';
-      this.photoUpload.value = '';
-
       try {
         const res = await axios.post(
           `/report/property-form-image-delete/${this.id}`,
           { path: this.imagePath }
         );
+        if (res) {
+          this.containerUploaded.style.display = 'none';
+          this.containerInitial.style.display = 'block';
+          this.photoUpload.value = '';
+        }
       } catch (err) {
         console.error(err);
       }
     });
+  }
+  scrollToTop() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
   }
 }
 export default LoadManager.queue(() => {

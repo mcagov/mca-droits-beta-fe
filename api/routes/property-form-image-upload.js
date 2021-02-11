@@ -1,10 +1,8 @@
-const { body, validationResult } = require('express-validator');
 import path from 'path';
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import multer from 'multer';
-import { azureUpload } from '../../services';
-import { formatValidationErrors } from '../../utils';
+// import { azureUpload } from '../../services';
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -20,7 +18,7 @@ const upload = multer({
   storage: storage,
   limits: { fileSize: 5000000 },
   fileFilter: fileFilter
-});
+}).single('image');
 
 function fileFilter(req, file, cb) {
   // Allowed ext
@@ -34,29 +32,43 @@ function fileFilter(req, file, cb) {
   if (mimetype && extname) {
     return cb(null, true);
   } else {
-    cb('Error: Images Only!');
+    cb('The selected file must be a jpg, jpeg or png');
   }
 }
 
 export default function (app) {
-  app.post(
-    '/report/property-form-image-upload/:prop_id',
-    upload.single('image'),
-    function (req, res) {
-      console.log('[req.file]', req.file);
+  app.post('/report/property-form-image-upload/:prop_id', function (req, res) {
+    upload(req, res, function (multerError) {
+      if (multerError) {
+        const err = {
+          id: 'property-image',
+          href: '#property-image'
+        };
 
-      ///Quick test for logic to upload image to azure
-      ///and delete temp image when complete
+        if (multerError.code === 'LIMIT_FILE_SIZE') {
+          err.text = 'The selected file must be smaller than 5MB';
+        } else if (multerError) {
+          err.text = multerError;
+        }
 
-      // const data = fs.createReadStream(
-      //   `${path.resolve(__dirname + '/../../uploads/')}/${req.file.filename}`
-      // );
-      // azureUpload(data, req.file.filename);
+        res.json({ error: err });
+      } else {
+        /**
+         * Quick test for logic to upload image to azure
+         * and delete temp image when complete
+         * This will be run on the check-your-answers page
+         */
 
-      const id = req.params.prop_id;
-      req.session.data.property[id].image = req.file.filename;
-      req.session.save();
-      res.json(req.file.path);
-    }
-  );
+        // const data = fs.createReadStream(
+        //   `${path.resolve(__dirname + '/../../uploads/')}/${req.file.filename}`
+        // );
+        // azureUpload(data, req.file.filename);
+
+        const id = req.params.prop_id;
+        req.session.data.property[id].image = req.file.filename;
+        req.session.save();
+        res.json(req.file.path);
+      }
+    });
+  });
 }

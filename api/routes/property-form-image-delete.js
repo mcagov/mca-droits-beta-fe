@@ -1,4 +1,3 @@
-import path from 'path';
 import fs from 'fs';
 
 export default function (app) {
@@ -15,5 +14,6 @@ export default function (app) {
 
     req.session.data.property[id].image = '';
     req.session.save();
+    res.json();
   });
 }

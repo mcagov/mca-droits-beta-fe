@@ -14,6 +14,7 @@ export class ImageUpload {
     this.containerInitial = $1('.photo-upload__container--initial', this.el);
     this.containerUploaded = $1('.photo-upload__container--uploaded', this.el);
     this.uploadButton = $1('.photo-upload__button', this.el);
+    this.continueButton = $1('.photo-upload__continue-button', this.el);
     this.photoUpload = $1('.photo-upload__upload', this.el);
     this.photoResult = $1('.photo-upload__result', this.el);
     this.uploadButtonChange = $1('.photo-upload__button-change', this.el);
@@ -28,7 +29,6 @@ export class ImageUpload {
   uploadPhotoEvent() {
     this.uploadButton.addEventListener('click', async () => {
       this.id = this.uploadButton.dataset.id;
-
       const file = new FormData();
       file.append('image', this.photoUpload.files[0]);
       try {
@@ -43,6 +43,7 @@ export class ImageUpload {
 
         this.imageSelected(`/${res.data}`);
         this.imagePath = res.data;
+        this.removeDisabledState();
       } catch (err) {
         console.error(err);
       }
@@ -68,6 +69,10 @@ export class ImageUpload {
         console.error(err);
       }
     });
+  }
+  removeDisabledState() {
+    this.continueButton.disabled = false;
+    this.continueButton.classList.remove('govuk-button--disabled');
   }
 }
 export default LoadManager.queue(() => {

@@ -23,7 +23,9 @@
       {% set propertyName = "property" %}
       {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
       {% set photoGuidance %}
-      {% set imagePath = "/uploads/" +  data[propertyName][propertyID]['image'] %}
+      {% if data[propertyName][propertyID]['image'] %}
+        {% set imagePath = "/uploads/" +  data[propertyName][propertyID]['image'] %}
+      {% endif %}
 
         <h3 class="govuk-heading-m">Your photo should include:</h3>
         <ul class="govuk-list govuk-list--bullet">
@@ -90,7 +92,7 @@
           <a class="photo-upload__button-change govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button">Upload a different image</a>
         </div>
 
-        <button class="govuk-button" data-module="govuk-button" id="photo-upload-continue">Continue</button>
+        <button disabled="disabled" aria-disabled="true" class="govuk-button govuk-button--disabled photo-upload__continue-button" data-module="govuk-button" id="photo-upload-continue">Continue</button>
 
       </form>
 

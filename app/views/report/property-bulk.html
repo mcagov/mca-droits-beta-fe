@@ -36,11 +36,15 @@
           <li>Description</li>
           <li>Quantity</li>
           <li>Total value</li>
-          <li>Storage address (if different to your address)</li>
+          <li>Storage address line 1</li>
+          <li>Storage address line 2 (if applicable)</li>
+          <li>Town</li>
+          <li>County</li>
+          <li>Postcode</li>
         </ul>
 
         {{ govukInsetText({
-          html: 'You can populate the <a href="/public/downloads/bulk-property-upload-template.csv">bulk wreck material upload template</a> with your wreck material and then upload it to this form.'
+          html: 'You can populate the <a href="/assets/downloads/ROW-bulk-upload-template.csv">bulk wreck material upload template</a> with your wreck material and then upload it to this form.'
         }) }}
 
         {{ govukFileUpload({

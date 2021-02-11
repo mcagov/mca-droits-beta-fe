@@ -74,7 +74,8 @@ module.exports = (env) => {
         files: ['dist/css/*.css', 'dist/js/*.js', 'app/views/**/*.html']
       }),
       new CopyWebpackPlugin({
-        patterns: [{ from: path.join(__dirname, "app/assets/images/"), to: path.join(__dirname, "dist/assets/images/"), noErrorOnMissing: true }]
+        patterns: [{ from: path.join(__dirname, "app/assets/images/"), to: path.join(__dirname, "dist/assets/images/"), noErrorOnMissing: true },
+                   { from: path.join(__dirname, "app/assets/downloads/"), to: path.join(__dirname, "dist/assets/downloads/"), noErrorOnMissing: true }]
       })
     ],
     optimization: {

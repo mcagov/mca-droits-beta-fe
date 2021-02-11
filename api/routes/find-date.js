@@ -1,6 +1,10 @@
 const { body, validationResult } = require('express-validator');
 
-import { formatValidationErrors } from '../../utils';
+import {
+  formatValidationErrors,
+  multiErrors,
+  validationNumberCheck
+} from '../../utils';
 
 export default function (app) {
   app.post(
@@ -10,16 +14,19 @@ export default function (app) {
         .exists()
         .not()
         .isEmpty()
+        .isNumeric()
         .withMessage('Enter your find day'),
       body('wreck-find-date-month')
         .exists()
         .not()
         .isEmpty()
+        .isNumeric()
         .withMessage('Enter your find month'),
       body('wreck-find-date-year')
         .exists()
         .not()
         .isEmpty()
+        .isNumeric()
         .withMessage('Enter your find year')
     ],
     function (req, res) {
@@ -35,40 +42,31 @@ export default function (app) {
       if (!errors) {
         return res.render('report/personal');
       } else {
-        // If any of the date inputs error apply a general error.
-        let prefix = 'wreck-find-date';
-        const dateErrors = Object.values(errors).filter((error) =>
-          error.id.includes(`${prefix}-`)
+        const getErrors = multiErrors(
+          errors,
+          'wreck-find-date',
+          'wreck-find-date',
+          3,
+          'Enter your find ',
+          ' and ',
+          'date '
         );
 
-        if (dateErrors) {
-          const firstDateErrorId = dateErrors[0].id;
+        const errorSummary = getErrors;
 
-          // Get the first error message and merge it into a single error message.
-          errors[prefix] = {
-            id: prefix,
-            href: `#${firstDateErrorId}`
-          };
+        validationNumberCheck(
+          body['wreck-find-date-day'],
+          errors['wreck-find-date']
+        );
+        validationNumberCheck(
+          body['wreck-find-date-month'],
+          errors['wreck-find-date']
+        );
+        validationNumberCheck(
+          body['wreck-find-date-year'],
+          errors['wreck-find-date']
+        );
 
-          // Construct a single error message based on all three error messages.
-          errors[prefix].text = 'Enter your find ';
-          if (dateErrors.length === 3) {
-            errors[prefix].text += 'date';
-          } else {
-            errors[prefix].text += dateErrors
-              .map((error) => error.text.replace('Enter your find ', ''))
-              .join(' and ');
-          }
-        }
-
-        let errorSummary = Object.values(errors);
-
-        if (dateErrors) {
-          // Remove all other errors from the summary so we only have one message.
-          errorSummary = errorSummary.filter(
-            (error) => !error.id.includes(`${prefix}-`)
-          );
-        }
         return res.render('report/find-date', {
           errors,
           errorSummary,

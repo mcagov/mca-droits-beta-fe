@@ -44,13 +44,7 @@
                   <input type=hidden name=property[{{ id }}][value] value="{{ item.value }}">
 
                   <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Address:</strong>
-                  {% set addressHtml %}
-                    {% set addressLines = [
-                   
-                    ] %}
-
-                    {{ address(addressLines) }}
-                  {% endset %}
+                    {{ addressObject(item['address-details']) }}
                   </p>
 
                   <input type=hidden name=property[{{ id }}][address-details] value="custom">

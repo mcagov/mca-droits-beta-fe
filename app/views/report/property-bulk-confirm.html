@@ -50,8 +50,9 @@
                   <input type=hidden name=property[{{ id }}][address-details] value="custom">
                   <input type=hidden name=property[{{ id }}][address-details][address-line-1] value={{ item['address-details']['address-line-1'] }}>
                   <input type=hidden name=property[{{ id }}][address-details][address-line-2] value={{ item['address-details']['address-line-2'] }}>
-                  <input type=hidden name=property{{ id }}][address-details][town] value={{ item['address-details']['town'] }}>
-                  <input type=hidden name=property[{{ id }}][address-details][postcode] value={{ item['address-details']['postcode'] }}>
+                  <input type=hidden name=property{{ id }}][address-details][address-town] value={{ item['address-details']['address-town'] }}>
+                  <input type=hidden name=property{{ id }}][address-details][address-county] value={{ item['address-details']['address-county'] }}>
+                  <input type=hidden name=property[{{ id }}][address-details][address-postcode] value={{ item['address-details']['address-postcode'] }}>
                 </td>
                 <td class="govuk-table__cell">
                   {{ govukFileUpload({

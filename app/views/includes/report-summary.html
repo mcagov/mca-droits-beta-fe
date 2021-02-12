@@ -309,17 +309,10 @@
             {% elseif property['storage-address'] == "custom" %}
               <td class="govuk-table__cell">
                 <div class="hide-on-print">
-                  {{ data["property"][id]["address-postcode"] }}
+                  {{ data["property"][id]["address-details"]["address-postcode"] }}
                 </div>
                 <div class="show-on-print">
-                  {% set addressLines = [
-                    data["property"][id]["address-line-1"],
-                    data["property"][id]["address-line-2"],
-                    data["property"][id]["address-town"],
-                    data["property"][id]["address-county"],
-                    data["property"][id]["address-postcode"]
-                  ] %}
-                  {{ address(addressLines) }}
+                  {{ addressObject(data["property"][id]["address-details"]) }}
                 </div>
               </td>
             {% else %}

@@ -23,8 +23,15 @@
       {% set propertyName = "property" %}
       {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
       {% set photoGuidance %}
+      {% set containerInitialClass = "photo-upload__container photo-upload__container--initial image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" %}
+      {% set containerUploadedClass = "photo-upload__container photo-upload__container--uploaded image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" %}
       {% if data[propertyName][propertyID]['image'] %}
         {% set imagePath = "/uploads/" +  data[propertyName][propertyID]['image'] %}
+        {% set containerInitialClass = containerInitialClass + " photo-upload__container--hide" %}
+        {% set continueButtonDisabled = false %}
+      {% else %}
+        {% set containerUploadedClass = containerUploadedClass + " photo-upload__container--hide" %}
+        {% set continueButtonDisabled = true %}
       {% endif %}
 
         <h3 class="govuk-heading-m">Your photo should include:</h3>
@@ -58,8 +65,12 @@
           text: data[propertyName][propertyID]["description"]
         }) }}
 
-        <div class="photo-upload__container--initial image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6">
-
+        <div class="{{containerInitialClass}}">
+          <div class="upload-progress">
+            <div class="upload-progress__bar"><span></span></div>
+            <div class="upload-progress__text govuk-heading-s govuk-!-padding-top-1"></div>
+            <div class="upload-progress__percent govuk-body"></div>
+          </div>
           <div class="govuk-form-group">
             <label class="govuk-label govuk-label--l" for="{{ propertyNamePrefix }}[image]">
               Select a photo
@@ -71,7 +82,7 @@
               summaryText: "Guidance for providing item photos",
               html: photoGuidance
             }) }}
-            <span id="passport-issued-error" class="govuk-error-message upload-error" style="display:none">
+            <span id="passport-issued-error" class="govuk-error-message upload-error">
               <span class="govuk-visually-hidden">Error:</span> <span class="upload-error__text"></span>
             </span>
             {{ govukFileUpload({
@@ -83,11 +94,10 @@
               classes: "photo-upload__upload"
             }) }}
           </div>
-
-          <a class="photo-upload__button govuk-button" data-module="govuk-button"  data-id={{ propertyID }}>Upload file</a>
+          <a class="photo-upload__button govuk-button" data-module="govuk-button" data-id={{ propertyID }}>Upload file</a>
         </div>
 
-        <div class="photo-upload__container--uploaded image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" style="display: none;">
+        <div class="{{containerUploadedClass}}">
           <h2 class="govuk-heading-l">Selected image</h2>
 
           <p class="govuk-body">Make sure your photo meets the guidelines below before submitting. If it does not, this may delay the closure of this report.</p>
@@ -101,11 +111,14 @@
             <img class="photo-upload__result govuk-!-margin-bottom-6" src="{{ imagePath }}" width="300px" />
           </div>
           
-          <a class="photo-upload__button-change govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button">Upload a different image</a>
+          <a class="photo-upload__button-change govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button" data-id={{ propertyID }}>Upload a different image</a>
         </div>
 
-        <button class="govuk-button" data-module="govuk-button" id="photo-upload-continue">Continue</button>
-
+        {{ govukButton({
+          text: "Continue",
+          disabled: continueButtonDisabled,
+          classes: 'govuk-button--continue'
+        }) }}
       </form>
 
     </div>

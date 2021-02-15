@@ -10,7 +10,7 @@ export class ImageUpload {
 
     this.el = el;
     this.id;
-    this.imagePath;
+    this.image;
     this.containerInitial = $1('.photo-upload__container--initial', this.el);
     this.containerUploaded = $1('.photo-upload__container--uploaded', this.el);
     this.uploadButton = $1('.photo-upload__button', this.el);
@@ -19,6 +19,11 @@ export class ImageUpload {
     this.uploadButtonChange = $1('.photo-upload__button-change', this.el);
     this.errorBlock = $('.upload-error', this.el);
     this.errorText = $('.upload-error__text', this.el);
+    this.uploadProgress = $1('.upload-progress', this.el);
+    this.uploadProgressBar = $1('.upload-progress__bar span', this.el);
+    this.uploadProgressText = $1('.upload-progress__text', this.el);
+    this.uploadProgressPercent = $1('.upload-progress__percent', this.el);
+    this.continueButton = $1('.govuk-button--continue', this.el);
 
     LoadManager.queue(this.init.bind(this), QUEUE.RESOURCES);
   }
@@ -39,17 +44,24 @@ export class ImageUpload {
           file,
           {
             headers: { 'Content-Type': 'multipart/form-data' },
-            withCredentials: true
+            withCredentials: true,
+            onUploadProgress: (progressEvent) => {
+              let percentCompleted = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              this.loadingIndicator(percentCompleted);
+            }
           }
         );
+
         if (res.data.error) {
           this.errorText.forEach((i) => (i.innerText = res.data.error.text));
           this.scrollToTop();
           this.errorBlock.forEach((i) => (i.style.display = 'block'));
         } else {
           this.errorBlock.forEach((i) => (i.style.display = 'none'));
-          this.imageSelected(`/${res.data}`);
-          this.imagePath = res.data;
+          this.imageSelected(`/uploads/${res.data}`);
+          this.image = res.data;
         }
       } catch (reqError) {
         console.error(reqError);
@@ -58,20 +70,23 @@ export class ImageUpload {
   }
   imageSelected(src) {
     this.photoResult.src = src;
-    this.containerInitial.style.display = 'none';
-    this.containerUploaded.style.display = 'block';
   }
   selectAltImageEvent() {
+    this.id = this.uploadButtonChange.dataset.id;
+
     this.uploadButtonChange.addEventListener('click', async () => {
       try {
         const res = await axios.post(
-          `/report/property-form-image-delete/${this.id}`,
-          { path: this.imagePath }
+          `/report/property-form-image-delete/${this.id}`
         );
         if (res) {
-          this.containerUploaded.style.display = 'none';
-          this.containerInitial.style.display = 'block';
+          this.containerUploaded.classList.add('photo-upload__container--hide');
+          this.containerInitial.classList.remove(
+            'photo-upload__container--hide'
+          );
           this.photoUpload.value = '';
+          this.continueButton.classList.add('govuk-button--disabled');
+          this.continueButton.disabled = true;
         }
       } catch (err) {
         console.error(err);
@@ -81,6 +96,25 @@ export class ImageUpload {
   scrollToTop() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+  }
+  loadingIndicator(progress) {
+    this.uploadProgress.classList.add('upload-progress--visible');
+    this.uploadProgressBar.style.width = `${progress}%`;
+
+    this.uploadProgressText.innerText = `Uploading image...`;
+    this.uploadProgressPercent.innerText = `${progress}%`;
+    if (progress === 100) {
+      this.uploadProgressText.innerText = `Image uploaded`;
+      setTimeout(() => {
+        this.uploadProgress.classList.remove('upload-progress--visible');
+        this.continueButton.classList.remove('govuk-button--disabled');
+        this.continueButton.disabled = false;
+        this.containerInitial.classList.add('photo-upload__container--hide');
+        this.containerUploaded.classList.remove(
+          'photo-upload__container--hide'
+        );
+      }, 2000);
+    }
   }
 }
 export default LoadManager.queue(() => {

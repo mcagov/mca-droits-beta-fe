@@ -39,18 +39,20 @@ function fileFilter(req, file, cb) {
 export default function (app) {
   app.post('/report/property-form-image-upload/:prop_id', function (req, res) {
     upload(req, res, function (multerError) {
+      const err = {
+        id: 'property-image',
+        href: '#property-image'
+      };
       if (multerError) {
-        const err = {
-          id: 'property-image',
-          href: '#property-image'
-        };
-
         if (multerError.code === 'LIMIT_FILE_SIZE') {
           err.text = 'The selected file must be smaller than 5MB';
         } else if (multerError) {
           err.text = multerError;
         }
 
+        res.json({ error: err });
+      } else if (req.body.image === 'undefined') {
+        err.text = 'Select an image';
         res.json({ error: err });
       } else {
         /**
@@ -67,7 +69,7 @@ export default function (app) {
         const id = req.params.prop_id;
         req.session.data.property[id].image = req.file.filename;
         req.session.save();
-        res.json(req.file.path);
+        res.json(req.file.filename);
       }
     });
   });

@@ -30,15 +30,13 @@ export default function (app) {
         // const data = JSON.stringify(req.session.data);
 
         // res.redirect('/report/confirmation');
-        // console.log(`/uploads/${req.session.data.property.i0.image}`);
+        Object.values(req.session.data.property).forEach((item) => {
+          const data = fs.createReadStream(
+            `${path.resolve(__dirname + '/../../uploads/')}/${item.image}`
+          );
 
-        const data = fs.createReadStream(
-          `${path.resolve(__dirname + '/../../uploads/')}/${
-            req.session.data.property.i0.image
-          }`
-        );
-        console.log(data);
-        azureUpload(data, req.session.data.property.i0.image);
+          azureUpload(data, item.image);
+        });
       }
     }
   );

@@ -46,10 +46,12 @@ export class ImageUpload {
             headers: { 'Content-Type': 'multipart/form-data' },
             withCredentials: true,
             onUploadProgress: (progressEvent) => {
-              let percentCompleted = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-              );
-              this.loadingIndicator(percentCompleted);
+              if (file.length) {
+                let percentCompleted = Math.round(
+                  (progressEvent.loaded * 100) / progressEvent.total
+                );
+                this.loadingIndicator(percentCompleted);
+              }
             }
           }
         );

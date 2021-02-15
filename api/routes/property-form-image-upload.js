@@ -109,7 +109,7 @@ export default function (app) {
         });
 
         req.session.save();
-        res.redirect('property-summary');
+        res.redirect('property-bulk');
       }
     );
   })();

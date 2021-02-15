@@ -63,65 +63,57 @@
 
 
 
-{% if data['wreck-name'] or data['wreck-construction-year'] or data['wreck-sunk-year'] %}
+{% if data['known-wreck'] == "yes" %}
 <div class="govuk-grid-column-two-thirds-from-desktop">
   <h2 class="govuk-heading-m">Vessel information</h2>
 
-  {{ govukSummaryList({
-    rows: [
-      {
-        key: {
-          text: "Vessel name"
-        },
-        value: {
-        text: data['wreck-name']
-      },
-        actions: {
-          items: [
-            {
-              href: "/report/vessel-information",
-              text: "Change",
-              visuallyHiddenText: " name"
-            }
-          ]
-        }
-      },
-      {
-        key: {
-          text: "Vessel construction year"
-        },
-        value: {
-        text: data['wreck-construction-year']
-      },
-        actions: {
-          items: [
-            {
-              href: "/report/vessel-information",
-              text: "Change",
-              visuallyHiddenText: " year"
-            }
-          ]
-        }
-      },
-      {
-        key: {
-          text: "Vessel sunk year"
-        },
-        value: {
-        text: data['wreck-sunk-year']
-      },
-        actions: {
-          items: [
-            {
-              href: "/report/vessel-information",
-              text: "Change",
-              visuallyHiddenText: " year"
-            }
-          ]
-        }
-      }
-    ]
-  }) }}
+  <dl class="govuk-summary-list">
+  {% if data['vessel-information']['vessel-name'] %}
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Vessel name
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{ data['vessel-information']['vessel-name'] }}
+      </dd>
+      <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/report/vessel-information">
+          Change<span class="govuk-visually-hidden"> name</span>
+        </a>
+      </dd>
+    </div>
+  {% endif %}
+  {% if data['vessel-information']['vessel-construction-year'] %}
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Vessel construction year
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{ data['vessel-information']['vessel-construction-year'] }}
+      </dd>
+      <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/report/vessel-information">
+          Change<span class="govuk-visually-hidden"> construction year</span>
+        </a>
+      </dd>
+    </div>
+  {% endif %}
+  {% if data['vessel-information']['vessel-sunk-year'] %}
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Vessel sunk year
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{ data['vessel-information']['vessel-sunk-year'] }}
+      </dd>
+      <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/report/vessel-information">
+          Change<span class="govuk-visually-hidden"> sunk year</span>
+        </a>
+      </dd>
+    </div>
+  {% endif %}
+  </dl>
 </div>
 {% endif %}
 
@@ -285,23 +277,23 @@
               <td class="govuk-table__cell govuk-table__cell--numeric">£{{ property["value"] }}</td>
             {% endif %}
 
-            {% if property['image'] == "" %}
-              <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--blue">Not provided</strong></td>
-            {% else %}
+            {% if property['image'] %}
               <td class="govuk-table__cell"><img src="/uploads/{{ property['image'] }}" width="100"/></td>
+            {% else %}
+              <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--blue">Not provided</strong></td>
             {% endif %}
             {% if property['storage-address'] == "personal" %}
               <td class="govuk-table__cell">
                 <div class="hide-on-print">
-                  {{ data["address-postcode"] }}
+                  {{ data["personal"]["address-postcode"] }}
                 </div>
                 <div class="show-on-print">
                   {% set addressLines = [
-                    data["address-line-1"],
-                    data["address-line-2"],
-                    data["address-town"],
-                    data["address-county"],
-                    data["address-postcode"]
+                    data["personal"]["address-line-1"],
+                    data["personal"]["address-line-2"],
+                    data["personal"]["address-town"],
+                    data["personal"]["address-county"],
+                    data["personal"]["address-postcode"]
                   ] %}
                   {{ address(addressLines) }}
                 </div>
@@ -309,17 +301,10 @@
             {% elseif property['storage-address'] == "custom" %}
               <td class="govuk-table__cell">
                 <div class="hide-on-print">
-                  {{ data["property"][id]["address-postcode"] }}
+                  {{ data["property"][id]["address-details"]["address-postcode"] }}
                 </div>
                 <div class="show-on-print">
-                  {% set addressLines = [
-                    data["property"][id]["address-line-1"],
-                    data["property"][id]["address-line-2"],
-                    data["property"][id]["address-town"],
-                    data["property"][id]["address-county"],
-                    data["property"][id]["address-postcode"]
-                  ] %}
-                  {{ address(addressLines) }}
+                  {{ addressObject(data["property"][id]["address-details"]) }}
                 </div>
               </td>
             {% else %}

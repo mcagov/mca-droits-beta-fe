@@ -24,7 +24,7 @@ export default function (app) {
   })
 
   app.post(
-    '/report/property-summary', 
+    '/report/property-summary-confirmation', 
     [
       body('property-declaration')
         .exists()

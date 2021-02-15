@@ -12,7 +12,7 @@
 
 {% block beforeContent %}
   {% include "includes/phase-banner.html" %}
-  <a class="govuk-back-link" href="/report/location">Back</a>
+  <a class="govuk-back-link" href="javascript:;" onclick="history.back()">Back</a>
 {% endblock %}
 
 {% block content %}
@@ -77,6 +77,7 @@
 
           <tbody class="govuk-table__body">
           {% for id, property in data["property"] %}
+            {% set imagePath = "" %}
           {% if data["property"][id]['image'] %}
             {% set imagePath = "/uploads/" +  data["property"][id]['image'] %}
           {% endif %}
@@ -88,7 +89,7 @@
               {% else %}
                 <td class="govuk-table__cell govuk-table__cell--numeric">£{{ property["value"] }}</td>
               {% endif %}
-              {% if property['image'] == "" %}
+              {% if not property['image'] %}
                 <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--blue">Not provided</strong></td>
               {% else %}
                 <td class="govuk-table__cell"><img src="{{imagePath}}" width="100" loading="lazy"/></td>
@@ -99,7 +100,7 @@
                 </td>
               {% elseif property['storage-address'] == "custom" %}
                 <td class="govuk-table__cell">
-                  {{ data["property"][id]["address-postcode"] }}
+                  {{ data["property"][id]["address-details"]["address-postcode"] }}
                 </td>
               {% else %}
                 <td class="govuk-table__cell">
@@ -132,7 +133,7 @@
 
 
       {% if itemsAdded > 0 %}
-      <form class="form" action="/report/property-summary" method="post" novalidate>
+      <form class="form" action="/report/property-summary-confirmation" method="post" novalidate>
         {% if errorSummary.length > 0 %}
           {{ govukErrorSummary({
               titleText: "There is a problem",

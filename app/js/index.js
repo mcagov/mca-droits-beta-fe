@@ -13,3 +13,4 @@ import './components/vesselInformation.js';
 import './components/staticMap.js';
 import './components/what3words.js';
 import './components/imageUpload.js';
+import './components/bulkUpload.js';

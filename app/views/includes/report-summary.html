@@ -268,22 +268,22 @@
         <tbody class="govuk-table__body">
         {% for id, property in data["property"] %}
           <tr class="govuk-table__row report-responsive-table__row">
-            <td class="govuk-table__cell report-responsive-table__cell" data-label="Description:">{{ property["description"] }}</td>
-            <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Quantity:">{{ property["quantity"] }}</td>
+            <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--description" data-label="Description">{{ property["description"] }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Quantity">{{ property["quantity"] }}</td>
             
             {% if property['value'] == "" %}
-              <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Value:">Unknown</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Value">Unknown</td>
             {% else %}
-              <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Value:">£{{ property["value"] }}</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Value">£{{ property["value"] }}</td>
             {% endif %}
 
             {% if property['image'] %}
-              <td class="govuk-table__cell report-responsive-table__cell" data-label="Image:"><img src="/uploads/{{ property['image'] }}" width="100"/></td>
+              <td class="govuk-table__cell report-responsive-table__cell" data-label="Image"><img src="/uploads/{{ property['image'] }}" width="100"/></td>
             {% else %}
-              <td class="govuk-table__cell report-responsive-table__cell" data-label="Image:"><strong class="govuk-tag govuk-tag--blue">Not provided</strong></td>
+              <td class="govuk-table__cell report-responsive-table__cell" data-label="Image"><strong class="govuk-tag govuk-tag--blue">Not provided</strong></td>
             {% endif %}
             {% if property['storage-address'] == "personal" %}
-              <td class="govuk-table__cell report-responsive-table__cell" data-label="Storage postcode:">
+              <td class="govuk-table__cell report-responsive-table__cell" data-label="Storage postcode">
                 <div class="hide-on-print">
                   {{ data["personal"]["address-postcode"] }}
                 </div>

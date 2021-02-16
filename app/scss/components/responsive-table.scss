@@ -48,9 +48,13 @@
       }
 
       &:before{
-        content: attr(data-label);
+        content: attr(data-label) ": \00a0";
         float: left;
         font-weight: bold;
+      }
+
+      &--description {
+        text-align: left;
       }
     }
   }	

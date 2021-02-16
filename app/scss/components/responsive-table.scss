@@ -1,87 +1,56 @@
-table {
+.report-responsive-table {
   border:0;
   width: 100%;
-  margin:0;
   padding:0;
   border-collapse: collapse;
   border-spacing: 0;
-  box-shadow: 0 1px 1px rgba(0,0,0,.3);
-
-  thead {
-    background: #F0F0F0;
-    height: 60px!important;
-    
-    tr {
-      th:first-child {
-        padding-left:45px;
-      }
-
-      th {
-        line-height:60px!important;
-        text-align: left;
-        font-size:11px;
-        padding-top:0px!important;
-        padding-bottom:0px!important;
-      }
-    }
-  }
-
-  tbody {
-    background: #fff;
-
-    tr {
-      border-top:1px solid #e5e5e5;
-      height: 60px;
-      td:first-child{
-        padding-left:45px;
-      }
-
-      td {
-        height: 60px;
-        line-height: 60px!important;
-        text-align: left;
-        padding:0 10px;
-        font-size:14px;
-        
-        i {
-          margin-right:8px;
-        }
-      }
-    }
-  }
 }
 
-@media screen and (max-width: 800px) {
-  table {
+@media screen and (max-width: 600px) {
+  .report-responsive-table {
     border: 1px solid transparent;
     box-shadow: none;
 
-    thead {
+    &__caption {
+      display: block;
+      padding-bottom: 10px;
+    }
+
+    &__change-link {
+      display: block;
+      float: left !important;
+      padding-top: 10px;
+      margin-bottom: 15px;
+    }
+
+    &__head {
       display: none;
     }
 
-    tbody {
-      tr {
-        border-bottom: 45px solid #F8F8F8;
+    &__row {
+      display: block;
+      border-top: 1px solid #b1b4b6;
+      border-bottom: 5px double #b1b4b6;
+      margin-bottom: 40px;
 
-        td:first-child{
-          padding-left:10px;
-        }
+      &:last-child {
+        margin-bottom: 0px;
+      }
+    }
 
-        td:before{
-          content: attr(data-label);
-          float: left;
-          font-size:10px;
-          font-weight: bold;
-        }
+    &__cell {
+      display: block;
+      text-align: right;
+      padding-right: 0 !important;
 
-        td{
-          display: block;
-          text-align: right;
-          font-size: 14px;
-          padding: 0px 10px!important;
-          box-shadow: 0 1px 1px rgba(0,0,0,.3);
-        }
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:before{
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
       }
     }
   }	

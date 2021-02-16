@@ -8,7 +8,6 @@ export const azureUpload = async (image, imageName) => {
   const blobServiceClient = BlobServiceClient.fromConnectionString(
     CONNECTION_STRING
   );
-  console.log('[azureUpload]', image);
 
   // Container name
   const containerName = 'report-uploads';

@@ -10,10 +10,12 @@ export class BulkUpload {
     if (!el) return;
 
     this.el = el;
+    this.id;
     this.form = $1('[data-js=bulk-form-element]', this.el);
     this.photoUploadInputs = [...$('.photo-upload__upload')];
     this.containersUploaded = [...$('.photo-upload__container--uploaded', this.el)];
     this.photoResults = [...$('.photo-upload__result', this.el)];
+    this.replaceImageButtons = [...$('.photo-upload__button-change', this.el)];
     this.uploadButton = $1('.photo-upload__button', this.el);
     this.addButton = $1('[data-js=bulk-add-btn]', this.el);
 
@@ -22,6 +24,7 @@ export class BulkUpload {
 
   init() {
     this.uploadEvent();
+    this.selectAltImageEvent();
   }
 
   uploadEvent() {
@@ -66,6 +69,30 @@ export class BulkUpload {
       })
 
     }); 
+  }
+
+  selectAltImageEvent() {
+    this.replaceImageButtons.forEach((el) => {
+      el.addEventListener('click', async () => {
+        this.id = el.dataset.id;
+        try {
+          const res = await axios.post(
+            `/report/property-form-image-delete/${this.id}`
+          );
+          if (res) {
+            const currentUploadedContainer = el.closest('.photo-upload__container--uploaded');
+            const currentUploadInput = $1(`#${this.id}`, this.el);
+
+            currentUploadedContainer.classList.add('photo-upload__container--hide');
+            currentUploadInput.value = '';
+            this.continueButton.classList.add('govuk-button--disabled');
+            this.continueButton.disabled = true;
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    })
   }
 
   removeDisabledState() {

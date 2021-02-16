@@ -41,7 +41,7 @@ function fileFilter(req, file, cb) {
 
 export default function (app) {
   app.post(
-    "/report/property-bulk",
+    "/report/property-bulk-confirm",
     upload.single("bulk-upload-file"),
     function(req,res){
       const fileRows = [];

@@ -13,12 +13,39 @@
 
 {% block content %}
 
+  {% set propertyName = "property" %}
+  {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
+  {% set containerUploadedClass = "photo-upload__container photo-upload__container--uploaded image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" %}
+  {% if data[propertyName][propertyID]['image'] %}
+    {% set imagePath = "/uploads/" +  data[propertyName][propertyID]['image'] %}
+  {% else %}
+    {% set containerUploadedClass = containerUploadedClass + " photo-upload__container--hide" %}
+    {% set continueButtonDisabled = true %}
+  {% endif %}
+
+  {% set photoGuidance %}
+    <h3 class="govuk-heading-m">Your photo should include:</h3>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Clear colour image of the whole item</li>
+      <li>Only contain the item listed above (images of other items should be added separately)</li>
+      <li>Show any markings on the item</li>
+    </ul>
+    <p class="govuk-body">Only one image can be added per item however if more are required to show multiple angles or markings please email them to row@mcga.gov.uk and include the report number issued when this report is completed.</p>
+    {{ govukInsetText({
+      text: "Reports cannot be closed without an image of each item, which are a clear permanent record of all items recovered. They aid in identification and in some cases can assist an owner in identifying their property."
+    }) }}
+  {% endset %}
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
 
       <h1 class="govuk-heading-xl">Confirm upload</h1>
-
       <p class="govuk-body-l">Confirm the wreck material to be added and attach any photos you have for each item.</p>
+      {{ govukDetails({
+        summaryText: "Guidance for providing item photos",
+        html: photoGuidance
+      }) }}         
+
       <div class="form-wrapper" data-js="bulk-upload">
         <form class="form" action="/report/property-summary" method="post" enctype="multipart/form-data" data-js="bulk-form-element">
 
@@ -34,7 +61,7 @@
             {% for id, item in bulkUpload %}
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Description:</strong> {{ item.description }}</p>
+                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Description: ID = {{ id }}</strong> {{ item.description }}</p>
                   <input type=hidden name=property[{{ id }}][description] value="{{ item.description }}">
 
                   <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Quantity:</strong> {{ item.quantity }}</p>
@@ -64,6 +91,16 @@
                     classes: "photo-upload__upload"
                   }) }}
                   <input type=hidden name=property[{{ id }}][image] value="">
+
+                  <div class="{{containerUploadedClass}}">
+                    <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Selected Image:</strong></p>
+
+                    <div>
+                      <img class="photo-upload__result govuk-!-margin-bottom-6" src="{{imagePath}}" width="300px" />
+                    </div>
+                    
+                    <a class="photo-upload__button-change govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button" data-id={{ id }}>Upload a different image</a>
+                  </div>
                 </td>
               </tr>
             {% endfor %}
@@ -72,7 +109,15 @@
 
           <input type="hidden" name="property-added-flash" value=true>
           <a class="photo-upload__button govuk-button" data-module="govuk-button">Upload images</a>
-          <button disabled="disabled" aria-disabled="true" class="govuk-button govuk-button--disabled" data-module="govuk-button" data-js="bulk-add-btn">Add items to report</button>
+
+          {{ govukButton({
+          text: "Add items to report",
+          disabled: continueButtonDisabled,
+          classes: 'govuk-button--continue',
+          attributes: {
+            'data-js': 'bulk-add-btn'
+          }
+        }) }}
 
         </form>
       </div>

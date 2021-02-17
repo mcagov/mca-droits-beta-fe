@@ -44,7 +44,20 @@
       {{ govukDetails({
         summaryText: "Guidance for providing item photos",
         html: photoGuidance
-      }) }}         
+      }) }} 
+
+      <div class="govuk-error-summary upload-error" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary" style="display:none">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">
+          There is a problem
+        </h2>
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            <li>
+              <a href="#property-image"><span class="upload-error__text"></span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
 
       <div class="form-wrapper" data-js="bulk-upload">
         <form class="form" action="/report/property-summary" method="post" enctype="multipart/form-data" data-js="bulk-form-element">
@@ -61,7 +74,7 @@
             {% for id, item in bulkUpload %}
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Description: ID = {{ id }}</strong> {{ item.description }}</p>
+                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Description:</strong> {{ item.description }}</p>
                   <input type=hidden name=property[{{ id }}][description] value="{{ item.description }}">
 
                   <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Quantity:</strong> {{ item.quantity }}</p>

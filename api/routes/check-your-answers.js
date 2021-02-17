@@ -1,3 +1,4 @@
+import axios from 'axios';
 const { body, validationResult } = require('express-validator');
 import fs from 'fs';
 import path from 'path';
@@ -14,7 +15,7 @@ export default function (app) {
         .isEmpty()
         .withMessage('Select to confirm you are happy with the declaration')
     ],
-    function (req, res) {
+    async function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
 
       if (errors) {
@@ -24,17 +25,43 @@ export default function (app) {
           values: req.body
         });
       } else {
-        // Final data to post to server
-        // const data = JSON.stringify(req.session.data);
+        const data = Object.assign({}, req.session.data);
 
-        // res.redirect('/report/confirmation');
-        Object.values(req.session.data.property).forEach((item) => {
-          const data = fs.createReadStream(
-            `${path.resolve(__dirname + '/../../uploads/')}/${item.image}`
-          );
+        delete data.location['location-type'];
+        delete data.location['location-latitude-decimal'];
+        delete data.location['location-longitude-decimal'];
+        delete data.location['location-latitude-degrees-degree'];
+        delete data.location['location-latitude-degrees-minute'];
+        delete data.location['location-latitude-degrees-second'];
+        delete data.location['location-latitude-degrees-direction'];
+        delete data.location['location-longitude-degrees-degree'];
+        delete data.location['location-longitude-degrees-minute'];
+        delete data.location['location-longitude-degrees-second'];
+        delete data.location['location-longitude-degrees-direction'];
+        delete data['property-id-counter'];
+        delete data['redirectToCheckAnswers'];
 
-          azureUpload(data, item.image);
-        });
+        console.log('[data]:', data);
+
+        // Post data to db
+        // try {
+        //   const response = await axios.post(
+        //     //url,
+        //     JSON.stringify(data)
+        //   );
+        //   if (response.statusText === 'OK') {
+        //     Object.values(req.session.data.property).forEach((item) => {
+        //       const data = fs.createReadStream(
+        //         `${path.resolve(__dirname + '/../../uploads/')}/${item.image}`
+        //       );
+
+        //       azureUpload(data, item.image);
+        //     });
+        //   }
+        //   return res.redirect('/report/confirmation');
+        // } catch (err) {
+        //   console.error(err);
+        // }
       }
     }
   );

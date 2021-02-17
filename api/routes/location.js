@@ -17,10 +17,15 @@ export default function (app) {
       .isEmpty()
       .withMessage('Choose an option'),
     async (req, res, next) => {
+      req.session.data.location = {};
+
       const session = req.session.data.location;
       const reqBody = req.body;
       let errors;
       let errorSummary;
+
+      session['location-standard'] = {};
+      session['location-given'] = {};
 
       const type = reqBody['location-type'];
 
@@ -38,7 +43,6 @@ export default function (app) {
             reqBody['location-latitude-decimal'];
           session['location-standard'].longitude =
             reqBody['location-longitude-decimal'];
-          session['location-standard'].radius = 0;
 
           session[
             'location-given'
@@ -129,7 +133,6 @@ export default function (app) {
 
           session['location-standard'].latitude = latitude.toFixed(5);
           session['location-standard'].longitude = longitude.toFixed(5);
-          session['location-standard'].radius = 0;
 
           session['location-given'].latitude = `${latD}° ${latM}' ${latDir}`;
           session['location-given'].longitude = `${lonD}° ${lonM}' ${lonDir}`;
@@ -251,7 +254,6 @@ export default function (app) {
 
           session['location-standard'].latitude = latitude.toFixed(5);
           session['location-standard'].longitude = longitude.toFixed(5);
-          session['location-standard'].radius = 0;
 
           session[
             'location-given'
@@ -419,6 +421,8 @@ export default function (app) {
           break;
         case 'description':
           session['location-description'] = reqBody['location-description'];
+          delete session['location-standard'];
+          delete session['location-given'];
 
           await body('location-description')
             .exists()
@@ -431,15 +435,7 @@ export default function (app) {
           errorSummary = Object.values(errors);
 
         default:
-          session['location-standard'].latitude = 0;
-          session['location-standard'].longitude = 0;
-          session['location-standard'].radius = 0;
-
-          session['location-given'].latitude = '';
-          session['location-given'].longitude = '';
-
-          errors = formatValidationErrors(validationResult(req));
-          errorSummary = Object.values(errors);
+          break;
       }
 
       if (!errors) {

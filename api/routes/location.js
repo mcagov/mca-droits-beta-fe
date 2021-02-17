@@ -33,6 +33,7 @@ export default function (app) {
 
       switch (type) {
         case 'coords-decimal':
+          session['location-type'] = 'coords-decimal';
           session['location-latitude-decimal'] =
             reqBody['location-latitude-decimal'];
           session['location-longitude-decimal'] =

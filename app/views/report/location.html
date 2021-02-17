@@ -503,11 +503,11 @@
               value: "coords-decimal",
               text: "Coordinates (Decimal degrees)",
               conditional: {
-              html: decimalInput
-            },
-            hint: {
-              html: "For example <em>53.76385° &nbsp;&nbsp; -3.73904°</em>."
-            },
+                html: decimalInput
+              },
+              hint: {
+                html: "For example <em>53.76385° &nbsp;&nbsp; -3.73904°</em>."
+              },
               checked: checked("['location']['location-type']", "coords-decimal")
             },
             {
@@ -517,21 +517,21 @@
                 html: decimalMinuteInput
               },
               hint: {
-              html: "For example <em>53° 45.831' N &nbsp;&nbsp; 3° 44.342' W</em>."
-            },
+                html: "For example <em>53° 45.831' N &nbsp;&nbsp; 3° 44.342' W</em>."
+              },
               checked: checked("['location']['location-type']", "coords-decimal-minutes")
             },
             {
               value: "coords-sexagesimal",
               text: "Coordinates (Degrees, minutes and seconds)",
               conditional: {
-              html: degreeInput
-            },
-            hint: {
-              html: "For example <em>53° 45′ 49″ N &nbsp;&nbsp; 3° 44′ 20″ W</em>."
-            },
-              checked: checked("['location']['location-type']", "coords-sexagesimal")
-            },
+                html: degreeInput
+              },
+              hint: {
+                html: "For example <em>53° 45′ 49″ N &nbsp;&nbsp; 3° 44′ 20″ W</em>."
+              },
+                checked: checked("['location']['location-type']", "coords-sexagesimal")
+              },
             {
               value: "map",
               text: "Draw on a map",
@@ -539,19 +539,19 @@
                 html: mapInput
               },
               hint: {
-              text: "Draw the area of the find on a map."
-            },
-              checked: checked("['location']['location-type']", "map")
-            },
+                text: "Draw the area of the find on a map."
+              },
+                checked: checked("['location']['location-type']", "map")
+              },
             {
               value: "description",
               text: "Description",
               conditional: {
-              html: descriptionInput
-            },
-              hint: {
-              text: "Provide a description of the find location."
-            },
+                html: descriptionInput
+              },
+                hint: {
+                text: "Provide a description of the find location."
+              },
               checked: checked("['location']['location-type']", "description")
             }
           ]

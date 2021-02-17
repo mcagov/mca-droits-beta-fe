@@ -17,8 +17,6 @@ export default function (app) {
     function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
 
-      req.session.data.redirectToCheckAnswers = null;
-
       if (errors) {
         return res.render('report/check-your-answers', {
           errors,

@@ -439,7 +439,9 @@ export default function (app) {
       }
 
       if (!errors) {
-        return res.redirect('depth');
+        return req.session.data.redirectToCheckAnswers
+          ? res.redirect('/report/check-your-answers')
+          : res.redirect('depth');
       } else {
         return res.render('report/location', {
           errors,

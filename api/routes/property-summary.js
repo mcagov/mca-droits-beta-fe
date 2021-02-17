@@ -3,28 +3,36 @@ const { body, validationResult } = require('express-validator');
 import { formatValidationErrors } from '../../utils';
 
 export default function (app) {
-
   app.get('/report/property-summary', function (req, res) {
-    var removedFlash = false
-    var addedFlash = false
-    
+    var removedFlash = false;
+    var addedFlash = false;
+
     // These are set as hidden fields.
-    if (req.session.data['property-added-flash'] !== undefined && req.session.data['property-added-flash']) {
-      addedFlash = true
-      req.session.data['property-added-flash'] = false
+    if (
+      req.session.data['property-added-flash'] !== undefined &&
+      req.session.data['property-added-flash']
+    ) {
+      addedFlash = true;
+      req.session.data['property-added-flash'] = false;
     }
-  
+
     // These are set as hidden fields.
-    if (req.session.data['property-removed-flash'] !== undefined && req.session.data['property-removed-flash']) {
-      removedFlash = true
-      req.session.data['property-removed-flash'] = false
+    if (
+      req.session.data['property-removed-flash'] !== undefined &&
+      req.session.data['property-removed-flash']
+    ) {
+      removedFlash = true;
+      req.session.data['property-removed-flash'] = false;
     }
-  
-    res.render('report/property-summary', { addedFlash: addedFlash, removedFlash: removedFlash })
-  })
+
+    res.render('report/property-summary', {
+      addedFlash: addedFlash,
+      removedFlash: removedFlash
+    });
+  });
 
   app.post(
-    '/report/property-summary-confirmation', 
+    '/report/property-summary-confirmation',
     [
       body('property-declaration')
         .exists()
@@ -32,12 +40,13 @@ export default function (app) {
         .isEmpty()
         .withMessage('Select to confirm you are happy with the declaration')
     ],
-    function(req, res) {
+    function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
 
       if (!errors) {
-        res.redirect('salvage-award');
-
+        return req.session.data.redirectToCheckAnswers
+          ? res.redirect('/report/check-your-answers')
+          : res.redirect('salvage-award');
       } else {
         return res.render('report/property-summary', {
           errors,
@@ -45,10 +54,6 @@ export default function (app) {
           values: req.body
         });
       }
-  })
-
-  app.get('/report/salvage', function (req, res) {
-  
-    res.render('report/salvage-award', { addedFlash: addedFlash, removedFlash: removedFlash })
-  })
+    }
+  );
 }

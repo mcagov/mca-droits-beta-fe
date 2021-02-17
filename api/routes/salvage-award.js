@@ -5,8 +5,7 @@ import { formatValidationErrors } from '../../utils';
 export default function (app) {
   app.get('report/salvage-award', function (req, res) {
     return res.render('report/salvage-award');
-  })
-  
+  });
 
   app.post(
     '/report/salvage-award-answer',
@@ -24,8 +23,8 @@ export default function (app) {
         if (req.body['salvage-services']) {
           req.session.data['salvage-services'] = req.body['salvage-services'];
         }
+        req.session.data.redirectToCheckAnswers = true;
         res.redirect('check-your-answers');
-
       } else {
         return res.render('report/salvage-award', {
           errors,

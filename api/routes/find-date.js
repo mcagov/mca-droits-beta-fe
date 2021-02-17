@@ -40,7 +40,9 @@ export default function (app) {
       }
 
       if (!errors) {
-        return res.render('report/personal');
+        return req.session.data.redirectToCheckAnswers
+          ? res.redirect('/report/check-your-answers')
+          : res.redirect('personal');
       } else {
         const getErrors = multiErrors(
           errors,

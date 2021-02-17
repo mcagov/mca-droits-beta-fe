@@ -252,11 +252,11 @@
 <div class="govuk-grid-column-full">
   <h2 class="govuk-heading-m govuk-!-margin-top-9">Wreck material</h2>
 
-  <table class="govuk-table">
-    <caption class="govuk-table__caption">Items of wreck material reported
-      <a class="govuk-link govuk-!-font-weight-regular hide-on-print" style="float: right;" href="/report/property-summary">Change<div class="govuk-visually-hidden"> details</div></a></caption>
-        <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
+  <table class="govuk-table report-responsive-table">
+    <caption class="govuk-table__caption report-responsive-table__caption">Items of wreck material reported
+      <a class="govuk-link govuk-!-font-weight-regular report-responsive-table__change-link hide-on-print" style="float: right;" href="/report/property-summary">Change<div class="govuk-visually-hidden"> details</div></a></caption>
+        <thead class="govuk-table__head report-responsive-table__head">
+        <tr class="govuk-table__row report-responsive-table__row">
           <th scope="col" class="govuk-table__header govuk-!-width-one-half">Description</th>
           <th scope="col" class="govuk-table__header govuk-table__header--numeric">Quantity</th>
           <th scope="col" class="govuk-table__header govuk-table__header--numeric">Total value</th>
@@ -267,23 +267,23 @@
 
         <tbody class="govuk-table__body">
         {% for id, property in data["property"] %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">{{ property["description"] }}</td>
-            <td class="govuk-table__cell govuk-table__cell--numeric">{{ property["quantity"] }}</td>
+          <tr class="govuk-table__row report-responsive-table__row">
+            <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--description" data-label="Description">{{ property["description"] }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Quantity">{{ property["quantity"] }}</td>
             
             {% if property['value'] == "" %}
-              <td class="govuk-table__cell govuk-table__cell--numeric">Unknown</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Value">Unknown</td>
             {% else %}
-              <td class="govuk-table__cell govuk-table__cell--numeric">£{{ property["value"] }}</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Value">£{{ property["value"] }}</td>
             {% endif %}
 
             {% if property['image'] %}
-              <td class="govuk-table__cell"><img src="/uploads/{{ property['image'] }}" width="100"/></td>
+              <td class="govuk-table__cell report-responsive-table__cell" data-label="Image"><img src="/uploads/{{ property['image'] }}" width="100"/></td>
             {% else %}
-              <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--blue">Not provided</strong></td>
+              <td class="govuk-table__cell report-responsive-table__cell" data-label="Image"><strong class="govuk-tag govuk-tag--blue">Not provided</strong></td>
             {% endif %}
             {% if property['storage-address'] == "personal" %}
-              <td class="govuk-table__cell">
+              <td class="govuk-table__cell report-responsive-table__cell" data-label="Storage postcode">
                 <div class="hide-on-print">
                   {{ data["personal"]["address-postcode"] }}
                 </div>
@@ -299,7 +299,7 @@
                 </div>
               </td>
             {% elseif property['storage-address'] == "custom" %}
-              <td class="govuk-table__cell">
+              <td class="govuk-table__cell report-responsive-table__cell" data-label="Storage postcode">
                 <div class="hide-on-print">
                   {{ data["property"][id]["address-details"]["address-postcode"] }}
                 </div>
@@ -308,7 +308,7 @@
                 </div>
               </td>
             {% else %}
-              <td class="govuk-table__cell">
+              <td class="govuk-table__cell report-responsive-table__cell" data-label="Storage postcode">
               </td>
             {% endif %}
           </tr>

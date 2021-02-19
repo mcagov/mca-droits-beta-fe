@@ -435,6 +435,9 @@ export default function (app) {
           errorSummary = Object.values(errors);
 
         default:
+          errors = formatValidationErrors(validationResult(req));
+          errorSummary = Object.values(errors);
+
           break;
       }
 

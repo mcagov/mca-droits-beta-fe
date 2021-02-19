@@ -52,7 +52,7 @@
               label: {
                 text: 'Building and street (line 1)'
               },
-              id: "property." + propertyID + "['address-line-1']",
+              id: propertyName + '-' + propertyID + "-address-line-1",
               autocomplete: "address-line1",
               name: propertyNamePrefix + "[address-line-1]",
               value: data[propertyName][propertyID]["address-details"]["address-line-1"],
@@ -74,7 +74,7 @@
                 text: "Town or city"
               },
               classes: "govuk-!-width-two-thirds",
-              id: "property." + propertyID + "['address-town']",
+              id: propertyName + '-' + propertyID + "-address-town",
               autocomplete: "address-level2",
               name: propertyNamePrefix + "[address-town]",
               value: data[propertyName][propertyID]["address-details"]["address-town"],
@@ -86,7 +86,7 @@
                 text: "County"
               },
               classes: "govuk-!-width-two-thirds",
-              id: "property." + propertyID + "['address-county']",
+              id: propertyName + '-' + propertyID + "-address-county",
               name: propertyNamePrefix + "[address-county]",
               value: data[propertyName][propertyID]["address-details"]["address-county"],
               errorMessage: errors["property." + propertyID + "['address-county']"]
@@ -97,7 +97,7 @@
                 text: "Postcode"
               },
               classes: "govuk-input--width-10",
-              id: "property." + propertyID + "['address-postcode']",
+              id: propertyName + '-' + propertyID + "-address-postcode",
               autocomplete: "postal-code",
               name: propertyNamePrefix + "[address-postcode]",
               value: data[propertyName][propertyID]["address-details"]["address-postcode"],
@@ -106,9 +106,9 @@
 
           {% endcall %}
         {% endset %}
-
+        
         {{ govukRadios({
-          idPrefix: "storage-address",
+          idPrefix: propertyName + '-' + propertyID + "-storage-address",
           name: propertyNamePrefix + "[storage-address]",
           value: data[propertyName][propertyID]["storage-address"],
           fieldset: {
@@ -129,9 +129,9 @@
               text: "A different address",
               checked: checked("['property']['" + propertyID + "']['storage-address']", "custom"),
               conditional: {
-              html: otherAddressHtml
-            }
-            }
+                html: otherAddressHtml
+              }
+            }            
           ]
         }) }}
 

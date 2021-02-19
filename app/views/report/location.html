@@ -484,6 +484,49 @@
           }) }}
         {% endset -%}
 
+        {# Fixes issue where if the user selects a radio, doesn't fill in any info
+           and submits the form it will reopen the correct radio option when the page
+           is rerendered with errors #}
+        {% set setCheckedCoordsDecimal = checked("['location']['location-type']", "coords-decimal") %}
+        {% set setCheckedCoordsDecimalMinutes = checked("['location']['location-type']", "coords-decimal-minutes") %}
+        {% set setCheckedCoordsSexagesimal = checked("['location']['location-type']", "coords-sexagesimal") %}
+        {% set setCheckedMap = checked("['location']['location-type']", "map") %}
+        {% set setCheckedDesc = checked("['location']['location-type']", "description") %}
+
+        {% if 
+          (errors['location-latitude-decimal']|length) or 
+          (errors['location-longitude-decimal']|length)  %}
+            {% set setCheckedCoordsDecimal = "coords-decimal" %}
+        {% endif %}
+
+        {% if 
+          (errors['location-latitude-decimal-minutes-degree']|length) or 
+          (errors['location-latitude-decimal-minutes-minute']|length) or 
+          (errors['location-longitude-decimal-minutes-degree']|length) or 
+          (errors['location-longitude-decimal-minutes-minute']|length)  %}
+            {% set setCheckedCoordsDecimalMinutes = "coords-decimal-minutes" %}
+        {% endif %}
+
+        {% if 
+          (errors['location-latitude-degrees-degree']|length) or 
+          (errors['location-latitude-degrees-minute']|length) or 
+          (errors['location-latitude-degrees-second']|length) or 
+          (errors['location-longitude-degrees-degree']|length) or 
+          (errors['location-longitude-degrees-minute']|length) or 
+          (errors['location-longitude-degrees-second']|length)  %}
+            {% set setCheckedCoordsDecimalMinutes = "coords-sexagesimal" %}
+        {% endif %}
+
+        {% if 
+          (errors['map-latitude-input']|length) or 
+          (errors['map-longitude-input']|length) or
+          (errors['map-radius-input']|length)  %}
+            {% set setCheckedMap = "map" %}
+        {% endif %}
+
+        {% if errors['description']|length %}
+          {% set setCheckedDesc = "description" %}
+        {% endif %}
 
         {{ govukRadios({
           idPrefix: "location-type",
@@ -508,7 +551,7 @@
               hint: {
                 html: "For example <em>53.76385° &nbsp;&nbsp; -3.73904°</em>."
               },
-              checked: checked("['location']['location-type']", "coords-decimal")
+              checked: setCheckedCoordsDecimal
             },
             {
               value: "coords-decimal-minutes",
@@ -519,7 +562,7 @@
               hint: {
                 html: "For example <em>53° 45.831' N &nbsp;&nbsp; 3° 44.342' W</em>."
               },
-              checked: checked("['location']['location-type']", "coords-decimal-minutes")
+              checked: setCheckedCoordsDecimalMinutes
             },
             {
               value: "coords-sexagesimal",
@@ -541,7 +584,7 @@
               hint: {
                 text: "Draw the area of the find on a map."
               },
-                checked: checked("['location']['location-type']", "map")
+                checked: setCheckedMap
               },
             {
               value: "description",
@@ -552,7 +595,7 @@
                 hint: {
                 text: "Provide a description of the find location."
               },
-              checked: checked("['location']['location-type']", "description")
+              checked: setCheckedDesc
             }
           ]
         }) }}

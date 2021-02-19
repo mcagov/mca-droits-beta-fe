@@ -6,7 +6,12 @@ import edt from 'express-debug';
 
 import routes from './api/routes';
 import sessionInMemory from 'express-session';
-import { sessionData, addCheckedFunction, matchRoutes } from './utils';
+import {
+  sessionData,
+  addCheckedFunction,
+  matchRoutes,
+  addNunjucksFilters
+} from './utils';
 import config from './app/js/config.js';
 
 const PORT = process.env.PORT || 5000;
@@ -39,6 +44,7 @@ const nunjucksAppEnv = nunjucks.configure(
   }
 );
 addCheckedFunction(nunjucksAppEnv);
+addNunjucksFilters(nunjucksAppEnv);
 
 // Set views engine
 app.set('view engine', 'html');

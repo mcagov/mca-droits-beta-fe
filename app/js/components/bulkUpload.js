@@ -5,6 +5,8 @@ import { $, $1, closest } from "../utilities/selector.js";
 import ComponentManager from "../tools/component-manager.js";
 import LoadManager, { QUEUE } from "../tools/load-manager.js";
 
+const singleImageUpload = require("./imageUpload.js");
+
 export class BulkUpload {
   constructor(el) {
     if (!el) return;
@@ -16,24 +18,32 @@ export class BulkUpload {
     this.containersUploaded = [...$('.photo-upload__container--uploaded', this.el)];
     this.photoResults = [...$('.photo-upload__result', this.el)];
     this.replaceImageButtons = [...$('.photo-upload__button-change', this.el)];
+    this.bulkUploadButton = $1('[data-js=bulk-image-upload]', this.el);
+    //this.uploadButtons = [...$('.photo-upload__button', this.el)];
+    this.addButton = $1('[data-js=bulk-add-btn]', this.el);
+
+    this.uploadProgress = $1('.upload-progress', this.el);
+    this.uploadProgressBar = $1('.upload-progress__bar span', this.el);
+    this.uploadProgressText = $1('.upload-progress__text', this.el);
+    this.uploadProgressPercent = $1('.upload-progress__percent', this.el);
+
     this.errorBlock = $('.upload-error', this.el);
     this.errorText = $('.upload-error__text', this.el);
-    this.uploadButton = $1('.photo-upload__button', this.el);
-    this.addButton = $1('[data-js=bulk-add-btn]', this.el);
+
     this.chosenFiles = 0;
 
     LoadManager.queue(this.init.bind(this), QUEUE.RESOURCES)
   }
 
   init() {
-
     this.handleUploadState()
-    this.uploadEvent();
+    this.bulkUploadEvent();
     this.selectAltImageEvent();
+    this.singleUploadEvent();
   }
 
-  uploadEvent() {
-    this.uploadButton.addEventListener('click', async () => {
+  bulkUploadEvent() {
+    this.bulkUploadButton.addEventListener('click', async () => {
       let formData = new FormData(this.form);
 
       // Loop through each file-upload input and grab the selected file data,
@@ -74,7 +84,7 @@ export class BulkUpload {
           console.log(res.data);
           // Allow user to continue through form when images have uploaded
           this.addButton.classList.remove('hidden');
-          this.uploadButton.classList.add('hidden');
+          this.bulkUploadButton.classList.add('hidden');
         }
       })
       .catch((error) => {
@@ -84,23 +94,90 @@ export class BulkUpload {
     }); 
   }
 
+  /*singleUploadEvent() {
+    this.uploadButtons.forEach((element) => {
+      element.addEventListener('click', async () => {
+        this.id = element.dataset.id;
+        const file = new FormData();
+        file.append('image', this.photoUpload.files[0]);
+        try {
+          const res = await axios.post(
+            `/report/property-form-image-upload/${this.id}`,
+            file,
+            {
+              headers: { 'Content-Type': 'multipart/form-data' },
+              withCredentials: true,
+              onUploadProgress: (progressEvent) => {
+                const uploadFiles = this.photoUpload.files,
+                  uploadFile = uploadFiles[0];
+  
+                if (
+                  uploadFiles.length &&
+                  (uploadFile.type === 'image/png' ||
+                    uploadFile.type === 'image/jpg' ||
+                    uploadFile.type === 'image/jpeg') &&
+                  uploadFile.size < 5000000
+                ) {
+                  let percentCompleted = Math.round(
+                    (progressEvent.loaded * 100) / progressEvent.total
+                  );
+                  this.loadingIndicator(percentCompleted);
+                }
+              }
+            }
+          );
+  
+          if (res.data.error) {
+            this.errorText.forEach((i) => (i.innerText = res.data.error.text));
+            this.scrollToTop();
+            this.errorBlock.forEach((i) => (i.style.display = 'block'));
+          } else {
+            this.errorBlock.forEach((i) => (i.style.display = 'none'));
+            this.imageSelected(`/uploads/${res.data}`);
+            this.image = res.data;
+          }
+        } catch (reqError) {
+          console.error(reqError);
+        }
+      });
+    })
+  }*/
+
   handleUploadState() {
     this.photoUploadInputs.forEach((element) => {
       element.addEventListener('input', () => {
-        this.chosenFiles++;
-        console.log(this.chosenFiles);
+        if (element.value) {
+          this.chosenFiles++;
+          console.log(this.chosenFiles);
+          //element.closest('.govuk-hint').classList.add('hidden');
+        } else {
+          this.chosenFiles--;
+          console.log(this.chosenFiles);
+        }
+
         if (this.chosenFiles === this.photoUploadInputs.length) {
-          this.uploadButton.classList.remove('govuk-button--disabled');
-          this.uploadButton.disabled = false;
+          if (this.bulkUploadButton.classList.contains('hidden')) {
+            this.addButton.classList.remove('govuk-button--disabled');
+            this.addButton.disabled = false;
+          } else {
+            this.bulkUploadButton.classList.remove('govuk-button--disabled');
+            this.bulkUploadButton.disabled = false;
+          }
         }
       })
     })
+  }
+
+  imageSelected(src) {
+    this.photoResult.src = src;
   }
 
   selectAltImageEvent() {
     this.replaceImageButtons.forEach((el) => {
       el.addEventListener('click', async () => {
         this.id = el.dataset.id;
+        // Select the upload button for the current file input
+        const currentUploadBtn = $1(`[data-id=${this.id}]`, this.el);
         try {
           const res = await axios.post(
             `/report/property-form-image-delete/${this.id}`
@@ -111,14 +188,41 @@ export class BulkUpload {
 
             currentUploadedContainer.classList.add('photo-upload__container--hide');
             currentUploadInput.value = '';
-            this.continueButton.classList.add('govuk-button--disabled');
-            this.continueButton.disabled = true;
+            this.chosenFiles--;
+            this.addButton.classList.add('govuk-button--disabled');
+            this.addButton.disabled = true;
+            currentUploadBtn.classList.remove('hidden');
           }
         } catch (err) {
           console.error(err);
         }
       });
     })
+  }
+
+  scrollToTop() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
+
+  loadingIndicator(progress) {
+    this.uploadProgress.classList.add('upload-progress--visible');
+    this.uploadProgressBar.style.width = `${progress}%`;
+
+    this.uploadProgressText.innerText = `Uploading image...`;
+    this.uploadProgressPercent.innerText = `${progress}%`;
+    if (progress === 100) {
+      this.uploadProgressText.innerText = `Image uploaded`;
+      setTimeout(() => {
+        this.uploadProgress.classList.remove('upload-progress--visible');
+        this.continueButton.classList.remove('govuk-button--disabled');
+        this.continueButton.disabled = false;
+        this.containerInitial.classList.add('photo-upload__container--hide');
+        this.containerUploaded.classList.remove(
+          'photo-upload__container--hide'
+        );
+      }, 2000);
+    }
   }
 }
 

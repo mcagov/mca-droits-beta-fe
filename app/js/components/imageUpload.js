@@ -34,6 +34,7 @@ export class ImageUpload {
     this.selectAltImageEvent();
   }
   uploadPhotoEvent() {
+    console.log('single upload script function imported');
     this.uploadButton.addEventListener('click', async () => {
       this.id = this.uploadButton.dataset.id;
       const file = new FormData();
@@ -128,6 +129,11 @@ export class ImageUpload {
     }
   }
 }
+
+export function SingleImageUpload() {
+  this.uploadPhotoEvent();
+};
+
 export default LoadManager.queue(() => {
   new ComponentManager(ImageUpload, '[data-js~=image-upload]');
 }, QUEUE.DOM);

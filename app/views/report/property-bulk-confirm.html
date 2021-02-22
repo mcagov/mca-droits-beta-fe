@@ -15,11 +15,12 @@
 
   {% set propertyName = "property" %}
   {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
-  {% set containerUploadedClass = "photo-upload__container photo-upload__container--uploaded image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" %}
+  {% set containerInitialClasses = "photo-upload__container photo-upload__container--initial image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" %}
+  {% set containerUploadedClasses = "photo-upload__container photo-upload__container--uploaded image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" %}
   {% if data[propertyName][propertyID]['image'] %}
     {% set imagePath = "/uploads/" +  data[propertyName][propertyID]['image'] %}
   {% else %}
-    {% set containerUploadedClass = containerUploadedClass + " photo-upload__container--hide" %}
+    {% set containerUploadedClasses = containerUploadedClasses + " photo-upload__container--hide" %}
     {% set continueButtonDisabled = false %}
   {% endif %}
 
@@ -61,7 +62,7 @@
       </div>
 
       <div class="form-wrapper" data-js="bulk-upload">
-        <form class="form" action="/report/property-summary" method="post" enctype="multipart/form-data" data-js="bulk-form-element">
+        <form class="form" action="/report/property-summary" method="post" enctype="multipart/form-data" data-js="bulk-form-element" data-js="image-upload">
 
           <table class="govuk-table">
             <caption class="govuk-table__caption">Uploaded wreck material</caption>
@@ -96,17 +97,33 @@
                   <input type=hidden name=property[{{ id }}][address-details][address-postcode] value={{ item['address-details']['address-postcode'] }}>
                 </td>
                 <td class="govuk-table__cell">
-                  {{ govukFileUpload({
-                    id: id, 
-                    name: "property-image",
-                    hint: {
-                        text: "Accepted file types: jpg, jpeg, png.<br/>Maximum file size: 5MB"
-                    },
-                    classes: "photo-upload__upload"
-                  }) }}
-                  <input type=hidden name=property[{{ id }}][image] value="">
+                  <div class="{{containerInitialClasses}}">
+                    <div class="upload-progress">
+                      <div class="upload-progress__bar"><span></span></div>
+                      <div class="upload-progress__text govuk-heading-s govuk-!-padding-top-1"></div>
+                      <div class="upload-progress__percent govuk-body"></div>
+                    </div>
+                    <div class="govuk-form-group">
+                      <label class="govuk-label govuk-label--s" for="{{ propertyNamePrefix }}[image]">
+                        Select a photo
+                      </label>
+                    
+                    <span id="passport-issued-error" class="govuk-error-message upload-error">
+                      <span class="govuk-visually-hidden">Error:</span> <span class="upload-error__text"></span>
+                    </span>
+                    {{ govukFileUpload({
+                      id: id, 
+                      name: "property-image",
+                      hint: {
+                          text: "Accepted file types: jpg, jpeg, png.<br/>Maximum file size: 5MB"
+                      },
+                      classes: "photo-upload__upload"
+                    }) }}
+                  </div>
 
-                  <div class="{{containerUploadedClass}}">
+                  <a class="photo-upload__button govuk-button hidden" data-module="govuk-button" data-id={{id}} data-js="single-image-upload">Upload file</a>
+                  </div>
+                  <div class="{{containerUploadedClasses}}">
                     <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Selected Image:</strong></p>
 
                     <div>
@@ -139,7 +156,8 @@
           disabled: true,
           classes: 'photo-upload__button govuk-button',
           attributes: {
-            'data-module': 'govuk-button'
+            'data-module': 'govuk-button',
+            'data-js': 'bulk-image-upload'
           }
         }) }}
       </div>

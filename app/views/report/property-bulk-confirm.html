@@ -41,6 +41,7 @@
 
       <h1 class="govuk-heading-xl">Confirm upload</h1>
       <p class="govuk-body-l">Confirm the wreck material to be added and attach any photos you have for each item.</p>
+      <p class="govuk-body">Make sure your photos meets the guidelines below before submitting. If they do not, this may delay the closure of this report.</p>
       {{ govukDetails({
         summaryText: "Guidance for providing item photos",
         html: photoGuidance
@@ -121,18 +122,27 @@
           </table>
 
           <input type="hidden" name="property-added-flash" value=true>
-          <a class="photo-upload__button govuk-button" data-module="govuk-button">Upload images</a>
 
           {{ govukButton({
-          text: "Add items to report",
-          disabled: continueButtonDisabled,
-          classes: 'govuk-button--continue',
-          attributes: {
-            'data-js': 'bulk-add-btn'
-          }
-        }) }}
+            text: "Add items to report",
+            disabled: continueButtonDisabled,
+            classes: 'govuk-button--continue',
+            attributes: {
+              'data-js': 'bulk-add-btn',
+              'style': 'display: none;'
+            }
+          }) }}
 
         </form>
+
+        {{ govukButton({
+            text: "Upload images",
+            disabled: true,
+            classes: 'photo-upload__button govuk-button govuk-button--disabled',
+            attributes: {
+              'data-module': 'govuk-button'
+            }
+          }) }}
       </div>
     </div>
   </div>

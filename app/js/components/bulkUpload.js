@@ -20,11 +20,14 @@ export class BulkUpload {
     this.errorText = $('.upload-error__text', this.el);
     this.uploadButton = $1('.photo-upload__button', this.el);
     this.addButton = $1('[data-js=bulk-add-btn]', this.el);
+    this.chosenFiles = 0;
 
     LoadManager.queue(this.init.bind(this), QUEUE.RESOURCES)
   }
 
   init() {
+
+    this.handleUploadState()
     this.uploadEvent();
     this.selectAltImageEvent();
   }
@@ -78,6 +81,19 @@ export class BulkUpload {
       })
 
     }); 
+  }
+
+  handleUploadState() {
+    this.photoUploadInputs.forEach((element) => {
+      element.addEventListener('input', () => {
+        this.chosenFiles++;
+        console.log(this.chosenFiles);
+        if (this.chosenFiles === this.photoUploadInputs.length) {
+          this.uploadButton.classList.remove('govuk-button--disabled');
+          this.uploadButton.disabled = false;
+        }
+      })
+    })
   }
 
   selectAltImageEvent() {

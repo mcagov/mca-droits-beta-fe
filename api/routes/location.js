@@ -5,9 +5,6 @@ import {
   validationNumberCheck
 } from '../../utils';
 
-// const api = require('@what3words/api');
-// api.setOptions({ key: '0LFRBQX2' });
-
 export default function (app) {
   app.post(
     '/report/location-answer',
@@ -349,46 +346,6 @@ export default function (app) {
 
           break;
 
-        // case 'what-3-words':
-        //   session['w3w-name'] = req.body['w3w-name'];
-
-        //   const checkInput = await check('w3w-name')
-        //     .exists()
-        //     .not()
-        //     .isEmpty()
-        //     .run(req);
-
-        //   await api
-        //     .convertToCoordinates(session['w3w-name'])
-        //     .then((data) => {
-        //       session['location-standard'].latitude = data.coordinates.lat;
-        //       session['location-standard'].longitude = data.coordinates.lng;
-
-        //       session[
-        //         'location-given'
-        //       ].latitude = `${data.coordinates.lat}° N `;
-        //       session[
-        //         'location-given'
-        //       ].longitude = `${data.coordinates.lng}° W`;
-        //     })
-        //     .catch(function (error) {
-        //       for (var prop in error) {
-        //         if (error[prop].code.length && !checkInput.isEmpty()) {
-        //           let errors = formatValidationErrors(validationResult(req));
-
-        //           errors['w3w-name'].text = error[prop].message;
-
-        //           return res.render('report/location', {
-        //             errors,
-        //             errorSummary: Object.values(errors),
-        //             values: req.body
-        //           });
-        //         }
-        //         break;
-        //       }
-        //     });
-
-        //   break;
         case 'map':
           session['map-latitude-input'] = reqBody['map-latitude-input'];
           session['map-longitude-input'] = reqBody['map-longitude-input'];

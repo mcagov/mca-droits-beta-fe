@@ -25,7 +25,6 @@
     "@babel/plugin-transform-react-jsx": "^7.12.13",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.12.13",
-    "@what3words/api": "^3.1.1",
     "accessible-autocomplete": "^2.0.3",
     "autoprefixer": "^10.0.0",
     "awesome-debounce-promise": "^2.1.0",

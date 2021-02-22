@@ -73,7 +73,8 @@ export class BulkUpload {
 
           console.log(res.data);
           // Allow user to continue through form when images have uploaded
-          this.removeDisabledState();
+          this.addButton.classList.remove('hidden');
+          this.uploadButton.classList.add('hidden');
         }
       })
       .catch((error) => {
@@ -118,11 +119,6 @@ export class BulkUpload {
         }
       });
     })
-  }
-
-  removeDisabledState() {
-    this.addButton.disabled = false;
-    this.addButton.classList.remove('govuk-button--disabled');
   }
 }
 

@@ -20,7 +20,7 @@
     {% set imagePath = "/uploads/" +  data[propertyName][propertyID]['image'] %}
   {% else %}
     {% set containerUploadedClass = containerUploadedClass + " photo-upload__container--hide" %}
-    {% set continueButtonDisabled = true %}
+    {% set continueButtonDisabled = false %}
   {% endif %}
 
   {% set photoGuidance %}
@@ -126,23 +126,22 @@
           {{ govukButton({
             text: "Add items to report",
             disabled: continueButtonDisabled,
-            classes: 'govuk-button--continue',
+            classes: 'govuk-button--continue hidden',
             attributes: {
-              'data-js': 'bulk-add-btn',
-              'style': 'display: none;'
+              'data-js': 'bulk-add-btn'
             }
           }) }}
 
         </form>
 
         {{ govukButton({
-            text: "Upload images",
-            disabled: true,
-            classes: 'photo-upload__button govuk-button govuk-button--disabled',
-            attributes: {
-              'data-module': 'govuk-button'
-            }
-          }) }}
+          text: "Upload images",
+          disabled: true,
+          classes: 'photo-upload__button govuk-button',
+          attributes: {
+            'data-module': 'govuk-button'
+          }
+        }) }}
       </div>
     </div>
   </div>

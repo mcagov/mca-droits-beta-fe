@@ -46,7 +46,16 @@ export class ImageUpload {
             headers: { 'Content-Type': 'multipart/form-data' },
             withCredentials: true,
             onUploadProgress: (progressEvent) => {
-              if (this.photoUpload.files.length) {
+              const uploadFiles = this.photoUpload.files,
+                uploadFile = uploadFiles[0];
+
+              if (
+                uploadFiles.length &&
+                (uploadFile.type === 'image/png' ||
+                  uploadFile.type === 'image/jpg' ||
+                  uploadFile.type === 'image/jpeg') &&
+                uploadFile.size < 5000000
+              ) {
                 let percentCompleted = Math.round(
                   (progressEvent.loaded * 100) / progressEvent.total
                 );

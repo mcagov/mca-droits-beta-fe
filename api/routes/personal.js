@@ -17,14 +17,18 @@ export default function (app) {
         .isEmpty()
         .withMessage('Enter your email address')
         .isEmail()
-        .withMessage('Enter an email address in the correct format, like name@example.com'),
+        .withMessage(
+          'Enter an email address in the correct format, like name@example.com'
+        ),
       body('telephone-number')
         .exists()
         .not()
         .isEmpty()
         .withMessage('Enter your telephone number')
         .isInt()
-        .withMessage('Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192'),
+        .withMessage(
+          'Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192'
+        ),
       body('address-line-1')
         .exists()
         .not()
@@ -59,7 +63,9 @@ export default function (app) {
       }
 
       if (!errors) {
-        res.redirect('known-wreck');
+        return req.session.data.redirectToCheckAnswers
+          ? res.redirect('/report/check-your-answers')
+          : res.redirect('known-wreck');
       } else {
         return res.render('report/personal', {
           errors,

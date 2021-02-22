@@ -175,3 +175,11 @@ export const validationNumberCheck = (val, error, msg = 'Enter a number') => {
     }
   }
 };
+
+export const addNunjucksFilters = function (env) {
+  const coreFilters = require('./lib/core_filters.js')(env);
+  const filters = Object.assign(coreFilters);
+  Object.keys(coreFilters).forEach(function (filterName) {
+    env.addFilter(filterName, filters[filterName]);
+  });
+};

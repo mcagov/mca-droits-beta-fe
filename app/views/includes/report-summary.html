@@ -210,7 +210,7 @@
   <h2 class="govuk-heading-m govuk-!-margin-top-9">Location</h2>
 
   <dl class="govuk-summary-list">
-    {% if data['location']['location-given']['latitide'] != "" and data['location']['location-given']['longitude'] != "" %}
+    {% if data['location']['location-given'] %}
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
         Coordinates
@@ -225,7 +225,7 @@
       </dd>
     </div>
     {% endif %}
-    {% if data['location']['location-description'] != "" %}
+    {% if data['location']['location-description'] %}
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
         Description
@@ -242,7 +242,7 @@
     {% endif %}
   </dl>
 
-  {% if data['location']['location-standard']['latitude'] != "" and data['location']['location-standard']['longitude'] != "" %}
+  {% if data['location']['location-standard']['latitude'] and data['location']['location-standard']['longitude'] %}
   <div data-js="static-map">
     <div id="location-map" class="map-display hide-on-print" data-latitude="{{ data['location']['location-standard']['latitude'] }}" data-longitude="{{ data['location']['location-standard']['longitude'] }}" data-radius="{{ data['location']['location-standard']['radius'] }}"></div>
   </div>
@@ -329,12 +329,12 @@
         {{ data["claim-salvage"]|capitalize }}
       </dd>
       <dd class="govuk-summary-list__actions">
-        <a class="govuk-link" href="/report/salvage">
+        <a class="govuk-link" href="/report/salvage-award">
           Change<span class="govuk-visually-hidden"> claim of expenses</span>
         </a>
       </dd>
     </div>
-    {% if data['salvage-services'] != "" %}
+    {% if data['salvage-services']|length %}
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
         Services rendered
@@ -343,7 +343,7 @@
         {{ data["salvage-services"] }}
       </dd>
       <dd class="govuk-summary-list__actions">
-        <a class="govuk-link" href="/report/salvage">
+        <a class="govuk-link" href="/report/salvage-award">
           Change<span class="govuk-visually-hidden"> description</span>
         </a>
       </dd>

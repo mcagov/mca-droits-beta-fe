@@ -5,9 +5,6 @@ import {
   validationNumberCheck
 } from '../../utils';
 
-// const api = require('@what3words/api');
-// api.setOptions({ key: '0LFRBQX2' });
-
 export default function (app) {
   app.post(
     '/report/location-answer',
@@ -17,10 +14,15 @@ export default function (app) {
       .isEmpty()
       .withMessage('Choose an option'),
     async (req, res, next) => {
+      req.session.data.location = {};
+
       const session = req.session.data.location;
       const reqBody = req.body;
       let errors;
       let errorSummary;
+
+      session['location-standard'] = {};
+      session['location-given'] = {};
 
       const type = reqBody['location-type'];
 
@@ -28,6 +30,7 @@ export default function (app) {
 
       switch (type) {
         case 'coords-decimal':
+          session['location-type'] = 'coords-decimal';
           session['location-latitude-decimal'] =
             reqBody['location-latitude-decimal'];
           session['location-longitude-decimal'] =
@@ -37,7 +40,6 @@ export default function (app) {
             reqBody['location-latitude-decimal'];
           session['location-standard'].longitude =
             reqBody['location-longitude-decimal'];
-          session['location-standard'].radius = 0;
 
           session[
             'location-given'
@@ -128,7 +130,6 @@ export default function (app) {
 
           session['location-standard'].latitude = latitude.toFixed(5);
           session['location-standard'].longitude = longitude.toFixed(5);
-          session['location-standard'].radius = 0;
 
           session['location-given'].latitude = `${latD}° ${latM}' ${latDir}`;
           session['location-given'].longitude = `${lonD}° ${lonM}' ${lonDir}`;
@@ -250,7 +251,6 @@ export default function (app) {
 
           session['location-standard'].latitude = latitude.toFixed(5);
           session['location-standard'].longitude = longitude.toFixed(5);
-          session['location-standard'].radius = 0;
 
           session[
             'location-given'
@@ -346,46 +346,6 @@ export default function (app) {
 
           break;
 
-        // case 'what-3-words':
-        //   session['w3w-name'] = req.body['w3w-name'];
-
-        //   const checkInput = await check('w3w-name')
-        //     .exists()
-        //     .not()
-        //     .isEmpty()
-        //     .run(req);
-
-        //   await api
-        //     .convertToCoordinates(session['w3w-name'])
-        //     .then((data) => {
-        //       session['location-standard'].latitude = data.coordinates.lat;
-        //       session['location-standard'].longitude = data.coordinates.lng;
-
-        //       session[
-        //         'location-given'
-        //       ].latitude = `${data.coordinates.lat}° N `;
-        //       session[
-        //         'location-given'
-        //       ].longitude = `${data.coordinates.lng}° W`;
-        //     })
-        //     .catch(function (error) {
-        //       for (var prop in error) {
-        //         if (error[prop].code.length && !checkInput.isEmpty()) {
-        //           let errors = formatValidationErrors(validationResult(req));
-
-        //           errors['w3w-name'].text = error[prop].message;
-
-        //           return res.render('report/location', {
-        //             errors,
-        //             errorSummary: Object.values(errors),
-        //             values: req.body
-        //           });
-        //         }
-        //         break;
-        //       }
-        //     });
-
-        //   break;
         case 'map':
           session['map-latitude-input'] = reqBody['map-latitude-input'];
           session['map-longitude-input'] = reqBody['map-longitude-input'];
@@ -418,6 +378,8 @@ export default function (app) {
           break;
         case 'description':
           session['location-description'] = reqBody['location-description'];
+          delete session['location-standard'];
+          delete session['location-given'];
 
           await body('location-description')
             .exists()
@@ -430,16 +392,16 @@ export default function (app) {
           errorSummary = Object.values(errors);
 
         default:
-          session['location-standard'].latitude = 0;
-          session['location-standard'].longitude = 0;
-          session['location-standard'].radius = 0;
+          errors = formatValidationErrors(validationResult(req));
+          errorSummary = Object.values(errors);
 
-          session['location-given'].latitude = '';
-          session['location-given'].longitude = '';
+          break;
       }
 
       if (!errors) {
-        return res.redirect('depth');
+        return req.session.data.redirectToCheckAnswers
+          ? res.redirect('/report/check-your-answers')
+          : res.redirect('depth');
       } else {
         return res.render('report/location', {
           errors,

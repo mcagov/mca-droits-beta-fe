@@ -15,6 +15,7 @@ export class BulkUpload {
     this.id;
     this.form = $1('[data-js=bulk-form-element]', this.el);
     this.photoUploadInputs = [...$('.photo-upload__upload')];
+    this.containersInitial = [...$('.photo-upload__container--initial', this.el)];
     this.containersUploaded = [...$('.photo-upload__container--uploaded', this.el)];
     this.photoResults = [...$('.photo-upload__result', this.el)];
     this.replaceImageButtons = [...$('.photo-upload__button-change', this.el)];
@@ -79,6 +80,9 @@ export class BulkUpload {
             this.containersUploaded[index].classList.remove(
               'photo-upload__container--hide'
             );
+            this.containersInitial[index].classList.add(
+              'photo-upload__container--hide'
+            );
           })
 
           console.log(res.data);
@@ -119,7 +123,12 @@ export class BulkUpload {
           } else {
             //this.errorBlock.forEach((i) => (i.style.display = 'none'));
             let imageSelected = $1(`#selected-photo-${this.id}`);
+            const currentInitialContainer = $1(`#photo-upload-container-${this.id}`);
+            const currentSelectedImageContainer = $1(`#photo-selected-container-${this.id}`);
+
             imageSelected.src = `/uploads/${res.data}`;
+            currentInitialContainer.classList.add('photo-upload__container--hide');
+            currentSelectedImageContainer.classList.remove('photo-upload__container--hide');
           }
         } catch (reqError) {
           console.error(reqError);
@@ -154,9 +163,9 @@ export class BulkUpload {
   }
 
   selectAltImageEvent() {
-    this.replaceImageButtons.forEach((el) => {
-      el.addEventListener('click', async () => {
-        this.id = el.dataset.id;
+    this.replaceImageButtons.forEach((element) => {
+      element.addEventListener('click', async () => {
+        this.id = element.dataset.id;
         // Select the upload button for the current file input
         const currentUploadBtn = $1(`[data-id=${this.id}]`, this.el);
         try {
@@ -164,15 +173,18 @@ export class BulkUpload {
             `/report/property-form-image-delete/${this.id}`
           );
           if (res) {
-            const currentUploadedContainer = el.closest('.photo-upload__container--uploaded');
+            const currentInitialContainer = $1(`#photo-upload-container-${this.id}`);
+            const currentSelectedImageContainer = $1(`#photo-selected-container-${this.id}`);
             const currentUploadInput = $1(`#${this.id}`, this.el);
 
-            currentUploadedContainer.classList.add('photo-upload__container--hide');
+            currentSelectedImageContainer.classList.add('photo-upload__container--hide');
+            currentInitialContainer.classList.remove('photo-upload__container--hide');
             currentUploadInput.value = '';
+            currentUploadBtn.classList.remove('hidden');
+
             this.chosenFiles--;
             this.addButton.classList.add('govuk-button--disabled');
             this.addButton.disabled = true;
-            currentUploadBtn.classList.remove('hidden');
           }
         } catch (err) {
           console.error(err);

@@ -97,7 +97,7 @@
                   <input type=hidden name=property[{{ id }}][address-details][address-postcode] value={{ item['address-details']['address-postcode'] }}>
                 </td>
                 <td class="govuk-table__cell">
-                  <div class="{{containerInitialClasses}}">
+                  <div id="photo-upload-container-{{id}}" class="{{containerInitialClasses}}">
                     <div class="upload-progress">
                       <div class="upload-progress__bar"><span></span></div>
                       <div class="upload-progress__text govuk-heading-s govuk-!-padding-top-1"></div>
@@ -123,7 +123,7 @@
 
                   <a class="photo-upload__button govuk-button hidden" data-module="govuk-button" data-id={{id}} data-js="single-image-upload">Upload file</a>
                   </div>
-                  <div class="{{containerUploadedClasses}}">
+                  <div id="photo-selected-container-{{id}}" class="{{containerUploadedClasses}}">
                     <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Selected Image:</strong></p>
 
                     <div>

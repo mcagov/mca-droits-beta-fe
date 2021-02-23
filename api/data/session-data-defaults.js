@@ -34,5 +34,6 @@ export default {
     'address-county': '',
     'address-postcode': ''
   },
+  location: {},
   property: {}
 };

@@ -127,7 +127,7 @@
                     <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Selected Image:</strong></p>
 
                     <div>
-                      <img class="photo-upload__result govuk-!-margin-bottom-6" src="{{imagePath}}" width="300px" />
+                      <img id="selected-photo-{{id}}" class="photo-upload__result govuk-!-margin-bottom-6" src="{{imagePath}}" width="300px" />
                     </div>
                     
                     <a class="photo-upload__button-change govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button" data-id={{ id }}>Upload a different image</a>
@@ -154,7 +154,7 @@
         {{ govukButton({
           text: "Upload images",
           disabled: true,
-          classes: 'photo-upload__button govuk-button',
+          classes: 'govuk-button',
           attributes: {
             'data-module': 'govuk-button',
             'data-js': 'bulk-image-upload'

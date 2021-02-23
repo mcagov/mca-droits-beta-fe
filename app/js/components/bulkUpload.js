@@ -19,7 +19,7 @@ export class BulkUpload {
     this.photoResults = [...$('.photo-upload__result', this.el)];
     this.replaceImageButtons = [...$('.photo-upload__button-change', this.el)];
     this.bulkUploadButton = $1('[data-js=bulk-image-upload]', this.el);
-    //this.uploadButtons = [...$('.photo-upload__button', this.el)];
+    this.singleUploadButtons = [...$('[data-js=single-image-upload]', this.el)];
     this.addButton = $1('[data-js=bulk-add-btn]', this.el);
 
     this.uploadProgress = $1('.upload-progress', this.el);
@@ -94,12 +94,13 @@ export class BulkUpload {
     }); 
   }
 
-  /*singleUploadEvent() {
-    this.uploadButtons.forEach((element) => {
+  singleUploadEvent() {
+    this.singleUploadButtons.forEach((element) => {
       element.addEventListener('click', async () => {
         this.id = element.dataset.id;
+        const currentInput = $1(`#${this.id}`, this.el);
         const file = new FormData();
-        file.append('image', this.photoUpload.files[0]);
+        file.append('image', currentInput.files[0]);
         try {
           const res = await axios.post(
             `/report/property-form-image-upload/${this.id}`,
@@ -107,41 +108,25 @@ export class BulkUpload {
             {
               headers: { 'Content-Type': 'multipart/form-data' },
               withCredentials: true,
-              onUploadProgress: (progressEvent) => {
-                const uploadFiles = this.photoUpload.files,
-                  uploadFile = uploadFiles[0];
-  
-                if (
-                  uploadFiles.length &&
-                  (uploadFile.type === 'image/png' ||
-                    uploadFile.type === 'image/jpg' ||
-                    uploadFile.type === 'image/jpeg') &&
-                  uploadFile.size < 5000000
-                ) {
-                  let percentCompleted = Math.round(
-                    (progressEvent.loaded * 100) / progressEvent.total
-                  );
-                  this.loadingIndicator(percentCompleted);
-                }
-              }
             }
           );
   
           if (res.data.error) {
-            this.errorText.forEach((i) => (i.innerText = res.data.error.text));
-            this.scrollToTop();
-            this.errorBlock.forEach((i) => (i.style.display = 'block'));
+            //this.errorText.forEach((i) => (i.innerText = res.data.error.text));
+            //this.scrollToTop();
+            //this.errorBlock.forEach((i) => (i.style.display = 'block'));
+            console.log('error');
           } else {
-            this.errorBlock.forEach((i) => (i.style.display = 'none'));
-            this.imageSelected(`/uploads/${res.data}`);
-            this.image = res.data;
+            //this.errorBlock.forEach((i) => (i.style.display = 'none'));
+            let imageSelected = $1(`#selected-photo-${this.id}`);
+            imageSelected.src = `/uploads/${res.data}`;
           }
         } catch (reqError) {
           console.error(reqError);
         }
       });
     })
-  }*/
+  }
 
   handleUploadState() {
     this.photoUploadInputs.forEach((element) => {
@@ -166,10 +151,6 @@ export class BulkUpload {
         }
       })
     })
-  }
-
-  imageSelected(src) {
-    this.photoResult.src = src;
   }
 
   selectAltImageEvent() {

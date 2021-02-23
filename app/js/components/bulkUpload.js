@@ -69,13 +69,12 @@ export class BulkUpload {
       )
       .then((res) => {
         if (res.data.error) {
-          this.errorText.forEach((i) => (i.innerText = res.data.error.text));
+          //this.errorText.forEach((i) => (i.innerText = res.data.error.text));
           this.scrollToTop();
           this.errorBlock.forEach((i) => (i.style.display = 'block'));
         } else {
           const data = res.data;
           this.photoResults.forEach((item, index) => {
-            console.log(item.filename);
             item.src = `/uploads/${data[index]['filename']}`;
             this.containersUploaded[index].classList.remove(
               'photo-upload__container--hide'
@@ -84,8 +83,6 @@ export class BulkUpload {
               'photo-upload__container--hide'
             );
           })
-
-          console.log(res.data);
           // Allow user to continue through form when images have uploaded
           this.addButton.classList.remove('hidden');
           this.bulkUploadButton.classList.add('hidden');
@@ -116,12 +113,13 @@ export class BulkUpload {
           );
   
           if (res.data.error) {
-            //this.errorText.forEach((i) => (i.innerText = res.data.error.text));
-            //this.scrollToTop();
-            //this.errorBlock.forEach((i) => (i.style.display = 'block'));
+            this.errorText.forEach((i) => (i.innerText = res.data.error.text));
+            this.scrollToTop();
+            this.errorBlock.forEach((i) => (i.style.display = 'block'));
             console.log('error');
           } else {
-            //this.errorBlock.forEach((i) => (i.style.display = 'none'));
+            this.errorBlock.forEach((i) => (i.style.display = 'none'));
+
             let imageSelected = $1(`#selected-photo-${this.id}`);
             const currentInitialContainer = $1(`#photo-upload-container-${this.id}`);
             const currentSelectedImageContainer = $1(`#photo-selected-container-${this.id}`);

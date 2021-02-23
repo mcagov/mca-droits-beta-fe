@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import multer from 'multer';
 import { azureUpload } from '../../services';
 import { formatValidationErrors } from '../../utils';
+import bulkUpload from '../../app/js/components/bulkUpload';
 const csv = require('fast-csv');
 
 const storage = multer.diskStorage({
@@ -16,13 +17,6 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     cb(null, `${uuidv4()}${path.extname(file.originalname)}`);
   }
-});
-
-
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 5000000 },
-  fileFilter: fileFilter
 });
 
 function fileFilter(req, file, cb) {
@@ -40,57 +34,83 @@ function fileFilter(req, file, cb) {
 }
 
 export default function (app) {
-  app.post(
-    "/report/property-bulk-confirm",
-    upload.single("bulk-upload-file"),
-    function(req,res){
-      const fileRows = [];
-        csv.parseFile(req.file.path, { headers: true })
-          .on("data", function (data) {
-            fileRows.push(data); // push each row
-          })
-          .on("end", function () {
-            //console.log(fileRows); //contains array of objects. Each object represents row of the csv file, with each element of it a column
-            fs.unlinkSync(req.file.path);   // remove temp file
-            
-            //process "fileRows" and respond  
-            let fileUpload = fileRows;
+  (() => {
+    const upload = multer({
+      storage: storage,
+      limits: { fileSize: 5000000 },
+      fileFilter: fileFilter
+    }).single('csv');
+  
+    app.post(
+      "/report/property-bulk-confirm",
+      function(req,res){
+        upload(req, res, function(multerError) {
+          const err = {
+            id: 'property-image',
+            href: '#property-image'
+          };
+          if (multerError) {
+            if (multerError.code === 'LIMIT_FILE_SIZE') {
+              err.text = 'The selected file must be smaller than 5MB';
+            } else if (multerError) {
+              err.text = multerError;
+            }
 
-            req.session.data['bulk-upload'] = {};
-            const sessionBulkUpload = req.session.data['bulk-upload'];
+            res.json({ error: err });
+          } else if (req.body.image === 'undefined') {
+            err.text = 'Select an image';
+            res.json({ error: err });
+          } else {
+            const fileRows = [];
+            csv.parseFile(req.file.path, { headers: true })
+            .on("data", function (data) {
+              fileRows.push(data); // push each row
+            })
+            .on("end", function () {
+              //console.log(fileRows); //contains array of objects. Each object represents row of the csv file, with each element of it a column
+              fs.unlinkSync(req.file.path);   // remove temp file
+              
+              //process "fileRows" and respond  
+              let fileUpload = fileRows;
 
-            fileUpload.forEach((obj, index) => {
-              // Create a bulk upload ID for each item
-              let itemID = 'bu' + index;
-              // Build up the session data object for each item
-              sessionBulkUpload[itemID] = {};
-              const item = sessionBulkUpload[itemID];
-              item['description'] = obj['Description'];
-              item['quantity'] = obj['Quantity'];
-              item['value'] = obj['Total value'];
-              if (obj['Total value']) {
-                item['value-known'] = 'yes';
-              };
+              req.session.data['bulk-upload'] = {};
+              const sessionBulkUpload = req.session.data['bulk-upload'];
 
-              if(obj['Storage address line 1'] && obj['Postcode']) {
-                item['storage-address'] = 'custom';
-                item['address-details'] = {};
-                item['address-details']['address-line-1'] = obj['Storage address line 1'];
-                item['address-details']['address-line-2'] = obj['Storage address line 2'];
-                item['address-details']['address-town'] = obj['Town'];
-                item['address-details']['address-county'] = obj['County'];
-                item['address-details']['address-postcode'] = obj['Postcode'];
-              } else {
-                item['storage-address'] = 'personal';
-              }
+              fileUpload.forEach((obj, index) => {
+                // Create a bulk upload ID for each item
+                let itemID = 'bu' + index;
+                // Build up the session data object for each item
+                sessionBulkUpload[itemID] = {};
+                const item = sessionBulkUpload[itemID];
+                item['description'] = obj['Description'];
+                item['quantity'] = obj['Quantity'];
+                item['value'] = obj['Total value'];
+                if (obj['Total value']) {
+                  item['value-known'] = 'yes';
+                };
 
-            }); 
+                if(obj['Storage address line 1'] && obj['Postcode']) {
+                  item['storage-address'] = 'custom';
+                  item['address-details'] = {};
+                  item['address-details']['address-line-1'] = obj['Storage address line 1'];
+                  item['address-details']['address-line-2'] = obj['Storage address line 2'];
+                  item['address-details']['address-town'] = obj['Town'];
+                  item['address-details']['address-county'] = obj['County'];
+                  item['address-details']['address-postcode'] = obj['Postcode'];
+                } else {
+                  item['storage-address'] = 'personal';
+                }
 
-            req.session.data['property'] = sessionBulkUpload;
-            var bulkUpload = sessionBulkUpload;
-            res.render('report/property-bulk-confirm', { bulkUpload: bulkUpload });
-          })
-    });
+              }); 
+
+              req.session.data['property'] = sessionBulkUpload;
+              var bulkUpload = sessionBulkUpload;
+              res.render('report/property-bulk-confirm', { bulkUpload: bulkUpload });
+            })
+          }
+        })
+      });
+  })();
 }
 
 

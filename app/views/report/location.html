@@ -42,11 +42,6 @@
         
         {# Coordinates (Decimal degrees) #}
         {% set decimalInput %}
-          
-          <span class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> {{ errors["coords-decimal"].text }}
-          </span>
-
           {% call govukFieldset({
             classes: "row-prototype-coordinate-input"
           }) %}
@@ -106,11 +101,6 @@
 
         {# Coordinates (Degrees and decimal minutes) #}
         {% set decimalMinuteInput %}
-
-          <span class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> {{ errors["coords-decimal-minutes"].text }}
-          </span>
-
           {% call govukFieldset({
             legend: {
               text: "Latitude"
@@ -267,11 +257,6 @@
 
         {# Coordinates (Degrees, minutes and seconds) #}
         {% set degreeInput %}
-
-          <span class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> {{ errors["coords-sexagesimal"].text }}
-          </span>
-
           {% call govukFieldset({
             legend: {
               text: "Latitude"
@@ -437,8 +422,10 @@
 
         {% set mapInput %}
           <div class="govuk-!-margin-bottom-5" data-js="editable-map">
+            <span class="govuk-error-message">
+              <span class="govuk-visually-hidden">Error:</span> {{ errors["location-map-input"].text }}
+            </span>
             <div id="location-map-input" class="row-prototype-map-select govuk-!-margin-bottom-1"></div>
-
             <ul class="leaflet-legend govuk-!-margin-top-0">
               <li class="leaflet-legend__item">
                 <img src="/assets/images/leaflet-legend/draw.png" class="leaflet-legend__icon" alt="Map tool 'draw' icon, dark grey circle">
@@ -460,11 +447,8 @@
           <input type=hidden name="map-latitude-input" id="map-latitude-input" value="{{ data['location']['map-latitude-input'] }}">
           <input type=hidden name="map-longitude-input" id="map-longitude-input" value="{{ data['location']['map-longitude-input'] }}">
           <input type=hidden name="map-radius-input" id="map-radius-input" value="{{ data['location']['map-radius-input'] }}">
-          <span id="map-radius-input-error" class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> 
-          </span>
         {% endset -%}
-
+        
         {% set descriptionInput %}
           {{ govukTextarea({
             name: "location-description",
@@ -510,7 +494,7 @@
           (errors['location-longitude-degrees-degree']|length) or 
           (errors['location-longitude-degrees-minute']|length) or 
           (errors['location-longitude-degrees-second']|length)  %}
-            {% set setCheckedCoordsDecimalMinutes = "coords-sexagesimal" %}
+            {% set setCheckedSexagesimal = "coords-sexagesimal" %}
         {% endif %}
 
         {% if 
@@ -569,7 +553,7 @@
               hint: {
                 html: "For example <em>53° 45′ 49″ N &nbsp;&nbsp; 3° 44′ 20″ W</em>."
               },
-                checked: checked("['location']['location-type']", "coords-sexagesimal")
+                checked: setCheckedSexagesimal
               },
             {
               value: "map",

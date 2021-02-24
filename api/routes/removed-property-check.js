@@ -29,6 +29,9 @@ export default function (app) {
         req.session.data['report-date']['year'] = year;
 
         if (value === 'yes') {
+          // Temp report reference
+          req.session.data.reference = '100/21';
+
           return req.session.data.redirectToCheckAnswers
             ? res.redirect('/report/check-your-answers')
             : res.redirect('find-date');

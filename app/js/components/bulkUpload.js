@@ -5,8 +5,6 @@ import { $, $1, closest } from "../utilities/selector.js";
 import ComponentManager from "../tools/component-manager.js";
 import LoadManager, { QUEUE } from "../tools/load-manager.js";
 
-const singleImageUpload = require("./imageUpload.js");
-
 export class BulkUpload {
   constructor(el) {
     if (!el) return;
@@ -19,7 +17,7 @@ export class BulkUpload {
     this.containersUploaded = [...$('.photo-upload__container--uploaded', this.el)];
     this.photoResults = [...$('.photo-upload__result', this.el)];
     this.replaceImageButtons = [...$('.photo-upload__button-change', this.el)];
-    this.bulkUploadButton = $1('[data-js=bulk-image-upload]', this.el);
+    this.bulkImageUploadButton = $1('[data-js=bulk-image-upload]', this.el);
     this.singleUploadButtons = [...$('[data-js=single-image-upload]', this.el)];
     this.addButton = $1('[data-js=bulk-add-btn]', this.el);
 
@@ -38,13 +36,13 @@ export class BulkUpload {
 
   init() {
     this.handleUploadState()
-    this.bulkUploadEvent();
+    this.bulkImageUploadEvent();
     this.selectAltImageEvent();
     this.singleUploadEvent();
   }
 
-  bulkUploadEvent() {
-    this.bulkUploadButton.addEventListener('click', async () => {
+  bulkImageUploadEvent() {
+    this.bulkImageUploadButton.addEventListener('click', async () => {
       let formData = new FormData(this.form);
 
       // Loop through each file-upload input and grab the selected file data,
@@ -85,7 +83,7 @@ export class BulkUpload {
           })
           // Allow user to continue through form when images have uploaded
           this.addButton.classList.remove('hidden');
-          this.bulkUploadButton.classList.add('hidden');
+          this.bulkImageUploadButton.classList.add('hidden');
         }
       })
       .catch((error) => {
@@ -148,12 +146,12 @@ export class BulkUpload {
         }
 
         if (this.chosenFiles === this.photoUploadInputs.length) {
-          if (this.bulkUploadButton.classList.contains('hidden')) {
+          if (this.bulkImageUploadButton.classList.contains('hidden')) {
             this.addButton.classList.remove('govuk-button--disabled');
             this.addButton.disabled = false;
           } else {
-            this.bulkUploadButton.classList.remove('govuk-button--disabled');
-            this.bulkUploadButton.disabled = false;
+            this.bulkImageUploadButton.classList.remove('govuk-button--disabled');
+            this.bulkImageUploadButton.disabled = false;
           }
         }
       })

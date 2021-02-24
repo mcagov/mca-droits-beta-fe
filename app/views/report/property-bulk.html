@@ -18,47 +18,66 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      <div data-js="spreadsheet-upload">
+        <form class="form" action="/report/property-bulk-confirm" method="post" enctype="multipart/form-data">
 
-      <form class="form" action="/report/property-bulk-confirm" method="post" enctype="multipart/form-data">
+          <h1 class="govuk-heading-xl">Upload wreck material</h1>
 
-        <h1 class="govuk-heading-xl">Upload wreck material</h1>
+          <div class="govuk-error-summary upload-error hidden" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+            <h2 class="govuk-error-summary__title" id="error-summary-title">
+              There is a problem
+            </h2>
+            <div class="govuk-error-summary__body">
+              <ul class="govuk-list govuk-error-summary__list">
+                <li>
+                  <a href="#property-bulk-file-error"><span class="upload-error__text"></span></a>
+                </li>
+              </ul>
+            </div>
+          </div>
 
-        <p class="govuk-body-l">Upload a spreadsheet file to add wreck material to your report in bulk.</p>
+          <p class="govuk-body-l">Upload a spreadsheet file to add wreck material to your report in bulk.</p>
 
-        {{ govukWarningText({
-          text: "You should only use this form to add wreck material from a single shipwreck.",
-          iconFallbackText: "Warning"
-        }) }}
+          {{ govukWarningText({
+            text: "You should only use this form to add wreck material from a single shipwreck.",
+            iconFallbackText: "Warning"
+          }) }}
 
-        <p class="govuk-body">The file must be formatted appropriately, with each item of wreck material listed beneath
-          the following named columns:</p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>Description</li>
-          <li>Quantity</li>
-          <li>Total value</li>
-          <li>Storage address line 1</li>
-          <li>Storage address line 2 (if applicable)</li>
-          <li>Town</li>
-          <li>County</li>
-          <li>Postcode</li>
-        </ul>
+          <p class="govuk-body">The file must be formatted appropriately, with each item of wreck material listed beneath
+            the following named columns:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>Description</li>
+            <li>Quantity</li>
+            <li>Total value</li>
+            <li>Storage address line 1</li>
+            <li>Storage address line 2 (if applicable)</li>
+            <li>Town</li>
+            <li>County</li>
+            <li>Postcode</li>
+          </ul>
 
-        {{ govukInsetText({
-          html: 'You can populate the <a href="/assets/downloads/ROW-bulk-upload-template.csv">bulk wreck material upload template</a> with your wreck material and then upload it to this form.'
-        }) }}
+          {{ govukInsetText({
+            html: 'You can populate the <a href="/assets/downloads/ROW-bulk-upload-template.csv">bulk wreck material upload template</a> with your wreck material and then upload it to this form.'
+          }) }}
+          <span id="property-bulk-file-error" class="govuk-error-message upload-error">
+            <span class="govuk-visually-hidden">Error:</span> <span class="upload-error__text"></span>
+          </span>
+          {{ govukFileUpload({
+            id: "bulk-upload-file",
+            name: "bulk-upload-file",
+            label: {
+              text: "Upload a file"
+            },
+            attributes: {
+              'data-js': 'file-input'
+            }
+          }) }}
 
-        {{ govukFileUpload({
-          id: "bulk-upload-file",
-          name: "bulk-upload-file",
-          label: {
-            text: "Upload a file"
-          }
-        }) }}
+          <button class="govuk-button hidden" data-module="govuk-button" data-js="bulk-continue-btn">Continue</button>
 
-        <button class="govuk-button" data-module="govuk-button">Upload</button>
-
-      </form>
-
+        </form>
+          <button class="govuk-button" data-module="govuk-button" data-js="spreadsheet-upload-btn">Upload</button>
+      </div>
     </div>
   </div>
 

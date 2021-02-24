@@ -12,4 +12,5 @@ import './components/editableMap.js';
 import './components/vesselInformation.js';
 import './components/staticMap.js';
 import './components/imageUpload.js';
+import './components/spreadsheetUpload.js';
 import './components/bulkUpload.js';

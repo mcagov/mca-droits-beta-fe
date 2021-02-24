@@ -12,24 +12,30 @@ export class SpreadsheetUpload {
     this.el = el;
     
     this.fileInput = $1('[data-js=file-input]', this.el);
+    this.fileInputWrapper = $1('[data-js=file-input-wrapper]', this.el);
     this.spreadsheetUploadBtn = $1('[data-js=spreadsheet-upload-btn]', this.el);
     this.continueBtn = $1('[data-js=bulk-continue-btn]', this.el);
 
     this.errorBlock = $('.upload-error', this.el);
     this.errorText = $('.upload-error__text', this.el);
 
+    this.uploadProgress = $1('.file-upload-progress', this.el);
+    this.uploadProgressBar = $1('.file-upload-progress__bar span', this.el);
+    this.uploadProgressText = $1('.file-upload-progress__text', this.el);
+    this.uploadProgressPercent = $1('.file-upload-progress__percent', this.el);
+
     LoadManager.queue(this.init.bind(this), QUEUE.RESOURCES)
   }
 
   init() {
-    console.log('spreadsheet upload script');
+    console.log(this.fileInput.labels);
     this.singleUploadEvent();
+    this.fileInputListener();
   }
 
 
   singleUploadEvent() {
     this.spreadsheetUploadBtn.addEventListener('click', async () => {
-      console.log('click');
       const input = this.fileInput;
       const file = new FormData();
       file.append('bulk-upload-file', input.files[0]);
@@ -39,7 +45,7 @@ export class SpreadsheetUpload {
           file,
           {
             headers: { 'Content-Type': 'multipart/form-data' },
-            withCredentials: true,
+            withCredentials: true
           }
         );
 
@@ -48,6 +54,7 @@ export class SpreadsheetUpload {
           this.scrollToTop();
           this.errorBlock.forEach((i) => (i.classList.remove('hidden')));
         } else {
+          this.handleLoadingIndicator();
           this.errorBlock.forEach((i) => (i.classList.add('hidden')));     
           this.spreadsheetUploadBtn.classList.add('hidden');
           this.continueBtn.classList.remove('hidden');
@@ -58,9 +65,40 @@ export class SpreadsheetUpload {
     });
   }
 
+  fileInputListener() {
+    this.fileInput.addEventListener('input', () => {
+      if (this.continueBtn.classList.contains('hidden')) {
+        return;
+      } else {
+        this.continueBtn.classList.add('hidden');
+        this.spreadsheetUploadBtn.classList.remove('hidden');
+      }
+    })
+  }
+
   scrollToTop() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+  }
+
+  handleLoadingIndicator() {
+    let progress = 0;
+    this.fileInputWrapper.classList.add('hidden');
+    this.uploadProgress.classList.add('file-upload-progress--visible');
+
+    this.uploadProgressText.innerText = `Uploading file...`;
+    const uploadStatus = setInterval(() => { 
+      progress++; 
+      this.uploadProgressPercent.innerText = `${progress}%`;
+      this.uploadProgressBar.style.width = `${progress}%`;
+      if (progress === 100) {
+        this.uploadProgressText.innerText = `File uploaded`;
+        this.uploadProgress.classList.remove('file-upload-progress--visible');
+        this.fileInput.labels[0].innerText = 'File uploaded'
+        this.fileInputWrapper.classList.remove('hidden');
+        clearInterval(uploadStatus);
+      }
+    }, 10);
   }
 }
 

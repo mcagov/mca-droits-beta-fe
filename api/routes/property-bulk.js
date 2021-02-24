@@ -56,7 +56,7 @@ export default function (app) {
             err.text = 'Select a csv file';
             res.json({ error: err });
           } else {
-            res.json();
+            res.json({ status: 200 });
           }
         })
       }
@@ -80,10 +80,10 @@ export default function (app) {
           fileRows.push(data); // push each row
         })
         .on("end", function () {
-          //console.log(fileRows); //contains array of objects. Each object represents row of the csv file, with each element of it a column
           fs.unlinkSync(req.file.path);   // remove temp file
           
-          //process "fileRows" and respond  
+          // 'fileRows' is an array of objects. Each object represents a row in the csv file, with each obj element a column
+          // Process "fileRows" and respond  
           let fileUpload = fileRows;
 
           req.session.data['bulk-upload'] = {};

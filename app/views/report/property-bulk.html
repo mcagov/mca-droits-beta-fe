@@ -62,16 +62,26 @@
           <span id="property-bulk-file-error" class="govuk-error-message upload-error">
             <span class="govuk-visually-hidden">Error:</span> <span class="upload-error__text"></span>
           </span>
-          {{ govukFileUpload({
-            id: "bulk-upload-file",
-            name: "bulk-upload-file",
-            label: {
-              text: "Upload a file"
-            },
-            attributes: {
-              'data-js': 'file-input'
-            }
-          }) }}
+          
+          <div data-js="file-input-wrapper">
+            {{ govukFileUpload({
+              id: "bulk-upload-file",
+              name: "bulk-upload-file",
+              label: {
+                text: "Upload a file"
+              },
+              attributes: {
+                'data-js': 'file-input'
+              }
+            }) }}
+          </div>
+
+          <div class="file-upload-progress">
+            <div class="file-upload-progress__bar"><span></span></div>
+            <div class="file-upload-progress__text govuk-heading-s govuk-!-padding-top-1"></div>
+            <div class="file-upload-progress__percent govuk-body"></div>
+          </div>
+
 
           <button class="govuk-button hidden" data-module="govuk-button" data-js="bulk-continue-btn">Continue</button>
 

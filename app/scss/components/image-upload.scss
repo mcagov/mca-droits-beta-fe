@@ -26,6 +26,7 @@
     }
   }
 }
+
 .upload-progress {
   display: none;
   align-items: center;
@@ -41,6 +42,33 @@
 
   &--visible {
     display: flex;
+  }
+
+  &__bar {
+    border: 2px solid;
+    width: 200px;
+    height: 20px;
+
+    span {
+      background-color: black;
+      height: 100%;
+      width: 0;
+      display: block;
+    }
+  }
+
+  &__text {
+    margin-bottom: 0;
+  }
+}
+
+// An alternate, relatively positioned upload progress indicator
+.file-upload-progress {
+  display: none;
+  position: relative;
+
+  &--visible {
+    display: block;
   }
 
   &__bar {

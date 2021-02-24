@@ -39,6 +39,7 @@ export default function (app) {
             reqBody['location-latitude-decimal'];
           session['location-standard'].longitude =
             reqBody['location-longitude-decimal'];
+          session['location-standard'].radius = 0;
 
           session[
             'location-given'
@@ -122,6 +123,7 @@ export default function (app) {
 
           session['location-standard'].latitude = latitude.toFixed(5);
           session['location-standard'].longitude = longitude.toFixed(5);
+          session['location-standard'].radius = 0;
 
           session['location-given'].latitude = `${latD}° ${latM}' ${latDir}`;
           session['location-given'].longitude = `${lonD}° ${lonM}' ${lonDir}`;
@@ -243,6 +245,7 @@ export default function (app) {
 
           session['location-standard'].latitude = latitude.toFixed(5);
           session['location-standard'].longitude = longitude.toFixed(5);
+          session['location-standard'].radius = 0;
 
           session[
             'location-given'
@@ -372,20 +375,19 @@ export default function (app) {
 
           errors = formatValidationErrors(validationResult(req));
           errorSummary = Object.values(errors);
-
-          errorSummary[0].id = 'location-map-input';
-          errorSummary[0].href = '#location-map-input';
-          errors['location-map-input'] = {
-            id: 'location-map-input',
-            href: '#location-map-input',
-            text: 'Draw the area of the find on the map'
-          };
+          if (errors) {
+            errorSummary[0].id = 'location-map-input';
+            errorSummary[0].href = '#location-map-input';
+            errors['location-map-input'] = {
+              id: 'location-map-input',
+              href: '#location-map-input',
+              text: 'Draw the area of the find on the map'
+            };
+          }
 
           break;
         case 'description':
           session['location-description'] = reqBody['location-description'];
-          delete session['location-standard'];
-          delete session['location-given'];
 
           await body('location-description')
             .exists()
@@ -403,6 +405,13 @@ export default function (app) {
 
           break;
       }
+
+      session['location-standard'].latitude = parseFloat(
+        session['location-standard'].latitude
+      );
+      session['location-standard'].longitude = parseFloat(
+        session['location-standard'].longitude
+      );
 
       if (!errors) {
         return req.session.data.redirectToCheckAnswers

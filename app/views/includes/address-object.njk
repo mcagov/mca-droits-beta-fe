@@ -1,0 +1,7 @@
+{% macro addressObject(addressDetails) %}
+  {% for key, value in addressDetails %}
+    {% if value %}
+      {{ value }}<br>
+    {% endif %}
+  {% endfor %}
+{% endmacro %}

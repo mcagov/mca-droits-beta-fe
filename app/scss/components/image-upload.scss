@@ -1,20 +1,90 @@
-.image-upload-wrapper {
-  background-color: govuk-colour('light-grey');
+.photo-upload {
+  &__container {
+    display: block;
+    position: relative;
+    background-color: govuk-colour('light-grey');
 
-  .govuk-button {
+    &--hide {
+      display: none;
+    }
+
+    .govuk-button {
+      margin-bottom: 0;
+    }
+
+    .govuk-form-group {
+      margin-bottom: 1em;
+    }
+    .govuk-file-upload {
+      background-color: lighten(govuk-colour('light-grey'), 2);
+      border: 1px dashed $govuk-border-colour;
+      padding: 1em;
+    }
+
+    .file-info {
+      color: $govuk-secondary-text-colour;
+    }
+  }
+}
+
+.upload-progress {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+  background-color: lighten(govuk-colour('light-grey'), 2);
+
+  &--visible {
+    display: flex;
+  }
+
+  &__bar {
+    border: 2px solid;
+    width: 200px;
+    height: 20px;
+
+    span {
+      background-color: black;
+      height: 100%;
+      width: 0;
+      display: block;
+    }
+  }
+
+  &__text {
     margin-bottom: 0;
   }
+}
 
-  .govuk-form-group {
-    margin-bottom: 1em;
-  }
-  .govuk-file-upload {
-    background-color: lighten(govuk-colour('light-grey'), 2);
-    border: 1px dashed $govuk-border-colour;
-    padding: 1em;
+// An alternate, relatively positioned upload progress indicator
+.file-upload-progress {
+  display: none;
+  position: relative;
+
+  &--visible {
+    display: block;
   }
 
-  .file-info {
-    color: $govuk-secondary-text-colour;
+  &__bar {
+    border: 2px solid;
+    width: 200px;
+    height: 20px;
+
+    span {
+      background-color: black;
+      height: 100%;
+      width: 0;
+      display: block;
+    }
+  }
+
+  &__text {
+    margin-bottom: 0;
   }
 }

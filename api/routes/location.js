@@ -1,12 +1,10 @@
 import { body, validationResult } from 'express-validator';
-import {
-  formatValidationErrors,
-  multiErrors,
-  validationNumberCheck
-} from '../../utils';
+import { formatValidationErrors } from '../../utils';
 
-// const api = require('@what3words/api');
-// api.setOptions({ key: '0LFRBQX2' });
+const inRange = require('lodash.inrange');
+const latitudeDegressRange = (val) => inRange(val, -90, 90) || val == 90;
+const longitudeDegressRange = (val) => inRange(val, -180, 180) || val == 180;
+const minutesSecondsRange = (val) => inRange(val, 0, 60) || val == 60;
 
 export default function (app) {
   app.post(
@@ -22,12 +20,16 @@ export default function (app) {
       let errors;
       let errorSummary;
 
+      session['location-standard'] = {};
+      session['location-given'] = {};
+
       const type = reqBody['location-type'];
 
       session['location-type'] = type;
 
       switch (type) {
         case 'coords-decimal':
+          session['location-type'] = 'coords-decimal';
           session['location-latitude-decimal'] =
             reqBody['location-latitude-decimal'];
           session['location-longitude-decimal'] =
@@ -48,43 +50,36 @@ export default function (app) {
 
           await body('location-latitude-decimal')
             .exists()
+            .custom((val) => {
+              if (!latitudeDegressRange(val)) {
+                throw new Error('Enter a latitude between -90 and 90');
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
             .not()
             .isEmpty()
-            .isNumeric()
-            .withMessage('latitude')
+            .withMessage('Enter a latitude')
             .run(req);
           await body('location-longitude-decimal')
             .exists()
+            .custom((val) => {
+              if (!longitudeDegressRange(val)) {
+                throw new Error('Enter a longitude between -180 and 180');
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
             .not()
             .isEmpty()
-            .isNumeric()
-            .withMessage('longitude')
+            .withMessage('Enter a longitude')
             .run(req);
 
           errors = formatValidationErrors(validationResult(req));
+          errorSummary = Object.values(errors);
 
-          if (errors) {
-            const getErrors = multiErrors(
-              errors,
-              'coords-decimal',
-              'location',
-              2,
-              'Enter coordinates for ',
-              ' and ',
-              'latitude and longitude'
-            );
-
-            errorSummary = getErrors;
-
-            validationNumberCheck(
-              reqBody['location-latitude-decimal'],
-              errors['coords-decimal']
-            );
-            validationNumberCheck(
-              reqBody['location-longitude-decimal'],
-              errors['coords-decimal']
-            );
-          }
           break;
 
         case 'coords-decimal-minutes':
@@ -136,65 +131,65 @@ export default function (app) {
           // handle errors
           await body('location-latitude-decimal-minutes-degree')
             .exists()
+            .custom((val) => {
+              if (!latitudeDegressRange(val)) {
+                throw new Error('Enter a latitude degree between -90 and 90');
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
             .not()
             .isEmpty()
-            .isNumeric()
-            .withMessage('latitude degree')
+            .withMessage('Enter a latitude degree')
             .run(req);
           await body('location-latitude-decimal-minutes-minute')
             .exists()
+            .custom((val) => {
+              if (!minutesSecondsRange(val)) {
+                throw new Error('Enter latitude minutes between 0 and 60');
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
             .not()
             .isEmpty()
-            .isNumeric()
-            .withMessage('latitude minutes')
+            .withMessage('Enter latitude minutes')
             .run(req);
           await body('location-longitude-decimal-minutes-degree')
             .exists()
+            .custom((val) => {
+              if (!latitudeDegressRange(val)) {
+                throw new Error(
+                  'Enter a longitude degree between -180 and 180'
+                );
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
             .not()
             .isEmpty()
-            .isNumeric()
-            .withMessage('longitude degree')
+            .withMessage('Enter a longitude degree')
             .run(req);
           await body('location-longitude-decimal-minutes-minute')
             .exists()
+            .custom((val) => {
+              if (!minutesSecondsRange(val)) {
+                throw new Error('Enter longitude minutes between 0 and 60');
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
             .not()
             .isEmpty()
-            .isNumeric()
-            .withMessage('longitude minutes')
+            .withMessage('Enter longitude minutes')
             .run(req);
 
           errors = formatValidationErrors(validationResult(req));
-
-          if (errors) {
-            const getErrors = multiErrors(
-              errors,
-              'coords-decimal-minutes',
-              'location',
-              4,
-              'Enter coordinates for ',
-              ' and ',
-              'latitude and longitude'
-            );
-
-            errorSummary = getErrors;
-
-            validationNumberCheck(
-              reqBody['location-latitude-decimal-minutes-degree'],
-              errors['coords-decimal-minutes']
-            );
-            validationNumberCheck(
-              reqBody['location-latitude-decimal-minutes-minute'],
-              errors['coords-decimal-minutes']
-            );
-            validationNumberCheck(
-              reqBody['location-longitude-decimal-minutes-degree'],
-              errors['coords-decimal-minutes']
-            );
-            validationNumberCheck(
-              reqBody['location-longitude-decimal-minutes-minute'],
-              errors['coords-decimal-minutes']
-            );
-          }
+          errorSummary = Object.values(errors);
 
           break;
         case 'coords-sexagesimal':
@@ -262,130 +257,96 @@ export default function (app) {
           // handle errors
           await body('location-latitude-degrees-degree')
             .exists()
+            .custom((val) => {
+              if (!latitudeDegressRange(val)) {
+                throw new Error('Enter a latitude degree between -90 and 90');
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
             .not()
             .isEmpty()
-            .isNumeric()
-            .withMessage('latitude degree')
+            .withMessage('Enter a latitude degree')
             .run(req);
           await body('location-latitude-degrees-minute')
             .exists()
+            .custom((val) => {
+              if (!minutesSecondsRange(val)) {
+                throw new Error('Enter latitude minutes between 0 and 60');
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
             .not()
             .isEmpty()
-            .isNumeric()
-            .withMessage('latitude minutes')
+            .withMessage('Enter latitude minutes')
             .run(req);
           await body('location-latitude-degrees-second')
             .exists()
+            .custom((val) => {
+              if (!minutesSecondsRange(val)) {
+                throw new Error('Enter latitude seconds between 0 and 60');
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
             .not()
             .isEmpty()
-            .isNumeric()
-            .withMessage('latitude seconds')
+            .withMessage('Enter longitude seconds')
             .run(req);
           await body('location-longitude-degrees-degree')
             .exists()
+            .custom((val) => {
+              if (!latitudeDegressRange(val)) {
+                throw new Error(
+                  'Enter a longitude degree between -180 and 180'
+                );
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
             .not()
             .isEmpty()
-            .isNumeric()
-            .withMessage('longitude degree')
+            .withMessage('Enter a longitude degree')
             .run(req);
           await body('location-longitude-degrees-minute')
             .exists()
+            .custom((val) => {
+              if (!minutesSecondsRange(val)) {
+                throw new Error('Enter longitude minutes between 0 and 60');
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
             .not()
             .isEmpty()
-            .isNumeric()
-            .withMessage('longitude minutes')
+            .withMessage('Enter longitude minutes')
             .run(req);
           await body('location-longitude-degrees-second')
             .exists()
+            .custom((val) => {
+              if (!minutesSecondsRange(val)) {
+                throw new Error('Enter longitude seconds between 0 and 60');
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
             .not()
             .isEmpty()
-            .isNumeric()
-            .withMessage('longitude seconds')
+            .withMessage('Enter longitude seconds')
             .run(req);
 
           errors = formatValidationErrors(validationResult(req));
-
-          if (errors) {
-            const getErrors = await multiErrors(
-              errors,
-              'coords-sexagesimal',
-              'location',
-              6,
-              'Enter coordinates for ',
-              ' and ',
-              'latitude and longitude'
-            );
-
-            errorSummary = getErrors;
-
-            validationNumberCheck(
-              reqBody['location-latitude-degrees-degree'],
-              errors['coords-sexagesimal']
-            );
-            validationNumberCheck(
-              reqBody['location-latitude-degrees-minute'],
-              errors['coords-sexagesimal']
-            );
-            validationNumberCheck(
-              reqBody['location-latitude-degrees-second'],
-              errors['coords-sexagesimal']
-            );
-            validationNumberCheck(
-              reqBody['location-longitude-degrees-degree'],
-              errors['coords-sexagesimal']
-            );
-            validationNumberCheck(
-              reqBody['location-longitude-degrees-minute'],
-              errors['coords-sexagesimal']
-            );
-            validationNumberCheck(
-              reqBody['location-longitude-degrees-second'],
-              errors['coords-sexagesimal']
-            );
-          }
+          errorSummary = Object.values(errors);
 
           break;
 
-        // case 'what-3-words':
-        //   session['w3w-name'] = req.body['w3w-name'];
-
-        //   const checkInput = await check('w3w-name')
-        //     .exists()
-        //     .not()
-        //     .isEmpty()
-        //     .run(req);
-
-        //   await api
-        //     .convertToCoordinates(session['w3w-name'])
-        //     .then((data) => {
-        //       session['location-standard'].latitude = data.coordinates.lat;
-        //       session['location-standard'].longitude = data.coordinates.lng;
-
-        //       session[
-        //         'location-given'
-        //       ].latitude = `${data.coordinates.lat}° N `;
-        //       session[
-        //         'location-given'
-        //       ].longitude = `${data.coordinates.lng}° W`;
-        //     })
-        //     .catch(function (error) {
-        //       for (var prop in error) {
-        //         if (error[prop].code.length && !checkInput.isEmpty()) {
-        //           let errors = formatValidationErrors(validationResult(req));
-
-        //           errors['w3w-name'].text = error[prop].message;
-
-        //           return res.render('report/location', {
-        //             errors,
-        //             errorSummary: Object.values(errors),
-        //             values: req.body
-        //           });
-        //         }
-        //         break;
-        //       }
-        //     });
-
-        //   break;
         case 'map':
           session['map-latitude-input'] = reqBody['map-latitude-input'];
           session['map-longitude-input'] = reqBody['map-longitude-input'];
@@ -414,6 +375,15 @@ export default function (app) {
 
           errors = formatValidationErrors(validationResult(req));
           errorSummary = Object.values(errors);
+          if (errors) {
+            errorSummary[0].id = 'location-map-input';
+            errorSummary[0].href = '#location-map-input';
+            errors['location-map-input'] = {
+              id: 'location-map-input',
+              href: '#location-map-input',
+              text: 'Draw the area of the find on the map'
+            };
+          }
 
           break;
         case 'description':
@@ -430,16 +400,23 @@ export default function (app) {
           errorSummary = Object.values(errors);
 
         default:
-          session['location-standard'].latitude = 0;
-          session['location-standard'].longitude = 0;
-          session['location-standard'].radius = 0;
+          errors = formatValidationErrors(validationResult(req));
+          errorSummary = Object.values(errors);
 
-          session['location-given'].latitude = '';
-          session['location-given'].longitude = '';
+          break;
       }
 
+      session['location-standard'].latitude = parseFloat(
+        session['location-standard'].latitude
+      );
+      session['location-standard'].longitude = parseFloat(
+        session['location-standard'].longitude
+      );
+
       if (!errors) {
-        return res.redirect('depth');
+        return req.session.data.redirectToCheckAnswers
+          ? res.redirect('/report/check-your-answers')
+          : res.redirect('depth');
       } else {
         return res.render('report/location', {
           errors,

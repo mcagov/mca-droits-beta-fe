@@ -4,9 +4,13 @@ $govuk-global-styles: true;
 @import '~govuk-frontend/govuk/all';
 @import 'accessible-autocomplete';
 
+//Utilities 
+@import './utilities/display';
+
 // Components
 @import './components/location';
 @import './components/map';
 @import './components/check-answers';
 @import './components/confirmation';
 @import './components/image-upload';
+@import './components/responsive-table';

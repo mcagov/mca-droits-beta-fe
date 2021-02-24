@@ -1,0 +1,61 @@
+.report-responsive-table {
+  border:0;
+  width: 100%;
+  padding:0;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+@media screen and (max-width: 600px) {
+  .report-responsive-table {
+    border: 1px solid transparent;
+    box-shadow: none;
+
+    &__caption {
+      display: block;
+      padding-bottom: 10px;
+    }
+
+    &__change-link {
+      display: block;
+      float: left !important;
+      padding-top: 10px;
+      margin-bottom: 15px;
+    }
+
+    &__head {
+      display: none;
+    }
+
+    &__row {
+      display: block;
+      border-top: 1px solid #b1b4b6;
+      border-bottom: 5px double #b1b4b6;
+      margin-bottom: 40px;
+
+      &:last-child {
+        margin-bottom: 0px;
+      }
+    }
+
+    &__cell {
+      display: block;
+      text-align: right;
+      padding-right: 0 !important;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:before{
+        content: attr(data-label) ": \00a0";
+        float: left;
+        font-weight: bold;
+      }
+
+      &--description {
+        text-align: left;
+      }
+    }
+  }	
+}

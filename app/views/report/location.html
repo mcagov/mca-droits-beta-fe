@@ -42,11 +42,6 @@
         
         {# Coordinates (Decimal degrees) #}
         {% set decimalInput %}
-          
-          <span class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> {{ errors["coords-decimal"].text }}
-          </span>
-
           {% call govukFieldset({
             classes: "row-prototype-coordinate-input"
           }) %}
@@ -106,11 +101,6 @@
 
         {# Coordinates (Degrees and decimal minutes) #}
         {% set decimalMinuteInput %}
-
-          <span class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> {{ errors["coords-decimal-minutes"].text }}
-          </span>
-
           {% call govukFieldset({
             legend: {
               text: "Latitude"
@@ -267,11 +257,6 @@
 
         {# Coordinates (Degrees, minutes and seconds) #}
         {% set degreeInput %}
-
-          <span class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> {{ errors["coords-sexagesimal"].text }}
-          </span>
-
           {% call govukFieldset({
             legend: {
               text: "Latitude"
@@ -435,14 +420,12 @@
 
         {% endset -%}
 
-        {# {% set w3wInput %}            
-          <div id="w3w-autocomplete" class="govuk-!-width-one-third" data-value="{{ data['location']['w3w-name'] }}" data-js="w3w"></div>
-        {% endset -%} #}
-
         {% set mapInput %}
           <div class="govuk-!-margin-bottom-5" data-js="editable-map">
+            <span class="govuk-error-message">
+              <span class="govuk-visually-hidden">Error:</span> {{ errors["location-map-input"].text }}
+            </span>
             <div id="location-map-input" class="row-prototype-map-select govuk-!-margin-bottom-1"></div>
-
             <ul class="leaflet-legend govuk-!-margin-top-0">
               <li class="leaflet-legend__item">
                 <img src="/assets/images/leaflet-legend/draw.png" class="leaflet-legend__icon" alt="Map tool 'draw' icon, dark grey circle">
@@ -464,11 +447,8 @@
           <input type=hidden name="map-latitude-input" id="map-latitude-input" value="{{ data['location']['map-latitude-input'] }}">
           <input type=hidden name="map-longitude-input" id="map-longitude-input" value="{{ data['location']['map-longitude-input'] }}">
           <input type=hidden name="map-radius-input" id="map-radius-input" value="{{ data['location']['map-radius-input'] }}">
-          <span id="map-radius-input-error" class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> 
-          </span>
         {% endset -%}
-
+        
         {% set descriptionInput %}
           {{ govukTextarea({
             name: "location-description",
@@ -484,6 +464,49 @@
           }) }}
         {% endset -%}
 
+        {# Fixes issue where if the user selects a radio, doesn't fill in any info
+           and submits the form it will reopen the correct radio option when the page
+           is rerendered with errors #}
+        {% set setCheckedCoordsDecimal = checked("['location']['location-type']", "coords-decimal") %}
+        {% set setCheckedCoordsDecimalMinutes = checked("['location']['location-type']", "coords-decimal-minutes") %}
+        {% set setCheckedCoordsSexagesimal = checked("['location']['location-type']", "coords-sexagesimal") %}
+        {% set setCheckedMap = checked("['location']['location-type']", "map") %}
+        {% set setCheckedDesc = checked("['location']['location-type']", "description") %}
+
+        {% if 
+          (errors['location-latitude-decimal']|length) or 
+          (errors['location-longitude-decimal']|length)  %}
+            {% set setCheckedCoordsDecimal = "coords-decimal" %}
+        {% endif %}
+
+        {% if 
+          (errors['location-latitude-decimal-minutes-degree']|length) or 
+          (errors['location-latitude-decimal-minutes-minute']|length) or 
+          (errors['location-longitude-decimal-minutes-degree']|length) or 
+          (errors['location-longitude-decimal-minutes-minute']|length)  %}
+            {% set setCheckedCoordsDecimalMinutes = "coords-decimal-minutes" %}
+        {% endif %}
+
+        {% if 
+          (errors['location-latitude-degrees-degree']|length) or 
+          (errors['location-latitude-degrees-minute']|length) or 
+          (errors['location-latitude-degrees-second']|length) or 
+          (errors['location-longitude-degrees-degree']|length) or 
+          (errors['location-longitude-degrees-minute']|length) or 
+          (errors['location-longitude-degrees-second']|length)  %}
+            {% set setCheckedSexagesimal = "coords-sexagesimal" %}
+        {% endif %}
+
+        {% if 
+          (errors['map-latitude-input']|length) or 
+          (errors['map-longitude-input']|length) or
+          (errors['map-radius-input']|length)  %}
+            {% set setCheckedMap = "map" %}
+        {% endif %}
+
+        {% if errors['description']|length %}
+          {% set setCheckedDesc = "description" %}
+        {% endif %}
 
         {{ govukRadios({
           idPrefix: "location-type",
@@ -503,12 +526,12 @@
               value: "coords-decimal",
               text: "Coordinates (Decimal degrees)",
               conditional: {
-              html: decimalInput
-            },
-            hint: {
-              html: "For example <em>53.76385° &nbsp;&nbsp; -3.73904°</em>."
-            },
-              checked: checked("['location']['location-type']", "coords-decimal")
+                html: decimalInput
+              },
+              hint: {
+                html: "For example <em>53.76385° &nbsp;&nbsp; -3.73904°</em>."
+              },
+              checked: setCheckedCoordsDecimal
             },
             {
               value: "coords-decimal-minutes",
@@ -517,21 +540,21 @@
                 html: decimalMinuteInput
               },
               hint: {
-              html: "For example <em>53° 45.831' N &nbsp;&nbsp; 3° 44.342' W</em>."
-            },
-              checked: checked("['location']['location-type']", "coords-decimal-minutes")
+                html: "For example <em>53° 45.831' N &nbsp;&nbsp; 3° 44.342' W</em>."
+              },
+              checked: setCheckedCoordsDecimalMinutes
             },
             {
               value: "coords-sexagesimal",
               text: "Coordinates (Degrees, minutes and seconds)",
               conditional: {
-              html: degreeInput
-            },
-            hint: {
-              html: "For example <em>53° 45′ 49″ N &nbsp;&nbsp; 3° 44′ 20″ W</em>."
-            },
-              checked: checked("['location']['location-type']", "coords-sexagesimal")
-            },
+                html: degreeInput
+              },
+              hint: {
+                html: "For example <em>53° 45′ 49″ N &nbsp;&nbsp; 3° 44′ 20″ W</em>."
+              },
+                checked: setCheckedSexagesimal
+              },
             {
               value: "map",
               text: "Draw on a map",
@@ -539,20 +562,20 @@
                 html: mapInput
               },
               hint: {
-              text: "Draw the area of the find on a map."
-            },
-              checked: checked("['location']['location-type']", "map")
-            },
+                text: "Draw the area of the find on a map."
+              },
+                checked: setCheckedMap
+              },
             {
               value: "description",
               text: "Description",
               conditional: {
-              html: descriptionInput
-            },
-              hint: {
-              text: "Provide a description of the find location."
-            },
-              checked: checked("['location']['location-type']", "description")
+                html: descriptionInput
+              },
+                hint: {
+                text: "Provide a description of the find location."
+              },
+              checked: setCheckedDesc
             }
           ]
         }) }}

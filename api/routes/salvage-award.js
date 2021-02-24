@@ -3,11 +3,6 @@ const { body, validationResult } = require('express-validator');
 import { formatValidationErrors } from '../../utils';
 
 export default function (app) {
-  app.get('report/salvage-award', function (req, res) {
-    return res.render('report/salvage-award');
-  })
-  
-
   app.post(
     '/report/salvage-award-answer',
     [
@@ -16,16 +11,26 @@ export default function (app) {
         .notEmpty()
         .withMessage('Select yes if you wish to claim a salvage award')
     ],
-    function (req, res) {
+    async function (req, res) {
+      req.session.data['claim-salvage'] = req.body['claim-salvage'];
+
+      if (req.body['claim-salvage'] === 'yes') {
+        req.session.data['salvage-services'] = req.body['salvage-services'];
+        await body('salvage-services')
+          .exists()
+          .not()
+          .isEmpty()
+          .withMessage('Describe the services rendered')
+          .run(req);
+      }
+      if (req.body['claim-salvage'] === 'no') {
+        delete req.session.data['salvage-services'];
+      }
       const errors = formatValidationErrors(validationResult(req));
 
       if (!errors) {
-        req.session.data['claim-salvage'] = req.body['claim-salvage'];
-        if (req.body['salvage-services']) {
-          req.session.data['salvage-services'] = req.body['salvage-services'];
-        }
+        req.session.data.redirectToCheckAnswers = true;
         res.redirect('check-your-answers');
-
       } else {
         return res.render('report/salvage-award', {
           errors,

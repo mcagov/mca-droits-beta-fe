@@ -210,7 +210,7 @@
   <h2 class="govuk-heading-m govuk-!-margin-top-9">Location</h2>
 
   <dl class="govuk-summary-list">
-    {% if data['location']['location-given'] %}
+    {% if data['location']['location-type'] == 'coords-decimal' or data['location']['location-type'] == 'coords-decimal-minutes' or data['location']['location-type'] == 'coords-sexagesimal' or data['location']['location-type'] == 'map' %}
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
         Coordinates
@@ -225,7 +225,7 @@
       </dd>
     </div>
     {% endif %}
-    {% if data['location']['location-description'] %}
+    {% if data['location']['location-type'] == "description" %}
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
         Description

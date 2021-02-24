@@ -82,11 +82,27 @@
             <div class="file-upload-progress__percent govuk-body"></div>
           </div>
 
-
-          <button class="govuk-button hidden" data-module="govuk-button" data-js="bulk-continue-btn">Continue</button>
+          {{ govukButton({
+            text: "Continue",
+            classes: 'govuk-button govuk-button--continue hidden',
+            attributes: {
+              'data-js': 'bulk-continue-btn',
+              'data-module': 'govuk-button'
+            }
+          }) }}
 
         </form>
-          <button class="govuk-button" data-module="govuk-button" data-js="spreadsheet-upload-btn">Upload</button>
+
+        {{ govukButton({
+            text: "Upload",
+            disabled: true,
+            classes: 'govuk-button',
+            attributes: {
+              'data-js': 'spreadsheet-upload-btn',
+              'data-module': 'govuk-button'
+            }
+          }) }}
+
       </div>
     </div>
   </div>

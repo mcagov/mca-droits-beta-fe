@@ -52,9 +52,6 @@ export default function (app) {
               err.text = multerError;            
             }        
             res.json({ error: err });
-          } else if (req.file === 'undefined') {
-            err.text = 'Select a csv file';
-            res.json({ error: err });
           } else {
             res.json({ status: 200 });
           }

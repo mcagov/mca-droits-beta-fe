@@ -28,13 +28,12 @@ export class SpreadsheetUpload {
   }
 
   init() {
-    console.log(this.fileInput.labels);
-    this.singleUploadEvent();
+    this.spreadsheetUploadEvent();
     this.fileInputListener();
   }
 
 
-  singleUploadEvent() {
+  spreadsheetUploadEvent() {
     this.spreadsheetUploadBtn.addEventListener('click', async () => {
       const input = this.fileInput;
       const file = new FormData();
@@ -67,6 +66,12 @@ export class SpreadsheetUpload {
 
   fileInputListener() {
     this.fileInput.addEventListener('input', () => {
+      if(this.spreadsheetUploadBtn.disabled) {
+        this.spreadsheetUploadBtn.disabled = false;
+        this.spreadsheetUploadBtn.classList.remove('govuk-button--disabled');
+        this.spreadsheetUploadBtn.removeAttr('aria-disabled');
+      }
+
       if (this.continueBtn.classList.contains('hidden')) {
         return;
       } else {

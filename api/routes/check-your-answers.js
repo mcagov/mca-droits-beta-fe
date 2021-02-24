@@ -2,6 +2,7 @@ import axios from 'axios';
 const { body, validationResult } = require('express-validator');
 import fs from 'fs';
 import path from 'path';
+var cloneDeep = require('lodash.clonedeep');
 import { azureUpload } from '../../services';
 import { formatValidationErrors } from '../../utils';
 
@@ -17,7 +18,9 @@ export default function (app) {
     ],
     async function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
-      const sd = req.session.data;
+      const sd = cloneDeep(req.session.data);
+      const blobUrl =
+        'https://mcadevelopmentstorage.blob.core.windows.net/report-uploads/';
 
       if (errors) {
         return res.render('report/check-your-answers', {
@@ -60,11 +63,14 @@ export default function (app) {
           if (sd['property'].hasOwnProperty(prop)) {
             let innerObj = {};
             innerObj = sd['property'][prop];
+
+            // Prepend azure blob container url path
+            innerObj.image = `${blobUrl}${innerObj.image}`;
             data['wreck-materials'].push(innerObj);
           }
         }
 
-        console.log('[data]:', JSON.stringify(data, null, 2));
+        console.log('[final data]:', JSON.stringify(data, null, 2));
 
         // Post data to db
         // try {
@@ -74,11 +80,11 @@ export default function (app) {
         //   );
         //   if (response.statusText === 'OK') {
         //     Object.values(req.session.data.property).forEach((item) => {
-        //       const data = fs.createReadStream(
+        //       const imageData = fs.createReadStream(
         //         `${path.resolve(__dirname + '/../../uploads/')}/${item.image}`
         //       );
 
-        //       azureUpload(data, item.image);
+        //       azureUpload(imageData, item.image);
         //     });
         //   }
         //   return res.redirect('/report/confirmation');

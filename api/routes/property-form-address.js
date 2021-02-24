@@ -34,15 +34,19 @@ export default function (app) {
           req.body.property[rawPropertyID];
       }
 
+      req.session.data.property[rawPropertyID]['address-details'] = {};
+
       if (bodyProperty['storage-address'] === 'custom') {
         /*for (let key in bodyProperty) {
         property[rawPropertyID][key] = bodyProperty[key];
       }*/
 
-        req.session.data.property[rawPropertyID]['address-details'] = {};
         req.session.data.property[rawPropertyID]['address-details'][
           'address-line-1'
         ] = req.body.property[rawPropertyID]['address-line-1'];
+        req.session.data.property[rawPropertyID]['address-details'][
+          'address-line-2'
+        ] = req.body.property[rawPropertyID]['address-line-2'];
         req.session.data.property[rawPropertyID]['address-details'][
           'address-town'
         ] = req.body.property[rawPropertyID]['address-town'];
@@ -52,6 +56,22 @@ export default function (app) {
         req.session.data.property[rawPropertyID]['address-details'][
           'address-postcode'
         ] = req.body.property[rawPropertyID]['address-postcode'];
+      } else if (bodyProperty['storage-address'] === 'personal') {
+        req.session.data.property[rawPropertyID]['address-details'][
+          'address-line-1'
+        ] = req.session.data.personal['address-line-1'];
+        req.session.data.property[rawPropertyID]['address-details'][
+          'address-line-2'
+        ] = req.session.data.personal['address-line-2'];
+        req.session.data.property[rawPropertyID]['address-details'][
+          'address-town'
+        ] = req.session.data.personal['address-town'];
+        req.session.data.property[rawPropertyID]['address-details'][
+          'address-county'
+        ] = req.session.data.personal['address-county'];
+        req.session.data.property[rawPropertyID]['address-details'][
+          'address-postcode'
+        ] = req.session.data.personal['address-postcode'];
       }
 
       var propertyID;
@@ -65,8 +85,6 @@ export default function (app) {
       }
 
       if (!req.body.property[rawPropertyID]['storage-address']) {
-        console.log(req.body);
-
         await body('property' + '[' + propertyID + ']["storage-address"]')
           .exists()
           .not()
@@ -108,7 +126,6 @@ export default function (app) {
        * can link to correct input element
        */
       for (let prop in errors) {
-        console.log(errors[prop].id);
         errors[prop].id = `${errors[prop].id.replace(/\./g, '-')}`;
         errors[prop].href = `#${errors[prop].id.replace(/\./g, '-')}`;
       }

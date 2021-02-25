@@ -24,6 +24,8 @@ function fileFilter(req, file, cb) {
   // Check mime
   const mimetype = filetypes.test(file.mimetype);
 
+  req.session.data.submittedFiles.push(file);
+
   if (mimetype && extname) {
     return cb(null, true);
   } else {
@@ -85,31 +87,54 @@ export default function (app) {
       storage: storage,
       limits: { fileSize: 5000000 },
       fileFilter: fileFilter
-    });
+    }).array('property-image');
     app.post(
       '/report/property-bulk-image-upload',
-      upload.array('property-image'),
       function (req, res) {
-        // FormData is passed in as a string for single items, and an array for
-        // more than one item. Here we covert the string to an array if only one
-        // item contains an uploaded image.
-        let idArray;
-        if (req.files.length > 1) {
-          idArray = req.body.IDs;
-        } else {
-          idArray = [];
-          idArray.push(req.body.IDs);
-        }
+        upload(req, res, function (multerError) {
+          console.log(req.session.data.submittedFiles);
+          console.log(req.session.data.property);
+          const err = {
+            id: 'property-image',
+            href: '#property-image'
+          }
+          if (multerError) {
+            console.log('MULTER ERROR:');
+            console.log(multerError);
+            if (multerError.code === 'LIMIT_FILE_SIZE') {
+              err.text = 'The selected file must be smaller than 5MB';
+            } else if (multerError) {
+              console.log('else if');
+              err.text = multerError;
+            }
 
-        // Loop through the item IDs and match each ID to the associated
-        // image (stored in req.files) using the array indexes.
-        idArray.forEach((imageId, index) => {
-          let id = imageId;
-          req.session.data.property[id].image = req.files[index].filename;
-        });
+            res.json({ error: err });
+          } else if (req.body.image === 'undefined') {
+            err.text = 'Select an image';
+            res.json({ error: err });
+          } else {
+            // FormData is passed in as a string for single items, and an array for
+            // more than one item. Here we covert the string to an array if only one
+            // item contains an uploaded image.
+            let idArray;
+            if (req.files.length > 1) {
+              idArray = req.body.IDs;
+            } else {
+              idArray = [];
+              idArray.push(req.body.IDs);
+            }
 
-        req.session.save();
-        res.json(req.files);
+            // Loop through the item IDs and match each ID to the associated
+            // image (stored in req.files) using the array indexes.
+            idArray.forEach((imageId, index) => {
+              let id = imageId;
+              req.session.data.property[id].image = req.files[index].filename;
+            });
+
+            req.session.save();
+            res.json(req.files);
+          }
+        })
       }
     );
   })();

@@ -49,6 +49,7 @@ export class BulkUpload {
       // and the input id (which is the unique id for the wreck item)
       this.photoUploadInputs.forEach((input) => {
         let file = input.files;
+        console.log(file);
         if (file.length > 0) {
 
           formData.append(file, file.name);
@@ -67,7 +68,7 @@ export class BulkUpload {
       )
       .then((res) => {
         if (res.data.error) {
-          //this.errorText.forEach((i) => (i.innerText = res.data.error.text));
+          this.errorText.forEach((i) => (i.innerText = res.data.error.text));
           this.scrollToTop();
           this.errorBlock.forEach((i) => (i.style.display = 'block'));
         } else {

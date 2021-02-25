@@ -90,17 +90,21 @@ if (process.env.NODE_ENV === 'development') edt(app, { panels: ['session'] });
 // Load API routes
 app.use('/', routes());
 
+// Auto render any view that exists
 app.get(/^([^.]+)$/, function (req, res, next) {
   matchRoutes(req, res, next);
 });
+
 // Redirect all POSTs to GETs
 app.post(/^\/([^.]+)$/, function (req, res) {
   res.redirect('/' + req.params[0]);
 });
+
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
   var err = new Error(`Page not found: ${req.path}`);
   err.status = 404;
+
   next(err);
 });
 

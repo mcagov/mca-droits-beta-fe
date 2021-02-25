@@ -1,21 +1,7 @@
 {% extends "layout.html" %}
 
-{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-
-
 {% block pageTitle %}
-  {% if serviceName %} {{ serviceName }} {% endif %}
-{% endblock %}
-
-{% block header %}
-  <!-- Blank header with no service name for the start page -->
-  {{ govukHeader() }}
-{% endblock %}
-
-{% block beforeContent %}
-  {% include "includes/phase-banner.html" %}
-  <a class="govuk-back-link" href="/">Back</a>
+  Page not found
 {% endblock %}
 
 {% block content %}
@@ -25,44 +11,10 @@
       <h1 class="govuk-heading-xl">
         Page not found
       </h1>
-      
-      <p></p>
-
-      <h2 class="govuk-heading-m">{{title}}</h2>
+      <p>If you entered a web address, check it is correct.</p>
+      <p>Return to the <a href="/">Report wreck and salvage homepage</a></p>
 
     </div>
-
-    
-
-    <div class="govuk-grid-column-one-third">
-
-      <aside class="app-related-items" role="complementary">
-        <h2 class="govuk-heading-m" id="subsection-title">
-          Wreckage and salvage
-        </h2>
-        <nav role="navigation" aria-labelledby="subsection-title">
-          <ul class="govuk-list govuk-!-font-size-16">
-            <li>
-              <a href="#">
-                What constitutes wreck material?
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                Searching and salvaging from shipwrecks
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                Shipwreck and salvage law
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </aside>
-
-    </div>
-
 
   </div>
 {% endblock %}

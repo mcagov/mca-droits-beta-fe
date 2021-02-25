@@ -11,5 +11,6 @@ document.body.className = document.body.className
 import './components/editableMap.js';
 import './components/vesselInformation.js';
 import './components/staticMap.js';
-import './components/what3words.js';
 import './components/imageUpload.js';
+import './components/spreadsheetUpload.js';
+import './components/bulkImageUpload.js';

@@ -5,27 +5,23 @@ import { formatValidationErrors } from '../../utils';
 export default function (app) {
   app.post(
     '/report/vessel-information-answer',
-    [
-      body('wreck-name')
-        .exists()
-        .not()
-        .isEmpty()
-        .withMessage('Enter the name of the vessel if known')
-    ],
     function (req, res) {
-      const errors = formatValidationErrors(validationResult(req));
-      
-      if (!errors) {
-        req.session.data['wreck-name'] = req.body['wreck-name'];
-        res.redirect('salvaged-from');
 
-      } else {
-        return res.render('report/vessel-information', {
-          errors,
-          errorSummary: Object.values(errors),
-          values: req.body
-        });
+      req.session.data['vessel-information'] = {};
+
+      if(req.body['vessel-name']) {
+        req.session.data['vessel-information']['vessel-name'] = req.body['vessel-name']
       }
+      
+      if(req.body['vessel-construction-year']) {
+        req.session.data['vessel-information']['vessel-construction-year'] = req.body['vessel-construction-year'];
+      }
+
+      if(req.body['vessel-sunk-year']) {
+        req.session.data['vessel-information']['vessel-sunk-year'] = req.body['vessel-sunk-year']
+      }
+      
+      res.redirect('salvaged-from');
     }
   );
 }

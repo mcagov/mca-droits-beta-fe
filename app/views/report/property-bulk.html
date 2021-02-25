@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% block pageTitle %}
+  Upload wreck material
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "includes/phase-banner.html" %}
+  <a class="govuk-back-link" href="/report/property-summary">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div data-js="spreadsheet-upload">
+        <form class="form" action="/report/property-bulk-confirm" method="post" enctype="multipart/form-data">
+
+          <h1 class="govuk-heading-xl">Upload wreck material</h1>
+
+          <div class="govuk-error-summary upload-error hidden" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+            <h2 class="govuk-error-summary__title" id="error-summary-title">
+              There is a problem
+            </h2>
+            <div class="govuk-error-summary__body">
+              <ul class="govuk-list govuk-error-summary__list">
+                <li>
+                  <a href="#property-bulk-file-error"><span class="upload-error__text"></span></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="govuk-body-l">Upload a spreadsheet file to add wreck material to your report in bulk.</p>
+
+          {{ govukWarningText({
+            text: "You should only use this form to add wreck material from a single shipwreck.",
+            iconFallbackText: "Warning"
+          }) }}
+
+          <p class="govuk-body">The file must be formatted appropriately, with each item of wreck material listed beneath
+            the following named columns:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>Description</li>
+            <li>Quantity</li>
+            <li>Total value</li>
+            <li>Storage address line 1</li>
+            <li>Storage address line 2 (if applicable)</li>
+            <li>Town</li>
+            <li>County</li>
+            <li>Postcode</li>
+          </ul>
+
+          {{ govukInsetText({
+            html: 'You can populate the <a href="/assets/downloads/ROW-bulk-upload-template.csv">bulk wreck material upload template</a> with your wreck material and then upload it to this form.'
+          }) }}
+          <span id="property-bulk-file-error" class="govuk-error-message upload-error">
+            <span class="govuk-visually-hidden">Error:</span> <span class="upload-error__text"></span>
+          </span>
+          
+          <div data-js="file-input-wrapper">
+            {{ govukFileUpload({
+              id: "bulk-upload-file",
+              name: "bulk-upload-file",
+              label: {
+                text: "Upload a file"
+              },
+              attributes: {
+                'data-js': 'file-input'
+              }
+            }) }}
+          </div>
+
+          <div class="file-upload-progress">
+            <div class="file-upload-progress__bar"><span></span></div>
+            <div class="file-upload-progress__text govuk-heading-s govuk-!-padding-top-1"></div>
+            <div class="file-upload-progress__percent govuk-body"></div>
+          </div>
+
+          {{ govukButton({
+            text: "Continue",
+            classes: 'govuk-button govuk-button--continue hidden',
+            attributes: {
+              'data-js': 'bulk-continue-btn',
+              'data-module': 'govuk-button'
+            }
+          }) }}
+
+        </form>
+
+        {{ govukButton({
+            text: "Upload",
+            disabled: true,
+            classes: 'govuk-button',
+            attributes: {
+              'data-js': 'spreadsheet-upload-btn',
+              'data-module': 'govuk-button'
+            }
+          }) }}
+
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

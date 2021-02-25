@@ -6,9 +6,13 @@ import edt from 'express-debug';
 
 import routes from './api/routes';
 import sessionInMemory from 'express-session';
-import { sessionData, addCheckedFunction, matchRoutes } from './utils';
+import {
+  sessionData,
+  addCheckedFunction,
+  matchRoutes,
+  addNunjucksFilters
+} from './utils';
 import config from './app/js/config.js';
-import { redirectToCheckDetails } from './api/middleware';
 
 const PORT = process.env.PORT || 5000;
 
@@ -40,6 +44,7 @@ const nunjucksAppEnv = nunjucks.configure(
   }
 );
 addCheckedFunction(nunjucksAppEnv);
+addNunjucksFilters(nunjucksAppEnv);
 
 // Set views engine
 app.set('view engine', 'html');
@@ -78,10 +83,6 @@ app.use(
 
 // Manage session data. Assigns default values to data
 app.use(sessionData);
-
-// When changing answers on report/check-your-answers ('Change' link)
-// this handles redirect back to this page when values updated and submitted
-app.use(redirectToCheckDetails);
 
 // Logs req.session data
 if (process.env.NODE_ENV === 'development') edt(app, { panels: ['session'] });

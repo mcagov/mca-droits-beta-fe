@@ -1,0 +1,167 @@
+{% extends "layout.html" %}
+
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+
+{% block pageTitle %}
+  Confirm  wreck material upload
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "includes/phase-banner.html" %}
+  <a class="govuk-back-link" href="/report/property-bulk">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  {% set propertyName = "property" %}
+  {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
+  {% set containerInitialClasses = "photo-upload__container photo-upload__container--initial image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" %}
+  {% set containerUploadedClasses = "photo-upload__container photo-upload__container--uploaded image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" %}
+  {% if data[propertyName][propertyID]['image'] %}
+    {% set imagePath = "/uploads/" +  data[propertyName][propertyID]['image'] %}
+  {% else %}
+    {% set containerUploadedClasses = containerUploadedClasses + " photo-upload__container--hide" %}
+    {% set continueButtonDisabled = false %}
+  {% endif %}
+
+  {% set photoGuidance %}
+    <h3 class="govuk-heading-m">Your photo should include:</h3>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Clear colour image of the whole item</li>
+      <li>Only contain the item listed above (images of other items should be added separately)</li>
+      <li>Show any markings on the item</li>
+    </ul>
+    <p class="govuk-body">Only one image can be added per item however if more are required to show multiple angles or markings please email them to row@mcga.gov.uk and include the report number issued when this report is completed.</p>
+    {{ govukInsetText({
+      text: "Reports cannot be closed without an image of each item, which are a clear permanent record of all items recovered. They aid in identification and in some cases can assist an owner in identifying their property."
+    }) }}
+  {% endset %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+      <h1 class="govuk-heading-xl">Confirm upload</h1>
+      <p class="govuk-body-l">Confirm the wreck material to be added and attach any photos you have for each item.</p>
+      <p class="govuk-body">Make sure your photos meets the guidelines below before submitting. If they do not, this may delay the closure of this report.</p>
+      {{ govukDetails({
+        summaryText: "Guidance for providing item photos",
+        html: photoGuidance
+      }) }} 
+
+      <div class="govuk-error-summary upload-error" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary" style="display:none">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">
+          There is a problem
+        </h2>
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            <li>
+              <a href="#property-image"><span class="upload-error__text"></span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="form-wrapper" data-js="bulk-upload">
+        <form class="form" action="/report/property-summary" method="post" data-js="bulk-form-element" data-js="image-upload">
+
+          <table class="govuk-table">
+            <caption class="govuk-table__caption">Uploaded wreck material</caption>
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Information</th>
+              <th scope="col" class="govuk-table__header">Image</th>
+            </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+            {% for id, item in data[propertyName] %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Description:</strong> {{ item.description }}</p>
+                  <input type=hidden name=property[{{ id }}][description] value="{{ item.description }}">
+
+                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Quantity:</strong> {{ item.quantity }}</p>
+                  <input type=hidden name=property[{{ id }}][quantity] value="{{ item.quantity }}">
+
+                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Value:</strong> £{{ item.value }}</p>
+                  <input type=hidden name=property[{{ id }}][value] value="{{ item.value }}">
+
+                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Address:</strong>
+                    {{ addressObject(item['address-details']) }}
+                  </p>
+
+                  <input type=hidden name=property[{{ id }}][address-details] value="custom">
+                  <input type=hidden name=property[{{ id }}][address-details][address-line-1] value={{ item['address-details']['address-line-1'] }}>
+                  <input type=hidden name=property[{{ id }}][address-details][address-line-2] value={{ item['address-details']['address-line-2'] }}>
+                  <input type=hidden name=property{{ id }}][address-details][address-town] value={{ item['address-details']['address-town'] }}>
+                  <input type=hidden name=property{{ id }}][address-details][address-county] value={{ item['address-details']['address-county'] }}>
+                  <input type=hidden name=property[{{ id }}][address-details][address-postcode] value={{ item['address-details']['address-postcode'] }}>
+                </td>
+                <td class="govuk-table__cell">
+                  <div id="photo-upload-container-{{id}}" class="{{containerInitialClasses}}">
+                    <div class="upload-progress">
+                      <div class="upload-progress__bar"><span></span></div>
+                      <div class="upload-progress__text govuk-heading-s govuk-!-padding-top-1"></div>
+                      <div class="upload-progress__percent govuk-body"></div>
+                    </div>
+                    <div class="govuk-form-group">
+                      <label class="govuk-label govuk-label--s" for="{{ propertyNamePrefix }}[image]">
+                        Select a photo
+                      </label>
+                    
+                    <span id="passport-issued-error" class="govuk-error-message upload-error">
+                      <span class="govuk-visually-hidden">Error:</span> <span class="upload-error__text"></span>
+                    </span>
+                    {{ govukFileUpload({
+                      id: id, 
+                      name: "property-image",
+                      hint: {
+                          text: "Accepted file types: jpg, jpeg, png.<br/>Maximum file size: 5MB"
+                      },
+                      classes: "photo-upload__upload"
+                    }) }}
+                  </div>
+
+                  <a class="photo-upload__button govuk-button hidden" data-module="govuk-button" data-id={{id}} data-js="single-image-upload">Upload file</a>
+                  </div>
+                  <div id="photo-selected-container-{{id}}" class="{{containerUploadedClasses}}">
+                    <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Selected Image:</strong></p>
+
+                    <div>
+                      <img id="selected-photo-{{id}}" class="photo-upload__result govuk-!-margin-bottom-6" src="{{imagePath}}" width="300px" />
+                    </div>
+                    
+                    <a class="photo-upload__button-change govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button" data-id={{ id }}>Upload a different image</a>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+
+          <input type="hidden" name="property-added-flash" value=true>
+
+          {{ govukButton({
+            text: "Add items to report",
+            disabled: continueButtonDisabled,
+            classes: 'govuk-button--continue hidden',
+            attributes: {
+              'data-js': 'bulk-add-btn'
+            }
+          }) }}
+
+        </form>
+
+        {{ govukButton({
+          text: "Upload images",
+          disabled: true,
+          classes: 'govuk-button',
+          attributes: {
+            'data-module': 'govuk-button',
+            'data-js': 'bulk-image-upload'
+          }
+        }) }}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

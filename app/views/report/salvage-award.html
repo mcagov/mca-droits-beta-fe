@@ -12,11 +12,16 @@
   <a class="govuk-back-link" href="/report/property-summary">Back</a>
 {% endblock %}
 
+{% set checkYes = checked("claim-salvage", "yes") %}
+
+{% if errors['salvage-services']|length %}
+  {% set checkYes = "yes" %}
+{% endif %}
+
 {% block content %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
       <form class="form" action="/report/salvage-award-answer" method="post">
         {% if errorSummary.length > 0 %}
           {{ govukErrorSummary({
@@ -53,7 +58,7 @@
             {
               value: "yes",
               text: "Yes",
-              checked: checked("claim-salvage", "yes"),
+              checked: checkYes,
               conditional: {
                 html: salvageServices
               }
@@ -63,8 +68,7 @@
               text: "No",
               checked: checked("claim-salvage", "no")
             }
-          ],
-          errorMessage: errors["claim-salvage"]
+          ]
         }) }}
 
         <button class="govuk-button" data-module="govuk-button">Continue</button>

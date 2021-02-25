@@ -63,65 +63,57 @@
 
 
 
-{% if data['wreck-name'] or data['wreck-construction-year'] or data['wreck-sunk-year'] %}
+{% if data['known-wreck'] == "yes" %}
 <div class="govuk-grid-column-two-thirds-from-desktop">
   <h2 class="govuk-heading-m">Vessel information</h2>
 
-  {{ govukSummaryList({
-    rows: [
-      {
-        key: {
-          text: "Vessel name"
-        },
-        value: {
-        text: data['wreck-name']
-      },
-        actions: {
-          items: [
-            {
-              href: "/report/vessel-information",
-              text: "Change",
-              visuallyHiddenText: " name"
-            }
-          ]
-        }
-      },
-      {
-        key: {
-          text: "Vessel construction year"
-        },
-        value: {
-        text: data['wreck-construction-year']
-      },
-        actions: {
-          items: [
-            {
-              href: "/report/vessel-information",
-              text: "Change",
-              visuallyHiddenText: " year"
-            }
-          ]
-        }
-      },
-      {
-        key: {
-          text: "Vessel sunk year"
-        },
-        value: {
-        text: data['wreck-sunk-year']
-      },
-        actions: {
-          items: [
-            {
-              href: "/report/vessel-information",
-              text: "Change",
-              visuallyHiddenText: " year"
-            }
-          ]
-        }
-      }
-    ]
-  }) }}
+  <dl class="govuk-summary-list">
+  {% if data['vessel-information']['vessel-name'] %}
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Vessel name
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{ data['vessel-information']['vessel-name'] }}
+      </dd>
+      <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/report/vessel-information">
+          Change<span class="govuk-visually-hidden"> name</span>
+        </a>
+      </dd>
+    </div>
+  {% endif %}
+  {% if data['vessel-information']['vessel-construction-year'] %}
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Vessel construction year
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{ data['vessel-information']['vessel-construction-year'] }}
+      </dd>
+      <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/report/vessel-information">
+          Change<span class="govuk-visually-hidden"> construction year</span>
+        </a>
+      </dd>
+    </div>
+  {% endif %}
+  {% if data['vessel-information']['vessel-sunk-year'] %}
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Vessel sunk year
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{ data['vessel-information']['vessel-sunk-year'] }}
+      </dd>
+      <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/report/vessel-information">
+          Change<span class="govuk-visually-hidden"> sunk year</span>
+        </a>
+      </dd>
+    </div>
+  {% endif %}
+  </dl>
 </div>
 {% endif %}
 
@@ -218,7 +210,7 @@
   <h2 class="govuk-heading-m govuk-!-margin-top-9">Location</h2>
 
   <dl class="govuk-summary-list">
-    {% if data['location']['location-given']['latitide'] != "" and data['location']['location-given']['longitude'] != "" %}
+    {% if data['location']['location-type'] == 'coords-decimal' or data['location']['location-type'] == 'coords-decimal-minutes' or data['location']['location-type'] == 'coords-sexagesimal' or data['location']['location-type'] == 'map' %}
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
         Coordinates
@@ -233,7 +225,7 @@
       </dd>
     </div>
     {% endif %}
-    {% if data['location']['location-description'] != "" %}
+    {% if data['location']['location-type'] == "description" %}
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
         Description
@@ -250,7 +242,7 @@
     {% endif %}
   </dl>
 
-  {% if data['location']['location-standard']['latitude'] != "" and data['location']['location-standard']['longitude'] != "" %}
+  {% if data['location']['location-standard']['latitude'] and data['location']['location-standard']['longitude'] %}
   <div data-js="static-map">
     <div id="location-map" class="map-display hide-on-print" data-latitude="{{ data['location']['location-standard']['latitude'] }}" data-longitude="{{ data['location']['location-standard']['longitude'] }}" data-radius="{{ data['location']['location-standard']['radius'] }}"></div>
   </div>
@@ -260,11 +252,11 @@
 <div class="govuk-grid-column-full">
   <h2 class="govuk-heading-m govuk-!-margin-top-9">Wreck material</h2>
 
-  <table class="govuk-table">
-    <caption class="govuk-table__caption">Items of wreck material reported
-      <a class="govuk-link govuk-!-font-weight-regular hide-on-print" style="float: right;" href="/report/property-summary">Change<div class="govuk-visually-hidden"> details</div></a></caption>
-        <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
+  <table class="govuk-table report-responsive-table">
+    <caption class="govuk-table__caption report-responsive-table__caption">Items of wreck material reported
+      <a class="govuk-link govuk-!-font-weight-regular report-responsive-table__change-link hide-on-print" style="float: right;" href="/report/property-summary">Change<div class="govuk-visually-hidden"> details</div></a></caption>
+        <thead class="govuk-table__head report-responsive-table__head">
+        <tr class="govuk-table__row report-responsive-table__row">
           <th scope="col" class="govuk-table__header govuk-!-width-one-half">Description</th>
           <th scope="col" class="govuk-table__header govuk-table__header--numeric">Quantity</th>
           <th scope="col" class="govuk-table__header govuk-table__header--numeric">Total value</th>
@@ -275,55 +267,48 @@
 
         <tbody class="govuk-table__body">
         {% for id, property in data["property"] %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">{{ property["description"] }}</td>
-            <td class="govuk-table__cell govuk-table__cell--numeric">{{ property["quantity"] }}</td>
+          <tr class="govuk-table__row report-responsive-table__row">
+            <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--description" data-label="Description">{{ property["description"] }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Quantity">{{ property["quantity"] }}</td>
             
             {% if property['value'] == "" %}
-              <td class="govuk-table__cell govuk-table__cell--numeric">Unknown</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Value">Unknown</td>
             {% else %}
-              <td class="govuk-table__cell govuk-table__cell--numeric">£{{ property["value"] }}</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Value">£{{ property["value"] }}</td>
             {% endif %}
 
-            {% if property['image'] == "" %}
-              <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--blue">Not provided</strong></td>
+            {% if property['image'] %}
+              <td class="govuk-table__cell report-responsive-table__cell" data-label="Image"><img src="/uploads/{{ property['image'] }}" width="100"/></td>
             {% else %}
-              <td class="govuk-table__cell"><img src="/uploads/{{ property['image'] }}" width="100"/></td>
+              <td class="govuk-table__cell report-responsive-table__cell" data-label="Image"><strong class="govuk-tag govuk-tag--blue">Not provided</strong></td>
             {% endif %}
             {% if property['storage-address'] == "personal" %}
-              <td class="govuk-table__cell">
+              <td class="govuk-table__cell report-responsive-table__cell" data-label="Storage postcode">
                 <div class="hide-on-print">
-                  {{ data["address-postcode"] }}
+                  {{ data["personal"]["address-postcode"] }}
                 </div>
                 <div class="show-on-print">
                   {% set addressLines = [
-                    data["address-line-1"],
-                    data["address-line-2"],
-                    data["address-town"],
-                    data["address-county"],
-                    data["address-postcode"]
+                    data["personal"]["address-line-1"],
+                    data["personal"]["address-line-2"],
+                    data["personal"]["address-town"],
+                    data["personal"]["address-county"],
+                    data["personal"]["address-postcode"]
                   ] %}
                   {{ address(addressLines) }}
                 </div>
               </td>
             {% elseif property['storage-address'] == "custom" %}
-              <td class="govuk-table__cell">
+              <td class="govuk-table__cell report-responsive-table__cell" data-label="Storage postcode">
                 <div class="hide-on-print">
-                  {{ data["property"][id]["address-postcode"] }}
+                  {{ data["property"][id]["address-details"]["address-postcode"] }}
                 </div>
                 <div class="show-on-print">
-                  {% set addressLines = [
-                    data["property"][id]["address-line-1"],
-                    data["property"][id]["address-line-2"],
-                    data["property"][id]["address-town"],
-                    data["property"][id]["address-county"],
-                    data["property"][id]["address-postcode"]
-                  ] %}
-                  {{ address(addressLines) }}
+                  {{ addressObject(data["property"][id]["address-details"]) }}
                 </div>
               </td>
             {% else %}
-              <td class="govuk-table__cell">
+              <td class="govuk-table__cell report-responsive-table__cell" data-label="Storage postcode">
               </td>
             {% endif %}
           </tr>
@@ -344,12 +329,12 @@
         {{ data["claim-salvage"]|capitalize }}
       </dd>
       <dd class="govuk-summary-list__actions">
-        <a class="govuk-link" href="/report/salvage">
+        <a class="govuk-link" href="/report/salvage-award">
           Change<span class="govuk-visually-hidden"> claim of expenses</span>
         </a>
       </dd>
     </div>
-    {% if data['salvage-services'] != "" %}
+    {% if data['salvage-services']|length %}
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
         Services rendered
@@ -358,7 +343,7 @@
         {{ data["salvage-services"] }}
       </dd>
       <dd class="govuk-summary-list__actions">
-        <a class="govuk-link" href="/report/salvage">
+        <a class="govuk-link" href="/report/salvage-award">
           Change<span class="govuk-visually-hidden"> description</span>
         </a>
       </dd>

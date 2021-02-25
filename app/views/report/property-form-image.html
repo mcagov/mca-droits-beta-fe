@@ -23,7 +23,16 @@
       {% set propertyName = "property" %}
       {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
       {% set photoGuidance %}
-      {% set imagePath = "/uploads/" +  data[propertyName][propertyID]['image'] %}
+      {% set containerInitialClass = "photo-upload__container photo-upload__container--initial image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" %}
+      {% set containerUploadedClass = "photo-upload__container photo-upload__container--uploaded image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" %}
+      {% if data[propertyName][propertyID]['image'] %}
+        {% set imagePath = "/uploads/" +  data[propertyName][propertyID]['image'] %}
+        {% set containerInitialClass = containerInitialClass + " photo-upload__container--hide" %}
+        {% set continueButtonDisabled = false %}
+      {% else %}
+        {% set containerUploadedClass = containerUploadedClass + " photo-upload__container--hide" %}
+        {% set continueButtonDisabled = true %}
+      {% endif %}
 
         <h3 class="govuk-heading-m">Your photo should include:</h3>
         <ul class="govuk-list govuk-list--bullet">
@@ -40,13 +49,28 @@
       <form class="form" action="/report/property-form-address/{{ propertyID }}" method="post" data-js="image-upload">
         <h1 class="govuk-heading-xl">Provide a photo of the item</h1>
 
-        <!-- <p class="govuk-body-l">Provide an image of the following item:</p> -->
+        <div class="govuk-error-summary upload-error" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary" style="display:none">
+          <h2 class="govuk-error-summary__title" id="error-summary-title">
+            There is a problem
+          </h2>
+          <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+              <li>
+                <a href="#property-image"><span class="upload-error__text"></span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
         {{ govukInsetText({
           text: data[propertyName][propertyID]["description"]
         }) }}
 
-        <div class="photo-upload__container--initial image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6">
-
+        <div class="{{containerInitialClass}}">
+          <div class="upload-progress">
+            <div class="upload-progress__bar"><span></span></div>
+            <div class="upload-progress__text govuk-heading-s govuk-!-padding-top-1"></div>
+            <div class="upload-progress__percent govuk-body"></div>
+          </div>
           <div class="govuk-form-group">
             <label class="govuk-label govuk-label--l" for="{{ propertyNamePrefix }}[image]">
               Select a photo
@@ -58,22 +82,22 @@
               summaryText: "Guidance for providing item photos",
               html: photoGuidance
             }) }}
-
+            <span id="passport-issued-error" class="govuk-error-message upload-error">
+              <span class="govuk-visually-hidden">Error:</span> <span class="upload-error__text"></span>
+            </span>
             {{ govukFileUpload({
               id: "property-image",
               name: "property-image",
               hint: {
                   text: "Accepted file types: jpg, jpeg, png.<br/>Maximum file size: 5MB"
               },
-              errorMessage: errors["property-image"],
               classes: "photo-upload__upload"
             }) }}
           </div>
-
-          <a class="photo-upload__button govuk-button" data-module="govuk-button"  data-id={{ propertyID }}>Upload file</a>
+          <a class="photo-upload__button govuk-button" data-module="govuk-button" data-id={{ propertyID }}>Upload file</a>
         </div>
 
-        <div class="photo-upload__container--uploaded image-upload-wrapper govuk-!-padding-4 govuk-!-margin-bottom-6" style="display: none;">
+        <div class="{{containerUploadedClass}}">
           <h2 class="govuk-heading-l">Selected image</h2>
 
           <p class="govuk-body">Make sure your photo meets the guidelines below before submitting. If it does not, this may delay the closure of this report.</p>
@@ -87,11 +111,14 @@
             <img class="photo-upload__result govuk-!-margin-bottom-6" src="{{ imagePath }}" width="300px" />
           </div>
           
-          <a class="photo-upload__button-change govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button">Upload a different image</a>
+          <a class="photo-upload__button-change govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button" data-id={{ propertyID }}>Upload a different image</a>
         </div>
 
-        <button class="govuk-button" data-module="govuk-button" id="photo-upload-continue">Continue</button>
-
+        {{ govukButton({
+          text: "Continue",
+          disabled: continueButtonDisabled,
+          classes: 'govuk-button--continue'
+        }) }}
       </form>
 
     </div>

@@ -15,7 +15,7 @@ export class EditableMap {
     this.longitude = $1('#map-longitude-input');
     this.radius = $1('#map-radius-input');
 
-    this.locationRadios = [...$('input[type=\'radio\'][name=\'location\']')];
+    this.locationRadios = [...$('input[type=\'radio\'][name=\'location-type\']')];
 
     LoadManager.queue(this.init.bind(this), QUEUE.RESOURCES)
   }
@@ -25,8 +25,9 @@ export class EditableMap {
 
     // When the radios open, invalidate the map size so Leaflet re-renders the map.
     this.locationRadios.forEach(el => {
-      el.addEventListener('input', function() {
-      map.invalidateSize()
+      el.addEventListener('click', function() {
+      // Small timeout required to allow for radio button click before map is re-rendered
+      setTimeout(function(){ map.invalidateSize()}, 10);
       })
     })
   }

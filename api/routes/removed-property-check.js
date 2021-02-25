@@ -29,9 +29,14 @@ export default function (app) {
         req.session.data['report-date']['year'] = year;
 
         if (value === 'yes') {
-          res.redirect('find-date');
+          // Temp report reference
+          req.session.data.reference = '100/21';
+
+          return req.session.data.redirectToCheckAnswers
+            ? res.redirect('/report/check-your-answers')
+            : res.redirect('find-date');
         } else {
-          res.redirect('not-removed-property-content');
+          return res.redirect('not-removed-property-content');
         }
       } else {
         return res.render('report/removed-property-check', {

@@ -14,11 +14,10 @@ export default function (app) {
     ],
     function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
-      
+
       if (!errors) {
         req.session.data['removed-from'] = req.body['removed-from'];
-        res.render('report/location');
-
+        res.redirect('location');
       } else {
         return res.render('report/salvaged-from', {
           errors,

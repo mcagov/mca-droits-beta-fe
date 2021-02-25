@@ -21,24 +21,24 @@ export class VesselInformation {
     // DEV NOTE:
     // May need improving if possible - only provides accurate matches after querying 2-3 letters
     accessibleAutocomplete({
-      element: document.querySelector('#wreck-name-autocomplete'),
-      id: 'wreck-name',
-      name: 'wreck-name',
-      required: true,
+      element: document.querySelector('#vessel-name-autocomplete'),
+      id: 'vessel-name',
+      name: 'vessel-name',
+      required: false,
       showNoOptionsFound: false,
       source: this.fetchData,
-      defaultValue: document.getElementById('wreck-name-autocomplete').dataset.value,
+      defaultValue: document.getElementById('vessel-name-autocomplete').dataset.value,
       templates: {
         inputValue: this.inputValueTemplate,
         suggestion: this.suggestionTemplate
       },
       onConfirm: (val) => {
         if (val && val.constructed) {
-          document.getElementById('wreck-construction-year').value = val.constructed
+          document.getElementById('vessel-construction-year').value = val.constructed
         }
 
         if (val && val.sunk) {
-          document.getElementById('wreck-sunk-year').value = val.sunk
+          document.getElementById('vessel-sunk-year').value = val.sunk
         }
       }
     })

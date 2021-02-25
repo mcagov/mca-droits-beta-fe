@@ -38,7 +38,7 @@ export class BulkUpload {
     this.handleUploadState()
     this.bulkImageUploadEvent();
     this.selectAltImageEvent();
-    this.singleUploadEvent();
+    this.singleImageUploadEvent();
   }
 
   bulkImageUploadEvent() {
@@ -93,7 +93,7 @@ export class BulkUpload {
     }); 
   }
 
-  singleUploadEvent() {
+  singleImageUploadEvent() {
     this.singleUploadButtons.forEach((element) => {
       element.addEventListener('click', async () => {
         this.id = element.dataset.id;

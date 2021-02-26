@@ -87,54 +87,35 @@ export default function (app) {
       storage: storage,
       limits: { fileSize: 5000000 },
       fileFilter: fileFilter
-    }).array('property-image');
+    }).single('image');
+
     app.post(
-      '/report/property-bulk-image-upload',
+      '/report/property-bulk-image-upload/:prop_id',
       function (req, res) {
         upload(req, res, function (multerError) {
-          console.log(req.session.data.submittedFiles);
-          console.log(req.session.data.property);
           const err = {
-            id: 'property-image',
-            href: '#property-image'
-          }
+            id: 'upload-error-text',
+            href: `#upload-error-text-${req.params.prop_id}`
+          };
           if (multerError) {
-            console.log('MULTER ERROR:');
-            console.log(multerError);
             if (multerError.code === 'LIMIT_FILE_SIZE') {
               err.text = 'The selected file must be smaller than 5MB';
             } else if (multerError) {
-              console.log('else if');
               err.text = multerError;
             }
 
-            res.json({ error: err });
+            return res.json({ error: err });
           } else if (req.body.image === 'undefined') {
             err.text = 'Select an image';
-            res.json({ error: err });
+            return res.json({ error: err });
           } else {
-            // FormData is passed in as a string for single items, and an array for
-            // more than one item. Here we covert the string to an array if only one
-            // item contains an uploaded image.
-            let idArray;
-            if (req.files.length > 1) {
-              idArray = req.body.IDs;
-            } else {
-              idArray = [];
-              idArray.push(req.body.IDs);
-            }
-
-            // Loop through the item IDs and match each ID to the associated
-            // image (stored in req.files) using the array indexes.
-            idArray.forEach((imageId, index) => {
-              let id = imageId;
-              req.session.data.property[id].image = req.files[index].filename;
-            });
-
+            const id = req.params.prop_id;
+            console.log(id);
+            req.session.data.property[id].image = req.file.filename;
             req.session.save();
-            res.json(req.files);
+            return res.json(req.file.filename);
           }
-        })
+        });
       }
     );
   })();

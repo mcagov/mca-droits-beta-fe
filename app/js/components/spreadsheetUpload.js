@@ -54,9 +54,11 @@ export class SpreadsheetUpload {
           this.errorBlock.forEach((i) => (i.classList.remove('hidden')));
         } else {
           this.handleLoadingIndicator();
-          this.errorBlock.forEach((i) => (i.classList.add('hidden')));     
-          this.spreadsheetUploadBtn.classList.add('hidden');
+          this.errorBlock.forEach((i) => (i.classList.add('hidden')));
+          setTimeout(() => {
+            this.spreadsheetUploadBtn.classList.add('hidden');
           this.continueBtn.classList.remove('hidden');
+          }, 1000);      
         }
       } catch (reqError) {
         console.error(reqError);

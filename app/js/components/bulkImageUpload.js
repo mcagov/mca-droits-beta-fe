@@ -67,8 +67,7 @@ export class BulkUpload {
       )
       .then((res) => {
         if (res.data.error) {
-          //this.errorText.forEach((i) => (i.innerText = res.data.error.text));
-          this.scrollToTop();
+          this.errorText.forEach((i) => (i.innerText = res.data.error.text));
           this.errorBlock.forEach((i) => (i.style.display = 'block'));
         } else {
           const data = res.data;
@@ -112,7 +111,6 @@ export class BulkUpload {
   
           if (res.data.error) {
             this.errorText.forEach((i) => (i.innerText = res.data.error.text));
-            this.scrollToTop();
             this.errorBlock.forEach((i) => (i.style.display = 'block'));
             console.log('error');
           } else {
@@ -145,7 +143,7 @@ export class BulkUpload {
           console.log(this.chosenFiles);
         }
 
-        if (this.chosenFiles === this.photoUploadInputs.length) {
+        if (this.chosenFiles >= this.photoUploadInputs.length) {
           if (this.bulkImageUploadButton.classList.contains('hidden')) {
             this.addButton.classList.remove('govuk-button--disabled');
             this.addButton.disabled = false;

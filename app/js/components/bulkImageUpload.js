@@ -143,7 +143,7 @@ export class BulkUpload {
           console.log(this.chosenFiles);
         }
 
-        if (this.chosenFiles === this.photoUploadInputs.length) {
+        if (this.chosenFiles >= this.photoUploadInputs.length) {
           if (this.bulkImageUploadButton.classList.contains('hidden')) {
             this.addButton.classList.remove('govuk-button--disabled');
             this.addButton.disabled = false;

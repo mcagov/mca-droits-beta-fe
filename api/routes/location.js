@@ -412,9 +412,6 @@ export default function (app) {
       session['location-standard'].longitude = parseFloat(
         session['location-standard'].longitude
       );
-      session['location-standard'].radius = parseFloat(
-        session['location-standard'].radius
-      );
 
       if (!errors) {
         return req.session.data.redirectToCheckAnswers

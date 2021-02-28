@@ -36,7 +36,6 @@ export class BulkUpload {
   }
 
   init() {
-    console.log(this.errorSummaryList);
     this.handleUploadState()
     this.bulkImageUploadEvent();
     this.selectAltImageEvent();
@@ -82,20 +81,26 @@ export class BulkUpload {
             this.errorContainer = $1(`#error-container-${id}`, this.el)
 
             if (res.data.error) {
+              const currentInput = input;
+              const currentUploadBtn = $1(`[data-id=${id}]`, this.el);
+
               // Create a new error item in the error summary block
               let listItem = document.createElement("li");
               let anchor = document.createElement("a");
               anchor.innerText = res.data.error.text;
               anchor.href = `#photo-upload-container-${id}`;
-              listItem.append(anchor);             
+              listItem.append(anchor);     
+              listItem.id = `error-summary-${id}`;        
               this.errorSummaryList.append(listItem);
 
               // Add the error text above the input
               this.errorText.innerText = res.data.error.text;
               this.errorContainer.classList.remove('hidden');
               this.errorSummaryBlock.classList.remove('hidden');
-              
+
               this.scrollToTop();
+              this.bulkImageUploadButton.disabled = true;
+              this.handleErrorReplacement(currentInput, currentUploadBtn);
             } else {
               this.errorContainer = $1(`#error-container-${id}`, this.el)
               console.log('SUCCESSFUL UPLOAD');
@@ -119,13 +124,16 @@ export class BulkUpload {
   singleImageUploadEvent() {
     this.singleUploadButtons.forEach((element) => {
       element.addEventListener('click', async () => {
-        this.id = element.dataset.id;
-        const currentInput = $1(`#${this.id}`, this.el);
+        let id = element.dataset.id;
+        const currentInput = $1(`#${id}`, this.el);
+        this.errorText = $1(`#upload-error-text-${id}`, this.el);
+        this.errorContainer = $1(`#error-container-${id}`, this.el);
         const file = new FormData();
+
         file.append('image', currentInput.files[0]);
         try {
           const res = await axios.post(
-            `/report/property-form-image-upload/${this.id}`,
+            `/report/property-form-image-upload/${id}`,
             file,
             {
               headers: { 'Content-Type': 'multipart/form-data' },
@@ -134,15 +142,26 @@ export class BulkUpload {
           );
   
           if (res.data.error) {
-            this.errorText.forEach((i) => (i.innerText = res.data.error.text));
-            this.errorBlock.forEach((i) => (i.style.display = 'block'));
-            console.log('error');
+            this.errorText.innerText = res.data.error.text;
+            if (this.errorContainer.classList.contains('hidden')) {
+              this.errorContainer.classList.remove('hidden');
+            }
           } else {
-            this.errorBlock.forEach((i) => (i.style.display = 'none'));
+            let errorSummaryItem = $1(`#error-summary-${id}`, this.errorSummaryBlock);
+            let imageSelected = $1(`#selected-photo-${id}`);
+            const currentInitialContainer = $1(`#photo-upload-container-${id}`);
+            const currentSelectedImageContainer = $1(`#photo-selected-container-${id}`);
+            
+            if (errorSummaryItem !== null) {
+              errorSummaryItem.remove();
+            }
 
-            let imageSelected = $1(`#selected-photo-${this.id}`);
-            const currentInitialContainer = $1(`#photo-upload-container-${this.id}`);
-            const currentSelectedImageContainer = $1(`#photo-selected-container-${this.id}`);
+            if (!this.errorSummaryList.length) {
+              this.errorSummaryBlock.classList.add('hidden');
+            }
+
+            this.errorContainer.classList.add('hidden');
+            this.errorText.innerHTML = "";
 
             imageSelected.src = `/uploads/${res.data}`;
             currentInitialContainer.classList.add('photo-upload__container--hide');
@@ -161,7 +180,6 @@ export class BulkUpload {
         if (element.value) {
           this.chosenFiles++;
           console.log(this.chosenFiles);
-          //element.closest('.govuk-hint').classList.add('hidden');
         } else {
           this.chosenFiles--;
           console.log(this.chosenFiles);
@@ -177,6 +195,21 @@ export class BulkUpload {
           }
         }
       })
+    })
+  }
+
+  handleErrorReplacement(input, uploadBtn) {
+    // If file errors on upload, display single image upload button.
+    uploadBtn.classList.remove('hidden');
+    uploadBtn.disabled = true;
+    uploadBtn.classList.add('govuk-button--disabled');
+    uploadBtn.setAttribute('aria-disabled', 'true');
+
+    // When input value is updated, allow new image to be uploaded.
+    input.addEventListener('input', () => {
+      uploadBtn.disabled = false;
+      uploadBtn.classList.remove('govuk-button--disabled');
+      uploadBtn.removeAttribute('aria-disabled');
     })
   }
 

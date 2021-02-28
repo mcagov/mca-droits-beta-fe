@@ -106,20 +106,20 @@
                         Select a photo
                       </label>
                     
-                    <span id="error-container-{{id}}" class="govuk-error-message upload-error hidden">
-                      <span class="govuk-visually-hidden">Error:</span> <span id="upload-error-text-{{id}}" class="upload-error__text"></span>
-                    </span>
-                    {{ govukFileUpload({
-                      id: id, 
-                      name: 'property-image',
-                      hint: {
-                          text: "Accepted file types: jpg, jpeg, png.<br/>Maximum file size: 5MB"
-                      },
-                      classes: "photo-upload__upload"
-                    }) }}
-                  </div>
+                      <span id="error-container-{{id}}" class="govuk-error-message upload-error hidden">
+                        <span class="govuk-visually-hidden">Error:</span> <span id="upload-error-text-{{id}}" class="upload-error__text"></span>
+                      </span>
+                      {{ govukFileUpload({
+                        id: id, 
+                        name: 'property-image',
+                        hint: {
+                            text: "Accepted file types: jpg, jpeg, png.<br/>Maximum file size: 5MB"
+                        },
+                        classes: "photo-upload__upload"
+                      }) }}
+                    </div>
 
-                  <a class="photo-upload__button govuk-button hidden" data-module="govuk-button" data-id={{id}} data-js="single-image-upload">Upload file</a>
+                    <a class="photo-upload__button govuk-button hidden" data-module="govuk-button" data-id={{id}} data-js="single-image-upload">Upload file</a>
                   </div>
                   <div id="photo-selected-container-{{id}}" class="{{containerUploadedClasses}}">
                     <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Selected Image:</strong></p>

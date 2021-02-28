@@ -31,12 +31,13 @@ export class BulkUpload {
     this.errorContainer;
 
     this.chosenFiles = 0;
+    this.successfulUploads = 0;
 
     LoadManager.queue(this.init.bind(this), QUEUE.RESOURCES)
   }
 
   init() {
-    this.handleUploadState()
+    this.handleInitialUploadState()
     this.bulkImageUploadEvent();
     this.selectAltImageEvent();
     this.singleImageUploadEvent();
@@ -98,12 +99,13 @@ export class BulkUpload {
               this.errorContainer.classList.remove('hidden');
               this.errorSummaryBlock.classList.remove('hidden');
 
-              this.scrollToTop();
               this.bulkImageUploadButton.disabled = true;
+              this.scrollToTop();
               this.handleErrorReplacement(currentInput, currentUploadBtn);
             } else {
+              this.successfulUploads++;
               this.errorContainer = $1(`#error-container-${id}`, this.el)
-              console.log('SUCCESSFUL UPLOAD');
+
               this.errorContainer.classList.add('hidden');
               this.photoResults[index].src = `/uploads/${res.data}`;
               this.containersUploaded[index].classList.remove(
@@ -112,6 +114,7 @@ export class BulkUpload {
               this.containersInitial[index].classList.add(
                 'photo-upload__container--hide'
               );
+              this.handleAddButtonState();             
             }
           })
           .catch((reqError) => {
@@ -147,6 +150,7 @@ export class BulkUpload {
               this.errorContainer.classList.remove('hidden');
             }
           } else {
+            this.successfulUploads++;
             let errorSummaryItem = $1(`#error-summary-${id}`, this.errorSummaryBlock);
             let imageSelected = $1(`#selected-photo-${id}`);
             const currentInitialContainer = $1(`#photo-upload-container-${id}`);
@@ -166,6 +170,8 @@ export class BulkUpload {
             imageSelected.src = `/uploads/${res.data}`;
             currentInitialContainer.classList.add('photo-upload__container--hide');
             currentSelectedImageContainer.classList.remove('photo-upload__container--hide');
+
+            this.handleAddButtonState();
           }
         } catch (reqError) {
           console.error(reqError);
@@ -174,28 +180,28 @@ export class BulkUpload {
     })
   }
 
-  handleUploadState() {
+  handleInitialUploadState() {
     this.photoUploadInputs.forEach((element) => {
       element.addEventListener('input', () => {
         if (element.value) {
-          this.chosenFiles++;
-          console.log(this.chosenFiles);
-        } else {
-          this.chosenFiles--;
-          console.log(this.chosenFiles);
-        }
+          this.chosenFiles++;         
+        } 
 
         if (this.chosenFiles === this.photoUploadInputs.length) {
-          if (this.bulkImageUploadButton.classList.contains('hidden')) {
-            this.addButton.classList.remove('govuk-button--disabled');
-            this.addButton.disabled = false;
-          } else {
-            this.bulkImageUploadButton.classList.remove('govuk-button--disabled');
-            this.bulkImageUploadButton.disabled = false;
-          }
+          this.bulkImageUploadButton.classList.remove('govuk-button--disabled');
+          this.bulkImageUploadButton.disabled = false;
         }
       })
     })
+  }
+
+  handleAddButtonState() {  
+    if (this.successfulUploads === this.photoResults.length) {
+      this.bulkImageUploadButton.classList.add('hidden');
+      this.addButton.classList.remove('hidden');
+      this.addButton.classList.remove('govuk-button--disabled');
+      this.addButton.disabled = false;
+    }
   }
 
   handleErrorReplacement(input, uploadBtn) {
@@ -224,6 +230,7 @@ export class BulkUpload {
             `/report/property-form-image-delete/${this.id}`
           );
           if (res) {
+            this.successfulUploads--;
             const currentInitialContainer = $1(`#photo-upload-container-${this.id}`);
             const currentSelectedImageContainer = $1(`#photo-selected-container-${this.id}`);
             const currentUploadInput = $1(`#${this.id}`, this.el);

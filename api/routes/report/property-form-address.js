@@ -1,6 +1,6 @@
 const { body, validationResult } = require('express-validator');
 
-import { formatValidationErrors } from '../../utils';
+import { formatValidationErrors } from '../../../utils';
 
 export default function (app) {
   app.get('/report/property-form-address/:prop_id', function (req, res) {

@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Sign in to Receiver of Wreck reports
+{% endblock %}
+
+{% block beforeContent %}
+  <a class="govuk-back-link" href="/portal/start">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-xl">Receiver of Wreck account</h1>
+
+      <form class="form" action="/portal/dashboard" method="post">
+
+        {{ govukInput({
+          label: {
+            text: "Email address"
+          },
+          classes: "govuk-!-width-three-quarters",
+          id: "email",
+          name: "email",
+          type: "email",
+          autocomplete: "email",
+          spellcheck: false
+        }) }}
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="password">
+            Password
+          </label>
+        
+          <input class="govuk-input govuk-!-width-full" id="password" name="password" type="password">
+          <p><a href="#">I have forgotten my password</a></p>
+        </div>
+
+        <button class="govuk-button" data-module="govuk-button">Sign in</button>
+        
+
+      </form>
+
+
+    </div>
+  </div>
+
+{% endblock %}

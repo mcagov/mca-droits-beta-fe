@@ -3,8 +3,8 @@ const { body, validationResult } = require('express-validator');
 import fs from 'fs';
 import path from 'path';
 var cloneDeep = require('lodash.clonedeep');
-import { azureUpload } from '../../services';
-import { formatValidationErrors } from '../../utils';
+import { azureUpload } from '../../../services';
+import { formatValidationErrors } from '../../../utils';
 
 export default function (app) {
   app.post(

@@ -1,7 +1,7 @@
 const { body, validationResult } = require('express-validator');
 import validator from 'validator';
 
-import { formatValidationErrors } from '../../utils';
+import { formatValidationErrors } from '../../../utils';
 
 export default function (app) {
   app.post(

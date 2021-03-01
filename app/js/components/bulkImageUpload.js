@@ -20,10 +20,10 @@ export class BulkUpload {
     this.singleUploadButtons = [...$('[data-js=single-image-upload]', this.el)];
     this.addButton = $1('[data-js=bulk-add-btn]', this.el);
 
-    this.uploadProgress = $1('.upload-progress', this.el);
-    this.uploadProgressBar = $1('.upload-progress__bar span', this.el);
-    this.uploadProgressText = $1('.upload-progress__text', this.el);
-    this.uploadProgressPercent = $1('.upload-progress__percent', this.el);
+    this.uploadProgress;
+    this.uploadProgressBar;
+    this.uploadProgressText;
+    this.uploadProgressPercent;
 
     this.errorSummaryBlock = $1('#error-summary-block');
     this.errorSummaryList = $1('#error-summary-list');
@@ -57,10 +57,10 @@ export class BulkUpload {
             file,
             {
               headers: { 'Content-Type': 'multipart/form-data' },
-              withCredentials: true
-              /*onUploadProgress: (progressEvent) => {
-                const uploadFiles = input.files,
-                  uploadFile = uploadFiles[0];
+              withCredentials: true,
+              onUploadProgress: (progressEvent) => {
+                const uploadFiles = input.files;
+                const uploadFile = uploadFiles[0];
 
                 if (
                   uploadFiles.length &&
@@ -71,10 +71,10 @@ export class BulkUpload {
                 ) {
                   let percentCompleted = Math.round(
                     (progressEvent.loaded * 100) / progressEvent.total
-                  );
-                  this.loadingIndicator(percentCompleted);
+                  );             
+                  this.loadingIndicator(percentCompleted, id);
                 }
-              }*/
+              }
             }
           )
           .then((res) => {
@@ -114,7 +114,7 @@ export class BulkUpload {
               this.containersInitial[index].classList.add(
                 'photo-upload__container--hide'
               );
-              this.handleAddButtonState();             
+              this.handleAddButtonState();          
             }
           })
           .catch((reqError) => {
@@ -127,7 +127,7 @@ export class BulkUpload {
   singleImageUploadEvent() {
     this.singleUploadButtons.forEach((element) => {
       element.addEventListener('click', async () => {
-        let id = element.dataset.id;
+        const id = element.dataset.id;
         const currentInput = $1(`#${id}`, this.el);
         this.errorText = $1(`#upload-error-text-${id}`, this.el);
         this.errorContainer = $1(`#error-container-${id}`, this.el);
@@ -141,6 +141,23 @@ export class BulkUpload {
             {
               headers: { 'Content-Type': 'multipart/form-data' },
               withCredentials: true,
+              onUploadProgress: (progressEvent) => {
+                const uploadFiles = currentInput.files;
+                const uploadFile = uploadFiles[0];
+
+                if (
+                  uploadFiles.length &&
+                  (uploadFile.type === 'image/png' ||
+                    uploadFile.type === 'image/jpg' ||
+                    uploadFile.type === 'image/jpeg') &&
+                  uploadFile.size < 5000000
+                ) {
+                  let percentCompleted = Math.round(
+                    (progressEvent.loaded * 100) / progressEvent.total
+                  );             
+                  this.loadingIndicator(percentCompleted, id);
+                }
+              }
             }
           );
   
@@ -256,7 +273,13 @@ export class BulkUpload {
     document.documentElement.scrollTop = 0;
   }
 
-  loadingIndicator(progress) {
+  loadingIndicator(progress, itemID) {
+    let currentUploadContainer = $1(`#photo-upload-container-${itemID}`)
+    this.uploadProgress = $1('.upload-progress', currentUploadContainer);
+    this.uploadProgressBar = $1('.upload-progress__bar span', currentUploadContainer);
+    this.uploadProgressText = $1('.upload-progress__text', currentUploadContainer);
+    this.uploadProgressPercent = $1('.upload-progress__percent', currentUploadContainer);
+
     this.uploadProgress.classList.add('upload-progress--visible');
     this.uploadProgressBar.style.width = `${progress}%`;
 
@@ -264,15 +287,7 @@ export class BulkUpload {
     this.uploadProgressPercent.innerText = `${progress}%`;
     if (progress === 100) {
       this.uploadProgressText.innerText = `Image uploaded`;
-      setTimeout(() => {
-        this.uploadProgress.classList.remove('upload-progress--visible');
-        this.continueButton.classList.remove('govuk-button--disabled');
-        this.continueButton.disabled = false;
-        this.containerInitial.classList.add('photo-upload__container--hide');
-        this.containerUploaded.classList.remove(
-          'photo-upload__container--hide'
-        );
-      }, 2000);
+      this.uploadProgress.classList.remove('upload-progress--visible');
     }
   }
 }

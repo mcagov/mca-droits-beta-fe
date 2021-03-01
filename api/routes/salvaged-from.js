@@ -39,6 +39,13 @@ export default function (app) {
           return res.redirect('/report/check-your-answers');
         }
 
+        if (req.session.data.redirectToCheckAnswers && 
+          (req.body['removed-from'] === 'shipwreck' ||
+            req.body['removed-from'] === 'seabed')
+        ) {
+          return res.redirect('/report/depth');
+        }
+
         if (
           req.session.data.redirectToCheckAnswers &&
           req.session.data['vessel-depth'] === null

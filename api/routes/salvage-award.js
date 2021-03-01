@@ -13,7 +13,6 @@ export default function (app) {
     ],
     async function (req, res) {
       req.session.data['claim-salvage'] = req.body['claim-salvage'];
-      req.session.data['salvage-services'] = '';
 
       if (req.body['claim-salvage'] === 'yes') {
         req.session.data['salvage-services'] = req.body['salvage-services'];
@@ -23,9 +22,6 @@ export default function (app) {
           .isEmpty()
           .withMessage('Describe the services rendered')
           .run(req);
-      }
-      if (req.body['claim-salvage'] === 'no') {
-        delete req.session.data['salvage-services'];
       }
       const errors = formatValidationErrors(validationResult(req));
 

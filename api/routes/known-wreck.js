@@ -22,10 +22,6 @@ export default function (app) {
 
         const value = req.session.data['known-wreck'];
 
-        req.session.data['vessel-information']['vessel-name'] = '';
-        req.session.data['vessel-information']['vessel-construction-year'] = '';
-        req.session.data['vessel-information']['vessel-sunk-year'] = '';
-
         if (value === 'yes') {
           res.redirect('vessel-information');
         } else {

@@ -4,20 +4,17 @@ import { formatValidationErrors } from '../../utils';
 
 export default function (app) {
   app.all('/report/vessel-description', function (req, res) {
-    // Get the answer from session data
-    // The name between the quotes is the same as the 'name' attribute on the input elements
-    // However in JavaScript we can't use hyphens in variable names
-
-    const salvagedFrom = req.session.data['removed-from'];
-
-    var descriptionResponses = ['shipwreck'];
-
-    // If it's not one of the description responses, skip this question.
-    if (descriptionResponses.includes(salvagedFrom)) {
-      res.render('report/vessel-description');
-    } else {
-      res.redirect('/report/property-summary');
+    if (req.session.data['removed-from'] === 'shipwreck') {
+      return res.render('report/vessel-description');
     }
+    if (
+      req.session.data['removed-from'] === 'seabed' &&
+      req.session.data.redirectToCheckAnswers
+    ) {
+      return res.redirect('/report/check-your-answers');
+    }
+
+    return res.redirect('/report/property-summary');
   });
 
   app.post(

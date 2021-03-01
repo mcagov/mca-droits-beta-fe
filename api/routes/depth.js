@@ -10,8 +10,6 @@ export default function (app) {
 
     const salvagedFrom = req.session.data['removed-from'];
 
-    req.session.data['vessel-depth'] = null;
-
     var depthResponses = ['shipwreck', 'seabed'];
 
     // If it's not one of the depth responses, skip this question.
@@ -36,7 +34,13 @@ export default function (app) {
 
       if (!errors) {
         req.session.data['vessel-depth'] = parseInt(req.body['vessel-depth']);
-        res.redirect('vessel-description');
+        if (
+          req.session.data.redirectToCheckAnswers &&
+          req.session.data['wreck-description'] !== ''
+        ) {
+          return res.redirect('/report/check-your-answers');
+        }
+        return res.redirect('vessel-description');
       } else {
         return res.render('report/depth', {
           errors,

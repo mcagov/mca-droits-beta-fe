@@ -109,32 +109,4 @@ export default function (app) {
       });
     }
   });
-
-  app.get('/report/property-delete/:prop_id', function (req, res) {
-    var rawPropertyID = req.params.prop_id;
-    var property = req.session.data.property;
-    var propertyItem = null;
-
-    if (property[rawPropertyID] !== undefined) {
-      propertyItem = property[rawPropertyID];
-    } else {
-      res.redirect('/report/property-summary');
-    }
-
-    res.render('report/property-delete', {
-      propertyID: rawPropertyID,
-      propertyItem: propertyItem
-    });
-  });
-
-  app.get('/report/property-delete-action/:prop_id', function (req, res) {
-    var rawPropertyID = req.params.prop_id;
-    var property = req.session.data.property;
-
-    if (property[rawPropertyID] !== undefined) {
-      delete property[rawPropertyID];
-    }
-
-    res.redirect('/report/property-summary');
-  });
 }

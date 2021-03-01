@@ -34,7 +34,6 @@ export class ImageUpload {
     this.selectAltImageEvent();
   }
   uploadPhotoEvent() {
-    console.log('single upload script function imported');
     this.uploadButton.addEventListener('click', async () => {
       this.id = this.uploadButton.dataset.id;
       const file = new FormData();

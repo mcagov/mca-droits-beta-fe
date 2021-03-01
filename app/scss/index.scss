@@ -14,3 +14,40 @@ $govuk-global-styles: true;
 @import './components/confirmation';
 @import './components/image-upload';
 @import './components/responsive-table';
+
+.row-prototype-action-confirmation {
+  .govuk-body {
+    color: white;
+    margin-bottom: 0;
+  }
+}
+
+
+.row-prototype-action-confirmation {
+  animation-duration: 1s;
+  animation-name: fadeOut;
+  animation-delay: 3s;
+  animation-fill-mode: forwards;
+  height: 25px;
+  padding: 15px;
+  margin: 25px 0;
+  overflow: hidden;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0;
+    height: 25px;
+    padding: 15px;
+    margin: 25px 0;
+  }
+  100% {
+    opacity: 0;
+    height: 0px;
+    padding: 0;
+    margin: 0;
+  }
+}

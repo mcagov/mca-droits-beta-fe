@@ -131,6 +131,7 @@ export default function (app) {
       }
 
       if (!errors) {
+        req.session.data['property-added-flash'] = true;
         res.redirect('/report/property-summary');
       } else {
         return res.render('report/property-form-address', {

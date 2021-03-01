@@ -125,7 +125,7 @@ export class ImageUpload {
         this.containerUploaded.classList.remove(
           'photo-upload__container--hide'
         );
-      }, 2000);
+      }, 1000);
     }
   }
 }

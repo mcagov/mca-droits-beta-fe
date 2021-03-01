@@ -43,5 +43,6 @@ export default {
   },
   'vessel-depth': null,
   'wreck-description': '',
-  'salvage-services': ''
+  'salvage-services': '',
+  submittedFiles: []
 };

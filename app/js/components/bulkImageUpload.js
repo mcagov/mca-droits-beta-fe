@@ -10,7 +10,6 @@ export class BulkUpload {
     if (!el) return;
 
     this.el = el;
-    this.id;
     this.form = $1('[data-js=bulk-form-element]', this.el);
     this.photoUploadInputs = [...$('.photo-upload__upload')];
     this.containersInitial = [...$('.photo-upload__container--initial', this.el)];
@@ -21,110 +20,175 @@ export class BulkUpload {
     this.singleUploadButtons = [...$('[data-js=single-image-upload]', this.el)];
     this.addButton = $1('[data-js=bulk-add-btn]', this.el);
 
-    this.uploadProgress = $1('.upload-progress', this.el);
-    this.uploadProgressBar = $1('.upload-progress__bar span', this.el);
-    this.uploadProgressText = $1('.upload-progress__text', this.el);
-    this.uploadProgressPercent = $1('.upload-progress__percent', this.el);
+    this.uploadProgress;
+    this.uploadProgressBar;
+    this.uploadProgressText;
+    this.uploadProgressPercent;
 
-    this.errorBlock = $('.upload-error', this.el);
-    this.errorText = $('.upload-error__text', this.el);
+    this.errorSummaryBlock = $1('#error-summary-block');
+    this.errorSummaryList = $1('#error-summary-list');
+    this.errorText;
+    this.errorContainer;
 
     this.chosenFiles = 0;
+    this.successfulUploads = 0;
 
     LoadManager.queue(this.init.bind(this), QUEUE.RESOURCES)
   }
 
   init() {
-    this.handleUploadState()
+    this.handleInitialUploadState()
     this.bulkImageUploadEvent();
     this.selectAltImageEvent();
     this.singleImageUploadEvent();
   }
 
   bulkImageUploadEvent() {
-    this.bulkImageUploadButton.addEventListener('click', async () => {
-      let formData = new FormData(this.form);
+    this.bulkImageUploadButton.addEventListener('click', () => {
 
       // Loop through each file-upload input and grab the selected file data,
       // and the input id (which is the unique id for the wreck item)
-      this.photoUploadInputs.forEach((input) => {
-        let file = input.files;
-        if (file.length > 0) {
+      this.photoUploadInputs.forEach((input, index) => {
+        let id = input.id;
+        const file = new FormData();
+        file.append('image', input.files[0]);
+        axios.post(
+            `/report/property-bulk-image-upload/${id}`,
+            file,
+            {
+              headers: { 'Content-Type': 'multipart/form-data' },
+              withCredentials: true,
+              onUploadProgress: (progressEvent) => {
+                const uploadFiles = input.files;
+                const uploadFile = uploadFiles[0];
 
-          formData.append(file, file.name);
-          formData.append('IDs', input.id);
-        }
-      });
+                if (
+                  uploadFiles.length &&
+                  (uploadFile.type === 'image/png' ||
+                    uploadFile.type === 'image/jpg' ||
+                    uploadFile.type === 'image/jpeg') &&
+                  uploadFile.size < 5000000
+                ) {
+                  let percentCompleted = Math.round(
+                    (progressEvent.loaded * 100) / progressEvent.total
+                  );             
+                  this.loadingIndicator(percentCompleted, id);
+                }
+              }
+            }
+          )
+          .then((res) => {
+            this.errorText = $1(`#upload-error-text-${id}`, this.el);
+            this.errorContainer = $1(`#error-container-${id}`, this.el)
 
-      axios.post(
-        // Post route handled in routes/property-form-image-upload.js
-        `/report/property-bulk-image-upload`,
-        formData,
-        {
-          headers: { 'Content-Type': 'multipart/form-data' },
-          withCredentials: true
-        }
-      )
-      .then((res) => {
-        if (res.data.error) {
-          //this.errorText.forEach((i) => (i.innerText = res.data.error.text));
-          this.scrollToTop();
-          this.errorBlock.forEach((i) => (i.style.display = 'block'));
-        } else {
-          const data = res.data;
-          this.photoResults.forEach((item, index) => {
-            item.src = `/uploads/${data[index]['filename']}`;
-            this.containersUploaded[index].classList.remove(
-              'photo-upload__container--hide'
-            );
-            this.containersInitial[index].classList.add(
-              'photo-upload__container--hide'
-            );
+            if (res.data.error) {
+              const currentInput = input;
+              const currentUploadBtn = $1(`[data-id=${id}]`, this.el);
+
+              // Create a new error item in the error summary block
+              let listItem = document.createElement("li");
+              let anchor = document.createElement("a");
+              anchor.innerText = res.data.error.text;
+              anchor.href = `#photo-upload-container-${id}`;
+              listItem.append(anchor);     
+              listItem.id = `error-summary-${id}`;        
+              this.errorSummaryList.append(listItem);
+
+              // Add the error text above the input
+              this.errorText.innerText = res.data.error.text;
+              this.errorContainer.classList.remove('hidden');
+              this.errorSummaryBlock.classList.remove('hidden');
+
+              this.bulkImageUploadButton.disabled = true;
+              this.scrollToTop();
+              this.handleErrorReplacement(currentInput, currentUploadBtn);
+            } else {
+              this.successfulUploads++;
+              this.errorContainer = $1(`#error-container-${id}`, this.el)
+
+              this.errorContainer.classList.add('hidden');
+              this.photoResults[index].src = `/uploads/${res.data}`;
+              this.containersUploaded[index].classList.remove(
+                'photo-upload__container--hide'
+              );
+              this.containersInitial[index].classList.add(
+                'photo-upload__container--hide'
+              );
+              this.handleAddButtonState();          
+            }
           })
-          // Allow user to continue through form when images have uploaded
-          this.addButton.classList.remove('hidden');
-          this.bulkImageUploadButton.classList.add('hidden');
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-
+          .catch((reqError) => {
+            console.error(reqError);
+          });
+      });
     }); 
   }
 
   singleImageUploadEvent() {
     this.singleUploadButtons.forEach((element) => {
       element.addEventListener('click', async () => {
-        this.id = element.dataset.id;
-        const currentInput = $1(`#${this.id}`, this.el);
+        const id = element.dataset.id;
+        const currentInput = $1(`#${id}`, this.el);
+        this.errorText = $1(`#upload-error-text-${id}`, this.el);
+        this.errorContainer = $1(`#error-container-${id}`, this.el);
         const file = new FormData();
+
         file.append('image', currentInput.files[0]);
         try {
           const res = await axios.post(
-            `/report/property-form-image-upload/${this.id}`,
+            `/report/property-form-image-upload/${id}`,
             file,
             {
               headers: { 'Content-Type': 'multipart/form-data' },
               withCredentials: true,
+              onUploadProgress: (progressEvent) => {
+                const uploadFiles = currentInput.files;
+                const uploadFile = uploadFiles[0];
+
+                if (
+                  uploadFiles.length &&
+                  (uploadFile.type === 'image/png' ||
+                    uploadFile.type === 'image/jpg' ||
+                    uploadFile.type === 'image/jpeg') &&
+                  uploadFile.size < 5000000
+                ) {
+                  let percentCompleted = Math.round(
+                    (progressEvent.loaded * 100) / progressEvent.total
+                  );             
+                  this.loadingIndicator(percentCompleted, id);
+                }
+              }
             }
           );
   
           if (res.data.error) {
-            this.errorText.forEach((i) => (i.innerText = res.data.error.text));
-            this.scrollToTop();
-            this.errorBlock.forEach((i) => (i.style.display = 'block'));
-            console.log('error');
+            this.errorText.innerText = res.data.error.text;
+            if (this.errorContainer.classList.contains('hidden')) {
+              this.errorContainer.classList.remove('hidden');
+            }
           } else {
-            this.errorBlock.forEach((i) => (i.style.display = 'none'));
+            this.successfulUploads++;
+            let errorSummaryItem = $1(`#error-summary-${id}`, this.errorSummaryBlock);
+            let imageSelected = $1(`#selected-photo-${id}`);
+            const currentInitialContainer = $1(`#photo-upload-container-${id}`);
+            const currentSelectedImageContainer = $1(`#photo-selected-container-${id}`);
+            
+            if (errorSummaryItem !== null) {
+              errorSummaryItem.remove();
+            }
 
-            let imageSelected = $1(`#selected-photo-${this.id}`);
-            const currentInitialContainer = $1(`#photo-upload-container-${this.id}`);
-            const currentSelectedImageContainer = $1(`#photo-selected-container-${this.id}`);
+            if (!this.errorSummaryList.length) {
+              this.errorSummaryBlock.classList.add('hidden');
+            }
+
+            this.errorContainer.classList.add('hidden');
+            this.errorText.innerHTML = "";
 
             imageSelected.src = `/uploads/${res.data}`;
             currentInitialContainer.classList.add('photo-upload__container--hide');
             currentSelectedImageContainer.classList.remove('photo-upload__container--hide');
+
+            this.handleAddButtonState();
           }
         } catch (reqError) {
           console.error(reqError);
@@ -133,28 +197,42 @@ export class BulkUpload {
     })
   }
 
-  handleUploadState() {
+  handleInitialUploadState() {
     this.photoUploadInputs.forEach((element) => {
       element.addEventListener('input', () => {
         if (element.value) {
-          this.chosenFiles++;
-          console.log(this.chosenFiles);
-          //element.closest('.govuk-hint').classList.add('hidden');
-        } else {
-          this.chosenFiles--;
-          console.log(this.chosenFiles);
-        }
+          this.chosenFiles++;         
+        } 
 
         if (this.chosenFiles === this.photoUploadInputs.length) {
-          if (this.bulkImageUploadButton.classList.contains('hidden')) {
-            this.addButton.classList.remove('govuk-button--disabled');
-            this.addButton.disabled = false;
-          } else {
-            this.bulkImageUploadButton.classList.remove('govuk-button--disabled');
-            this.bulkImageUploadButton.disabled = false;
-          }
+          this.bulkImageUploadButton.classList.remove('govuk-button--disabled');
+          this.bulkImageUploadButton.disabled = false;
         }
       })
+    })
+  }
+
+  handleAddButtonState() {  
+    if (this.successfulUploads === this.photoResults.length) {
+      this.bulkImageUploadButton.classList.add('hidden');
+      this.addButton.classList.remove('hidden');
+      this.addButton.classList.remove('govuk-button--disabled');
+      this.addButton.disabled = false;
+    }
+  }
+
+  handleErrorReplacement(input, uploadBtn) {
+    // If file errors on upload, display single image upload button.
+    uploadBtn.classList.remove('hidden');
+    uploadBtn.disabled = true;
+    uploadBtn.classList.add('govuk-button--disabled');
+    uploadBtn.setAttribute('aria-disabled', 'true');
+
+    // When input value is updated, allow new image to be uploaded.
+    input.addEventListener('input', () => {
+      uploadBtn.disabled = false;
+      uploadBtn.classList.remove('govuk-button--disabled');
+      uploadBtn.removeAttribute('aria-disabled');
     })
   }
 
@@ -169,6 +247,7 @@ export class BulkUpload {
             `/report/property-form-image-delete/${this.id}`
           );
           if (res) {
+            this.successfulUploads--;
             const currentInitialContainer = $1(`#photo-upload-container-${this.id}`);
             const currentSelectedImageContainer = $1(`#photo-selected-container-${this.id}`);
             const currentUploadInput = $1(`#${this.id}`, this.el);
@@ -194,7 +273,13 @@ export class BulkUpload {
     document.documentElement.scrollTop = 0;
   }
 
-  loadingIndicator(progress) {
+  loadingIndicator(progress, itemID) {
+    let currentUploadContainer = $1(`#photo-upload-container-${itemID}`)
+    this.uploadProgress = $1('.upload-progress', currentUploadContainer);
+    this.uploadProgressBar = $1('.upload-progress__bar span', currentUploadContainer);
+    this.uploadProgressText = $1('.upload-progress__text', currentUploadContainer);
+    this.uploadProgressPercent = $1('.upload-progress__percent', currentUploadContainer);
+
     this.uploadProgress.classList.add('upload-progress--visible');
     this.uploadProgressBar.style.width = `${progress}%`;
 
@@ -202,15 +287,7 @@ export class BulkUpload {
     this.uploadProgressPercent.innerText = `${progress}%`;
     if (progress === 100) {
       this.uploadProgressText.innerText = `Image uploaded`;
-      setTimeout(() => {
-        this.uploadProgress.classList.remove('upload-progress--visible');
-        this.continueButton.classList.remove('govuk-button--disabled');
-        this.continueButton.disabled = false;
-        this.containerInitial.classList.add('photo-upload__container--hide');
-        this.containerUploaded.classList.remove(
-          'photo-upload__container--hide'
-        );
-      }, 2000);
+      this.uploadProgress.classList.remove('upload-progress--visible');
     }
   }
 }

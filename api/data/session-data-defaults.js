@@ -36,5 +36,6 @@ export default {
   },
   location: { 'location-standard': {}, 'location-given': {} },
   property: {},
-  'vessel-information': {}
+  'vessel-information': {},
+  submittedFiles: []
 };

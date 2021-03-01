@@ -7,18 +7,20 @@ export default function (app) {
     // Get the answer from session data
     // The name between the quotes is the same as the 'name' attribute on the input elements
     // However in JavaScript we can't use hyphens in variable names
-  
-    const salvagedFrom = req.session.data['removed-from']
-  
-    var depthResponses = ['shipwreck', 'seabed']
-  
+
+    const salvagedFrom = req.session.data['removed-from'];
+
+    req.session.data['vessel-depth'] = null;
+
+    var depthResponses = ['shipwreck', 'seabed'];
+
     // If it's not one of the depth responses, skip this question.
     if (depthResponses.includes(salvagedFrom)) {
-      res.render('report/depth')
+      res.render('report/depth');
     } else {
-      res.redirect('/report/vessel-description')
+      res.redirect('/report/vessel-description');
     }
-  })
+  });
 
   app.post(
     '/report/depth-answer',
@@ -33,9 +35,8 @@ export default function (app) {
       const errors = formatValidationErrors(validationResult(req));
 
       if (!errors) {
-        req.session.data['vessel-depth'] = req.body['vessel-depth'];
+        req.session.data['vessel-depth'] = parseInt(req.body['vessel-depth']);
         res.redirect('vessel-description');
-
       } else {
         return res.render('report/depth', {
           errors,

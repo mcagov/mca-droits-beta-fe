@@ -59,7 +59,7 @@
 
         {% set valueInput %}
         {{ govukInput({
-          id: "property-value",
+          id: "property." + propertyID + ".value",
           name: propertyNamePrefix + "[value]",
           value: data[propertyName][propertyID]["value"],
           label: {
@@ -72,10 +72,11 @@
             text: "Include only the items that you are reporting at this time."
           },
           classes: "govuk-input--width-5",
-          spellcheck: false
+          spellcheck: false,
+          errorMessage: errors["property." + propertyID + ".value"]
         }) }}
         {% endset %}
-
+        
         {{ govukRadios({
           idPrefix: "value-known",
           name: "value-known",

@@ -10,7 +10,9 @@ export default function (app) {
         .exists()
         .not()
         .isEmpty()
-        .withMessage('Select yes if you know which shipwreck this wreck material has come from')
+        .withMessage(
+          'Select yes if you know which shipwreck this wreck material has come from'
+        )
     ],
     function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
@@ -19,6 +21,10 @@ export default function (app) {
         req.session.data['known-wreck'] = req.body['known-wreck'];
 
         const value = req.session.data['known-wreck'];
+
+        req.session.data['vessel-information']['vessel-name'] = '';
+        req.session.data['vessel-information']['vessel-construction-year'] = '';
+        req.session.data['vessel-information']['vessel-sunk-year'] = '';
 
         if (value === 'yes') {
           res.redirect('vessel-information');

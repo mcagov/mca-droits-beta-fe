@@ -22,6 +22,9 @@ export default function (app) {
         req.session.data['vessel-depth'] = null;
         req.session.data['wreck-description'] = '';
       }
+      if (req.body['removed-from'] === 'seabed') {
+        req.session.data['wreck-description'] = '';
+      }
 
       if (!errors) {
         req.session.data['removed-from'] = req.body['removed-from'];
@@ -33,17 +36,17 @@ export default function (app) {
           (req.body['removed-from'] === 'afloat' ||
             req.body['removed-from'] === 'sea shore')
         ) {
-          res.redirect('/report/check-your-answers');
+          return res.redirect('/report/check-your-answers');
         }
 
         if (
           req.session.data.redirectToCheckAnswers &&
           req.session.data['vessel-depth'] === null
         ) {
-          res.redirect('/report/depth');
+          return res.redirect('/report/depth');
         }
 
-        res.redirect('location');
+        return res.redirect('location');
       } else {
         return res.render('report/salvaged-from', {
           errors,

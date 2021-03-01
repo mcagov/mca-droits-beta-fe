@@ -38,9 +38,9 @@ export default function (app) {
           req.session.data.redirectToCheckAnswers &&
           req.session.data['wreck-description'] !== ''
         ) {
-          res.redirect('/report/check-your-answers');
+          return res.redirect('/report/check-your-answers');
         }
-        res.redirect('vessel-description');
+        return res.redirect('vessel-description');
       } else {
         return res.render('report/depth', {
           errors,

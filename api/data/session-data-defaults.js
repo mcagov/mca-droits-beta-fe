@@ -36,5 +36,12 @@ export default {
   },
   location: { 'location-standard': {}, 'location-given': {} },
   property: {},
-  'vessel-information': {}
+  'vessel-information': {
+    'vessel-name': '',
+    'vessel-construction-year': '',
+    'vessel-sunk-year': ''
+  },
+  'vessel-depth': null,
+  'wreck-description': '',
+  'salvage-services': ''
 };

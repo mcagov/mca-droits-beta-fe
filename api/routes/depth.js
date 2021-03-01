@@ -10,8 +10,6 @@ export default function (app) {
 
     const salvagedFrom = req.session.data['removed-from'];
 
-    req.session.data['vessel-depth'] = null;
-
     var depthResponses = ['shipwreck', 'seabed'];
 
     // If it's not one of the depth responses, skip this question.

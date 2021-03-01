@@ -9,6 +9,8 @@ export default function (app) {
     req.session.data['vessel-information']['vessel-sunk-year'] =
       req.body['vessel-sunk-year'];
 
-    res.redirect('salvaged-from');
+    return req.session.data.redirectToCheckAnswers
+      ? res.redirect('/report/check-your-answers')
+      : res.redirect('salvaged-from');
   });
 }

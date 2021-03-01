@@ -56,9 +56,76 @@
             }
           ]
         }
+      },
+      {
+        key: {
+        text: "Where wreck material found"
+      },
+        value: {
+        text: data["removed-from"] | capitalize
+      },
+        actions: {
+          items: [
+            {
+              href: "/report/salvaged-from",
+              text: "Change",
+              visuallyHiddenText: "answer"
+            }
+          ]
+        }
       }
     ]
   }) }}
+  {% if data['vessel-depth'] != null %}
+    <div style="margin-top:-30px">
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+            text: "Item depth"
+          },
+            value: {
+            text: data["vessel-depth"] + 'm'
+          },
+            actions: {
+              items: [
+                {
+                  href: "/report/depth",
+                  text: "Change",
+                  visuallyHiddenText: "answer"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+    </div>
+  {% endif %}
+  {% if data['wreck-description'] != '' %}
+    <div style="margin-top:-30px">
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+            text: "Detailed description of the shipwreck"
+          },
+            value: {
+            text: data["wreck-description"]
+          },
+            actions: {
+              items: [
+                {
+                  href: "/report/vessel-description",
+                  text: "Change",
+                  visuallyHiddenText: "answer"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+    </div>
+  {% endif %}
 </div>
 
 

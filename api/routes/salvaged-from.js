@@ -15,8 +15,34 @@ export default function (app) {
     function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
 
+      if (
+        req.body['removed-from'] === 'afloat' ||
+        req.body['removed-from'] === 'sea shore'
+      ) {
+        req.session.data['vessel-depth'] = null;
+        req.session.data['wreck-description'] = '';
+      }
+
       if (!errors) {
         req.session.data['removed-from'] = req.body['removed-from'];
+
+        // Conditionals if user changes their mind about where they found the wreck
+        // on check answers page
+        if (
+          req.session.data.redirectToCheckAnswers &&
+          (req.body['removed-from'] === 'afloat' ||
+            req.body['removed-from'] === 'sea shore')
+        ) {
+          res.redirect('/report/check-your-answers');
+        }
+
+        if (
+          req.session.data.redirectToCheckAnswers &&
+          req.session.data['vessel-depth'] === null
+        ) {
+          res.redirect('/report/depth');
+        }
+
         res.redirect('location');
       } else {
         return res.render('report/salvaged-from', {

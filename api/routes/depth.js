@@ -34,6 +34,12 @@ export default function (app) {
 
       if (!errors) {
         req.session.data['vessel-depth'] = parseInt(req.body['vessel-depth']);
+        if (
+          req.session.data.redirectToCheckAnswers &&
+          req.session.data['wreck-description'] !== ''
+        ) {
+          res.redirect('/report/check-your-answers');
+        }
         res.redirect('vessel-description');
       } else {
         return res.render('report/depth', {

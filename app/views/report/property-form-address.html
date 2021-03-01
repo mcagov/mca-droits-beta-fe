@@ -56,7 +56,7 @@
               autocomplete: "address-line1",
               name: propertyNamePrefix + "[address-line-1]",
               value: data[propertyName][propertyID]["address-details"]["address-line-1"],
-              errorMessage: errors["property." + propertyID + "['address-line-1']"]
+              errorMessage: errors["property." + propertyID + ".address-line-1"]
             }) }}
 
             {{ govukInput({
@@ -78,7 +78,7 @@
               autocomplete: "address-level2",
               name: propertyNamePrefix + "[address-town]",
               value: data[propertyName][propertyID]["address-details"]["address-town"],
-              errorMessage: errors["property." + propertyID + "['address-town']"]
+              errorMessage: errors["property." + propertyID + ".address-town"]
             }) }}
 
             {{ govukInput({
@@ -89,7 +89,7 @@
               id: propertyName + '-' + propertyID + "-address-county",
               name: propertyNamePrefix + "[address-county]",
               value: data[propertyName][propertyID]["address-details"]["address-county"],
-              errorMessage: errors["property." + propertyID + "['address-county']"]
+              errorMessage: errors["property." + propertyID + ".address-county"]
             }) }}
 
             {{ govukInput({
@@ -101,7 +101,7 @@
               autocomplete: "postal-code",
               name: propertyNamePrefix + "[address-postcode]",
               value: data[propertyName][propertyID]["address-details"]["address-postcode"],
-              errorMessage: errors["property." + propertyID + "['address-postcode']"]
+              errorMessage: errors["property." + propertyID + ".address-postcode"]
             }) }}
 
           {% endcall %}

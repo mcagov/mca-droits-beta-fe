@@ -63,12 +63,10 @@
 {% endset -%}
 
 
-  <div class="govuk-grid-row">
+  <div class="govuk-grid-row" data-js="portal-filter">
     <div class="govuk-grid-column-full">
 
       <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">Your reports of wreck material</h1>
-
-      
 
       <div class="report-filters govuk-!-padding-5 govuk-!-margin-bottom-2">
         <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Filter reports by status:</h2>
@@ -80,28 +78,28 @@
         </div>
         
         <div class="govuk-!-margin-top-5">
-          <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-status="received">
+          <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="received">
             {{govukTag({
               text: "Received",
               classes: "govuk-tag--purple govuk-!-margin-bottom-2"
             })}}
             <span class="portal-filter-item__close">&#10005;</span>
           </a>
-          <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-status="response">
+          <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="response">
             {{govukTag({
               text: "Awaiting your response",
               classes: "govuk-tag--orange govuk-!-margin-bottom-2"
             })}}
             <span class="portal-filter-item__close">&#10005;</span>
           </a>
-          <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-status="ongoing">
+          <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="ongoing">
             {{govukTag({
               text: "Investigation Ongoing",
               classes: "govuk-tag--blue govuk-!-margin-bottom-2"
             })}}   
             <span class="portal-filter-item__close">&#10005;</span>       
           </a>
-          <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-status="closed">
+          <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="closed">
             {{govukTag({
               text: "Closed",
               classes: "govuk-tag--green govuk-!-margin-bottom-2"
@@ -114,7 +112,7 @@
       </div>
       
 
-      <table id="table-status-filter" class="govuk-table">
+      <table id="table-status-filter" class="govuk-table" data-js="report-listings-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Reference</th>
@@ -125,7 +123,7 @@
           </tr>
         </thead>
         <tbody class="govuk-table__body">
-          <tr class="govuk-table__row table-status-filter-row" data-status="received">
+          <tr class="govuk-table__row table-status-filter-row" data-status="received" data-js="report-listings-row">
             <td class="govuk-table__cell">034/20</td>
             <td class="govuk-table__cell">&nbsp;11&nbsp;09&nbsp;2020</td>
             <td class="govuk-table__cell">
@@ -144,7 +142,7 @@
             </td>
             <td class="govuk-table__cell"><a href="/portal/report/034-20">View report</a></td>
           </tr>
-          <tr class="govuk-table__row table-status-filter-row response-required" data-status="response">
+          <tr class="govuk-table__row table-status-filter-row response-required" data-status="response" data-js="report-listings-row">
             <td class="govuk-table__cell">012/20</td>
             <td class="govuk-table__cell">&nbsp;12&nbsp;05&nbsp;2020</td>
             <td class="govuk-table__cell">
@@ -163,7 +161,27 @@
             </td>
             <td class="govuk-table__cell"><a href="/portal/report/012-20">View report</a></td>
           </tr>
-          <tr class="govuk-table__row table-status-filter-row" data-status="closed">
+          </tr>
+          <tr class="govuk-table__row table-status-filter-row response-required" data-status="response" data-js="report-listings-row">
+            <td class="govuk-table__cell">043/26</td>
+            <td class="govuk-table__cell">&nbsp;29&nbsp;01&nbsp;2021</td>
+            <td class="govuk-table__cell">
+              Titanic<br/>
+              {{ govukDetails({
+                summaryText: "1 item of wreck material",
+                html: wreck2
+              }) }}
+            </td>
+            <td class="govuk-table__cell">
+              {{govukTag({
+                text: "Awaiting your response",
+                classes: "govuk-tag--orange govuk-!-margin-bottom-2"
+              })}}<br/>
+              <strong>Last&nbsp;update:</strong>&nbsp;18&nbsp;02&nbsp;2021
+            </td>
+            <td class="govuk-table__cell"><a href="/portal/report/012-20">View report</a></td>
+          </tr>
+          <tr class="govuk-table__row table-status-filter-row" data-status="closed" data-js="report-listings-row">
             <td class="govuk-table__cell">041/19</td>
             <td class="govuk-table__cell">&nbsp;17&nbsp;01&nbsp;2019</td>
             <td class="govuk-table__cell">
@@ -179,6 +197,25 @@
                 classes: "govuk-tag--green govuk-!-margin-bottom-2"
               })}}<br/>
               <strong>Last&nbsp;update:</strong>&nbsp;22&nbsp;10&nbsp;2019
+            </td>
+            <td class="govuk-table__cell"><a href="/portal/report/041-19">View report</a></td>
+          </tr>
+          <tr class="govuk-table__row table-status-filter-row" data-status="closed" data-js="report-listings-row">
+            <td class="govuk-table__cell">031/39</td>
+            <td class="govuk-table__cell">&nbsp;18&nbsp;01&nbsp;2018</td>
+            <td class="govuk-table__cell">
+              Boatface<br/>
+              {{ govukDetails({
+                summaryText: "2 items of wreck material",
+                html: wreck3
+              }) }}
+            </td>
+            <td class="govuk-table__cell">
+              {{govukTag({
+                text: "Closed",
+                classes: "govuk-tag--green govuk-!-margin-bottom-2"
+              })}}<br/>
+              <strong>Last&nbsp;update:</strong>&nbsp;22&nbsp;08&nbsp;2019
             </td>
             <td class="govuk-table__cell"><a href="/portal/report/041-19">View report</a></td>
           </tr>

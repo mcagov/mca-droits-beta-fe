@@ -10,6 +10,7 @@
   .report-responsive-table {
     border: 1px solid transparent;
     box-shadow: none;
+    margin-top: 25px;
 
     &__caption {
       display: block;
@@ -53,8 +54,16 @@
         font-weight: bold;
       }
 
-      &--description {
+      &--text-left {
         text-align: left;
+      }
+
+      &--text-right {
+        text-align: right;
+      }
+
+      &--width-full {
+        width: 100%;
       }
     }
   }	

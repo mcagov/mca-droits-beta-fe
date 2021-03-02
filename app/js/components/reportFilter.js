@@ -28,9 +28,15 @@ export class ReportFilter {
         this.clearActiveStates();
 
         if (!active) {
+          if(status === 'all') {
+            item.classList.add('portal-filter-item--active');
+            this.displayAllRows();
+            return;
+          }
           const activeItems = [...$(`[data-status=${status}]`, this.reportListTable)];
           item.classList.add('portal-filter-item--active');
           this.reportListRows.forEach((row) => {
+            row.classList.remove('visible');
             row.classList.add('hidden');
           });
           activeItems.forEach((item) => {

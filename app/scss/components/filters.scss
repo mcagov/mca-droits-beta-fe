@@ -67,4 +67,9 @@
       }
     }
   }
+
+  &--closed {
+    outline: 1px solid #b1b4b6 !important;
+    outline-offset: -1px !important;
+  }
 }

@@ -14,6 +14,7 @@ $govuk-global-styles: true;
 @import './components/confirmation';
 @import './components/image-upload';
 @import './components/responsive-table';
+@import './components/action-confirmation';
 
 .row-prototype-action-confirmation {
   .govuk-body {

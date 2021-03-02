@@ -1,0 +1,20 @@
+@import '../tools/animations';
+
+.row-form-action-confirmation {
+  .govuk-body {
+    color: white;
+    margin-bottom: 0;
+  }
+}
+
+
+.row-form-action-confirmation {
+  animation-duration: 1s;
+  animation-name: fadeOut;
+  animation-delay: 3s;
+  animation-fill-mode: forwards;
+  height: 25px;
+  padding: 15px;
+  margin: 25px 0;
+  overflow: hidden;
+}

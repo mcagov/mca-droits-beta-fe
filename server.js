@@ -3,23 +3,38 @@ import bodyParser from 'body-parser';
 import nunjucks from 'nunjucks';
 import path from 'path';
 import edt from 'express-debug';
-
-import routes from './api/routes';
-import sessionInMemory from 'express-session';
 import {
   sessionData,
   addCheckedFunction,
   matchRoutes,
-  addNunjucksFilters
+  addNunjucksFilters,
+  forceHttps
 } from './utils';
-import config from './app/js/config.js';
+import routes from './api/routes';
+import config from './app/config.js';
 
-const PORT = process.env.PORT || 5000;
+import sessionInMemory from 'express-session';
 
+const PORT = process.env.PORT || config.PORT;
 const app = express();
 
-// Add variables that are available in all views
-app.locals.serviceName = config.serviceName;
+// Global vars
+app.locals.serviceName = config.SERVICE_NAME;
+
+// Local vars
+const env = process.env.NODE_ENV;
+let useHttps = process.env.USE_HTTPS || config.USE_HTTPS;
+
+useHttps = useHttps.toLowerCase();
+
+// Production session data
+const session = require('express-session');
+const AzureTablesStoreFactory = require('connect-azuretables')(session);
+
+const isSecure = env === 'production' && useHttps === 'true';
+if (isSecure) {
+  app.use(forceHttps);
+}
 
 // Support for parsing data in POSTs
 app.use(bodyParser.json());
@@ -40,7 +55,7 @@ const nunjucksAppEnv = nunjucks.configure(
   {
     autoescape: false,
     express: app,
-    watch: process.env.NODE_ENV === 'development' ? true : false
+    watch: env === 'development' ? true : false
   }
 );
 addCheckedFunction(nunjucksAppEnv);
@@ -59,33 +74,41 @@ app.use(
 );
 
 // Session uses service name to avoid clashes with other prototypes
-const sessionName = Buffer.from(config.serviceName, 'utf8').toString('hex');
+const sessionName = Buffer.from(config.SERVICE_NAME, 'utf8').toString('hex');
 const sessionOptions = {
   secret: sessionName,
-  resave: false,
-  saveUninitialized: true,
-  unset: 'destroy',
   cookie: {
     maxAge: 1000 * 60 * 60 * 4, // 4 hours
-    secure: false
+    secure: isSecure
   }
 };
-
-app.use(
-  sessionInMemory(
-    Object.assign(sessionOptions, {
-      name: sessionName,
-      resave: false,
-      saveUninitialized: false
-    })
-  )
-);
+if (env === 'development') {
+  app.use(
+    sessionInMemory(
+      Object.assign(sessionOptions, {
+        name: sessionName,
+        resave: false,
+        saveUninitialized: false
+      })
+    )
+  );
+} else {
+  app.use(
+    session(
+      Object.assign(sessionOptions, {
+        store: AzureTablesStoreFactory.create(),
+        resave: false,
+        saveUninitialized: false
+      })
+    )
+  );
+}
 
 // Manage session data. Assigns default values to data
 app.use(sessionData);
 
 // Logs req.session data
-if (process.env.NODE_ENV === 'development') edt(app, { panels: ['session'] });
+if (env === 'development') edt(app, { panels: ['session'] });
 
 // Load API routes
 app.use('/', routes());

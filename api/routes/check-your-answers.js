@@ -5,6 +5,7 @@ import path from 'path';
 var cloneDeep = require('lodash.clonedeep');
 import { azureUpload } from '../../services';
 import { formatValidationErrors } from '../../utils';
+import config from '../../app/config';
 
 export default function (app) {
   app.post(
@@ -19,8 +20,6 @@ export default function (app) {
     async function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
       const sd = cloneDeep(req.session.data);
-      const blobUrl =
-        'https://mcadevelopmentstorage.blob.core.windows.net/report-uploads/';
       const postUrl =
         'https://prod-05.uksouth.logic.azure.com:443/workflows/7eb0e5d4ba61419b9fc3a100c1d2b55e/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=dlIj2NC1JL2pRXGbH0ZMo_B1YbJDm_JKvE0PTEI1F5k&Content-Type=application/json';
 
@@ -67,7 +66,7 @@ export default function (app) {
             innerObj = sd['property'][prop];
 
             // Prepend azure blob container url path
-            innerObj.image = `${blobUrl}${innerObj.image}`;
+            innerObj.image = `${config.BLOB_URL}${innerObj.image}`;
             data['wreck-materials'].push(innerObj);
           }
         }

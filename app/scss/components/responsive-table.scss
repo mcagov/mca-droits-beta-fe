@@ -54,17 +54,19 @@
         font-weight: bold;
       }
 
-      &--text-left {
+      &--no-label {
         text-align: left;
-      }
 
-      &--text-right {
-        text-align: right;
+        &:before {
+          content: none;
+        }
       }
+    }
 
-      &--width-full {
-        width: 100%;
-      }
+    // Added for GovUK component to ensure 'govuk-details' list 
+    // text remains left aligned within a mobile table layout
+    .govuk-details__text {
+      text-align: left;
     }
   }	
 }

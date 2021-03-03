@@ -6,6 +6,12 @@
   }
 }
 
+.portal-filter-item-wrapper {
+  @media screen and (max-width: 600px) {
+    display: block;
+  }
+}
+
 .portal-filter-item {
   text-decoration: none;
 
@@ -18,11 +24,14 @@
     .govuk-tag--orange {
       background-color: darken(#fcd6c3, 10%);
     }
-    .govuk-tag--green {
+    .govuk-tag--grey {
       background-color: darken(#eeefef, 10%);
     }
     .govuk-tag--blue {
       background-color: darken(#d2e2f1, 10%);
+    }
+    .govuk-tag--turquoise {
+      background-color: darken(#bfe3e0, 10%);
     }
   }
 
@@ -59,12 +68,19 @@
       .govuk-tag--orange {
         background-color: #fcd6c3;
       }
-      .govuk-tag--green {
+      .govuk-tag--grey {
         background-color: #eeefef;
       }
       .govuk-tag--blue {
         background-color: #d2e2f1;
       }
+      .govuk-tag--turquoise {
+        background-color: #bfe3e0;
+      }
+    }
+
+    &[data-status="all"]:hover {
+      background-color: govuk-colour("light-grey");
     }
   }
 

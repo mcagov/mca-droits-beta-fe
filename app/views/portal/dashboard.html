@@ -78,41 +78,50 @@
         </div>
         
         <div class="govuk-!-margin-top-5">
-          <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="all">
-            {{govukTag({
-              text: "All",
-              classes: "govuk-tag--turquoise govuk-!-margin-bottom-2"
-            })}}
-            <span class="portal-filter-item__close">&#10005;</span>
-          </a>
-          <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="received">
-            {{govukTag({
-              text: "Received",
-              classes: "govuk-tag--purple govuk-!-margin-bottom-2"
-            })}}
-            <span class="portal-filter-item__close">&#10005;</span>
-          </a>
-          <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="response">
-            {{govukTag({
-              text: "Awaiting your response",
-              classes: "govuk-tag--orange govuk-!-margin-bottom-2"
-            })}}
-            <span class="portal-filter-item__close">&#10005;</span>
-          </a>
-          <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="ongoing">
-            {{govukTag({
-              text: "Investigation Ongoing",
-              classes: "govuk-tag--blue govuk-!-margin-bottom-2"
-            })}}   
-            <span class="portal-filter-item__close">&#10005;</span>       
-          </a>
-          <a class="portal-filter-item portal-filter-item--closed govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="closed">
-            {{govukTag({
-              text: "Closed",
-              classes: "govuk-tag--grey govuk-!-margin-bottom-2"
-            })}}
-            <span class="portal-filter-item__close">&#10005;</span>       
-          </a>
+          <span class="portal-filter-item-wrapper">
+            <a class="portal-filter-item portal-filter-item--active govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="all">
+              {{govukTag({
+                text: "All",
+                classes: "govuk-tag--turquoise govuk-!-margin-bottom-2"
+              })}}
+            </a>
+          </span>
+          <span class="portal-filter-item-wrapper">
+            <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="received">
+              {{govukTag({
+                text: "Received",
+                classes: "govuk-tag--purple govuk-!-margin-bottom-2"
+              })}}
+              <span class="portal-filter-item__close">&#10005;</span>
+            </a>
+          </span>
+          <span class="portal-filter-item-wrapper">
+            <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="response">
+              {{govukTag({
+                text: "Awaiting your response",
+                classes: "govuk-tag--orange govuk-!-margin-bottom-2"
+              })}}
+              <span class="portal-filter-item__close">&#10005;</span>
+            </a>
+          </span>
+          <span class="portal-filter-item-wrapper">
+            <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="ongoing">
+              {{govukTag({
+                text: "Investigation Ongoing",
+                classes: "govuk-tag--blue govuk-!-margin-bottom-2"
+              })}}   
+              <span class="portal-filter-item__close">&#10005;</span>       
+            </a>
+          </span>
+          <span class="portal-filter-item-wrapper">
+            <a class="portal-filter-item portal-filter-item--closed govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="closed">
+              {{govukTag({
+                text: "Closed",
+                classes: "govuk-tag--grey govuk-!-margin-bottom-2"
+              })}}
+              <span class="portal-filter-item__close">&#10005;</span>       
+            </a>
+          </span>
         </div>
 
 

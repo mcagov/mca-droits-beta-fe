@@ -83,6 +83,8 @@ export default function (app) {
   })();
 
   (() => {
+    let imageUploads = [];
+
     const upload = multer({
       storage: storage,
       limits: { fileSize: 5000000 },
@@ -93,6 +95,9 @@ export default function (app) {
       '/report/property-bulk-image-upload/:prop_id',
       function (req, res) {
         upload(req, res, function (multerError) {
+          // Total number of wreck items 
+          const itemQuantity = req.body.itemQuantity;
+          // Create error summary list item, linking to the related wreck item input
           const err = {
             id: 'upload-error-text',
             href: `#upload-error-text-${req.params.prop_id}`
@@ -103,16 +108,31 @@ export default function (app) {
             } else if (multerError) {
               err.text = multerError;
             }
-
             return res.json({ error: err });
+
           } else if (req.body.image === 'undefined') {
             err.text = 'Select an image';
             return res.json({ error: err });
+
           } else {
-            const id = req.params.prop_id;
-            console.log(id);
-            req.session.data.property[id].image = req.file.filename;
-            req.session.save();
+            const itemId = req.params.prop_id;
+            // For each upload, push the image filename to the imageUploads array
+            imageUploads.push(
+              {
+                id: itemId,
+                image: req.file.filename
+              }
+            );
+            // Images will upload at different speeds, so here we make sure the image 
+            // key in the wreck item object is stored correctly in session data
+            for(const obj of imageUploads) {
+              req.session.data.property[obj.id].image = obj.image;
+            }
+            // When all images are assigned to the relevant wreck item, clear the array
+            if (itemQuantity === imageUploads.length) {
+              imageUploads = [];
+            }
+
             return res.json(req.file.filename);
           }
         });

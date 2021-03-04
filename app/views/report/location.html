@@ -420,6 +420,68 @@
 
         {% endset -%}
 
+        {% set locationOsGridSquareClass = "govuk-input--width-2" %}
+        {% set locationOsGridEastingClass = "govuk-input--width-4" %}
+        {% set locationOsGridNorthingClass = "govuk-input--width-4" %}
+
+        {% if errors["location-osgrid-square"] %}
+          {% set locationOsGridSquareClass = locationOsGridSquareClass + " govuk-input--error" %}
+        {% endif %}
+        {% if errors["location-osgrid-easting"] %}
+          {% set locationOsGridEastingClass = locationOsGridEastingClass + " govuk-input--error" %}
+        {% endif %}
+        {% if errors["location-osgrid-northing"] %}
+          {% set locationOsGridNorthingClass = locationOsGridNorthingClass + " govuk-input--error" %}
+        {% endif %}
+
+        {% set osgridInput %}
+          {% call govukFieldset({
+            legend: {
+              text: "Grid reference"
+            },
+            classes: "row-prototype-coordinate-input"
+          }) %}
+            {{ govukInput({
+              id: "location-osgrid-square",
+              name: "location-osgrid-square",
+              value: data["location"]["location-osgrid-square"],
+              classes: locationOsGridSquareClass,
+              label: {
+                text: "Square",
+                classes: "govuk-visually-hidden"
+              }
+            }) }}
+
+            {{ govukInput({
+              id: "location-osgrid-easting",
+              name: "location-osgrid-easting",
+              value: data["location"]["location-osgrid-easting"],
+              classes: locationOsGridEastingClass,
+              label: {
+                text: "Easting",
+                classes: "govuk-visually-hidden"
+              },
+              attributes: {
+                inputmode: "numeric"
+              }
+            }) }}
+
+            {{ govukInput({
+              id: "location-osgrid-northing",
+              name: "location-osgrid-northing",
+              value: data["location"]["location-osgrid-northing"],
+              classes: locationOsGridNorthingClass,
+              label: {
+                text: "Northing",
+                classes: "govuk-visually-hidden"
+              },
+              attributes: {
+                inputmode: "numeric"
+              }
+            }) }}
+          {% endcall %}
+        {% endset -%}
+
         {% set mapInput %}
           <div class="govuk-!-margin-bottom-5" data-js="editable-map">
             <span class="govuk-error-message">
@@ -448,21 +510,6 @@
           <input type=hidden name="map-longitude-input" id="map-longitude-input" value="{{ data['location']['map-longitude-input'] }}">
           <input type=hidden name="map-radius-input" id="map-radius-input" value="{{ data['location']['map-radius-input'] }}">
         {% endset -%}
-        
-        {% set descriptionInput %}
-          {{ govukTextarea({
-            name: "location-description",
-            id: "location-description",
-            value: data["location"]["location-description"],
-            label: {
-              text: "Where was the wreck material found?"
-            },
-            hint: {
-              text: "You should include any known coordinates, distances and directions."
-            },
-            errorMessage: errors["location-description"]
-          }) }}
-        {% endset -%}
 
         {# Fixes issue where if the user selects a radio, doesn't fill in any info
            and submits the form it will reopen the correct radio option when the page
@@ -470,6 +517,7 @@
         {% set setCheckedCoordsDecimal = checked("['location']['location-type']", "coords-decimal") %}
         {% set setCheckedCoordsDecimalMinutes = checked("['location']['location-type']", "coords-decimal-minutes") %}
         {% set setCheckedCoordsSexagesimal = checked("['location']['location-type']", "coords-sexagesimal") %}
+        {% set setCheckedOsGrid = checked("['location']['location-type']", "coords-osgrid") %}
         {% set setCheckedMap = checked("['location']['location-type']", "map") %}
         {% set setCheckedDesc = checked("['location']['location-type']", "description") %}
 
@@ -498,14 +546,17 @@
         {% endif %}
 
         {% if 
+          (errors['location-osgrid-square']|length) or 
+          (errors['location-osgrid-easting']|length) or 
+          (errors['location-osgrid-northing']|length) %}
+            {% set setCheckedOsGrid = "coords-osgrid" %}
+        {% endif %}
+
+        {% if 
           (errors['map-latitude-input']|length) or 
           (errors['map-longitude-input']|length) or
           (errors['map-radius-input']|length)  %}
             {% set setCheckedMap = "map" %}
-        {% endif %}
-
-        {% if errors['description']|length %}
-          {% set setCheckedDesc = "description" %}
         {% endif %}
 
         {{ govukRadios({
@@ -553,8 +604,19 @@
               hint: {
                 html: "For example <em>53° 45′ 49″ N &nbsp;&nbsp; 3° 44′ 20″ W</em>."
               },
-                checked: setCheckedSexagesimal
+              checked: setCheckedSexagesimal
+            },
+            {
+              value: "coords-osgrid",
+              text: "UK grid reference",
+              conditional: {
+                html: osgridInput
               },
+              hint: {
+                html: "For example <em>TQ 3003 8038</em>."
+              },
+              checked: setCheckedOsGrid
+            },
             {
               value: "map",
               text: "Draw on a map",
@@ -565,22 +627,27 @@
                 text: "Draw the area of the find on a map."
               },
                 checked: setCheckedMap
-              },
-            {
-              value: "description",
-              text: "Description",
-              conditional: {
-                html: descriptionInput
-              },
-                hint: {
-                text: "Provide a description of the find location."
-              },
-              checked: setCheckedDesc
-            }
+            }            
           ]
         }) }}
 
-        <button class="govuk-button" data-module="govuk-button">Continue</button>
+        {{ govukTextarea({
+          name: "location-description",
+          id: "location-description",
+          classes: "govuk-!-width-two-thirds",
+          value: data["location"]["location-description"],
+          label: {
+            text: "Additional information"
+          },
+          hint: {
+            text: "Please provide any further information you have about the location the wreck material was found. You should include any known distances and directions.",
+            classes: "govuk-!-width-two-thirds"
+          }
+        }) }}
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
 
       </form>
 

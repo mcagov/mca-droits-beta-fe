@@ -48,7 +48,6 @@ export class ReportFilter {
         return;
       }
       const activeItems = [...$(`[data-status=${filterStatus}]`, this.reportListTable)];
-      console.log(activeItems);
       reportItem.classList.add('portal-filter-item--active');
       this.reportListRows.forEach((row) => {
         row.classList.remove('visible');

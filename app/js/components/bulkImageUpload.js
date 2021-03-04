@@ -46,7 +46,6 @@ export class BulkUpload {
   bulkImageUploadEvent() {
     this.bulkImageUploadButton.addEventListener('click', () => {
       const numberOfItems = this.photoUploadInputs.length;
-      console.log(numberOfItems);
       // Loop through each file-upload input and grab the selected file data,
       // and the input id (which is the unique id for the wreck item)
       this.photoUploadInputs.forEach((input, index) => {

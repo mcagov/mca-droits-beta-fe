@@ -1,5 +1,6 @@
 import { body, validationResult } from 'express-validator';
-import { formatValidationErrors } from '../../../utils';
+import { formatValidationErrors } from '../../utils';
+import GT_OSGB from '../../utils/geotools';
 
 const inRange = require('lodash.inrange');
 const latitudeDegressRange = (val) => inRange(val, -90, 90) || val == 90;
@@ -26,6 +27,8 @@ export default function (app) {
       const type = reqBody['location-type'];
 
       session['location-type'] = type;
+
+      session['location-description'] = reqBody['location-description'];
 
       switch (type) {
         case 'coords-decimal':
@@ -347,6 +350,63 @@ export default function (app) {
 
           break;
 
+        case 'coords-osgrid':
+          session['location-osgrid-square'] = reqBody['location-osgrid-square'];
+          session['location-osgrid-easting'] =
+            reqBody['location-osgrid-easting'];
+          session['location-osgrid-northing'] =
+            reqBody['location-osgrid-northing'];
+
+          const osgb = new GT_OSGB();
+
+          osgb.parseGridRef(
+            `${reqBody['location-osgrid-square']} ${reqBody['location-osgrid-easting']} ${reqBody['location-osgrid-northing']}`
+          );
+
+          const wgs84 = osgb.getWGS84();
+
+          session['location-standard'].latitude = wgs84.latitude.toFixed(5);
+          session['location-standard'].longitude = wgs84.longitude.toFixed(5);
+          session['location-standard'].radius = 0;
+
+          session[
+            'location-given'
+          ].latitude = `${session['location-standard'].latitude}°`;
+          session[
+            'location-given'
+          ].longitude = `${session['location-standard'].longitude}°`;
+
+          await body('location-osgrid-square')
+            .exists()
+            .not()
+            .isNumeric()
+            .withMessage('Grid reference must be letters')
+            .not()
+            .isEmpty()
+            .withMessage('Enter grid reference')
+            .run(req);
+          await body('location-osgrid-easting')
+            .exists()
+            .isNumeric()
+            .withMessage('Must be a number')
+            .not()
+            .isEmpty()
+            .withMessage('Enter easting')
+            .run(req);
+          await body('location-osgrid-northing')
+            .exists()
+            .isNumeric()
+            .withMessage('Must be a number')
+            .not()
+            .isEmpty()
+            .withMessage('Enter northing')
+            .run(req);
+
+          errors = formatValidationErrors(validationResult(req));
+          errorSummary = Object.values(errors);
+
+          break;
+
         case 'map':
           session['map-latitude-input'] = reqBody['map-latitude-input'];
           session['map-longitude-input'] = reqBody['map-longitude-input'];
@@ -386,18 +446,6 @@ export default function (app) {
           }
 
           break;
-        case 'description':
-          session['location-description'] = reqBody['location-description'];
-
-          await body('location-description')
-            .exists()
-            .not()
-            .isEmpty()
-            .withMessage('Enter a description')
-            .run(req);
-
-          errors = formatValidationErrors(validationResult(req));
-          errorSummary = Object.values(errors);
 
         default:
           errors = formatValidationErrors(validationResult(req));

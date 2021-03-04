@@ -24,8 +24,6 @@ function fileFilter(req, file, cb) {
   // Check mime
   const mimetype = filetypes.test(file.mimetype);
 
-  req.session.data.submittedFiles.push(file);
-
   if (mimetype && extname) {
     return cb(null, true);
   } else {
@@ -74,6 +72,7 @@ export default function (app) {
 
             const id = req.params.prop_id;
             req.session.data.property[id].image = req.file.filename;
+            req.session.data.property[id].originalFilename = req.file.originalname;
             req.session.save();
             res.json(req.file.filename);
           }
@@ -120,13 +119,15 @@ export default function (app) {
             imageUploads.push(
               {
                 id: itemId,
-                image: req.file.filename
+                image: req.file.filename,
+                originalFilename: req.file.originalname
               }
             );
             // Images will upload at different speeds, so here we make sure the image 
             // key in the wreck item object is stored correctly in session data
             for(const obj of imageUploads) {
               req.session.data.property[obj.id].image = obj.image;
+              req.session.data.property[obj.id].originalFilename = obj.originalFilename;
             }
             // When all images are assigned to the relevant wreck item, clear the array
             if (itemQuantity === imageUploads.length) {

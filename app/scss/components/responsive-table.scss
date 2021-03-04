@@ -10,6 +10,7 @@
   .report-responsive-table {
     border: 1px solid transparent;
     box-shadow: none;
+    margin-top: 25px;
 
     &__caption {
       display: block;
@@ -53,9 +54,19 @@
         font-weight: bold;
       }
 
-      &--description {
+      &--no-label {
         text-align: left;
+
+        &:before {
+          content: none;
+        }
       }
+    }
+
+    // Added for GovUK component to ensure 'govuk-details' list 
+    // text remains left aligned within a mobile table layout
+    .govuk-details__text {
+      text-align: left;
     }
   }	
 }

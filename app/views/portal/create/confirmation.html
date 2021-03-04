@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Receiver of Wreck account created
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <div class="govuk-panel govuk-panel--confirmation">
+        <h1 class="govuk-panel__title">Receiver of Wreck account created</h1>
+      </div>
+
+      <p>
+        We have sent you a confirmation email.
+      </p>
+
+      <h2 class="govuk-heading-m">What happens next</h2>
+      <p>You can continue to your reports on the next page. The details you have just entered can be used to sign in to your account in the future.</p>
+      
+      {{ govukButton({
+        text: "Continue to your reports",
+        href: "/portal/dashboard",
+        isStartButton: true
+      }) }}
+
+
+    </div>
+  </div>
+
+{% endblock %}

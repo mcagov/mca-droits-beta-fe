@@ -1,5 +1,5 @@
 import { body, validationResult } from 'express-validator';
-import { formatValidationErrors } from '../../utils';
+import { formatValidationErrors } from '../../../utils';
 
 const inRange = require('lodash.inrange');
 const latitudeDegressRange = (val) => inRange(val, -90, 90) || val == 90;

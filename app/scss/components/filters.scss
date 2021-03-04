@@ -1,0 +1,91 @@
+.report-filters {
+  background-color: govuk-colour("light-grey");
+
+  .govuk-details {
+    margin-bottom: 0;
+  }
+}
+
+.portal-filter-item-wrapper {
+  @media screen and (max-width: 600px) {
+    display: block;
+  }
+}
+
+.portal-filter-item {
+  text-decoration: none;
+
+  &:hover {
+    background-color: darken(govuk-colour("light-grey"), 5%);
+
+    .govuk-tag--purple {
+      background-color: darken(#dbd5e9, 10%);
+    }
+    .govuk-tag--orange {
+      background-color: darken(#fcd6c3, 10%);
+    }
+    .govuk-tag--grey {
+      background-color: darken(#eeefef, 10%);
+    }
+    .govuk-tag--blue {
+      background-color: darken(#d2e2f1, 10%);
+    }
+    .govuk-tag--turquoise {
+      background-color: darken(#bfe3e0, 10%);
+    }
+  }
+
+  &:focus {
+    outline: none;
+    color: inherit;
+    background-color: transparent;
+    box-shadow: none;
+    text-decoration: none;
+  }
+
+  &__close {
+    display: none;
+    padding: 4px;
+    font-weight: bold;
+    color: govuk-colour("dark-grey");
+  }
+
+  &--active {
+    border: 1px solid govuk-colour("mid-grey");
+    padding: 8px 5px;
+    background-color: darken(govuk-colour("light-grey"), 5%);
+
+    .portal-filter-item__close {
+      display: inline;
+    }
+
+    &:hover {
+      background-color: darken(govuk-colour("light-grey"), 10%);
+  
+      .govuk-tag--purple {
+        background-color: #dbd5e9;
+      }
+      .govuk-tag--orange {
+        background-color: #fcd6c3;
+      }
+      .govuk-tag--grey {
+        background-color: #eeefef;
+      }
+      .govuk-tag--blue {
+        background-color: #d2e2f1;
+      }
+      .govuk-tag--turquoise {
+        background-color: #bfe3e0;
+      }
+    }
+
+    &[data-status="all"]:hover {
+      background-color: govuk-colour("light-grey");
+    }
+  }
+
+  &--closed {
+    outline: 1px solid #b1b4b6 !important;
+    outline-offset: -1px !important;
+  }
+}

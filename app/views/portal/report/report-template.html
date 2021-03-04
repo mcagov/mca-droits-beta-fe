@@ -1,0 +1,424 @@
+{% extends "layout.html" %}
+
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
+
+{% block pageTitle %}
+Check your answers
+{% endblock %}
+
+{% block beforeContent %}
+{% include "includes/phase-banner.html" %}
+<a class="govuk-back-link" href="/portal/dashboard">Back to reports</a>
+{% endblock %}
+
+{% block content %}
+
+{% set reportDetail %}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+        <h2 class="govuk-heading-m">Details of find</h2>
+        {% set wreckFindDateText %}
+        &nbsp;22&nbsp;04&nbsp;2020
+        {% endset -%}
+
+        {% set wreckReportDateText %}
+        &nbsp;12&nbsp;05&nbsp;2020
+        {% endset -%}
+
+
+
+        {{ govukSummaryList({
+            rows: [
+                {
+                key: {
+                    text: "Date found"
+                },
+                value: {
+                    html: wreckFindDateText,
+                    actions: {
+                    items: []
+                    }
+                }
+                },
+                {
+                key: {
+                    text: "Date reported"
+                },
+                value: {
+                html: wreckReportDateText
+                },
+                actions: {
+                    items: []
+                }
+                },
+                {
+                key: {
+                text: "Wreck material removed"
+                },
+                value: {
+                text: "Yes"
+                },
+                actions: {
+                    items: []
+                }
+                }
+            ]
+            }) }}
+    </div>
+
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+        <h2 class="govuk-heading-m govuk-!-margin-top-5">Your details</h2>
+
+        {% set addressHtml %}
+        {% set addressLines = [
+                "71 Cherry Court",
+                "",
+                "Southampton",
+                "Hampshire",
+                "SO53 5PD"
+            ] %}
+
+        {{ address(addressLines) }}
+        {% endset -%}
+
+        {{ govukSummaryList({
+            rows: [
+                {
+                key: {
+                text: "Full name"
+                },
+                value: {
+                text: "Joe Bloggs"
+                },
+                actions: {
+                    items: []
+                }
+                },
+                {
+                key: {
+                text: "Email address"
+                },
+                value: {
+                text: "joe.bloggs@gmail.com"
+                },
+                actions: {
+                    items: []
+                }
+                },
+                {
+                key: {
+                text: "Telephone number"
+                },
+                value: {
+                text: "01524 316271"
+                },
+                actions: {
+                items: []
+                }
+                },
+                {
+                key: {
+                text: "Address"
+                },
+                value: {
+                html: addressHtml
+                },
+                actions: {
+                items: []
+                }
+                }
+            ]
+            }) }}
+    </div>
+
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+        <h2 class="govuk-heading-m">Vessel information</h2>
+      
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Vessel name"
+              },
+              value: {
+                text: "Avondale Park"
+              },
+              actions: {
+                items: []
+              }
+            },
+            {
+              key: {
+                text: "Vessel construction year"
+              },
+              value: {
+                text: "1944"
+              },
+              actions: {
+                items: []
+              }
+            },
+            {
+              key: {
+                text: "Vessel sunk year"
+              },
+              value: {
+                text: "1945"
+              },
+              actions: {
+                items: []
+              }
+            }
+          ]
+        }) }}
+      </div>
+
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+        <h2 class="govuk-heading-m govuk-!-margin-top-5">Location</h2>
+
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Coordinates
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    53.12346°&nbsp;&nbsp;2.34234°
+                </dd>
+            </div>
+        </dl>
+
+        <div id="location-map" class="map-display hide-on-print" data-latitude="53.12346" data-longitude="2.34234"
+            data-radius="{{ data['location-standard']['radius'] }}"></div>
+    </div>
+
+    <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m govuk-!-margin-top-9">Wreck material</h2>
+
+        <table class="govuk-table">
+            <caption class="govuk-table__caption">Items of wreck material reported
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header govuk-!-width-one-half">Description</th>
+                    <th scope="col" class="govuk-table__header govuk-table__header--numeric">Quantity</th>
+                    <th scope="col" class="govuk-table__header govuk-table__header--numeric">Total value</th>
+                    <th scope="col" class="govuk-table__header">Image</th>
+                    <th scope="col" class="govuk-table__header">Storage address</th>
+                </tr>
+            </thead>
+
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">17th-century Dutch Navy cannon weighing 56kg and 1262mm in length.</td>
+                    <td class="govuk-table__cell govuk-table__cell--numeric">1</td>
+                    <td class="govuk-table__cell govuk-table__cell--numeric">£3000</td>
+                    <td class="govuk-table__cell"><img src="/public/images/items/cannon.jpg" width="250" /></td>
+                    <td class="govuk-table__cell">
+                        {% set addressLines = [
+                            "71 Cherry Court",
+                            "",
+                            "Southampton",
+                            "Hampshire",
+                            "SO53 5PD"
+                            ] %}
+                        {{ address(addressLines) }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+        <h2 class="govuk-heading-m govuk-!-margin-top-5">Salvage</h2>
+
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Claim of expenses
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    Yes
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Services rendered
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    Fuel for boat and gas required for diving.
+                </dd>
+            </div>
+        </dl>
+    </div>
+</div>
+
+{% endset -%}
+
+{% set reportCorrespondence %}
+<div class="row-messages">
+    <div class="row-message row-message-received govuk-!-padding-5 govuk-!-margin-bottom-5">
+        <h2 class="govuk-heading-m">Message from the Receiver of Wreck</h2>
+        <p class="govuk-body"><strong>Sent:</strong> 06 09 2020, 15:32</p>
+        <div class="row-message-body govuk-inset-text">
+            <h3 class="govuk-heading-s">We have reviewed your wreck and salvage report</h3>
+            <p class="govuk-body">Dear Joe Bloggs,</p>
+            <p class="govuk-body">Thank you for reporting wreck and salvage. The Receiver of Wreck team has reviewed the details of your report.</p>
+            <h3 class="govuk-heading-s">Further information required</h3>
+            <p class="govuk-body">To help us identify the owner of the wreck material, we require the following additional information from you:</p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li>A detailed description of the wreck site. Any information that you could offer including the size of the wreck, material of construction, method of propulsion, the configuration of hatches, boilers or engines, or any obvious cargo.</li>
+                <li>Please provide the Receiver with an image and/or measurements of the item confirm whether there are any inscriptions, maker’s marks, serial numbers or similar visible on the find.</li>
+            </ul>
+
+            <p class="govuk-body">Please reply to this email with any further information. Digital images can be attached to your email response.</p>
+        </div>
+    </div>
+
+    <div class="row-message row-message-sent govuk-!-padding-5 govuk-!-margin-bottom-5">
+        <h2 class="govuk-heading-m">Message from Joe Bloggs</h2>
+        <p class="govuk-body"><strong>Sent:</strong> 08 09 2020, 09:05</p>
+        <div class="row-message-body govuk-inset-text">
+            <p class="govuk-body">Thank you for reviewing my report. The wreck was about 30ft in length and of timber construction. There were a large number of bottles found onboard. The item recovered had the mark "XYZ" on it. I have attached images.</p>
+            <p class="govuk-body">Please let me know if there is anything else I need to provide.</p>
+            <p class="govuk-body">Joe Bloggs.</p>
+        </div>
+        <div class="row-message-attachments">
+            <h3 class="govuk-heading-s">File attachments:</h3>
+            <img src="/public/images/items/prop.jpeg" height="100"/>
+            <img src="/public/images/items/mendi.png" height="100"/>
+        </div>
+    </div>
+
+    <div id="latest" class="row-message row-message-received govuk-!-padding-5 govuk-!-margin-bottom-5">
+        <h2 class="govuk-heading-m">Message from the Receiver of Wreck</h2>
+        <p class="govuk-body"><strong>Sent:</strong> 10 09 2020, 17:12</p>
+        <div class="row-message-body govuk-inset-text">
+            <p class="govuk-body">Dear Joe Bloggs,</p>
+            <p class="govuk-body">Thank you for providing this additional information. We are unable to determine the scale of the object from the photographs provided, please could you provide approximate measurements or provide photographs with a rule alongside the item.</p>
+        </div>
+    </div>
+</div>
+<div>
+    <h2 class="govuk-heading-m">Send a message to the Receiver of Wreck</h2>
+    {{ govukTextarea({
+        name: "message",
+        id: "message",
+        classes: "govuk-!-width-one-half",
+        label: {
+          text: "Message",
+          classes: "govuk-label--s"
+        }
+      }) }}
+      {{ govukFileUpload({
+        id: "attachment",
+        name: "attachment",
+        label: {
+          text: "Attachment",
+          classes: "govuk-label--s"
+        }
+      }) }}
+      {{ govukButton({
+        text: "Send"
+      }) }}
+</div>
+{% endset -%}
+
+{% set reportOutcome %}
+<h2 class="govuk-heading-m">Owner has waived their rights to the wreck material found</h2>
+
+<p class="govuk-body">The Receiver of Wreck has concluded their investigations into the report of wreck and salvage (reference (034/20). We have been able to successfully locate the current legal owner of the wreck of the <em>HMS Drake</em>.</p>
+
+<p class="govuk-body">Following the Receiver’s correspondence with the wreck owner, the owner has decided, on this occasion, to waive rights to the material recovered by you and listed below.</p>
+
+<p class="govuk-body">Therefore, in accordance with section 243 of the Merchant Shipping Act 1995, the Receiver of Wreck is able to offer you title to the material listed below in lieu of a salvage award.</p>
+
+<p class="govuk-body">Item as listed and described by you:</p>
+
+<ul class="govuk-list govuk-list--bullet">
+    <li>1 x Porthole door, brass, 9” diameter, glass cracked but otherwise good condition.</li>
+</ul>
+
+<h2 class="govuk-heading-m">What happens next?</h2>
+<p class="govuk-body">The Receiver of Wreck’s responsibility for this item is now discharged and our investigation is now officially closed.</p>
+
+<p class="govuk-body">Please look after this piece of Britain’s maritime heritage.</p>
+
+<p class="govuk-body">Although on this occasion you have been awarded this item in lieu of a salvage award, please note that you are still required to report all future recoveries from this (or any other) wreck.</p>
+{% endset -%}
+
+
+<div class="govuk-grid-row">        
+    <div class="govuk-grid-column-full">
+
+        <h1 class="govuk-heading-xl">
+            Report overview
+        </h1>
+
+    </div>
+</div>
+
+<div class="govuk-grid-row">        
+    <div class="govuk-grid-column-one-half-from-desktop">
+
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Reference
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    012/20
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Report status
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{govukTag({
+                        text: "Awaiting your response",
+                        classes: "govuk-tag--orange govuk-!-margin-bottom-2"
+                      })}}
+                      <br />
+                      <a href="#correspondence" class="scroll-to-latest-message">(see latest message)</a>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Last update
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    29&nbsp;06&nbsp;2020
+                </dd>
+            </div>
+        </dl>
+
+    </div>
+</div>
+
+        
+
+<div class="govuk-grid-row">        
+    <div class="govuk-grid-column-full">
+        {{ govukTabs({
+        items: [
+            {
+                label: "Report details",
+                id: "detail",
+                    panel: {
+                        html: reportDetail
+                    }
+            },
+            {
+                label: "Correspondence",
+                id: "correspondence",
+                panel: {
+                    html: reportCorrespondence
+                }
+            }
+        ]
+        }) }}
+
+    </div>
+</div>
+{% endblock %}

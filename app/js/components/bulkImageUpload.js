@@ -45,23 +45,27 @@ export class BulkUpload {
 
   bulkImageUploadEvent() {
     this.bulkImageUploadButton.addEventListener('click', () => {
-
+      const numberOfItems = this.photoUploadInputs.length;
       // Loop through each file-upload input and grab the selected file data,
       // and the input id (which is the unique id for the wreck item)
       this.photoUploadInputs.forEach((input, index) => {
         let id = input.id;
-        const file = new FormData();
-        file.append('image', input.files[0]);
+        const data = new FormData();
+        
+        // Append the image file data added to each input on the page, 
+        // along with the total number of wreck item inputs
+        data.append('image', input.files[0]);
+        data.append('itemQuantity', numberOfItems);
+
         axios.post(
             `/report/property-bulk-image-upload/${id}`,
-            file,
+            data,
             {
               headers: { 'Content-Type': 'multipart/form-data' },
               withCredentials: true,
               onUploadProgress: (progressEvent) => {
                 const uploadFiles = input.files;
                 const uploadFile = uploadFiles[0];
-
                 if (
                   uploadFiles.length &&
                   (uploadFile.type === 'image/png' ||
@@ -102,10 +106,11 @@ export class BulkUpload {
               this.bulkImageUploadButton.disabled = true;
               this.scrollToTop();
               this.handleErrorReplacement(currentInput, currentUploadBtn);
+
             } else {
               this.successfulUploads++;
+              // If upload is successful, hide error containers and display preview image
               this.errorContainer = $1(`#error-container-${id}`, this.el)
-
               this.errorContainer.classList.add('hidden');
               this.photoResults[index].src = `/uploads/${res.data}`;
               this.containersUploaded[index].classList.remove(
@@ -114,7 +119,9 @@ export class BulkUpload {
               this.containersInitial[index].classList.add(
                 'photo-upload__container--hide'
               );
-              this.handleAddButtonState();          
+
+              this.handleAddButtonState(); 
+
             }
           })
           .catch((reqError) => {

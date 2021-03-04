@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Create a Receiver of Wreck account
+{% endblock %}
+
+{% block beforeContent %}
+  <a class="govuk-back-link" href="/portal/create/email">Back</a>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-xl">Enter code to confirm your email address</h1>
+
+      <p>We have sent a code to: <strong>{{ data['portal-email'] }}</strong></p>
+
+      <form class="form" action="/portal/create/email-confirm-success" method="post">
+
+        {{ govukInput({
+          label: {
+            text: "Confirmation code"
+          },
+          hint: {
+            text: "For example, DNCLRK"
+          },
+          classes: "govuk-!-width-one-third",
+          id: "one-third",
+          name: "one-third"
+        }) }}
+
+        {{ govukWarningText({
+          text: "If you use a browser to access your email, you may need to open a new window or tab to see the code.",
+          iconFallbackText: "Warning"
+        }) }}
+
+        {% set notRecievedEmail %}
+          <p>The email may take a few minutes to arrive. Its subject line is: ‘Confirm your email address - Receiver of Wreck’.</p>
+
+          <p>Check your spam or junk folder – if it still has not arrived, you can <a href="/portal/create/email">request a new code</a>.</p>
+        {% endset %}
+
+        {{ govukDetails({
+          summaryText: "I have not received the email",
+          html: notRecievedEmail 
+        }) }}
+        
+        <button class="govuk-button" data-module="govuk-button">Confirm</button>
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

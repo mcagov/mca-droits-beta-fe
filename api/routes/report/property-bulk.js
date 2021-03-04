@@ -3,8 +3,8 @@ import path from 'path';
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import multer from 'multer';
-import { azureUpload } from '../../services';
-import { formatValidationErrors } from '../../utils';
+import { azureUpload } from '../../../services';
+import { formatValidationErrors } from '../../../utils';
 const csv = require('fast-csv');
 
 const storage = multer.diskStorage({

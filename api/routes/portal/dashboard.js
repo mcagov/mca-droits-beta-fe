@@ -79,14 +79,12 @@ export default function (app) {
         if (err) {
           console.log(`Token generation failed due to ${err}`);
         } else {
-          console.log('else');
-          getUserID(tokenResponse.accessToken);
-          console.log('end');
+          fetchData(tokenResponse.accessToken);
         }
       }
     );
 
-    function getUserID(accessToken) {      
+    function fetchData(accessToken) {      
       axios.get(
         url,
         {
@@ -104,7 +102,9 @@ export default function (app) {
           if(item._crf99_reporter_value === currentUserID) {
             userReports.push(item);
           }
-        })      
+        })   
+        console.log(userReports);   
+        console.log('END');
       }) 
       .catch((reqError) => {
         console.error(reqError);

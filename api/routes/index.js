@@ -18,6 +18,7 @@ import propertyFormImageDelete from './report/property-form-image-delete';
 import propertyFormAddress from './report/property-form-address';
 import salvageAward from './report/salvage-award';
 import checkYourAnswers from './report/check-your-answers';
+import portalDashboard from './portal/dashboard';
 
 export default () => {
   const app = Router();
@@ -41,6 +42,7 @@ export default () => {
   propertyFormAddress(app);
   salvageAward(app);
   checkYourAnswers(app);
+  portalDashboard(app);
 
   return app;
 };

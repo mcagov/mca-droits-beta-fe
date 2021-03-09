@@ -139,7 +139,7 @@
         {% for item in userReports %}
           <tr class="govuk-table__row report-responsive-table__row report-responsive-table__row--portal-dashboard" data-status="received" data-js="report-listings-row">
             <td class="govuk-table__cell report-responsive-table__cell" data-label="Reference">{{ item["report-ref"] }}</td>
-            <td class="govuk-table__cell report-responsive-table__cell" data-label="Date reported">{{ item.dates["date-reported"] }}</td>
+            <td class="govuk-table__cell report-responsive-table__cell" data-label="Date reported">{{ item.formattedDates["date-reported"] }}</td>
             <td class="govuk-table__cell report-responsive-table__cell" data-label="Details">
               HMS Drake<br/>
               {{ govukDetails({
@@ -152,7 +152,7 @@
                 text: "Received",
                 classes: "govuk-tag--purple govuk-!-margin-bottom-2"
               })}}<br/>
-              <strong>Last&nbsp;update: </strong>{{ item.dates["last-updated"] }}
+              <strong>Last&nbsp;update: </strong>{{ item.formattedDates["last-updated"] }}
             </td>
             <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--no-label"><a href="/portal/report/034-20">View report</a></td>
           </tr>

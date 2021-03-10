@@ -34,3 +34,5 @@ jobs:
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_0b3a046e60f64bfc9c1595758f050b7e }}
         package: .
+      env:
+        AZURE_STORAGE_CONNECTION_STRING: ${{secrets.AZURE_STAGING_STORAGE_CONNECTION_STRING}}

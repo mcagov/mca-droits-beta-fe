@@ -26,6 +26,7 @@ export default function (app) {
         'date-found': '28 12 2019',
         'date-reported': '15 01 2020',
         'last-updated': '05 03 2021',
+        'vessel-name': 'HMS Drake',
         'wreck-materials': [
           'The bell of the SS Mendi. Includes the identifying marking \'Mendi\'.',
           '17th-century Dutch Navy cannon weighing 56kg and 1262mm in length',
@@ -51,6 +52,7 @@ export default function (app) {
           console.log(`Token generation failed due to ${err}`);
         } else {
           accessToken = tokenResponse.accessToken;
+          req.session.data['access-token'] = accessToken;
           getUserID(accessToken).then(() => {
             const filteredReportUrl = url + `crf99_mcawreckreports?$select=crf99_reportreference,crf99_datereported,crf99_datefound,modifiedon,_crf99_reporter_value&$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)`;
             fetchReportData(accessToken, filteredReportUrl).then(() => {

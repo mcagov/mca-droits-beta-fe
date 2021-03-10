@@ -149,7 +149,9 @@
             <td class="govuk-table__cell report-responsive-table__cell" data-label="Reference">{{ item["report-ref"] }}</td>
             <td class="govuk-table__cell report-responsive-table__cell" data-label="Date reported">{{ item["date-reported"] }}</td>
             <td class="govuk-table__cell report-responsive-table__cell" data-label="Details">
-              HMS Drake<br/>
+              {% if item['vessel-name'] %}
+              {{ item['vessel-name'] }}<br/>
+              {% endif %}
               <details class="govuk-details" data-module="govuk-details">
                 <summary class="govuk-details__summary">
                   <span class="govuk-details__summary-text">

@@ -14,12 +14,10 @@ export default function (app) {
     
     let accessToken = '';
     const currentUserEmail = req.body.email;
-    let currentUserID = '';
+    let currentUserID;
     
     const url = 'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/';
-    const contactsUrl = url + 'contacts?$select=emailaddress1,contactid';
-    const reportDataUrl = url + 'crf99_mcawreckreports?$select=crf99_reportreference,crf99_datereported,crf99_datefound,modifiedon,_crf99_reporter_value'
-    //const wreckMaterialUrl = url + 'crf99_mcawreckmaterials';
+    const contactsUrl = url + `contacts?$select=contactid,emailaddress1&$filter=emailaddress1 eq '${currentUserEmail}'`;
 
     // Contains 2 test reports, with a third added from the api response:
     req.session.data.userReports = [
@@ -49,7 +47,8 @@ export default function (app) {
         } else {
           accessToken = tokenResponse.accessToken;
           getUserID(accessToken).then(() => {
-            fetchReportData(currentUserID).then(() => {
+            const filteredReportUrl = url + `crf99_mcawreckreports?$select=crf99_reportreference,crf99_datereported,crf99_datefound,modifiedon,_crf99_reporter_value&$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)`;
+            fetchReportData(accessToken, filteredReportUrl).then(() => {
               return res.redirect('dashboard');
             })
           });
@@ -67,12 +66,7 @@ export default function (app) {
         )
         .then((res) => {        
           const data = res.data.value;
-
-          data.find(function(item, index) {
-            if(item.emailaddress1 === currentUserEmail) {
-              currentUserID = item.contactid;
-            }
-          }) 
+          currentUserID = data[0].contactid;
           resolve()
         })
         .catch((reqError) => {
@@ -83,41 +77,26 @@ export default function (app) {
       })
     }
 
-    function fetchReportData(userID) {
+    function fetchReportData(token, url) {
       return new Promise((resolve, reject) => {  
         axios.get(
-          reportDataUrl,
+          url,
           {
-            headers: { 'Authorization': `bearer ${accessToken}` },
+            headers: { 'Authorization': `bearer ${token}` },
           }
         )
         .then((res) => {        
           const reportData = res.data.value;
-
-          findUserReports(reportData, userID).then(() => {
-            resolve();
+          reportData.forEach((item) => {       
+            formatReportData(item);
           })
+
+          resolve();
         })
         .catch((reqError) => {
           console.log('Report data error: ' + reqError);
           reject();
         })
-      })
-    }
-
-    function findUserReports(data, ID) {
-      return new Promise((resolve, reject) => { 
-        if(data.length && ID.length) {
-          data.forEach((item) => {
-            if(item._crf99_reporter_value === ID) {        
-              formatReportData(item);
-            }
-          })
-          resolve();
-        } else {
-          console.log('Error finding user data');
-          reject();
-        }
       })
     }
 
@@ -132,6 +111,11 @@ export default function (app) {
         'DD MM YYYY'
       );
       reportItem['last-updated'] = dayjs(data.modifiedon).format('DD MM YYYY');
+      reportItem['wreck-materials'] = [];
+
+      ['wreck-materials'].forEach((item) => {
+        reportItem['wreck-materials'].push(item.crf99_description);
+      });
 
       req.session.data.userReports.push(reportItem);
     }

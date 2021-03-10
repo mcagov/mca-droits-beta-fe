@@ -13,11 +13,18 @@ export default function (app) {
     const clientId = '62ef4f36-0bd1-43f0-9ce4-eaf4a078b9a1';
     const clientSecret = 'H9Z5g5N0VN~AV2.g~n1UP_8Wn9l.-0u2N_';
     const resource = 'https://mca-sandbox.crm11.dynamics.com';
-    const url = 'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/crf99_mcawreckreports?$select=crf99_reportreference,crf99_datereported,crf99_datefound,modifiedon,_crf99_reporter_value';
-    let session = req.session.data;
-    session = {};
+    
+    let accessToken = '';
+    const currentUserEmail = req.body.email;
+    let currentUserID = '';
+    
+    const url = 'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/';
+    const contactsUrl = url + 'contacts?$select=emailaddress1,contactid';
+    const reportDataUrl = url + 'crf99_mcawreckreports?$select=crf99_reportreference,crf99_datereported,crf99_datefound,modifiedon,_crf99_reporter_value'
+    //const wreckMaterialUrl = url + 'crf99_mcawreckmaterials';
+
     // Contains 2 test reports, with a third added from the api response:
-    session.userReports = [
+    req.session.data.userReports = [
       {
         "report-ref": "98/21",
         "date-found": "2019-12-28T00:00:00Z",
@@ -52,43 +59,77 @@ export default function (app) {
         if (err) {
           console.log(`Token generation failed due to ${err}`);
         } else {
-          const accessToken = tokenResponse.accessToken;
-          fetchData(accessToken).then(() => {
-            console.log(session.userReports);
-            return res.render('portal/dashboard', {userReports: session.userReports});
+          accessToken = tokenResponse.accessToken;
+          getUserID(accessToken).then(() => {
+            fetchReportData(currentUserID).then(() => {
+              return res.redirect('dashboard');
+            })
           });
         }
       }
     );
 
-    function fetchData(accessToken) {  
+    function getUserID(token) {  
       return new Promise((resolve, reject) => {  
         axios.get(
-          url,
+          contactsUrl,
           {
-            headers: { 'Authorization': `bearer ${accessToken}` },
+            headers: { 'Authorization': `bearer ${token}` },
           }
         )
         .then((res) => {        
-          // For testing purposes we are hard coding a userID here, but the aim is to use the 
-          // inputted email address to query 'contacts' and grab the userID, before querying 
-          // 'mcawreckreports' to retrieve the wreck data related to that userID.
-          // The obj key for user ids is _crf99_reporter_value
-
-          // Assume we have retrieved this from the 'contacts' table in the database
-          const currentUserID = "8da6141c-727b-eb11-a812-0022481a85d1";
           const data = res.data.value;
 
           data.find(function(item, index) {
-            if(item._crf99_reporter_value === currentUserID) {
-              formatReportData(item);
+            if(item.emailaddress1 === currentUserEmail) {
+              currentUserID = item.contactid;
             }
           }) 
           resolve()
         })
         .catch((reqError) => {
-          return reqError;
+          console.log('User ID error');
+          console.log(reqError);
+          reject();
         })
+      })
+    }
+
+    function fetchReportData(userID) {
+      return new Promise((resolve, reject) => {  
+        axios.get(
+          reportDataUrl,
+          {
+            headers: { 'Authorization': `bearer ${accessToken}` },
+          }
+        )
+        .then((res) => {        
+          const reportData = res.data.value;
+
+          findUserReports(reportData, userID).then(() => {
+            resolve();
+          })
+        })
+        .catch((reqError) => {
+          console.log('Report data error: ' + reqError);
+          reject();
+        })
+      })
+    }
+
+    function findUserReports(data, ID) {
+      return new Promise((resolve, reject) => { 
+        if(data.length && ID.length) {
+          data.forEach((item) => {
+            if(item._crf99_reporter_value === ID) {        
+              formatReportData(item);
+            }
+          })
+          resolve();
+        } else {
+          console.log('Error finding user data');
+          reject();
+        }
       })
     }
 
@@ -118,7 +159,7 @@ export default function (app) {
         dates[key] = dayjs(dates[key]).format("DD MM YYYY");
       })
 
-      session.userReports.push(reportItem);
+      req.session.data.userReports.push(reportItem);
     }
   });
 }

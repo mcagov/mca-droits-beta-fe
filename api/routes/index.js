@@ -20,6 +20,7 @@ import salvageAward from './report/salvage-award';
 import checkYourAnswers from './report/check-your-answers';
 import portalDashboard from './portal/dashboard';
 import portalDashboardSort from './portal/dashboard-sort';
+import portalViewReport from './portal/view-report';
 
 export default () => {
   const app = Router();
@@ -45,6 +46,7 @@ export default () => {
   checkYourAnswers(app);
   portalDashboard(app);
   portalDashboardSort(app);
+  portalViewReport(app);
 
   return app;
 };

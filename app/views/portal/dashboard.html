@@ -133,6 +133,7 @@
           ]
         }) }}
       </form>
+
       <table class="govuk-table report-responsive-table" data-js="report-listings-table">
         <thead class="govuk-table__head report-responsive-table__head">
           <tr class="govuk-table__row report-responsive-table__row">
@@ -145,6 +146,7 @@
         </thead>
         <tbody class="govuk-table__body report-responsive-table__body" data-js="portal-dashboard">
         {% for item in data.userReports %}
+          {% set convertedRef = item["report-ref"] | replace(r/\//ig,'-') %}
           <tr class="govuk-table__row report-responsive-table__row report-responsive-table__row--portal-dashboard" data-status="received" data-js="report-listings-row">
             <td class="govuk-table__cell report-responsive-table__cell" data-label="Reference">{{ item["report-ref"] }}</td>
             <td class="govuk-table__cell report-responsive-table__cell" data-label="Date reported">{{ item["date-reported"] }}</td>
@@ -174,7 +176,9 @@
               })}}<br/>
               <strong>Last&nbsp;update: </strong>{{ item["last-updated"] }}
             </td>
-            <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--no-label"><a href="/portal/report/034-20">View report</a></td>
+            <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--no-label">
+              <a href="/portal/report/{{convertedRef}}">View report</a>
+            </td>
           </tr>
         {% endfor %}
         </tbody>

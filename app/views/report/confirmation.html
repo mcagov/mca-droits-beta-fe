@@ -20,7 +20,7 @@
         <div class="govuk-panel__body">
           Your reference:
           <br>
-          <strong>034/20</strong>
+          <strong>{{reference}}</strong>
         </div>
       </div>
 
@@ -46,25 +46,6 @@
       </div>
 
       <h2 class="govuk-heading-m">What happens next</h2>
-
-      {% if data["property-possession"] == "no" %}
-        <p>You have opted to deliver the salvaged wreck material to the Receiver of Wreck. The wreck material should be
-          delivered to the following address:</p>
-
-        <p>
-          Spring Place<br/>
-          105 Commercial Road<br/>
-          Southampton<br/>
-          SO15 1EG<br/>
-          United Kingdom<br/>
-        </p>
-
-        {{ govukWarningText({
-          html: 'You must <a href="#">contact the Receiver of Wreck</a> if it is not possible to deliver the wreck material within 5 working days.',
-          iconFallbackText: "Warning"
-        }) }}
-
-      {% endif %}
 
       <p>If you wish to report additional items of wreck material from another find, please complete another <a href="/report/start">Report of wreck material</a></p>
 

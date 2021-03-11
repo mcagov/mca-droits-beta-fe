@@ -44,7 +44,7 @@
  *
  *****************************************************************************/
 
-export class GT_OSGB {
+export default class GT_OSGB {
   constructor() {
     this.northings = 0;
     this.eastings = 0;

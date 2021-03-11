@@ -6,24 +6,6 @@
   Your reports of wreck material
 {% endblock %}
 {% block content %}
-{% set wreck1 %}
-<ul class="govuk-list govuk-list--bullet">
-  <li>German U-boat propellers measuring 60cm in diameter.</li>
-  <li>The bell of the SS Mendi. Includes the identifying marking 'Mendi'.</li>
-  <li>17th-century Dutch Navy cannon weighing 56kg and 1262mm in length.</li>
-</ul>
-{% endset -%}
-{% set wreck2 %}
-<ul class="govuk-list govuk-list--bullet">
-  <li>17th-century Dutch Navy cannon weighing 56kg and 1262mm in length.</li>
-</ul>
-{% endset -%}
-{% set wreck3 %}
-<ul class="govuk-list govuk-list--bullet">
-  <li>German U-boat propellers measuring 60cm in diameter.</li>
-  <li>The bell of the SS Mendi. Includes the identifying marking 'Mendi'.</li>
-</ul>
-{% endset -%}
 {{value}}
 {% set statusGuide %}
   <p class="">
@@ -167,11 +149,23 @@
             <td class="govuk-table__cell report-responsive-table__cell" data-label="Reference">{{ item["report-ref"] }}</td>
             <td class="govuk-table__cell report-responsive-table__cell" data-label="Date reported">{{ item["date-reported"] }}</td>
             <td class="govuk-table__cell report-responsive-table__cell" data-label="Details">
-              HMS Drake<br/>
-              {{ govukDetails({
-                summaryText: "3 items of wreck material",
-                html: wreck1
-              }) }}
+              {% if item['vessel-name'] %}
+              {{ item['vessel-name'] }}<br/>
+              {% endif %}
+              <details class="govuk-details" data-module="govuk-details">
+                <summary class="govuk-details__summary">
+                  <span class="govuk-details__summary-text">
+                    {{ item['wreck-materials'] | length }} items of wreck material
+                  </span>
+                </summary>
+                <div class="govuk-details__text">
+                  <ul class="govuk-list govuk-list--bullet">
+                  {% for property in item['wreck-materials'] %}
+                    <li>{{ property }}</li>
+                  {% endfor %}
+                  </ul>
+                </div>
+              </details>
             </td>
             <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--no-label">
               {{govukTag({

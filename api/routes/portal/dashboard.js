@@ -11,15 +11,13 @@ export default function (app) {
     const clientId = '62ef4f36-0bd1-43f0-9ce4-eaf4a078b9a1';
     const clientSecret = 'H9Z5g5N0VN~AV2.g~n1UP_8Wn9l.-0u2N_';
     const resource = 'https://mca-sandbox.crm11.dynamics.com';
-    
+
     let accessToken = '';
     const currentUserEmail = req.body.email;
-    let currentUserID = '';
-    
+    let currentUserID;
+
     const url = 'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/';
-    const contactsUrl = url + 'contacts?$select=emailaddress1,contactid';
-    const reportDataUrl = url + 'crf99_mcawreckreports?$select=crf99_reportreference,crf99_datereported,crf99_datefound,modifiedon,_crf99_reporter_value'
-    //const wreckMaterialUrl = url + 'crf99_mcawreckmaterials';
+    const contactsUrl = url + `contacts?$select=contactid,emailaddress1&$filter=emailaddress1 eq '${currentUserEmail}'`;
 
     // Contains 2 test reports, with a third added from the api response:
     req.session.data.userReports = [
@@ -28,12 +26,18 @@ export default function (app) {
         'date-found': '28 12 2019',
         'date-reported': '15 01 2020',
         'last-updated': '05 03 2021',
+        'vessel-name': 'HMS Drake',
+        'wreck-materials': [
+          'The bell of the SS Mendi. Includes the identifying marking \'Mendi\'.',
+          '17th-century Dutch Navy cannon weighing 56kg and 1262mm in length',
+          'German U-boat propellers measuring 60cm in diameter.']
       },
       {
         'report-ref': '99/21',
         'date-found': '17 01 2020',
         'date-reported': '23 02 2020',
         'last-updated': '01 02 2021',
+        'wreck-materials': ['17th-century Dutch Navy cannon weighing 56kg and 1262mm in length']
       },
     ];
 
@@ -48,8 +52,10 @@ export default function (app) {
           console.log(`Token generation failed due to ${err}`);
         } else {
           accessToken = tokenResponse.accessToken;
+          req.session.data['access-token'] = accessToken;
           getUserID(accessToken).then(() => {
-            fetchReportData(currentUserID).then(() => {
+            const filteredReportUrl = url + `crf99_mcawreckreports?$select=crf99_reportreference,crf99_datereported,crf99_datefound,modifiedon,_crf99_reporter_value&$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)`;
+            fetchReportData(accessToken, filteredReportUrl).then(() => {
               return res.redirect('dashboard');
             })
           });
@@ -57,71 +63,52 @@ export default function (app) {
       }
     );
 
-    function getUserID(token) {  
-      return new Promise((resolve, reject) => {  
+    function getUserID(token) {
+      return new Promise((resolve, reject) => {
         axios.get(
           contactsUrl,
           {
             headers: { 'Authorization': `bearer ${token}` },
           }
         )
-        .then((res) => {        
-          const data = res.data.value;
-
-          data.find(function(item, index) {
-            if(item.emailaddress1 === currentUserEmail) {
-              currentUserID = item.contactid;
-            }
-          }) 
-          resolve()
-        })
-        .catch((reqError) => {
-          console.log('User ID error');
-          console.log(reqError);
-          reject();
-        })
+          .then((res) => {
+            const data = res.data.value;
+            currentUserID = data[0].contactid;
+            resolve()
+          })
+          .catch((reqError) => {
+            console.log('User ID error');
+            console.log(reqError);
+            reject();
+          })
       })
     }
 
-    function fetchReportData(userID) {
-      return new Promise((resolve, reject) => {  
+    function fetchReportData(token, url) {
+      return new Promise((resolve, reject) => {
         axios.get(
-          reportDataUrl,
+          url,
           {
-            headers: { 'Authorization': `bearer ${accessToken}` },
+            headers: { 'Authorization': `bearer ${token}` },
           }
         )
-        .then((res) => {        
-          const reportData = res.data.value;
+          .then((res) => {
+            const reportData = res.data.value;
+            reportData.forEach((item) => {
+              formatReportData(item);
+            })
 
-          findUserReports(reportData, userID).then(() => {
             resolve();
           })
-        })
-        .catch((reqError) => {
-          console.log('Report data error: ' + reqError);
-          reject();
-        })
-      })
-    }
-
-    function findUserReports(data, ID) {
-      return new Promise((resolve, reject) => { 
-        if(data.length && ID.length) {
-          data.forEach((item) => {
-            if(item._crf99_reporter_value === ID) {        
-              formatReportData(item);
-            }
+          .catch((reqError) => {
+            console.log('Report data error: ' + reqError);
+            reject();
           })
-          resolve();
-        } else {
-          console.log('Error finding user data');
-          reject();
-        }
       })
     }
 
     function formatReportData(data) {
+      const wreckMaterialsData = data.crf99_MCAWreckMaterial_WreckReport_crf99_;
       let reportItem = {};
 
       reportItem['report-ref'] = data.crf99_reportreference;
@@ -132,6 +119,11 @@ export default function (app) {
         'DD MM YYYY'
       );
       reportItem['last-updated'] = dayjs(data.modifiedon).format('DD MM YYYY');
+      reportItem['wreck-materials'] = [];
+
+      wreckMaterialsData.forEach((item) => {
+        reportItem['wreck-materials'].push(item.crf99_description);
+      });
 
       req.session.data.userReports.push(reportItem);
     }

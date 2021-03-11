@@ -116,7 +116,9 @@ export default function (app) {
           .exists()
           .not()
           .isEmpty()
-          .withMessage('Enter your postcode')
+          .withMessage('Enter a real postcode')
+          .isPostalCode(['GB'])
+          .withMessage('Please enter a valid postcode')
           .run(req);
       }
       const errors = formatValidationErrors(validationResult(req));

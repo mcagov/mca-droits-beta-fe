@@ -21,7 +21,7 @@ export default function (app) {
     const url = 'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/';
     const contactsUrl =
       url +
-      `contacts?$select=contactid,emailaddress1&$filter=emailaddress1 eq '${currentUserEmail}'`;
+      `contacts?$filter=emailaddress1 eq '${currentUserEmail}'`;
 
     // Contains 2 test reports, with a third added from the api response:
     req.session.data.userReports = [
@@ -60,7 +60,7 @@ export default function (app) {
         } else {
           accessToken = tokenResponse.accessToken;
           req.session.data.token = accessToken;
-          getUserID(accessToken).then(() => {
+          getUserData(accessToken).then(() => {
             const filteredReportUrl =
               url +
               `crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)`;
@@ -72,7 +72,7 @@ export default function (app) {
       }
     );
 
-    function getUserID(token) {
+    function getUserData(token) {
       return new Promise((resolve, reject) => {
         axios
           .get(contactsUrl, {
@@ -80,13 +80,20 @@ export default function (app) {
           })
           .then((res) => {
             const data = res.data.value[0];
+            console.log(data);
             const session = req.session.data;
             currentUserID = data.contactid;
             session.id = currentUserID;
             session.userName = data.fullname;
             session.userEmail = data.emailaddress1;
             session.userTel = data.telephone1;
-            req.session.data.userAddress = data.address1_composite;
+            session.userAddress1 = data.address1_line1;
+            session.userCity = data.address1_city;
+            session.userCounty = data.address1_county;
+            session.userPostcode = data.address1_postalcode;
+
+            console.log(session);
+            console.log('END CONTACTS CALL');
             resolve();
           })
           .catch((reqError) => {

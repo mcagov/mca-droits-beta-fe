@@ -1,4 +1,5 @@
 import axios from 'axios';
+import dayjs from 'dayjs';
 
 export default function (app) {
   app.get(
@@ -9,7 +10,7 @@ export default function (app) {
       report = report.replace('-', '/');
       const token = req.session.data.token;
 
-      const reportUrl = `https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/crf99_mcawreckreports?$filter=crf99_reportreference eq '${report}'`;
+      const reportUrl = `https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/crf99_mcawreckreports?$filter=crf99_reportreference eq '${report}'&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_`;
       let reportData;
 
       fetchReportData(token, reportUrl).then(() => {
@@ -24,8 +25,14 @@ export default function (app) {
               headers: { Authorization: `bearer ${token}` },
             })
             .then((res) => {
-              console.log(res);
               reportData = res.data.value[0];
+              reportData.coordinates = `${reportData.crf99_latitude}° ${reportData.crf99_longitude}°`;
+              reportData.dateReported = dayjs(reportData.crf99_datereported).format(
+                'DD MM YYYY'
+              );
+              reportData.dateFound = dayjs(reportData.crf99_datefound).format(
+                'DD MM YYYY'
+              );
               console.log(reportData);
 
               resolve();

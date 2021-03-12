@@ -9,29 +9,47 @@ import config from '../../../app/config';
 
 export default function (app) {
   app.post(
-    '/report/check-your-answers',
+    '/report/confirmation',
     [
       body('property-declaration')
         .exists()
         .not()
         .isEmpty()
-        .withMessage('Select to confirm you are happy with the declaration')
+        .withMessage('Select to confirm you are happy with the declaration'),
     ],
     async function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
       const sd = cloneDeep(req.session.data);
+      const genRefUrl =
+        'https://mca-referencegenerator.azurewebsites.net/api/generatereference';
       const postUrl =
         'https://prod-05.uksouth.logic.azure.com:443/workflows/7eb0e5d4ba61419b9fc3a100c1d2b55e/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=dlIj2NC1JL2pRXGbH0ZMo_B1YbJDm_JKvE0PTEI1F5k&Content-Type=application/json';
+      let reference;
 
+      // Errors
       if (errors) {
         return res.render('report/check-your-answers', {
           errors,
           errorSummary: Object.values(errors),
-          values: req.body
+          values: req.body,
         });
       } else {
+        // Generate a report reference
+        try {
+          const response = await axios.get(genRefUrl, {
+            headers: {
+              'x-functions-key':
+                'plJvmaBA0qXYNh/m0VZahvwdNCL7aowzGAcPwkg/G8yh1LHiKXYf3Q==',
+            },
+          });
+          reference = response.data;
+        } catch (err) {
+          console.error(err);
+        }
+
+        // Data obj to send to db
         const data = {
-          reference: sd['reference'],
+          reference,
           'report-date': `${sd['report-date']['year']}-${sd['report-date']['month']}-${sd['report-date']['day']}`,
           'wreck-find-date': `${sd['wreck-find-date']['year']}-${sd['wreck-find-date']['month']}-${sd['wreck-find-date']['day']}`,
           latitude: sd['location']['location-standard']['latitude'],
@@ -54,9 +72,9 @@ export default function (app) {
             'address-line-2': sd['personal']['address-line-2'],
             'address-town': sd['personal']['address-town'],
             'address-county': sd['personal']['address-county'],
-            'address-postcode': sd['personal']['address-postcode']
+            'address-postcode': sd['personal']['address-postcode'],
           },
-          'wreck-materials': []
+          'wreck-materials': [],
         };
 
         // adding properties to wreck materials array
@@ -71,22 +89,29 @@ export default function (app) {
           }
         }
 
-        console.log('[final data]:', JSON.stringify(data, null, 2));
+        // console.log('[final data]:', JSON.stringify(data, null, 2));
 
         // Post data to db
         try {
           const response = await axios.post(postUrl, JSON.stringify(data), {
-            headers: { 'content-type': 'application/json' }
+            headers: { 'content-type': 'application/json' },
           });
           if (response.statusText === 'Accepted') {
+            // Push image(s) to Azure
             Object.values(req.session.data.property).forEach((item) => {
               const imageData = fs.createReadStream(
-                `${path.resolve(__dirname + '/../../uploads/')}/${item.image}`
+                `${path.resolve(__dirname + '../../../../uploads/')}/${
+                  item.image
+                }`
               );
 
               azureUpload(imageData, item.image);
             });
-            return res.redirect('/report/confirmation');
+
+            // Clear session data
+            req.session.data = {};
+
+            return res.render('report/confirmation', { reference });
           }
         } catch (err) {
           console.error(err);

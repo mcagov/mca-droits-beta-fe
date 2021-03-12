@@ -10,7 +10,7 @@ export default function (app) {
         .exists()
         .not()
         .isEmpty()
-        .withMessage('Select yes if you have removed the wreck material')
+        .withMessage('Select yes if you have removed the wreck material'),
     ],
     function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
@@ -29,9 +29,6 @@ export default function (app) {
         req.session.data['report-date']['year'] = year;
 
         if (value === 'yes') {
-          // Temp report reference
-          req.session.data.reference = '100/21';
-
           return req.session.data.redirectToCheckAnswers
             ? res.redirect('/report/check-your-answers')
             : res.redirect('find-date');
@@ -42,7 +39,7 @@ export default function (app) {
         return res.render('report/removed-property-check', {
           errors,
           errorSummary: Object.values(errors),
-          values: req.body
+          values: req.body,
         });
       }
     }

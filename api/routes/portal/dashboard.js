@@ -63,7 +63,7 @@ export default function (app) {
           getUserID(accessToken).then(() => {
             const filteredReportUrl =
               url +
-              `crf99_mcawreckreports?$select=crf99_reportreference,crf99_datereported,crf99_datefound,modifiedon,_crf99_reporter_value&$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)`;
+              `crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)`;
             fetchReportData(accessToken, filteredReportUrl).then(() => {
               return res.redirect('dashboard');
             });
@@ -79,9 +79,14 @@ export default function (app) {
             headers: { Authorization: `bearer ${token}` },
           })
           .then((res) => {
-            const data = res.data.value;
-            currentUserID = data[0].contactid;
-            req.session.data.id = currentUserID;
+            const data = res.data.value[0];
+            const session = req.session.data;
+            currentUserID = data.contactid;
+            session.id = currentUserID;
+            session.userName = data.fullname;
+            session.userEmail = data.emailaddress1;
+            session.userTel = data.telephone1;
+            req.session.data.userAddress = data.address1_composite;
             resolve();
           })
           .catch((reqError) => {
@@ -115,6 +120,7 @@ export default function (app) {
 
     function formatReportData(data) {
       const wreckMaterialsData = data.crf99_MCAWreckMaterial_WreckReport_crf99_;
+
       let reportItem = {};
 
       reportItem['report-ref'] = data.crf99_reportreference;

@@ -5,11 +5,17 @@ export default function (app) {
     '/portal/report/:report',
 
     function (req, res) {
-      const report = req.params.report;
+      let report = req.params.report;
+      report = report.replace('-', '/');
       const token = req.session.data.token;
-      const reportUrl = `https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/crf99_mcawreckreports?$filter=crf99_reportreference eq ${report}`;
 
-      fetchReportData(token, reportUrl);
+      const reportUrl = `https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/crf99_mcawreckreports?$filter=crf99_reportreference eq '${report}'`;
+      let reportData;
+
+      fetchReportData(token, reportUrl).then(() => {
+        console.log(reportData);
+        res.render('portal/report', { reportData: reportData });
+      });
 
       function fetchReportData(token, url) {
         return new Promise((resolve, reject) => {
@@ -18,7 +24,8 @@ export default function (app) {
               headers: { Authorization: `bearer ${token}` },
             })
             .then((res) => {
-              const reportData = res.data.value;
+              console.log(res);
+              reportData = res.data.value[0];
               console.log(reportData);
 
               resolve();
@@ -29,8 +36,6 @@ export default function (app) {
             });
         });
       }
-
-      res.render('portal/report');
     }
   );
 }

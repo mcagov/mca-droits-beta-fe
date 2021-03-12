@@ -89,7 +89,7 @@ export default function (app) {
           }
         }
 
-        console.log('[final data]:', JSON.stringify(data, null, 2));
+        // console.log('[final data]:', JSON.stringify(data, null, 2));
 
         // Post data to db
         try {
@@ -100,7 +100,9 @@ export default function (app) {
             // Push image(s) to Azure
             Object.values(req.session.data.property).forEach((item) => {
               const imageData = fs.createReadStream(
-                `${path.resolve(__dirname + '/../../uploads/')}/${item.image}`
+                `${path.resolve(__dirname + '../../../../uploads/')}/${
+                  item.image
+                }`
               );
 
               azureUpload(imageData, item.image);

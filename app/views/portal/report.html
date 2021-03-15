@@ -13,6 +13,12 @@ Report Details
 
 {% block content %}
 
+{% if reportData.crf99_salvageawardclaimed %}
+{% set salvageAwardClaim = "Yes" %}
+{% else %}
+{% set salvageAwardClaim = "No" %}
+{% endif %}
+
 {% set reportDetail %}
 
 <div class="govuk-grid-row">
@@ -209,22 +215,24 @@ Report Details
             </thead>
 
             <tbody class="govuk-table__body">
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">17th-century Dutch Navy cannon weighing 56kg and 1262mm in length.</td>
-                    <td class="govuk-table__cell govuk-table__cell--numeric">1</td>
-                    <td class="govuk-table__cell govuk-table__cell--numeric">£3000</td>
-                    <td class="govuk-table__cell"><img src="/public/images/items/cannon.jpg" width="250" /></td>
-                    <td class="govuk-table__cell">
-                        {% set addressLines = [
-                            "71 Cherry Court",
-                            "",
-                            "Southampton",
-                            "Hampshire",
-                            "SO53 5PD"
-                            ] %}
-                        {{ address(addressLines) }}
-                    </td>
-                </tr>
+              {% for item in reportData.crf99_MCAWreckMaterial_WreckReport_crf99_ %}
+              <tr class="govuk-table__row">
+                  <td class="govuk-table__cell">{{ item.crf99_description }}</td>
+                  <td class="govuk-table__cell govuk-table__cell--numeric">{{ item.crf99_quantity }}</td>
+                  <td class="govuk-table__cell govuk-table__cell--numeric">£{{ item.crf99_value }}</td>
+                  <td class="govuk-table__cell"><img src="{{ item.crf99_imageurl }}" width="250" /></td>
+                  <td class="govuk-table__cell">
+                      {% set addressLines = [
+                          "71 Cherry Court",
+                          "",
+                          "Southampton",
+                          "Hampshire",
+                          "SO53 5PD"
+                          ] %}
+                      {{ address(addressLines) }}
+                  </td>
+              </tr>
+              {% endfor %}
             </tbody>
         </table>
     </div>
@@ -238,17 +246,19 @@ Report Details
                     Claim of expenses
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    Yes
+                  {{ salvageAwardClaim }}
                 </dd>
             </div>
+            {% if reportData.crf99_salvageawardclaimed %}
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
                     Services rendered
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    Fuel for boat and gas required for diving.
+                    {{ reportData.crf99_servicesdescription }}
                 </dd>
             </div>
+            {% endif %}
         </dl>
     </div>
 </div>

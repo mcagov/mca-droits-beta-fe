@@ -1,21 +1,11 @@
-import adal from 'adal-node';
 import axios from 'axios';
 import dayjs from 'dayjs';
 
 export default function (app) {
-  app.post('/portal/dashboard', function (req, res) {
-    const adalAuthContext = adal.AuthenticationContext;
-    const authorityHostUrl = 'https://login.microsoftonline.com';
-    const tenant = '513fb495-9a90-425b-a49a-bc6ebe2a429e';
-    const authorityUrl = authorityHostUrl + '/' + tenant;
-    const clientId = '62ef4f36-0bd1-43f0-9ce4-eaf4a078b9a1';
-    const clientSecret = 'H9Z5g5N0VN~AV2.g~n1UP_8Wn9l.-0u2N_';
-    const resource = 'https://mca-sandbox.crm11.dynamics.com';
+  app.get('/portal/dashboard', function (req, res) {
+    const currentUserEmail = req.session.data.email;
 
-    const currentUserEmail = req.body.email;
-    req.session.data.email = currentUserEmail;
-
-    let accessToken = '';
+    let accessToken = req.session.data.token;
     let currentUserID;
 
     const url = 'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/';
@@ -24,7 +14,7 @@ export default function (app) {
       `contacts?$filter=emailaddress1 eq '${currentUserEmail}'`;
 
     // Contains 2 test reports, with a third added from the api response:
-    req.session.data.userReports = [
+    let userReports = [
       {
         'report-ref': '98/21',
         'date-found': '28 12 2019',
@@ -48,29 +38,14 @@ export default function (app) {
       },
     ];
 
-    const context = new adalAuthContext(authorityUrl);
-
-    context.acquireTokenWithClientCredentials(
-      resource,
-      clientId,
-      clientSecret,
-      (err, tokenResponse) => {
-        if (err) {
-          console.log(`Token generation failed due to ${err}`);
-        } else {
-          accessToken = tokenResponse.accessToken;
-          req.session.data.token = accessToken;
-          getUserData(accessToken).then(() => {
-            const filteredReportUrl =
-              url +
-              `crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)`;
-            fetchReportData(accessToken, filteredReportUrl).then(() => {
-              return res.redirect('dashboard');
-            });
-          });
-        }
-      }
-    );
+    getUserData(accessToken).then(() => {
+      const filteredReportUrl =
+        url +
+        `crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)`;
+      fetchReportData(accessToken, filteredReportUrl).then(() => {
+        return res.render('portal/dashboard', { userReports: userReports });
+      });
+    });
 
     function getUserData(token) {
       return new Promise((resolve, reject) => {
@@ -80,7 +55,6 @@ export default function (app) {
           })
           .then((res) => {
             const data = res.data.value[0];
-            console.log(data);
             const session = req.session.data;
             currentUserID = data.contactid;
             session.id = currentUserID;
@@ -91,9 +65,6 @@ export default function (app) {
             session.userCity = data.address1_city;
             session.userCounty = data.address1_county;
             session.userPostcode = data.address1_postalcode;
-
-            console.log(session);
-            console.log('END CONTACTS CALL');
             resolve();
           })
           .catch((reqError) => {
@@ -115,7 +86,6 @@ export default function (app) {
             reportData.forEach((item) => {
               formatReportData(item);
             });
-
             resolve();
           })
           .catch((reqError) => {
@@ -144,7 +114,7 @@ export default function (app) {
         reportItem['wreck-materials'].push(item.crf99_description);
       });
 
-      req.session.data.userReports.push(reportItem);
+      userReports.push(reportItem);
     }
   });
 }

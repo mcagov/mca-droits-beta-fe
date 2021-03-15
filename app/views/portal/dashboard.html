@@ -145,7 +145,7 @@
           </tr>
         </thead>
         <tbody class="govuk-table__body report-responsive-table__body" data-js="portal-dashboard">
-        {% for item in data.userReports %}
+        {% for item in userReports %}
           {% set convertedRef = item["report-ref"] | replace(r/\//ig,'-') %}
           <tr class="govuk-table__row report-responsive-table__row report-responsive-table__row--portal-dashboard" data-status="received" data-js="report-listings-row">
             <td class="govuk-table__cell report-responsive-table__cell" data-label="Reference">{{ item["report-ref"] }}</td>

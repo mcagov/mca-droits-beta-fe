@@ -1,126 +1,126 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
 
+const url = 'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/';
+
 export default function (app) {
-  app.get('/portal/dashboard', function (req, res) {
-    const currentUserEmail = req.session.data.email;
+  app
+    .get('/portal/dashboard', function (req, res) {
+      const currentUserEmail = req.session.data.email;
 
-    let accessToken = req.session.data.token;
-    let currentUserID;
+      let accessToken = req.session.data.token;
+      let currentUserID;
+      let userReports = [];
 
-    const url = 'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/';
-    const contactsUrl =
-      url + `contacts?$filter=emailaddress1 eq '${currentUserEmail}'`;
+      const contactsUrl =
+        url + `contacts?$filter=emailaddress1 eq '${currentUserEmail}'`;
 
-    //Changed to empty array to test sorting via api
-
-    // Contains 2 test reports, with a third added from the api response:
-    // let userReports = [
-    //   {
-    //     'report-ref': '98/21',
-    //     'date-found': '28 12 2019',
-    //     'date-reported': '15 01 2020',
-    //     'last-updated': '05 03 2021',
-    //     'vessel-name': 'HMS Drake',
-    //     'wreck-materials': [
-    //       "The bell of the SS Mendi. Includes the identifying marking 'Mendi'.",
-    //       '17th-century Dutch Navy cannon weighing 56kg and 1262mm in length',
-    //       'German U-boat propellers measuring 60cm in diameter.',
-    //     ],
-    //   },
-    //   {
-    //     'report-ref': '99/21',
-    //     'date-found': '17 01 2020',
-    //     'date-reported': '23 02 2020',
-    //     'last-updated': '01 02 2021',
-    //     'wreck-materials': [
-    //       '17th-century Dutch Navy cannon weighing 56kg and 1262mm in length',
-    //     ],
-    //   },
-    // ];
-    let userReports = [];
-
-    getUserData(accessToken).then(() => {
-      //Changed db query so can work with more reports to test
-
-      // const filteredReportUrl =
-      //   url +
-      //   `crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)`;
-      const filteredReportUrl =
-        'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/crf99_mcawreckreports?$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=crf99_datereported desc';
-      fetchReportData(accessToken, filteredReportUrl).then(() => {
-        return res.render('portal/dashboard', { userReports: userReports });
+      getUserData(accessToken).then(() => {
+        const filteredReportUrl =
+          url +
+          `crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=crf99_datereported desc`;
+        const allReportsUrl =
+          'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/crf99_mcawreckreports?$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=crf99_datereported desc';
+        fetchReportData(accessToken, filteredReportUrl, userReports, res).then(
+          () => {
+            return res.render('portal/dashboard', { userReports: userReports });
+          }
+        );
       });
-    });
 
-    function getUserData(token) {
-      return new Promise((resolve, reject) => {
-        axios
-          .get(contactsUrl, {
-            headers: { Authorization: `bearer ${token}` },
-          })
-          .then((res) => {
-            const data = res.data.value[0];
-            const session = req.session.data;
-            currentUserID = data.contactid;
-            session.id = currentUserID;
-            session.userName = data.fullname;
-            session.userEmail = data.emailaddress1;
-            session.userTel = data.telephone1;
-            session.userAddress1 = data.address1_line1;
-            session.userCity = data.address1_city;
-            session.userCounty = data.address1_county;
-            session.userPostcode = data.address1_postalcode;
-            resolve();
-          })
-          .catch((reqError) => {
-            console.log('User ID error');
-            console.log(reqError);
-            reject();
-          });
-      });
-    }
-
-    function fetchReportData(token, url) {
-      return new Promise((resolve, reject) => {
-        axios
-          .get(url, {
-            headers: { Authorization: `bearer ${token}` },
-          })
-          .then((res) => {
-            const reportData = res.data.value;
-            reportData.forEach((item) => {
-              formatReportData(item);
+      function getUserData(token) {
+        return new Promise((resolve, reject) => {
+          axios
+            .get(contactsUrl, {
+              headers: { Authorization: `bearer ${token}` },
+            })
+            .then((res) => {
+              const data = res.data.value[0];
+              const session = req.session.data;
+              currentUserID = data.contactid;
+              session.id = currentUserID;
+              session.userName = data.fullname;
+              session.userEmail = data.emailaddress1;
+              session.userTel = data.telephone1;
+              session.userAddress1 = data.address1_line1;
+              session.userCity = data.address1_city;
+              session.userCounty = data.address1_county;
+              session.userPostcode = data.address1_postalcode;
+              resolve();
+            })
+            .catch((reqError) => {
+              console.log('User ID error');
+              console.log(reqError);
+              reject();
             });
-            resolve();
-          })
-          .catch((reqError) => {
-            console.log('Report data error: ' + reqError);
-            reject();
-          });
-      });
-    }
+        });
+      }
+    })
 
-    function formatReportData(data) {
-      const wreckMaterialsData = data.crf99_MCAWreckMaterial_WreckReport_crf99_;
+    // Sorting reports
+    .post(
+      '/portal/dashboard',
 
-      let reportItem = {};
+      function (req, res) {
+        const type = req.body['report-sort-by'];
+        const accessToken = req.session.data.token;
+        const filteredReportUrl =
+          url +
+          `crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${req.session.data.id}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=${type} desc`;
+        const allReportsUrl = `https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/crf99_mcawreckreports?$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=${type} desc`;
+        let userReports = [];
 
-      reportItem['report-ref'] = data.crf99_reportreference;
-      reportItem['date-found'] = dayjs(data.crf99_datefound).format(
-        'DD MM YYYY'
-      );
-      reportItem['date-reported'] = dayjs(data.crf99_datereported).format(
-        'DD MM YYYY'
-      );
-      reportItem['last-updated'] = dayjs(data.modifiedon).format('DD MM YYYY');
-      reportItem['wreck-materials'] = [];
-
-      wreckMaterialsData.forEach((item) => {
-        reportItem['wreck-materials'].push(item.crf99_description);
-      });
-
-      userReports.push(reportItem);
-    }
-  });
+        fetchReportData(accessToken, filteredReportUrl, userReports, res).then(
+          () => {
+            return res.render('portal/dashboard', {
+              userReports: userReports,
+              sort: type,
+            });
+          }
+        );
+      }
+    );
 }
+
+const fetchReportData = (accessToken, url, userReports, res) =>
+  new Promise((resolve, reject) => {
+    axios
+      .get(url, {
+        headers: { Authorization: `bearer ${accessToken}` },
+      })
+      .then((res) => {
+        const reportData = res.data.value;
+        reportData.forEach((item) => {
+          formatReportData(item, userReports);
+        });
+        resolve();
+      })
+      .catch((err) => {
+        console.log('[Report data error]:' + err);
+        if (err.response.status === 401) {
+          res.redirect('/portal/login');
+        }
+        reject();
+      });
+  });
+
+const formatReportData = (data, userReports) => {
+  const wreckMaterialsData = data.crf99_MCAWreckMaterial_WreckReport_crf99_;
+
+  let reportItem = {};
+
+  reportItem['report-ref'] = data.crf99_reportreference;
+  reportItem['date-found'] = dayjs(data.crf99_datefound).format('DD MM YYYY');
+  reportItem['date-reported'] = dayjs(data.crf99_datereported).format(
+    'DD MM YYYY'
+  );
+  reportItem['last-updated'] = dayjs(data.modifiedon).format('DD MM YYYY');
+  reportItem['wreck-materials'] = [];
+
+  wreckMaterialsData.forEach((item) => {
+    reportItem['wreck-materials'].push(item.crf99_description);
+  });
+
+  userReports.push(reportItem);
+  return userReports;
+};

@@ -10,38 +10,44 @@ export default function (app) {
 
     const url = 'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/';
     const contactsUrl =
-      url +
-      `contacts?$filter=emailaddress1 eq '${currentUserEmail}'`;
+      url + `contacts?$filter=emailaddress1 eq '${currentUserEmail}'`;
+
+    //Changed to empty array to test sorting via api
 
     // Contains 2 test reports, with a third added from the api response:
-    let userReports = [
-      {
-        'report-ref': '98/21',
-        'date-found': '28 12 2019',
-        'date-reported': '15 01 2020',
-        'last-updated': '05 03 2021',
-        'vessel-name': 'HMS Drake',
-        'wreck-materials': [
-          "The bell of the SS Mendi. Includes the identifying marking 'Mendi'.",
-          '17th-century Dutch Navy cannon weighing 56kg and 1262mm in length',
-          'German U-boat propellers measuring 60cm in diameter.',
-        ],
-      },
-      {
-        'report-ref': '99/21',
-        'date-found': '17 01 2020',
-        'date-reported': '23 02 2020',
-        'last-updated': '01 02 2021',
-        'wreck-materials': [
-          '17th-century Dutch Navy cannon weighing 56kg and 1262mm in length',
-        ],
-      },
-    ];
+    // let userReports = [
+    //   {
+    //     'report-ref': '98/21',
+    //     'date-found': '28 12 2019',
+    //     'date-reported': '15 01 2020',
+    //     'last-updated': '05 03 2021',
+    //     'vessel-name': 'HMS Drake',
+    //     'wreck-materials': [
+    //       "The bell of the SS Mendi. Includes the identifying marking 'Mendi'.",
+    //       '17th-century Dutch Navy cannon weighing 56kg and 1262mm in length',
+    //       'German U-boat propellers measuring 60cm in diameter.',
+    //     ],
+    //   },
+    //   {
+    //     'report-ref': '99/21',
+    //     'date-found': '17 01 2020',
+    //     'date-reported': '23 02 2020',
+    //     'last-updated': '01 02 2021',
+    //     'wreck-materials': [
+    //       '17th-century Dutch Navy cannon weighing 56kg and 1262mm in length',
+    //     ],
+    //   },
+    // ];
+    let userReports = [];
 
     getUserData(accessToken).then(() => {
+      //Changed db query so can work with more reports to test
+
+      // const filteredReportUrl =
+      //   url +
+      //   `crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)`;
       const filteredReportUrl =
-        url +
-        `crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)`;
+        'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/crf99_mcawreckreports?$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=crf99_datereported desc';
       fetchReportData(accessToken, filteredReportUrl).then(() => {
         return res.render('portal/dashboard', { userReports: userReports });
       });

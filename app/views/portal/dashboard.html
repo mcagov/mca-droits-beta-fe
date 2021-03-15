@@ -95,19 +95,21 @@
           </span>
         </div>
       </div>
+      
       {% set reportedSelected = false %}
       {% set foundSelected = false %}
       {% set lastUpdated = false %}
-      {% if data['report-sort-by'] === 'date-reported' %}
+      {% if sort === 'crf99_datereported' %}
         {% set reportedSelected = true %}
       {% endif %}
-      {% if data['report-sort-by'] === 'date-found' %}
+      {% if sort === 'crf99_datefound' %}
         {% set foundSelected = true %}
       {% endif %}
-      {% if data['report-sort-by'] === 'last-updated' %}
+      {% if sort === 'modifiedon' %}
         {% set lastUpdatedSelected = true %}
       {% endif %}
-      <form class="form" action='/portal/dashboard-sort' method="post" data-js="portal-sort">
+      
+      <form class="form" action='/portal/dashboard' method="post" data-js="portal-sort">
         {{ govukSelect({
           id: "report-sort-by",
           name: "report-sort-by",
@@ -116,17 +118,17 @@
           },
           items: [
             {
-              value: "date-reported",
+              value: "crf99_datereported",
               text: "Reported",
               selected: reportedSelected
             },
             {
-              value: "date-found",
+              value: "crf99_datefound",
               text: "Found",
               selected: foundSelected
             },
             {
-              value: "last-updated",
+              value: "modifiedon",
               text: "Last Updated",
               selected: lastUpdatedSelected
             }

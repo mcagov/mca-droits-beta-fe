@@ -27,18 +27,19 @@ export default function (app) {
             .then((res) => {
               reportData = res.data.value[0];
               reportData.coordinates = `${reportData.crf99_latitude}° ${reportData.crf99_longitude}°`;
-              reportData.dateReported = dayjs(reportData.crf99_datereported).format(
-                'DD MM YYYY'
-              );
+              reportData.dateReported = dayjs(
+                reportData.crf99_datereported
+              ).format('DD MM YYYY');
               reportData.dateFound = dayjs(reportData.crf99_datefound).format(
                 'DD MM YYYY'
               );
-              console.log(reportData);
-
               resolve();
             })
-            .catch((reqError) => {
-              console.log('Report data error: ' + reqError);
+            .catch((err) => {
+              console.log('Report data error: ' + err);
+              if (err.response.status === 401) {
+                res.redirect('/portal/login');
+              }
               reject();
             });
         });

@@ -19,6 +19,7 @@
       background-color: lighten(govuk-colour('light-grey'), 2);
       border: 1px dashed $govuk-border-colour;
       padding: 1em;
+      width: calc(100% - 35px);
     }
 
     .file-info {

@@ -18,8 +18,10 @@ import propertyFormImageDelete from './report/property-form-image-delete';
 import propertyFormAddress from './report/property-form-address';
 import salvageAward from './report/salvage-award';
 import checkYourAnswers from './report/check-your-answers';
+import portalLogin from './portal/login';
 import portalDashboard from './portal/dashboard';
 import portalDashboardSort from './portal/dashboard-sort';
+import portalViewReport from './portal/view-report';
 
 export default () => {
   const app = Router();
@@ -43,8 +45,10 @@ export default () => {
   propertyFormAddress(app);
   salvageAward(app);
   checkYourAnswers(app);
+  portalLogin(app);
   portalDashboard(app);
   portalDashboardSort(app);
+  portalViewReport(app);
 
   return app;
 };

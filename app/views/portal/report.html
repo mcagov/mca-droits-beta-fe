@@ -3,7 +3,7 @@
 {%- from "govuk/components/tag/macro.njk" import govukTag -%}
 
 {% block pageTitle %}
-Check your answers
+Report Details
 {% endblock %}
 
 {% block beforeContent %}
@@ -19,11 +19,11 @@ Check your answers
     <div class="govuk-grid-column-two-thirds-from-desktop">
         <h2 class="govuk-heading-m">Details of find</h2>
         {% set wreckFindDateText %}
-        &nbsp;22&nbsp;04&nbsp;2020
+        {{ reportData.dateFound }}
         {% endset -%}
 
         {% set wreckReportDateText %}
-        &nbsp;12&nbsp;05&nbsp;2020
+        {{ reportData.dateReported }}
         {% endset -%}
 
 
@@ -72,11 +72,10 @@ Check your answers
 
         {% set addressHtml %}
         {% set addressLines = [
-                "71 Cherry Court",
-                "",
-                "Southampton",
-                "Hampshire",
-                "SO53 5PD"
+                data.userAddress1,
+                data.userCity,
+                data.userCounty,
+                data.userPostcode
             ] %}
 
         {{ address(addressLines) }}
@@ -89,7 +88,7 @@ Check your answers
                 text: "Full name"
                 },
                 value: {
-                text: "Joe Bloggs"
+                text: data['userName']
                 },
                 actions: {
                     items: []
@@ -100,7 +99,7 @@ Check your answers
                 text: "Email address"
                 },
                 value: {
-                text: "joe.bloggs@gmail.com"
+                text: data['userEmail']
                 },
                 actions: {
                     items: []
@@ -111,7 +110,7 @@ Check your answers
                 text: "Telephone number"
                 },
                 value: {
-                text: "01524 316271"
+                text: data['userTel']
                 },
                 actions: {
                 items: []
@@ -142,7 +141,7 @@ Check your answers
                 text: "Vessel name"
               },
               value: {
-                text: "Avondale Park"
+                text: ""
               },
               actions: {
                 items: []
@@ -153,7 +152,7 @@ Check your answers
                 text: "Vessel construction year"
               },
               value: {
-                text: "1944"
+                text: ""
               },
               actions: {
                 items: []
@@ -164,7 +163,7 @@ Check your answers
                 text: "Vessel sunk year"
               },
               value: {
-                text: "1945"
+                text: ""
               },
               actions: {
                 items: []
@@ -183,13 +182,15 @@ Check your answers
                     Coordinates
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    53.12346°&nbsp;&nbsp;2.34234°
+                    {{ reportData.coordinates }}
                 </dd>
             </div>
         </dl>
 
-        <div id="location-map" class="map-display hide-on-print" data-latitude="53.12346" data-longitude="2.34234"
-            data-radius="{{ data['location-standard']['radius'] }}"></div>
+        <div data-js="static-map">
+          <div id="location-map" class="map-display hide-on-print" data-latitude="{{ reportData.crf99_latitude }}" data-longitude="{{ reportData.crf99_longitude }}"
+              data-radius="{{ reportData.crf99_locationradius }}"></div>
+        </div>
     </div>
 
     <div class="govuk-grid-column-full">
@@ -367,7 +368,7 @@ Check your answers
                     Reference
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    012/20
+                    {{ reportData.crf99_reportreference }}
                 </dd>
             </div>
             <div class="govuk-summary-list__row">

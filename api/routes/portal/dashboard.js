@@ -1,26 +1,20 @@
-import adal from 'adal-node';
 import axios from 'axios';
 import dayjs from 'dayjs';
 
 export default function (app) {
-  app.post('/portal/dashboard', function (req, res) {
-    const adalAuthContext = adal.AuthenticationContext;
-    const authorityHostUrl = 'https://login.microsoftonline.com';
-    const tenant = '513fb495-9a90-425b-a49a-bc6ebe2a429e';
-    const authorityUrl = authorityHostUrl + '/' + tenant;
-    const clientId = '62ef4f36-0bd1-43f0-9ce4-eaf4a078b9a1';
-    const clientSecret = 'H9Z5g5N0VN~AV2.g~n1UP_8Wn9l.-0u2N_';
-    const resource = 'https://mca-sandbox.crm11.dynamics.com';
+  app.get('/portal/dashboard', function (req, res) {
+    const currentUserEmail = req.session.data.email;
 
-    let accessToken = '';
-    const currentUserEmail = req.body.email;
+    let accessToken = req.session.data.token;
     let currentUserID;
 
     const url = 'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/';
-    const contactsUrl = url + `contacts?$select=contactid,emailaddress1&$filter=emailaddress1 eq '${currentUserEmail}'`;
+    const contactsUrl =
+      url +
+      `contacts?$filter=emailaddress1 eq '${currentUserEmail}'`;
 
     // Contains 2 test reports, with a third added from the api response:
-    req.session.data.userReports = [
+    let userReports = [
       {
         'report-ref': '98/21',
         'date-found': '28 12 2019',
@@ -28,87 +22,82 @@ export default function (app) {
         'last-updated': '05 03 2021',
         'vessel-name': 'HMS Drake',
         'wreck-materials': [
-          'The bell of the SS Mendi. Includes the identifying marking \'Mendi\'.',
+          "The bell of the SS Mendi. Includes the identifying marking 'Mendi'.",
           '17th-century Dutch Navy cannon weighing 56kg and 1262mm in length',
-          'German U-boat propellers measuring 60cm in diameter.']
+          'German U-boat propellers measuring 60cm in diameter.',
+        ],
       },
       {
         'report-ref': '99/21',
         'date-found': '17 01 2020',
         'date-reported': '23 02 2020',
         'last-updated': '01 02 2021',
-        'wreck-materials': ['17th-century Dutch Navy cannon weighing 56kg and 1262mm in length']
+        'wreck-materials': [
+          '17th-century Dutch Navy cannon weighing 56kg and 1262mm in length',
+        ],
       },
     ];
 
-    const context = new adalAuthContext(authorityUrl);
+    getUserData(accessToken).then(() => {
+      const filteredReportUrl =
+        url +
+        `crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)`;
+      fetchReportData(accessToken, filteredReportUrl).then(() => {
+        return res.render('portal/dashboard', { userReports: userReports });
+      });
+    });
 
-    context.acquireTokenWithClientCredentials(
-      resource,
-      clientId,
-      clientSecret,
-      (err, tokenResponse) => {
-        if (err) {
-          console.log(`Token generation failed due to ${err}`);
-        } else {
-          accessToken = tokenResponse.accessToken;
-          req.session.data['access-token'] = accessToken;
-          getUserID(accessToken).then(() => {
-            const filteredReportUrl = url + `crf99_mcawreckreports?$select=crf99_reportreference,crf99_datereported,crf99_datefound,modifiedon,_crf99_reporter_value&$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)`;
-            fetchReportData(accessToken, filteredReportUrl).then(() => {
-              return res.redirect('dashboard');
-            })
-          });
-        }
-      }
-    );
-
-    function getUserID(token) {
+    function getUserData(token) {
       return new Promise((resolve, reject) => {
-        axios.get(
-          contactsUrl,
-          {
-            headers: { 'Authorization': `bearer ${token}` },
-          }
-        )
+        axios
+          .get(contactsUrl, {
+            headers: { Authorization: `bearer ${token}` },
+          })
           .then((res) => {
-            const data = res.data.value;
-            currentUserID = data[0].contactid;
-            resolve()
+            const data = res.data.value[0];
+            const session = req.session.data;
+            currentUserID = data.contactid;
+            session.id = currentUserID;
+            session.userName = data.fullname;
+            session.userEmail = data.emailaddress1;
+            session.userTel = data.telephone1;
+            session.userAddress1 = data.address1_line1;
+            session.userCity = data.address1_city;
+            session.userCounty = data.address1_county;
+            session.userPostcode = data.address1_postalcode;
+            resolve();
           })
           .catch((reqError) => {
             console.log('User ID error');
             console.log(reqError);
             reject();
-          })
-      })
+          });
+      });
     }
 
     function fetchReportData(token, url) {
       return new Promise((resolve, reject) => {
-        axios.get(
-          url,
-          {
-            headers: { 'Authorization': `bearer ${token}` },
-          }
-        )
+        axios
+          .get(url, {
+            headers: { Authorization: `bearer ${token}` },
+          })
           .then((res) => {
             const reportData = res.data.value;
             reportData.forEach((item) => {
               formatReportData(item);
-            })
-
+            });
             resolve();
           })
           .catch((reqError) => {
             console.log('Report data error: ' + reqError);
             reject();
-          })
-      })
+          });
+      });
     }
 
     function formatReportData(data) {
       const wreckMaterialsData = data.crf99_MCAWreckMaterial_WreckReport_crf99_;
+
       let reportItem = {};
 
       reportItem['report-ref'] = data.crf99_reportreference;
@@ -125,7 +114,7 @@ export default function (app) {
         reportItem['wreck-materials'].push(item.crf99_description);
       });
 
-      req.session.data.userReports.push(reportItem);
+      userReports.push(reportItem);
     }
   });
 }

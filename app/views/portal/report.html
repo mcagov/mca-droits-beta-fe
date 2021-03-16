@@ -200,10 +200,10 @@ Report Details
     <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-m govuk-!-margin-top-9">Wreck material</h2>
 
-        <table class="govuk-table">
+        <table class="govuk-table report-responsive-table">
             <caption class="govuk-table__caption">Items of wreck material reported
-            <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
+            <thead class="govuk-table__head report-responsive-table__head">
+                <tr class="govuk-table__row report-responsive-table__row">
                     <th scope="col" class="govuk-table__header govuk-!-width-one-half">Description</th>
                     <th scope="col" class="govuk-table__header govuk-table__header--numeric">Quantity</th>
                     <th scope="col" class="govuk-table__header govuk-table__header--numeric">Total value</th>
@@ -214,12 +214,12 @@ Report Details
 
             <tbody class="govuk-table__body">
               {% for item in reportData.crf99_MCAWreckMaterial_WreckReport_crf99_ %}
-              <tr class="govuk-table__row">
-                  <td class="govuk-table__cell">{{ item.crf99_description }}</td>
-                  <td class="govuk-table__cell govuk-table__cell--numeric">{{ item.crf99_quantity }}</td>
-                  <td class="govuk-table__cell govuk-table__cell--numeric">£{{ item.crf99_value }}</td>
-                  <td class="govuk-table__cell"><img src="{{ item.crf99_imageurl }}" width="250" /></td>
-                  <td class="govuk-table__cell">
+              <tr class="govuk-table__row report-responsive-table__row">
+                  <td class="govuk-table__cell report-responsive-table__cell" data-label="Description">{{ item.crf99_description }}</td>
+                  <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Quantity">{{ item.crf99_quantity }}</td>
+                  <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Value">£{{ item.crf99_value }}</td>
+                  <td class="govuk-table__cell report-responsive-table__cell" data-label="Image"><img src="{{ item.crf99_imageurl }}" width="250" /></td>
+                  <td class="govuk-table__cell report-responsive-table__cell" data-label="Storage address">
                       {% set addressLines = item.storageAddress %}
                       {{ address(addressLines) }}
                   </td>

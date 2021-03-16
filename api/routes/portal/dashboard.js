@@ -12,13 +12,11 @@ export default function (app) {
       let currentUserID;
       let userReports = [];
 
-      const contactsUrl =
-        url + `contacts?$filter=emailaddress1 eq '${currentUserEmail}'`;
+      const contactsUrl = `${url}contacts?$filter=emailaddress1 eq '${currentUserEmail}'`;
 
       getUserData(accessToken).then(() => {
         const filteredReportUrl =
-          url +
-          `crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=crf99_datereported desc`;
+          `${url}crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=crf99_datereported desc`;
         const allReportsUrl =
           'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/crf99_mcawreckreports?$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=crf99_datereported desc';
         fetchReportData(accessToken, filteredReportUrl, userReports, res).then(

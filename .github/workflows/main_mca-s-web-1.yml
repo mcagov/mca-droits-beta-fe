@@ -1,9 +1,12 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - mca-d-web-1
+name: Build and deploy Node.js app to Azure Web App - mca-s-web-1
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -27,9 +30,9 @@ jobs:
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'mca-d-web-1'
+        app-name: 'mca-s-web-1'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_513dee18fa4b4460879379b66b0cacf2 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_0b3a046e60f64bfc9c1595758f050b7e }}
         package: .
       env:
-        AZURE_STORAGE_CONNECTION_STRING: ${{secrets.AZURE_STORAGE_CONNECTION_STRING}}
+        AZURE_STORAGE_CONNECTION_STRING: ${{secrets.AZURE_STAGING_STORAGE_CONNECTION_STRING}}

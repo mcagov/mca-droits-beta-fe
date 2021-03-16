@@ -9,39 +9,12 @@ export default function (app) {
     let currentUserID;
 
     const url = 'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/';
-    const contactsUrl =
-      url +
-      `contacts?$filter=emailaddress1 eq '${currentUserEmail}'`;
+    const contactsUrl = `${url}contacts?$filter=emailaddress1 eq '${currentUserEmail}'`;
 
-    // Contains 2 test reports, with a third added from the api response:
-    let userReports = [
-      {
-        'report-ref': '98/21',
-        'date-found': '28 12 2019',
-        'date-reported': '15 01 2020',
-        'last-updated': '05 03 2021',
-        'vessel-name': 'HMS Drake',
-        'wreck-materials': [
-          "The bell of the SS Mendi. Includes the identifying marking 'Mendi'.",
-          '17th-century Dutch Navy cannon weighing 56kg and 1262mm in length',
-          'German U-boat propellers measuring 60cm in diameter.',
-        ],
-      },
-      {
-        'report-ref': '99/21',
-        'date-found': '17 01 2020',
-        'date-reported': '23 02 2020',
-        'last-updated': '01 02 2021',
-        'wreck-materials': [
-          '17th-century Dutch Navy cannon weighing 56kg and 1262mm in length',
-        ],
-      },
-    ];
+    let userReports = [];
 
     getUserData(accessToken).then(() => {
-      const filteredReportUrl =
-        url +
-        `crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)`;
+      const filteredReportUrl = `${url}crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)`;
       fetchReportData(accessToken, filteredReportUrl).then(() => {
         return res.render('portal/dashboard', { userReports: userReports });
       });

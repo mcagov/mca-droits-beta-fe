@@ -32,8 +32,6 @@ Report Details
         {{ reportData.dateReported }}
         {% endset -%}
 
-
-
         {{ govukSummaryList({
             rows: [
                 {
@@ -222,13 +220,7 @@ Report Details
                   <td class="govuk-table__cell govuk-table__cell--numeric">£{{ item.crf99_value }}</td>
                   <td class="govuk-table__cell"><img src="{{ item.crf99_imageurl }}" width="250" /></td>
                   <td class="govuk-table__cell">
-                      {% set addressLines = [
-                          "{{item.addressLine1}}",
-                          "{{item.addressLine2}}",
-                          "{{item.city}}",
-                          "{{item.county}}",
-                          "{{item.postcode}}"
-                          ] %}
+                      {% set addressLines = item.storageAddress %}
                       {{ address(addressLines) }}
                   </td>
               </tr>
@@ -263,76 +255,6 @@ Report Details
     </div>
 </div>
 
-{% endset -%}
-
-{% set reportCorrespondence %}
-<div class="row-messages">
-    <div class="row-message row-message-received govuk-!-padding-5 govuk-!-margin-bottom-5">
-        <h2 class="govuk-heading-m">Message from the Receiver of Wreck</h2>
-        <p class="govuk-body"><strong>Sent:</strong> 06 09 2020, 15:32</p>
-        <div class="row-message-body govuk-inset-text">
-            <h3 class="govuk-heading-s">We have reviewed your wreck and salvage report</h3>
-            <p class="govuk-body">Dear Joe Bloggs,</p>
-            <p class="govuk-body">Thank you for reporting wreck and salvage. The Receiver of Wreck team has reviewed the details of your report.</p>
-            <h3 class="govuk-heading-s">Further information required</h3>
-            <p class="govuk-body">To help us identify the owner of the wreck material, we require the following additional information from you:</p>
-
-            <ul class="govuk-list govuk-list--bullet">
-                <li>A detailed description of the wreck site. Any information that you could offer including the size of the wreck, material of construction, method of propulsion, the configuration of hatches, boilers or engines, or any obvious cargo.</li>
-                <li>Please provide the Receiver with an image and/or measurements of the item confirm whether there are any inscriptions, maker’s marks, serial numbers or similar visible on the find.</li>
-            </ul>
-
-            <p class="govuk-body">Please reply to this email with any further information. Digital images can be attached to your email response.</p>
-        </div>
-    </div>
-
-    <div class="row-message row-message-sent govuk-!-padding-5 govuk-!-margin-bottom-5">
-        <h2 class="govuk-heading-m">Message from Joe Bloggs</h2>
-        <p class="govuk-body"><strong>Sent:</strong> 08 09 2020, 09:05</p>
-        <div class="row-message-body govuk-inset-text">
-            <p class="govuk-body">Thank you for reviewing my report. The wreck was about 30ft in length and of timber construction. There were a large number of bottles found onboard. The item recovered had the mark "XYZ" on it. I have attached images.</p>
-            <p class="govuk-body">Please let me know if there is anything else I need to provide.</p>
-            <p class="govuk-body">Joe Bloggs.</p>
-        </div>
-        <div class="row-message-attachments">
-            <h3 class="govuk-heading-s">File attachments:</h3>
-            <img src="/public/images/items/prop.jpeg" height="100"/>
-            <img src="/public/images/items/mendi.png" height="100"/>
-        </div>
-    </div>
-
-    <div id="latest" class="row-message row-message-received govuk-!-padding-5 govuk-!-margin-bottom-5">
-        <h2 class="govuk-heading-m">Message from the Receiver of Wreck</h2>
-        <p class="govuk-body"><strong>Sent:</strong> 10 09 2020, 17:12</p>
-        <div class="row-message-body govuk-inset-text">
-            <p class="govuk-body">Dear Joe Bloggs,</p>
-            <p class="govuk-body">Thank you for providing this additional information. We are unable to determine the scale of the object from the photographs provided, please could you provide approximate measurements or provide photographs with a rule alongside the item.</p>
-        </div>
-    </div>
-</div>
-<div>
-    <h2 class="govuk-heading-m">Send a message to the Receiver of Wreck</h2>
-    {{ govukTextarea({
-        name: "message",
-        id: "message",
-        classes: "govuk-!-width-one-half",
-        label: {
-          text: "Message",
-          classes: "govuk-label--s"
-        }
-      }) }}
-      {{ govukFileUpload({
-        id: "attachment",
-        name: "attachment",
-        label: {
-          text: "Attachment",
-          classes: "govuk-label--s"
-        }
-      }) }}
-      {{ govukButton({
-        text: "Send"
-      }) }}
-</div>
 {% endset -%}
 
 {% set reportOutcome %}
@@ -419,13 +341,6 @@ Report Details
                     panel: {
                         html: reportDetail
                     }
-            },
-            {
-                label: "Correspondence",
-                id: "correspondence",
-                panel: {
-                    html: reportCorrespondence
-                }
             }
         ]
         }) }}

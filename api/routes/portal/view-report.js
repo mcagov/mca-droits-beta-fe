@@ -18,7 +18,6 @@ export default function (app) {
       fetchReportData(token, reportUrl).then(() => {
         storageAddressUrl = `https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/crf99_mcastorageaddresses?$filter=Microsoft.Dynamics.CRM.In(PropertyName='crf99_mcastorageaddressid',PropertyValues=[${storageAddressIDs}])`;
         fetchStorageAddresses(token, storageAddressUrl).then(() => {
-          console.log(reportData);
           res.render('portal/report', { reportData: reportData });
         });
       });
@@ -63,7 +62,6 @@ export default function (app) {
             })
             .then((res) => {
               const addressData = res.data.value;
-
               // First loop through the address data from the api response
               for (const address of addressData) {
                 // Loop through the wreck items in the existing 'reportData' object
@@ -71,11 +69,15 @@ export default function (app) {
                   // If we find a storage 'ID' in the response that matches a storage 'value' in the
                   // wreck items, grab the address details and add them to the item in reportData.
                   if (address.crf99_mcastorageaddressid === wreckItem._crf99_storageaddress_value) {
-                    wreckItem.addressLine1 = address.crf99_addressline1;
-                    wreckItem.addressLine2 = address.crf99_addressline2;
-                    wreckItem.city = address.crf99_city;
-                    wreckItem.county = address.crf99_county;
-                    wreckItem.postcode = address.crf99_postcode;
+                    wreckItem.storageAddress = [];
+                    const addressArr = wreckItem.storageAddress;
+                    addressArr.push(
+                      address.crf99_addressline1,
+                      address.crf99_addressline2,
+                      address.crf99_city,
+                      address.crf99_county,
+                      address.crf99_postcode
+                    );
                   }
                 }
               }

@@ -5,3 +5,9 @@
     background-color: white;
   }
 }
+
+.check-answers__details-rowgap {
+  @media (min-width:641px) {
+    margin-top: -30px;
+  }
+}

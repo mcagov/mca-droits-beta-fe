@@ -223,11 +223,11 @@ Report Details
                   <td class="govuk-table__cell"><img src="{{ item.crf99_imageurl }}" width="250" /></td>
                   <td class="govuk-table__cell">
                       {% set addressLines = [
-                          "71 Cherry Court",
-                          "",
-                          "Southampton",
-                          "Hampshire",
-                          "SO53 5PD"
+                          "{{item.addressLine1}}",
+                          "{{item.addressLine2}}",
+                          "{{item.city}}",
+                          "{{item.county}}",
+                          "{{item.postcode}}"
                           ] %}
                       {{ address(addressLines) }}
                   </td>

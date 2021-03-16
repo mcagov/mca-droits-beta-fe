@@ -1,0 +1,19 @@
+<tr class="govuk-table__row report-responsive-table__row report-responsive-table__row--portal-dashboard" data-status="received" data-js="report-listings-row">
+  <td class="govuk-table__cell report-responsive-table__cell" data-label="Reference"></td>
+  <td class="govuk-table__cell report-responsive-table__cell" data-label="Date reported"></td>
+  <td class="govuk-table__cell report-responsive-table__cell" data-label="Details">
+    <br/>
+    {{ govukDetails({
+      summaryText: "3 items of wreck material",
+      html: wreck1
+    }) }}
+  </td>
+  <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--no-label">
+    {{govukTag({
+      text: "Placeholder",
+      classes: "govuk-tag--purple govuk-!-margin-bottom-2"
+    })}}<br/>
+    <strong>Last&nbsp;update:</strong>
+  </td>
+  <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--no-label"><a href="/portal/report/034-20">View report</a></td>
+</tr>

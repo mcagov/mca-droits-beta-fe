@@ -8,6 +8,14 @@ import { formatValidationErrors } from '../../../utils';
 import config from '../../../app/config';
 
 export default function (app) {
+  // If user clicks back button on confirmation page it will redirect to start page
+  app.get('/report/check-your-answers', function (req, res, next) {
+    if (Object.keys(req.session.data['report-date']).length == 0) {
+      return res.redirect('/report/start');
+    }
+    next();
+  });
+
   app.post(
     '/report/confirmation',
     [

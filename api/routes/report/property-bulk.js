@@ -4,7 +4,7 @@ import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import multer from 'multer';
 import { azureUpload } from '../../../services';
-import { formatValidationErrors } from '../../../utils';
+import { formatValidationErrors } from '../../../utilities';
 const csv = require('fast-csv');
 
 const storage = multer.diskStorage({
@@ -39,7 +39,7 @@ function fileFilter(req, file, cb) {
 export default function (app) {
   app.post(
     "/report/property-bulk",
-    function(req, res){
+    function (req, res) {
       upload(req, res, function (multerError) {
         const err = {
           id: 'property-bulk-file-error',
@@ -49,55 +49,55 @@ export default function (app) {
           if (multerError.code === 'LIMIT_FILE_SIZE') {
             err.text = 'The selected file must be smaller than 5MB';
           } else if (multerError) {
-            err.text = multerError;            
-          }        
+            err.text = multerError;
+          }
           res.json({ error: err });
         } else {
           const fileRows = [];
           csv.parseFile(req.file.path, { headers: true })
-          .on("data", function (data) {
-            fileRows.push(data); // push each row
-          })
-          .on("end", function () {
-            fs.unlinkSync(req.file.path);   // remove temp file
-            
-            // 'fileRows' is an array of objects. Each object represents a row in the csv file, with each obj element a column
-            // Process "fileRows" and respond  
-            let fileUpload = fileRows;
+            .on("data", function (data) {
+              fileRows.push(data); // push each row
+            })
+            .on("end", function () {
+              fs.unlinkSync(req.file.path);   // remove temp file
 
-            req.session.data['bulk-upload'] = {};
-            const sessionBulkUpload = req.session.data['bulk-upload'];
+              // 'fileRows' is an array of objects. Each object represents a row in the csv file, with each obj element a column
+              // Process "fileRows" and respond  
+              let fileUpload = fileRows;
 
-            fileUpload.forEach((obj, index) => {
-              // Create a bulk upload ID for each item
-              let itemID = 'bu' + index;
-              // Build up the session data object for each item
-              sessionBulkUpload[itemID] = {};
-              const item = sessionBulkUpload[itemID];
-              item['description'] = obj['Description'];
-              item['quantity'] = obj['Quantity'];
-              item['value'] = obj['Total value'];
-              if (obj['Total value']) {
-                item['value-known'] = 'yes';
-              };
+              req.session.data['bulk-upload'] = {};
+              const sessionBulkUpload = req.session.data['bulk-upload'];
 
-              if(obj['Storage address line 1'] && obj['Postcode']) {
-                item['storage-address'] = 'custom';
-                item['address-details'] = {};
-                item['address-details']['address-line-1'] = obj['Storage address line 1'];
-                item['address-details']['address-line-2'] = obj['Storage address line 2'];
-                item['address-details']['address-town'] = obj['Town'];
-                item['address-details']['address-county'] = obj['County'];
-                item['address-details']['address-postcode'] = obj['Postcode'];
-              } else {
-                item['storage-address'] = 'personal';
-              }
+              fileUpload.forEach((obj, index) => {
+                // Create a bulk upload ID for each item
+                let itemID = 'bu' + index;
+                // Build up the session data object for each item
+                sessionBulkUpload[itemID] = {};
+                const item = sessionBulkUpload[itemID];
+                item['description'] = obj['Description'];
+                item['quantity'] = obj['Quantity'];
+                item['value'] = obj['Total value'];
+                if (obj['Total value']) {
+                  item['value-known'] = 'yes';
+                };
 
-            }); 
+                if (obj['Storage address line 1'] && obj['Postcode']) {
+                  item['storage-address'] = 'custom';
+                  item['address-details'] = {};
+                  item['address-details']['address-line-1'] = obj['Storage address line 1'];
+                  item['address-details']['address-line-2'] = obj['Storage address line 2'];
+                  item['address-details']['address-town'] = obj['Town'];
+                  item['address-details']['address-county'] = obj['County'];
+                  item['address-details']['address-postcode'] = obj['Postcode'];
+                } else {
+                  item['storage-address'] = 'personal';
+                }
 
-            req.session.data['property'] = sessionBulkUpload;
-            res.json({status: 200});
-          })
+              });
+
+              req.session.data['property'] = sessionBulkUpload;
+              res.json({ status: 200 });
+            })
         }
       })
     }

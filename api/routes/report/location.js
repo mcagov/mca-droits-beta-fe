@@ -1,6 +1,6 @@
 import { body, validationResult } from 'express-validator';
-import { formatValidationErrors } from '../../../utils';
-import { GT_OSGB } from '../../../utils';
+import { formatValidationErrors } from '../../../utilities';
+import GT_OSGB from '../../../utilities';
 
 const inRange = require('lodash.inrange');
 const latitudeDegressRange = (val) => inRange(val, -90, 90) || val == 90;

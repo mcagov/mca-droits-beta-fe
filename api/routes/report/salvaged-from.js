@@ -1,6 +1,6 @@
 const { body, validationResult } = require('express-validator');
 
-import { formatValidationErrors } from '../../../utils';
+import { formatValidationErrors } from '../../../utilities';
 
 export default function (app) {
   app.post(
@@ -39,7 +39,7 @@ export default function (app) {
           return res.redirect('/report/check-your-answers');
         }
 
-        if (req.session.data.redirectToCheckAnswers && 
+        if (req.session.data.redirectToCheckAnswers &&
           (req.body['removed-from'] === 'shipwreck' ||
             req.body['removed-from'] === 'seabed')
         ) {

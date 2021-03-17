@@ -1,5 +1,5 @@
 const { body, validationResult } = require('express-validator');
-import { formatValidationErrors } from '../../../utils';
+import { formatValidationErrors } from '../../../utilities';
 const dayjs = require('dayjs');
 
 const inRange = require('lodash.inrange');

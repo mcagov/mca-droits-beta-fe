@@ -125,7 +125,7 @@ export default function (app) {
             );
             // Images will upload at different speeds, so here we make sure the image 
             // key in the wreck item object is stored correctly in session data
-            for(const obj of imageUploads) {
+            for (const obj of imageUploads) {
               req.session.data.property[obj.id].image = obj.image;
               req.session.data.property[obj.id].originalFilename = obj.originalFilename;
             }

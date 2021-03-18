@@ -9,9 +9,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
+    environment: Dev
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@master    
 
     - name: Set up Node.js version
       uses: actions/setup-node@v1
@@ -24,6 +24,30 @@ jobs:
         npm run build --if-present
         npm run test --if-present
 
+    - name: Create env file
+      env:
+        AZURE_BLOB_IMAGE_URL: ${{secrets.AZURE_BLOB_IMAGE_URL}}
+        AZURE_STORAGE_CONNECTION_STRING: ${{secrets.AZURE_STORAGE_CONNECTION_STRING}}
+        CLIENT_SECRET : ${{secrets.CLIENT_SECRET}}
+        DATAVERSE_API_BASE_URL : ${{secrets.DATAVERSE_API_BASE_URL}}
+        DATAVERSE_API_SERVICE_URL : ${{secrets.DATAVERSE_API_SERVICE_URL}}
+        DB_POST_URL : ${{secrets.DB_POST_URL}}
+        REFERENCE_GENERATOR_KEY : ${{secrets.REFERENCE_GENERATOR_KEY}}
+        REFERENCE_GENERATOR_URL : ${{secrets.REFERENCE_GENERATOR_URL}}
+        TENANT_ID : ${{secrets.TENANT_ID}}
+      run: |
+          touch .env
+          echo AZURE_BLOB_IMAGE_URL="$AZURE_BLOB_IMAGE_URL" >> .env
+          echo AZURE_STORAGE_CONNECTION_STRING="$AZURE_STORAGE_CONNECTION_STRING" >> .env
+          echo CLIENT_SECRET="$CLIENT_SECRET" >> .env
+          echo DATAVERSE_API_BASE_URL="$DATAVERSE_API_BASE_URL" >> .env
+          echo DATAVERSE_API_SERVICE_URL="$DATAVERSE_API_SERVICE_URL" >> .env
+          echo DB_POST_URL="$DB_POST_URL" >> .env
+          echo REFERENCE_GENERATOR_KEY="$REFERENCE_GENERATOR_KEY" >> .env
+          echo REFERENCE_GENERATOR_URL="$REFERENCE_GENERATOR_URL" >> .env
+          echo TENANT_ID="$TENANT_ID" >> .env          
+          cat .env
+          
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
       with:

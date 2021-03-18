@@ -59,24 +59,16 @@ export default function (app) {
           csv.parseFile(req.file.path, {
             headers: true
           })
-            /*.validate((row) => {
-              Object.keys(row).forEach((key) => {
-                return row[key] === '';
-              })
-            })*/
-            /*.on('data-invalid', (row) => {
-              err.text = 'Please make sure you have filled out all of the information in your bulk upload spreadsheet';
-              return res.json({ error: err });
-            })*/
             .on('error', (errorMsg) => {
               console.log(errorMsg);
             })
             .on("data", function (data) {
-              fileRows.push(data); // push each row
+              // Push each row
+              fileRows.push(data);
             })
             .on("end", function () {
-              fs.unlinkSync(req.file.path);   // remove temp file
-              console.log(fileRows);
+              // Remove temp file
+              fs.unlinkSync(req.file.path);
               const validationError = validateCsvData(fileRows);
               if (validationError) {
                 err.text = validationError;
@@ -126,12 +118,11 @@ export default function (app) {
     }
   );
 
-  // Loop through csv file rows and run validation function on each row
+  // Function to loop through csv file rows and run validation on each row
   function validateCsvData(rows) {
-    const dataRows = rows.slice(1, rows.length); //ignore header at 0 and get rest of the rows
-    console.log(dataRows);
+    // Ignore header at 0 and get rest of the rows
+    const dataRows = rows.slice(1, rows.length);
     for (let i = 0; i < dataRows.length; i++) {
-      // Check for empty cells within the current row
       const rowError = validateCsvRow(dataRows[i]);
       if (rowError) {
         return rowError;
@@ -141,6 +132,7 @@ export default function (app) {
   }
 
   function validateCsvRow(row) {
+    // Check for empty cells within the current row
     if (Object.values(row).includes('')) {
       return "The selected file contains some empty values. Please check that you have entered all of the required information for each item of wreck material."
     }

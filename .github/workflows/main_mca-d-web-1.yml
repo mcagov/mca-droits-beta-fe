@@ -27,7 +27,7 @@ jobs:
     - name: Create env file
       run: |
           touch .env
-          echo AZURE_BLOB_IMAGE_URL="${{AZURE_BLOB_IMAGE_URL}}" >> .env
+          echo AZURE_BLOB_IMAGE_URL="$GITHUB_ENV.AZURE_BLOB_IMAGE_URL" >> .env
           echo AZURE_STORAGE_CONNECTION_STRING=${{AZURE_STORAGE_CONNECTION_STRING}} >> .env
           echo CLIENT_SECRET=${{CLIENT_SECRET}} >> .env
           echo DATAVERSE_API_BASE_URL=${{DATAVERSE_API_BASE_URL}} >> .env

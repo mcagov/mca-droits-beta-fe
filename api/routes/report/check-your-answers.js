@@ -5,9 +5,16 @@ import path from 'path';
 var cloneDeep = require('lodash.clonedeep');
 import { azureUpload } from '../../../services';
 import { formatValidationErrors } from '../../../utilities';
-import config from '../../../app/config';
 
 export default function (app) {
+  // If user clicks back button on confirmation page it will redirect to start page
+  app.get('/report/check-your-answers', function (req, res, next) {
+    if (Object.keys(req.session.data['report-date']).length == 0) {
+      return res.redirect('/report/start');
+    }
+    next();
+  });
+
   app.post(
     '/report/confirmation',
     [
@@ -20,10 +27,6 @@ export default function (app) {
     async function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
       const sd = cloneDeep(req.session.data);
-      const genRefUrl =
-        'https://mca-referencegenerator.azurewebsites.net/api/generatereference';
-      const postUrl =
-        'https://prod-05.uksouth.logic.azure.com:443/workflows/7eb0e5d4ba61419b9fc3a100c1d2b55e/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=dlIj2NC1JL2pRXGbH0ZMo_B1YbJDm_JKvE0PTEI1F5k&Content-Type=application/json';
       let reference;
 
       // Errors
@@ -36,12 +39,14 @@ export default function (app) {
       } else {
         // Generate a report reference
         try {
-          const response = await axios.get(genRefUrl, {
-            headers: {
-              'x-functions-key':
-                'plJvmaBA0qXYNh/m0VZahvwdNCL7aowzGAcPwkg/G8yh1LHiKXYf3Q==',
-            },
-          });
+          const response = await axios.get(
+            process.env.REFERENCE_GENERATOR_URL,
+            {
+              headers: {
+                'x-functions-key': process.env.REFERENCE_GENERATOR_KEY,
+              },
+            }
+          );
           reference = response.data;
         } catch (err) {
           console.error(err);
@@ -84,7 +89,7 @@ export default function (app) {
             innerObj = sd['property'][prop];
 
             // Prepend azure blob container url path
-            innerObj.image = `${config.BLOB_URL}${innerObj.image}`;
+            innerObj.image = `${process.env.AZURE_BLOB_IMAGE_URL}${innerObj.image}`;
             data['wreck-materials'].push(innerObj);
           }
         }
@@ -93,14 +98,19 @@ export default function (app) {
 
         // Post data to db
         try {
-          const response = await axios.post(postUrl, JSON.stringify(data), {
-            headers: { 'content-type': 'application/json' },
-          });
+          const response = await axios.post(
+            process.env.DB_POST_URL,
+            JSON.stringify(data),
+            {
+              headers: { 'content-type': 'application/json' },
+            }
+          );
           if (response.statusText === 'Accepted') {
             // Push image(s) to Azure
             Object.values(req.session.data.property).forEach((item) => {
               const imageData = fs.createReadStream(
-                `${path.resolve(__dirname + '../../../../uploads/')}/${item.image
+                `${path.resolve(__dirname + '../../../../uploads/')}/${
+                  item.image
                 }`
               );
 

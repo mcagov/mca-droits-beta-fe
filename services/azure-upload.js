@@ -1,12 +1,12 @@
 import { BlobServiceClient } from '@azure/storage-blob';
 import fs from 'fs';
-const CONNECTION_STRING = require('../config/keys');
 const mime = require('mime-types');
-
+const dotenv = require('dotenv');
+dotenv.config();
 export const azureUpload = async (image, imageName) => {
   // Create the BlobServiceClient object which will be used to create a container client
   const blobServiceClient = BlobServiceClient.fromConnectionString(
-    CONNECTION_STRING
+    process.env.AZURE_STORAGE_CONNECTION_STRING
   );
 
   // Container name
@@ -25,7 +25,7 @@ export const azureUpload = async (image, imageName) => {
 
   // Upload data to the blob
   const blobOptions = {
-    blobHTTPHeaders: { blobContentType: mime.lookup(imageName) }
+    blobHTTPHeaders: { blobContentType: mime.lookup(imageName) },
   };
 
   const uploadBlobResponse = await blockBlobClient.uploadStream(

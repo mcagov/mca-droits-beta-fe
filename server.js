@@ -8,10 +8,12 @@ import {
   addCheckedFunction,
   matchRoutes,
   addNunjucksFilters,
-  forceHttps
+  forceHttps,
 } from './utilities';
 import routes from './api/routes';
 import config from './app/config.js';
+const dotenv = require('dotenv');
+dotenv.config();
 
 import sessionInMemory from 'express-session';
 
@@ -40,7 +42,7 @@ if (isSecure) {
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
-    extended: true
+    extended: true,
   })
 );
 
@@ -50,12 +52,12 @@ app.set('trust proxy', 1); // needed for secure cookies on heroku
 const nunjucksAppEnv = nunjucks.configure(
   [
     path.join(__dirname, './node_modules/govuk-frontend/'),
-    path.join(__dirname, './app/views/')
+    path.join(__dirname, './app/views/'),
   ],
   {
     autoescape: false,
     express: app,
-    watch: env === 'development' ? true : false
+    watch: env === 'development' ? true : false,
   }
 );
 addCheckedFunction(nunjucksAppEnv);
@@ -79,8 +81,8 @@ const sessionOptions = {
   secret: sessionName,
   cookie: {
     maxAge: 1000 * 60 * 60 * 4, // 4 hours
-    secure: isSecure
-  }
+    secure: isSecure,
+  },
 };
 if (env === 'development') {
   app.use(
@@ -88,7 +90,7 @@ if (env === 'development') {
       Object.assign(sessionOptions, {
         name: sessionName,
         resave: false,
-        saveUninitialized: false
+        saveUninitialized: false,
       })
     )
   );
@@ -98,7 +100,7 @@ if (env === 'development') {
       Object.assign(sessionOptions, {
         store: AzureTablesStoreFactory.create(),
         resave: false,
-        saveUninitialized: false
+        saveUninitialized: false,
       })
     )
   );
@@ -112,6 +114,15 @@ if (env === 'development') edt(app, { panels: ['session'] });
 
 // Load API routes
 app.use('/', routes());
+
+// Disables caching when user clicks back button on confirmation page
+app.use('/report/check-your-answers', function (req, res, next) {
+  res.set(
+    'Cache-Control',
+    'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0'
+  );
+  next();
+});
 
 app.get(/^([^.]+)$/, function (req, res, next) {
   matchRoutes(req, res, next);

@@ -29,7 +29,7 @@ jobs:
         AZURE_BLOB_IMAGE_URL: ${{secrets.AZURE_BLOB_IMAGE_URL}}
       run: |
           touch .env
-          echo AZURE_BLOB_IMAGE_URL="$env.AZURE_BLOB_IMAGE_URL" >> .env          
+          echo AZURE_BLOB_IMAGE_URL="${{env.AZURE_BLOB_IMAGE_URL}}" >> .env          
           cat .env
 #    - name: 'Deploy to Azure Web App'
 #     uses: azure/webapps-deploy@v2

@@ -11,9 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
-      env:
-        AZURE_BLOB_IMAGE_URL : ${{ secrets.AZURE_BLOB_IMAGE_URL }}
+    - uses: actions/checkout@master    
 
     - name: Set up Node.js version
       uses: actions/setup-node@v1
@@ -29,7 +27,7 @@ jobs:
     - name: Create env file
       run: |
           touch .env
-          echo AZURE_BLOB_IMAGE_URL="$AZURE_BLOB_IMAGE_URL " >> .env          
+          echo AZURE_BLOB_IMAGE_URL="${{secrets.AZURE_BLOB_IMAGE_URL}}" >> .env          
           cat .env
 
     - name: 'Deploy to Azure Web App'

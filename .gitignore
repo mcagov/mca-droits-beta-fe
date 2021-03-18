@@ -5,3 +5,4 @@ package-lock.json
 /config/keys_dev.js
 /uploads/**/*
 .vscode/launch.json
+.env

@@ -49,7 +49,7 @@ jobs:
           cat .env
           
     - name: 'Deploy to Azure Web App'
-     uses: azure/webapps-deploy@v2
+      uses: azure/webapps-deploy@v2
       with:
         app-name: 'mca-d-web-1'
         slot-name: 'production'

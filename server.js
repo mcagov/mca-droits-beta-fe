@@ -9,7 +9,7 @@ import {
   matchRoutes,
   addNunjucksFilters,
   forceHttps,
-} from './utils';
+} from './utilities';
 import routes from './api/routes';
 import config from './app/config.js';
 const dotenv = require('dotenv');

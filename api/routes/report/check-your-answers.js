@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 var cloneDeep = require('lodash.clonedeep');
 import { azureUpload } from '../../../services';
-import { formatValidationErrors } from '../../../utils';
+import { formatValidationErrors } from '../../../utilities';
 
 export default function (app) {
   // If user clicks back button on confirmation page it will redirect to start page

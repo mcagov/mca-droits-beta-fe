@@ -24,6 +24,20 @@ jobs:
         npm run build --if-present
         npm run test --if-present
 
+    - name: Create env file
+      run: |
+          touch .env
+          echo AZURE_BLOB_IMAGE_URL="${{AZURE_BLOB_IMAGE_URL}}" >> .env
+          echo AZURE_STORAGE_CONNECTION_STRING=${{AZURE_STORAGE_CONNECTION_STRING}} >> .env
+          echo CLIENT_SECRET=${{CLIENT_SECRET}} >> .env
+          echo DATAVERSE_API_BASE_URL=${{DATAVERSE_API_BASE_URL}} >> .env
+          echo DATAVERSE_API_SERVICE_URL=${{DATAVERSE_API_SERVICE_URL}} >> .env
+          echo DB_POST_URL=${{DB_POST_URL}} >> .env
+          echo REFERENCE_GENERATOR_KEY=${{REFERENCE_GENERATOR_KEY}} >> .env
+          echo REFERENCE_GENERATOR_URL=${{REFERENCE_GENERATOR_URL}} >> .env
+          echo TENANT_ID=${{TENANT_ID}} >> .env
+          cat .env
+
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
       with:

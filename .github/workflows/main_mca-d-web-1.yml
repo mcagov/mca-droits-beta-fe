@@ -25,17 +25,19 @@ jobs:
         npm run test --if-present
 
     - name: Create env file
+      env:
+
       run: |
           touch .env
-          echo AZURE_BLOB_IMAGE_URL="env.AZURE_BLOB_IMAGE_URL" >> .env
-          echo AZURE_STORAGE_CONNECTION_STRING="env.AZURE_STORAGE_CONNECTION_STRING" >> .env
-          echo CLIENT_SECRET="env.CLIENT_SECRET" >> .env
-          echo DATAVERSE_API_BASE_URL="env.DATAVERSE_API_BASE_URL" >> .env
-          echo DATAVERSE_API_SERVICE_URL="env.DATAVERSE_API_SERVICE_URL" >> .env
-          echo DB_POST_URL="env.DB_POST_URL" >> .env
-          echo REFERENCE_GENERATOR_KEY="env.REFERENCE_GENERATOR_KEY" >> .env
-          echo REFERENCE_GENERATOR_URL="env.REFERENCE_GENERATOR_URL" >> .env
-          echo TENANT_ID="env.TENANT_ID" >> .env
+          echo AZURE_BLOB_IMAGE_URL="${{env.AZURE_BLOB_IMAGE_URL}}" >> .env
+          echo AZURE_STORAGE_CONNECTION_STRING="${{env.AZURE_STORAGE_CONNECTION_STRING}}" >> .env
+          echo CLIENT_SECRET="${{env.CLIENT_SECRET}}" >> .env
+          echo DATAVERSE_API_BASE_URL="${{env.DATAVERSE_API_BASE_URL}}" >> .env
+          echo DATAVERSE_API_SERVICE_URL="${{env.DATAVERSE_API_SERVICE_URL}}" >> .env
+          echo DB_POST_URL="${{env.DB_POST_URL}}" >> .env
+          echo REFERENCE_GENERATOR_KEY="${{env.REFERENCE_GENERATOR_KEY}}" >> .env
+          echo REFERENCE_GENERATOR_URL=${{"env.REFERENCE_GENERATOR_URL}}" >> .env
+          echo TENANT_ID="${{env.TENANT_ID}}" >> .env
           cat .env
 
     - name: 'Deploy to Azure Web App'

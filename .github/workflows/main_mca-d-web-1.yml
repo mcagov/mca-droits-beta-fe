@@ -10,8 +10,8 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-  steps:
-  #  - uses: actions/checkout@master    
+    steps:
+    - uses: actions/checkout@master    
 
   #  - name: Set up Node.js version
   #    uses: actions/setup-node@v1
@@ -25,13 +25,12 @@ jobs:
   #      npm run test --if-present
 
     - name: Create env file
-      with:
+      env:
         AZURE_BLOB_IMAGE_URL: ${{secrets.AZURE_BLOB_IMAGE_URL}}
       run: |
           touch .env
           echo AZURE_BLOB_IMAGE_URL="$AZURE_BLOB_IMAGE_URL" >> .env          
           cat .env
-
 #    - name: 'Deploy to Azure Web App'
 #     uses: azure/webapps-deploy@v2
 #      with:

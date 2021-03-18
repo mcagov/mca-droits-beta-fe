@@ -12,6 +12,8 @@ import {
 } from './utils';
 import routes from './api/routes';
 import config from './app/config.js';
+const dotenv = require('dotenv');
+dotenv.config();
 
 import sessionInMemory from 'express-session';
 

@@ -7,6 +7,10 @@ export default function (app) {
     var removedFlash = false;
     var addedFlash = false;
 
+    if (req.session.data['bulk-upload'] !== 'undefined') {
+      req.session.data['bulk-upload'] = {};
+    }
+
     // These are set as hidden fields.
     if (
       req.session.data['property-added-flash'] !== undefined &&

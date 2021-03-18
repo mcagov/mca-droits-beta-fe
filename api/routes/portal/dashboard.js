@@ -1,7 +1,9 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
+const dotenv = require('dotenv');
+dotenv.config();
 
-const url = 'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/';
+const url = process.env.DATAVERSE_API_BASE_URL + process.env.DATAVERSE_API_SERVICE_URL;
 
 export default function (app) {
   app
@@ -18,7 +20,7 @@ export default function (app) {
         const filteredReportUrl =
           `${url}crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=crf99_datereported desc`;
         const allReportsUrl =
-          'https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/crf99_mcawreckreports?$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=crf99_datereported desc';
+          `${url}crf99_mcawreckreports?$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=crf99_datereported desc`;
         fetchReportData(accessToken, filteredReportUrl, userReports, res).then(
           () => {
             return res.render('portal/dashboard', { userReports: userReports });
@@ -62,10 +64,8 @@ export default function (app) {
       function (req, res) {
         const type = req.body['report-sort-by'];
         const accessToken = req.session.data.token;
-        const filteredReportUrl =
-          url +
-          `crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${req.session.data.id}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=${type} desc`;
-        const allReportsUrl = `https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/crf99_mcawreckreports?$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=${type} desc`;
+        const filteredReportUrl = `${url}crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${req.session.data.id}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=${type} desc`;
+        const allReportsUrl = `${url}crf99_mcawreckreports?$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=${type} desc`;
         let userReports = [];
 
         fetchReportData(accessToken, filteredReportUrl, userReports, res).then(

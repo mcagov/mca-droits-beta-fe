@@ -95,7 +95,10 @@ export default function (app) {
 
               });
 
-              req.session.data['property'] = sessionBulkUpload;
+              for (const prop in sessionBulkUpload) {
+                req.session.data['property'][prop] = sessionBulkUpload[prop];
+              }
+
               res.json({ status: 200 });
             })
         }

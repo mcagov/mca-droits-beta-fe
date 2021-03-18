@@ -48,7 +48,7 @@ export default function (app) {
         })
         .not()
         .isEmpty()
-        .withMessage('Enter your find year')
+        .withMessage('Enter your find year'),
     ],
     function (req, res) {
       let errors = formatValidationErrors(validationResult(req));
@@ -66,7 +66,7 @@ export default function (app) {
       if (allValsEntered) {
         const now = dayjs();
         const submitted = dayjs(
-          `${body['wreck-find-date-day']}-${body['wreck-find-date-month']}-${body['wreck-find-date-year']}`
+          `${body['wreck-find-date-year']}-${body['wreck-find-date-month']}-${body['wreck-find-date-day']}`
         );
 
         // If date (parsed by dayjs) is after current date
@@ -76,7 +76,7 @@ export default function (app) {
           errors['wreck-find-date'] = {
             id: 'wreck-find-date',
             href: '#wreck-find-date',
-            text: 'Enter a date in the past'
+            text: 'Enter a date in the past',
           };
           // Needed to target all input boxes on the frontend
           errors['wreck-find-date-day'] = {};
@@ -109,7 +109,7 @@ export default function (app) {
             // Get the first error message and merge it into a single error message.
             errors[prefix] = {
               id: prefix,
-              href: `#${firstDateErrorId}`
+              href: `#${firstDateErrorId}`,
             };
 
             // Construct a single error message based on all three error messages.
@@ -168,7 +168,7 @@ export default function (app) {
         return res.render('report/find-date', {
           errors,
           errorSummary,
-          values: req.body
+          values: req.body,
         });
       }
     }

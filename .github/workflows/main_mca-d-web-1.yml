@@ -30,7 +30,7 @@ jobs:
 
       run: |
           touch .env
-          echo AZURE_BLOB_IMAGE_URL="${{AZURE_BLOB_IMAGE_URL}}" >> .env          
+          echo AZURE_BLOB_IMAGE_URL="${{ env.AZURE_BLOB_IMAGE_URL }}" >> .env          
           cat .env
 
     - name: 'Deploy to Azure Web App'

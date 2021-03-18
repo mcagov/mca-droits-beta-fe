@@ -10,32 +10,34 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@master    
+  #  steps:
+  #  - uses: actions/checkout@master    
 
-    - name: Set up Node.js version
-      uses: actions/setup-node@v1
-      with:
-        node-version: '12.x'
+  #  - name: Set up Node.js version
+  #    uses: actions/setup-node@v1
+  #    with:
+  #      node-version: '12.x'
 
-    - name: npm install, build, and test
-      run: |
-        npm install
-        npm run build --if-present
-        npm run test --if-present
+  #  - name: npm install, build, and test
+  #    run: |
+  #      npm install
+  #      npm run build --if-present
+  #      npm run test --if-present
 
     - name: Create env file
+      with:
+        AZURE_BLOB_IMAGE_URL: ${{secrets.AZURE_BLOB_IMAGE_URL}}
       run: |
           touch .env
-          echo AZURE_BLOB_IMAGE_URL="${{secrets.AZURE_BLOB_IMAGE_URL}}" >> .env          
+          echo AZURE_BLOB_IMAGE_URL="$AZURE_BLOB_IMAGE_URL" >> .env          
           cat .env
 
-    - name: 'Deploy to Azure Web App'
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'mca-d-web-1'
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_513dee18fa4b4460879379b66b0cacf2 }}
-        package: .
-      env:
-        AZURE_STORAGE_CONNECTION_STRING: ${{secrets.AZURE_STORAGE_CONNECTION_STRING}}
+#    - name: 'Deploy to Azure Web App'
+#     uses: azure/webapps-deploy@v2
+#      with:
+#        app-name: 'mca-d-web-1'
+#        slot-name: 'production'
+#        publish-profile: ${{ secrets.AzureAppService_PublishProfile_513dee18fa4b4460879379b66b0cacf2 }}
+#        package: .
+#      env:
+#        AZURE_STORAGE_CONNECTION_STRING: ${{secrets.AZURE_STORAGE_CONNECTION_STRING}}

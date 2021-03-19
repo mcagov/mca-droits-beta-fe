@@ -55,12 +55,28 @@
         font-weight: bold;
       }
 
+      img {
+        max-width: 100%;
+      }
+
       &--no-label {
         text-align: left;
 
         &:before {
           content: none;
         }
+      }
+
+      &--text-left {
+        text-align: left !important;
+      }
+
+      &--no-border {
+        border-bottom: none !important;
+      }
+
+      .photo-upload__container--uploaded {
+        max-width: 100%;
       }
     }
 

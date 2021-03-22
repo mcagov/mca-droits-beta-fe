@@ -14,17 +14,38 @@ import routes from './api/routes';
 import config from './app/config.js';
 const dotenv = require('dotenv');
 dotenv.config();
+import helmet from 'helmet';
 
 import sessionInMemory from 'express-session';
 
-const PORT = process.env.PORT || config.PORT;
 const app = express();
+const PORT = process.env.PORT || config.PORT;
 
 // Global vars
 app.locals.serviceName = config.SERVICE_NAME;
 
 // Local vars
 const env = process.env.NODE_ENV;
+
+if (env === 'production') {
+  app.use(helmet());
+  app.use(
+    helmet.contentSecurityPolicy({
+      directives: {
+        defaultSrc: ["'self'", 'unpkg.com', 'cdnjs.cloudflare.com'],
+        scriptSrc: [
+          "'self'",
+          "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
+          'unpkg.com',
+          'cdnjs.cloudflare.com',
+        ],
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: [],
+      },
+    })
+  );
+}
+
 let useHttps = process.env.USE_HTTPS || config.USE_HTTPS;
 
 useHttps = useHttps.toLowerCase();
@@ -133,20 +154,20 @@ app.post(/^\/([^.]+)$/, function (req, res) {
 });
 
 // Catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  var err = new Error(`Page not found: ${req.path}`);
-  err.status = 404;
+// app.use(function (req, res, next) {
+//   var err = new Error(`Page not found: ${req.path}`);
+//   err.status = 404;
 
-  next(err);
-});
+//   next(err);
+// });
 
 // Display error
-app.use(function (err, req, res, next) {
-  res.status(err.status || 500);
-  if (err.message.startsWith('template not found')) {
-    res.status(404).render('404');
-  }
-});
+// app.use(function (err, req, res, next) {
+//   res.status(err.status || 500);
+//   if (err.message.startsWith('template not found')) {
+//     res.status(404).render('404');
+//   }
+// });
 
 app.listen(PORT, () => {
   console.log(`App listening on ${PORT} - url: http://localhost:${PORT}`);

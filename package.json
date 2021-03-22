@@ -6,7 +6,8 @@
     "start": "cross-env NODE_ENV=production node -r esm server.js",
     "watch": "webpack --watch",
     "build": "webpack --env.production",
-    "dev": "cross-env NODE_ENV=development concurrently \"nodemon -r esm server.js\" \"npm run watch\""
+    "dev": "cross-env NODE_ENV=development concurrently \"nodemon -r esm server.js\" \"npm run watch\"",
+    "prod": "cross-env NODE_ENV=production concurrently \"node -r esm server.js\" \"npm run build\""
   },
   "repository": {
     "type": "git",
@@ -47,6 +48,7 @@
     "fast-csv": "^4.3.6",
     "file-loader": "^6.1.0",
     "govuk-frontend": "^3.10.2",
+    "helmet": "^4.4.1",
     "keypather": "^3.1.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.inrange": "^3.3.6",

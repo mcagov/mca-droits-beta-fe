@@ -39,6 +39,12 @@ if (env === 'production') {
           'unpkg.com',
           'cdnjs.cloudflare.com',
         ],
+        imgSrc: [
+          "'self'",
+          'data:',
+          '*.tile.openstreetmap.org',
+          'cdnjs.cloudflare.com',
+        ],
         objectSrc: ["'none'"],
         upgradeInsecureRequests: [],
       },
@@ -154,20 +160,23 @@ app.post(/^\/([^.]+)$/, function (req, res) {
 });
 
 // Catch 404 and forward to error handler
-// app.use(function (req, res, next) {
-//   var err = new Error(`Page not found: ${req.path}`);
-//   err.status = 404;
+app.use(function (req, res, next) {
+  var err = new Error(`Page not found: ${req.path}`);
+  err.status = 404;
 
-//   next(err);
-// });
+  next(err);
+});
 
 // Display error
-// app.use(function (err, req, res, next) {
-//   res.status(err.status || 500);
-//   if (err.message.startsWith('template not found')) {
-//     res.status(404).render('404');
-//   }
-// });
+app.use(function (err, req, res, next) {
+  res.status(err.status || 500);
+  if (
+    err.message !== undefined &&
+    err.message.startsWith('template not found')
+  ) {
+    res.status(404).render('404');
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on ${PORT} - url: http://localhost:${PORT}`);

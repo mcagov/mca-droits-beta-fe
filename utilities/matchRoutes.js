@@ -11,7 +11,7 @@ function renderPath(path, res, next) {
       res.end(html);
       return;
     }
-    if (!error.message.startsWith('template not found')) {
+    if (!error.message.indexOf('not found') > 0) {
       // We got an error other than template not found - call next with the error
       next(error);
       return;

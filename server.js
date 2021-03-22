@@ -170,10 +170,8 @@ app.use(function (req, res, next) {
 // Display error
 app.use(function (err, req, res, next) {
   res.status(err.status || 500);
-  if (
-    err.message !== undefined &&
-    err.message.startsWith('template not found')
-  ) {
+
+  if (err.message.indexOf('not found') > 0) {
     res.status(404).render('404');
   }
 });

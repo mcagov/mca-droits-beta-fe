@@ -16,3 +16,6 @@ import './components/bulkImageUpload.js';
 import './components/reportFilter.js';
 import './components/portalSignIn.js';
 import './components/portalSort.js';
+
+// Utilities
+import { windowPrint } from './utilities/printWindow';

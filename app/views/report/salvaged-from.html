@@ -13,7 +13,14 @@
 
 {% block beforeContent %}
   {% include "includes/phase-banner.html" %}
-  <a class="govuk-back-link" href="javascript:;" onclick="history.back()">Back</a>
+  
+  {% if data['known-wreck'] === 'yes' %}
+    {% set backLink = "/report/vessel-information" %}
+  {% else %}
+    {% set backLink = "/report/known-wreck" %}
+  {% endif %}
+
+  <a class="govuk-back-link" href="{{backLink}}">Back</a>
 {% endblock %}
 
 {% block content %}

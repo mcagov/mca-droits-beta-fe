@@ -89,7 +89,8 @@ export default function (app) {
                 const item = sessionBulkUpload[itemID];
                 item['description'] = obj['Description'];
                 item['quantity'] = obj['Quantity'];
-                item['value'] = obj['Total value'];
+                // Remove any non-numeric characters from the 'Total value' of the wreck item
+                item['value'] = obj['Total value'].replace(/\D/g, '');
                 if (obj['Total value']) {
                   item['value-known'] = 'yes';
                 };

@@ -82,7 +82,8 @@ export default function (app) {
 
               fileUpload.forEach((obj, index) => {
                 // Create a bulk upload ID for each item
-                let itemID = 'bu' + index;
+
+                let itemID = `bu-${uuidv4()}-${index}`;
                 // Build up the session data object for each item
                 sessionBulkUpload[itemID] = {};
                 const item = sessionBulkUpload[itemID];

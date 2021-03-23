@@ -52,7 +52,6 @@ export default function (app) {
           } else if (multerError) {
             err.text = multerError;
           }
-          console.log('test');
           res.json({ error: err });
         } else {
           const fileRows = [];
@@ -89,10 +88,16 @@ export default function (app) {
                 const item = sessionBulkUpload[itemID];
                 item['description'] = obj['Description'];
                 item['quantity'] = obj['Quantity'];
+
                 // Remove any non-numeric characters from the 'Total value' of the wreck item
                 item['value'] = obj['Total value'].replace(/\D/g, '');
+                if (obj['Total value'] === '') {
+                  item['value'] = 'Unknown';
+                }
                 if (obj['Total value']) {
                   item['value-known'] = 'yes';
+                } else {
+                  item['value-known'] = 'no';
                 };
 
                 if (obj['Storage address line 1'] && obj['Postcode']) {
@@ -135,7 +140,12 @@ export default function (app) {
   function validateCsvRow(row) {
     // Check for empty cells within the current row
     if (Object.values(row).includes('')) {
-      return "The selected file contains some empty values. Please check that you have entered all of the required information for each item of wreck material."
+      Object.values(row).forEach((col, index) => {
+        // Exclude 'Total value' column from validation check
+        if (index !== 2) {
+          return "The selected file contains some empty values. Please check that you have entered all of the required information for each item of wreck material."
+        }
+      })
     }
     return;
   }

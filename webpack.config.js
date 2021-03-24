@@ -13,12 +13,12 @@ module.exports = (env) => {
   return {
     mode: devMode ? 'development' : 'production',
     entry: {
-      main: './app/js/index.js'
+      main: ['@babel/polyfill', './app/js/index.js'],
     },
     output: {
       path: path.join(__dirname, 'dist'),
       filename: 'assets/js/[name].js',
-      library: '[name]Module'
+      library: '[name]Module',
     },
     resolve: {
       extensions: ['.js', '.json', '.scss', '.css', '.njk'],
@@ -31,19 +31,12 @@ module.exports = (env) => {
             MiniCssExtractPlugin.loader,
             { loader: 'css-loader', options: { sourceMap: true, url: false } },
             { loader: 'postcss-loader', options: { sourceMap: true } },
-            { loader: 'sass-loader', options: { sourceMap: true } }
-          ]
+            { loader: 'sass-loader', options: { sourceMap: true } },
+          ],
         },
         {
           test: /\.js$/,
           loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env',
-                      {
-                        'plugins': ['@babel/plugin-proposal-class-properties']
-                      }
-                    ]
-          }
         },
         {
           test: /\.(png|jpg|gif)$/i,
@@ -51,48 +44,58 @@ module.exports = (env) => {
             {
               loader: 'url-loader',
               options: {
-                limit: 8192
-              }
-            }
-          ]
-        }
-      ]
+                limit: 8192,
+              },
+            },
+          ],
+        },
+      ],
     },
     stats: {
-      colors: true
+      colors: true,
     },
     devtool: 'source-map',
     plugins: [
       new CleanWebpackPlugin(),
       new MiniCssExtractPlugin({
-        filename: 'assets/css/[name].css'
+        filename: 'assets/css/[name].css',
       }),
       new BrowserSyncPlugin({
         host: 'localhost',
         port: 3000,
         proxy: 'http://localhost:5000/',
-        files: ['dist/css/*.css', 'dist/js/*.js', 'app/views/**/*.html']
+        files: ['dist/css/*.css', 'dist/js/*.js', 'app/views/**/*.html'],
       }),
       new CopyWebpackPlugin({
-        patterns: [{ from: path.join(__dirname, "app/assets/images/"), to: path.join(__dirname, "dist/assets/images/"), noErrorOnMissing: true },
-                   { from: path.join(__dirname, "app/assets/downloads/"), to: path.join(__dirname, "dist/assets/downloads/"), noErrorOnMissing: true }]
-      })
+        patterns: [
+          {
+            from: path.join(__dirname, 'app/assets/images/'),
+            to: path.join(__dirname, 'dist/assets/images/'),
+            noErrorOnMissing: true,
+          },
+          {
+            from: path.join(__dirname, 'app/assets/downloads/'),
+            to: path.join(__dirname, 'dist/assets/downloads/'),
+            noErrorOnMissing: true,
+          },
+        ],
+      }),
     ],
     optimization: {
       minimize: !devMode,
       minimizer: [
         new TerserPlugin({
           sourceMap: true,
-          parallel: true
+          parallel: true,
         }),
         new OptimizeCSSAssetsPlugin({
           cssProcessorOptions: {
             map: {
-              inline: false
-            }
-          }
-        })
-      ]
-    }
+              inline: false,
+            },
+          },
+        }),
+      ],
+    },
   };
 };

@@ -14,8 +14,8 @@ import './components/imageUpload.js';
 import './components/spreadsheetUpload.js';
 import './components/bulkImageUpload.js';
 import './components/reportFilter.js';
-import './components/portalSignIn.js';
 import './components/portalSort.js';
 
 // Utilities
 import { windowPrint } from './utilities/printWindow';
+import { polyfills } from './utilities/polyfills';

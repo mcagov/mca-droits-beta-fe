@@ -46,8 +46,12 @@ export default function (app) {
       req.body.property[rawPropertyID].quantity;
     req.session.data.property[rawPropertyID]['value-known'] =
       req.body['value-known'];
-    req.session.data.property[rawPropertyID]['value'] =
-      req.body.property[rawPropertyID].value;
+    if (req.body.property[rawPropertyID].value === "") {
+      req.session.data.property[rawPropertyID]['value'] = "Unknown"
+    } else {
+      req.session.data.property[rawPropertyID]['value'] =
+        req.body.property[rawPropertyID].value;
+    }
 
     var property = req.session.data.property;
     var propertyID;

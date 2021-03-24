@@ -19,7 +19,7 @@
 
     &__change-link {
       display: block;
-      float: left !important;
+      float: left;
       padding-top: 10px;
       margin-bottom: 15px;
       width: 100%;
@@ -88,7 +88,12 @@
   }
 }
 @media screen and (min-width: 601px) {
-  .report-responsive-table__cell span {
-    display: none;
+  .report-responsive-table {
+    &__cell span {
+      display: none;
+    }
+    &__change-link {
+      float: right;
+    }
   }
 }

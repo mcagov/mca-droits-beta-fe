@@ -319,7 +319,7 @@
 
   <table class="govuk-table report-responsive-table">
     <caption class="govuk-table__caption report-responsive-table__caption">Items of wreck material reported
-      <a class="govuk-link govuk-!-font-weight-regular report-responsive-table__change-link hide-on-print" style="float: right;" href="/report/property-summary">Change<div class="govuk-visually-hidden"> details</div></a></caption>
+      <a class="govuk-link govuk-!-font-weight-regular report-responsive-table__change-link hide-on-print" href="/report/property-summary">Change<div class="govuk-visually-hidden"> details</div></a></caption>
         <thead class="govuk-table__head report-responsive-table__head">
         <tr class="govuk-table__row report-responsive-table__row">
           <th scope="col" class="govuk-table__header govuk-!-width-one-half">Description</th>
@@ -342,7 +342,7 @@
               {{ property["quantity"] }}
             </td>
             
-            {% if property['value'] == "" %}
+            {% if property['value'] == "Unknown" %}
               <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
                 <span>Value:</span>
                 Unknown

@@ -15,3 +15,6 @@ import './components/spreadsheetUpload.js';
 import './components/bulkImageUpload.js';
 import './components/reportFilter.js';
 import './components/portalSort.js';
+
+// Utilities
+import { windowPrint } from './utilities/printWindow';

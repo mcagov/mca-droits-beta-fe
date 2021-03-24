@@ -109,8 +109,7 @@ export default function (app) {
             // Push image(s) to Azure
             Object.values(req.session.data.property).forEach((item) => {
               const imageData = fs.createReadStream(
-                `${path.resolve(__dirname + '../../../../uploads/')}/${
-                  item.image
+                `${path.resolve(__dirname + '../../../../uploads/')}/${item.image
                 }`
               );
 

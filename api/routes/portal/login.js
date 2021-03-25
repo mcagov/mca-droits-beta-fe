@@ -94,7 +94,7 @@ export default function (app) {
     req.session.destroy(function (err) {
       req.logOut();
       res.redirect(
-        'https://mcactitest.b2clogin.com/mcactitest.onmicrosoft.com/logout/?p=B2C_1_login/v2.0/.well-known/openid-configuration&post_logout_redirect_uri=http://localhost:3000'
+        'https://mcactitest.b2clogin.com/mcactitest.onmicrosoft.com/oauth2/v2.0/logout?p=B2C_1_signin&post_logout_redirect_uri=http://localhost:3000'
       );
     });
   });

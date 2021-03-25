@@ -61,16 +61,22 @@ export class ImageUpload {
                 );
                 this.loadingIndicator(percentCompleted);
               }
-            }
+            },
           }
         );
 
         if (res.data.error) {
           this.errorText.forEach((i) => (i.innerText = res.data.error.text));
           this.scrollToTop();
-          this.errorBlock.forEach((i) => (i.style.display = 'block'));
+          this.errorBlock.forEach((i) => {
+            i.classList.add('block');
+            i.classList.remove('hidden');
+          });
         } else {
-          this.errorBlock.forEach((i) => (i.style.display = 'none'));
+          this.errorBlock.forEach((i) => {
+            i.classList.add('hidden');
+            i.classList.remove('block');
+          });
           this.imageSelected(`/uploads/${res.data}`);
           this.image = res.data;
         }
@@ -131,7 +137,7 @@ export class ImageUpload {
 
 export function SingleImageUpload() {
   this.uploadPhotoEvent();
-};
+}
 
 export default LoadManager.queue(() => {
   new ComponentManager(ImageUpload, '[data-js~=image-upload]');

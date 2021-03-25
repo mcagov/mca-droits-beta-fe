@@ -86,7 +86,7 @@ export default function (app) {
     },
     function (req, res) {
       log.info('We received a return from AzureAD.');
-      res.redirect('/portal/dashboard');
+      res.render('dashboard', { user: req.user });
     }
   );
 

@@ -1,63 +1,96 @@
-const msal = require('@azure/msal-node');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const config = {
-  auth: {
-    clientId: 'd6782c10-8404-477b-97ea-889da33828f9',
-    authority: 'https://login.microsoftonline.com/common',
-    clientSecret: 'C_RLV2~sK4AFu_5o9~.eJ7d5PQSwaFE1r.',
-  },
-  system: {
-    loggerOptions: {
-      loggerCallback(loglevel, message, containsPii) {
-        console.log(message);
-      },
-      piiLoggingEnabled: false,
-      logLevel: msal.LogLevel.Verbose,
-    },
-  },
-};
-const REDIRECT_URI = "http://localhost:3000/portal/dashboard'";
-
-// Create msal application object
-const pca = new msal.ConfidentialClientApplication(config);
+const passport = require('passport');
+var OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
 
 export default function (app) {
-  app.get('/portal/login', function (req, res) {
-    const authCodeUrlParameters = {
-      scopes: ['user.read'],
-      redirectUri: REDIRECT_URI,
-    };
+  passport.use(
+    new OIDCStrategy(
+      {
+        identityMetadata:
+          'https://mcactitest.b2clogin.com/mcactitest.onmicrosoft.com/B2C_1_login/v2.0/.well-known/openid-configuration',
+        clientID: 'e0019a41-2229-4597-b3fe-53bae1bd3433',
+        responseType: 'code id_token',
+        responseMode: 'form_post',
+        redirectUrl: 'http://localhost:3000/portal/dashboard',
+        allowHttpForRedirectUrl: true,
+        clientSecret: 'kl6CfT2WJcHI8RaW9u~f~a0GA_7K-kN-l-',
+        validateIssuer: false,
+        isB2C: true,
+        validateIssuer: true,
+        issuer: null,
+        passReqToCallback: false,
+        useCookieInsteadOfSession: false,
+        cookieSameSite: false,
+        loggingLevel: 'info',
+        scope: ['offline_access'],
+      },
+      function (iss, sub, profile, accessToken, refreshToken, done) {
+        if (!profile.oid) {
+          return done(new Error('No oid found'), null);
+        }
+        // asynchronous verification, for effect...
+        process.nextTick(function () {
+          findByOid(profile.oid, function (err, user) {
+            if (err) {
+              return done(err);
+            }
+            if (!user) {
+              // "Auto-registration"
+              users.push(profile);
+              console.log(profile);
 
-    // get url to sign user in and consent to scopes needed for application
-    pca
-      .getAuthCodeUrl(authCodeUrlParameters)
-      .then((response) => {
-        res.redirect(response);
-      })
-      .catch((error) => console.log(JSON.stringify(error)));
-  });
-  app.get('/portal/dashboard', (req, res) => {
-    const tokenRequest = {
-      code: req.query.code,
-      scopes: ['user.read'],
-      redirectUri: REDIRECT_URI,
-    };
+              return done(null, profile);
+            }
+            return done(null, user);
+          });
+        });
+      }
+    )
+  );
+  app.get(
+    '/portal/login',
+    function (req, res, next) {
+      passport.authenticate('azuread-openidconnect', {
+        response: res, // required
+        failureRedirect: '/',
+      })(req, res, next);
+    },
+    function (req, res) {
+      log.info('We received a return from AzureAD.');
+      res.redirect('/');
+    }
+  );
 
-    pca
-      .acquireTokenByCode(tokenRequest)
-      .then((response) => {
-        console.log('\nResponse: \n:', response);
-        res.sendStatus(200);
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(500).send(error);
-      });
-  });
+  app.get(
+    '/portal/dashboard',
+    function (req, res, next) {
+      passport.authenticate('azuread-openidconnect', {
+        response: res, // required
+        failureRedirect: '/',
+      })(req, res, next);
+    },
+    function (req, res) {
+      log.info('We received a return from AzureAD.');
+      res.redirect('/');
+    }
+  );
+
+  app.post(
+    '/portal/dashboard',
+    function (req, res, next) {
+      passport.authenticate('azuread-openidconnect', {
+        response: res, // required
+        failureRedirect: '/',
+      })(req, res, next);
+    },
+    function (req, res) {
+      log.info('We received a return from AzureAD.');
+      res.redirect('/');
+    }
+  );
 }
-
 // export default function (app) {
 //   app.post('/portal/login', function (req, res) {
 //     const adalAuthContext = adal.AuthenticationContext;

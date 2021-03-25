@@ -45,7 +45,7 @@ export default () => {
   salvageAward(app);
   checkYourAnswers(app);
   portalLogin(app);
-  portalDashboard(app);
+  // portalDashboard(app);
   portalViewReport(app);
 
   return app;

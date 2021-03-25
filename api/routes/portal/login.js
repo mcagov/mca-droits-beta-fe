@@ -5,6 +5,33 @@ const passport = require('passport');
 var OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
 
 export default function (app) {
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  passport.serializeUser(function (user, done) {
+    done(null, user.oid);
+  });
+
+  passport.deserializeUser(function (oid, done) {
+    findByOid(oid, function (err, user) {
+      done(err, user);
+    });
+  });
+
+  // array to hold logged in users
+  var users = [];
+
+  var findByOid = function (oid, fn) {
+    for (var i = 0, len = users.length; i < len; i++) {
+      var user = users[i];
+      log.info('we are using user: ', user);
+      if (user.oid === oid) {
+        return fn(null, user);
+      }
+    }
+    return fn(null, null);
+  };
+
   passport.use(
     new OIDCStrategy(
       {
@@ -50,7 +77,7 @@ export default function (app) {
     )
   );
   app.get(
-    '/portal/login',
+    '/login',
     function (req, res, next) {
       passport.authenticate('azuread-openidconnect', {
         response: res, // required
@@ -59,37 +86,46 @@ export default function (app) {
     },
     function (req, res) {
       log.info('We received a return from AzureAD.');
-      res.redirect('/');
+      res.redirect('/portal/dashboard');
     }
   );
 
-  app.get(
-    '/portal/dashboard',
-    function (req, res, next) {
-      passport.authenticate('azuread-openidconnect', {
-        response: res, // required
-        failureRedirect: '/',
-      })(req, res, next);
-    },
-    function (req, res) {
-      log.info('We received a return from AzureAD.');
-      res.redirect('/');
-    }
-  );
+  app.get('/logout', function (req, res) {
+    req.session.destroy(function (err) {
+      req.logOut();
+      res.redirect(
+        'https://mcactitest.b2clogin.com/mcactitest.onmicrosoft.com/logout/?p=B2C_1_login/v2.0/.well-known/openid-configuration&post_logout_redirect_uri=http://localhost:3000'
+      );
+    });
+  });
 
-  app.post(
-    '/portal/dashboard',
-    function (req, res, next) {
-      passport.authenticate('azuread-openidconnect', {
-        response: res, // required
-        failureRedirect: '/',
-      })(req, res, next);
-    },
-    function (req, res) {
-      log.info('We received a return from AzureAD.');
-      res.redirect('/');
-    }
-  );
+  // app.get(
+  //   '/portal/dashboard',
+  //   function (req, res, next) {
+  //     passport.authenticate('azuread-openidconnect', {
+  //       response: res, // required
+  //       failureRedirect: '/',
+  //     })(req, res, next);
+  //   },
+  //   function (req, res) {
+  //     log.info('We received a return from AzureAD.');
+  //     res.redirect('/');
+  //   }
+  // );
+
+  // app.post(
+  //   '/portal/dashboard',
+  //   function (req, res, next) {
+  //     passport.authenticate('azuread-openidconnect', {
+  //       response: res, // required
+  //       failureRedirect: '/',
+  //     })(req, res, next);
+  //   },
+  //   function (req, res) {
+  //     log.info('We received a return from AzureAD.');
+  //     res.redirect('/');
+  //   }
+  // );
 }
 // export default function (app) {
 //   app.post('/portal/login', function (req, res) {

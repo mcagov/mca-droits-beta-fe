@@ -68,6 +68,7 @@ export default function (app) {
           'vessel-depth': sd['vessel-depth'],
           'removed-from': sd['removed-from'],
           'wreck-description': sd['wreck-description'],
+          'claim-salvage': sd['claim-salvage'],
           'salvage-services': sd['salvage-services'],
           personal: {
             'full-name': sd['personal']['full-name'],

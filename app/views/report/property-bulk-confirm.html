@@ -82,8 +82,8 @@
                   <input type=hidden name=property[{{ id }}][quantity] value="{{ item.quantity }}">
 
                   <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Value:</strong>
-                  {%if item.value === 'Unknown' %}
-                    {{ item.value }}
+                  {%if item.value === "" %}
+                    Unknown
                   {% else %}
                    £{{ item.value }}
                   {% endif %}

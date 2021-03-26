@@ -19,6 +19,8 @@ import propertyFormAddress from './report/property-form-address';
 import salvageAward from './report/salvage-award';
 import checkYourAnswers from './report/check-your-answers';
 import portalLogin from './portal/login';
+import portalLogout from './portal/logout';
+import portalLoginRedirectUrl from './portal/loginRedirectUrl';
 import portalDashboard from './portal/dashboard';
 import portalViewReport from './portal/view-report';
 
@@ -45,7 +47,9 @@ export default () => {
   salvageAward(app);
   checkYourAnswers(app);
   portalLogin(app);
-  // portalDashboard(app);
+  portalLogout(app);
+  portalLoginRedirectUrl(app);
+  portalDashboard(app);
   portalViewReport(app);
 
   return app;

@@ -5,8 +5,15 @@
 {% block pageTitle %}
   Your reports of wreck material
 {% endblock %}
+
+{% block beforeContent %}
+  <div class="account-link">
+    <a class="govuk-back-link" href="/logout">Logout</a>
+  </div>
+{% endblock %}
+
 {% block content %}
-<a href="/logout">Logout</a>
+
 {{value}}
 {% set statusGuide %}
   <p class="">

@@ -89,7 +89,7 @@
 }
 @media screen and (min-width: 601px) {
   .report-responsive-table {
-    &__cell span {
+    &__cell span:not(.govuk-details__summary-text) {
       display: none;
     }
     &__change-link {

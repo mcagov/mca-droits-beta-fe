@@ -3,7 +3,10 @@ dotenv.config();
 
 const passport = require('passport');
 var OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
-
+var bunyan = require('bunyan');
+var log = bunyan.createLogger({
+  name: 'Microsoft OIDC Example Web Application',
+});
 export default function (app) {
   app.use(passport.initialize());
   app.use(passport.session());
@@ -40,7 +43,7 @@ export default function (app) {
         clientID: 'e0019a41-2229-4597-b3fe-53bae1bd3433',
         responseType: 'code id_token',
         responseMode: 'form_post',
-        redirectUrl: 'http://localhost:3000/portal/dashboard',
+        redirectUrl: 'http://localhost:3000/auth/openid/return',
         allowHttpForRedirectUrl: true,
         clientSecret: 'kl6CfT2WJcHI8RaW9u~f~a0GA_7K-kN-l-',
         validateIssuer: false,
@@ -51,9 +54,9 @@ export default function (app) {
         useCookieInsteadOfSession: false,
         cookieSameSite: false,
         loggingLevel: 'info',
-        scope: ['offline_access'],
+        scope: 'e0019a41-2229-4597-b3fe-53bae1bd3433',
       },
-      function (iss, sub, profile, accessToken, refreshToken, done) {
+      function (iss, sub, profile, accessToken, refreshToken, params, done) {
         if (!profile.oid) {
           return done(new Error('No oid found'), null);
         }
@@ -66,7 +69,6 @@ export default function (app) {
             if (!user) {
               // "Auto-registration"
               users.push(profile);
-              console.log(profile);
 
               return done(null, profile);
             }
@@ -76,6 +78,7 @@ export default function (app) {
       }
     )
   );
+
   app.get(
     '/login',
     function (req, res, next) {
@@ -86,74 +89,7 @@ export default function (app) {
     },
     function (req, res) {
       log.info('We received a return from AzureAD.');
-      res.render('dashboard', { user: req.user });
+      res.render('portal/dashboard', { user: req.user });
     }
   );
-
-  app.get('/logout', function (req, res) {
-    req.session.destroy(function (err) {
-      req.logOut();
-      res.redirect(
-        'https://mcactitest.b2clogin.com/mcactitest.onmicrosoft.com/oauth2/v2.0/logout?p=B2C_1_signin&post_logout_redirect_uri=http://localhost:3000'
-      );
-    });
-  });
-
-  // app.get(
-  //   '/portal/dashboard',
-  //   function (req, res, next) {
-  //     passport.authenticate('azuread-openidconnect', {
-  //       response: res, // required
-  //       failureRedirect: '/',
-  //     })(req, res, next);
-  //   },
-  //   function (req, res) {
-  //     log.info('We received a return from AzureAD.');
-  //     res.redirect('/');
-  //   }
-  // );
-
-  // app.post(
-  //   '/portal/dashboard',
-  //   function (req, res, next) {
-  //     passport.authenticate('azuread-openidconnect', {
-  //       response: res, // required
-  //       failureRedirect: '/',
-  //     })(req, res, next);
-  //   },
-  //   function (req, res) {
-  //     log.info('We received a return from AzureAD.');
-  //     res.redirect('/');
-  //   }
-  // );
 }
-// export default function (app) {
-//   app.post('/portal/login', function (req, res) {
-//     const adalAuthContext = adal.AuthenticationContext;
-//     const authorityHostUrl = 'https://login.microsoftonline.com/';
-//     const tenant = process.env.TENANT_ID;
-//     const authorityUrl = authorityHostUrl + tenant;
-//     const clientId = process.env.CLIENT_ID;
-//     const clientSecret = process.env.CLIENT_SECRET;
-//     const resource = process.env.DATAVERSE_API_BASE_URL;
-//     const context = new adalAuthContext(authorityUrl);
-
-//     const currentUserEmail = req.body.email;
-
-//     context.acquireTokenWithClientCredentials(
-//       resource,
-//       clientId,
-//       clientSecret,
-//       (err, tokenResponse) => {
-//         if (err) {
-//           console.log(`Token generation failed due to ${err}`);
-//         } else {
-//           const accessToken = tokenResponse.accessToken;
-//           req.session.data.token = accessToken;
-//           req.session.data.email = currentUserEmail;
-//           return res.redirect('dashboard');
-//         }
-//       }
-//     );
-//   });
-// }

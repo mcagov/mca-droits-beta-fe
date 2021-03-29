@@ -4,7 +4,7 @@ $govuk-global-styles: true;
 @import '~govuk-frontend/govuk/all';
 @import 'accessible-autocomplete';
 
-//Utilities 
+//Utilities
 @import './utilities/display';
 
 // Components
@@ -16,3 +16,4 @@ $govuk-global-styles: true;
 @import './components/responsive-table';
 @import './components/action-confirmation';
 @import './components/filters';
+@import './components/dashboard';

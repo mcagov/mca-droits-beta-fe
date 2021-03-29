@@ -1,0 +1,14 @@
+.account-link {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+  margin-bottom: 15px;
+
+  > a {
+    padding: 0;
+    &:before,
+    &:after {
+      display: none;
+    }
+  }
+}

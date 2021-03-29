@@ -135,7 +135,7 @@ Report Details
             }) }}
     </div>
 
-    <!--<div class="govuk-grid-column-two-thirds-from-desktop">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
         <h2 class="govuk-heading-m">Vessel information</h2>
       
         {{ govukSummaryList({
@@ -175,7 +175,7 @@ Report Details
             }
           ]
         }) }}
-      </div>-->
+      </div>
 
     <div class="govuk-grid-column-two-thirds-from-desktop">
         <h2 class="govuk-heading-m govuk-!-margin-top-5">Location</h2>
@@ -189,22 +189,26 @@ Report Details
                     {{ reportData.coordinates }}
                 </dd>
             </div>
+            {% if reportData.crf99_recoveredfrom %}
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
                     Salvaged from
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    Seabed
+                    {{ reportData.crf99_recoveredfrom }}
                 </dd>
             </div>
+            {% endif %}
+            {% if reportData.crf99_depth %}
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
                     Depth
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    20m
+                    {{ reportData.crf99_depth }} metres
                 </dd>
             </div>
+            {% endif %}
         </dl>
 
         <div data-js="static-map">

@@ -149,6 +149,12 @@
         <tbody class="govuk-table__body report-responsive-table__body" data-js="portal-dashboard">
         {% for item in userReports %}
           {% set convertedRef = item["report-ref"] | replace(r/\//ig,'-') %}
+          {% if item['wreck-materials'] | length === 1 %}
+            {% set itemSummaryText = "item" %}
+          {% else %}
+             {% set itemSummaryText = "items" %}
+          {% endif %}
+          
           <tr class="govuk-table__row report-responsive-table__row report-responsive-table__row--portal-dashboard" data-status="{{item['status-attr']}}" data-js="report-listings-row">
             <td class="govuk-table__cell report-responsive-table__cell">
             <span>Reference:</span>
@@ -164,7 +170,7 @@
               <details class="govuk-details" data-module="govuk-details">
                 <summary class="govuk-details__summary">
                   <span class="govuk-details__summary-text">
-                    {{ item['wreck-materials'] | length }} items of wreck material
+                    {{ item['wreck-materials'] | length }} {{ itemSummaryText }} of wreck material
                   </span>
                 </summary>
                 <div class="govuk-details__text">

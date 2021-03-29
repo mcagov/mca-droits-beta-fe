@@ -135,47 +135,42 @@ Report Details
             }) }}
     </div>
 
+    {% if reportData.crf99_vesselname %}
     <div class="govuk-grid-column-two-thirds-from-desktop">
-        <h2 class="govuk-heading-m">Vessel information</h2>
-      
-        {{ govukSummaryList({
-          rows: [
-            {
-              key: {
-                text: "Vessel name"
-              },
-              value: {
-                text: ""
-              },
-              actions: {
-                items: []
-              }
-            },
-            {
-              key: {
-                text: "Vessel construction year"
-              },
-              value: {
-                text: ""
-              },
-              actions: {
-                items: []
-              }
-            },
-            {
-              key: {
-                text: "Vessel sunk year"
-              },
-              value: {
-                text: ""
-              },
-              actions: {
-                items: []
-              }
-            }
-          ]
-        }) }}
-      </div>
+      <h2 class="govuk-heading-m">Vessel information</h2>
+
+      <dl class="govuk-summary-list">
+          <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                  Vessel name
+              </dt>
+              <dd class="govuk-summary-list__value">
+                  {{ reportData.crf99_vesselname }}
+              </dd>
+          </div>
+          {% if reportData.crf99_vesselyearconstructed %}
+          <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                  Vessel construction year
+              </dt>
+              <dd class="govuk-summary-list__value">
+                  {{ reportData.crf99_vesselyearconstructed }}
+              </dd>
+          </div>
+          {% endif %}
+          {% if reportData.crf99_vesselyearsunk %}
+          <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                  Vessel sunk year
+              </dt>
+              <dd class="govuk-summary-list__value">
+                  {{ reportData.crf99_vesselyearsunk }}
+              </dd>
+          </div>
+          {% endif %}
+      </dl>
+    </div>
+    {% endif %}
 
     <div class="govuk-grid-column-two-thirds-from-desktop">
         <h2 class="govuk-heading-m govuk-!-margin-top-5">Location</h2>

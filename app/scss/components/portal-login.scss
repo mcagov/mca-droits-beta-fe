@@ -1,0 +1,152 @@
+// Custom styling for the AD B2C sign-in page
+
+.localAccount {
+  font-family: "GDS Transport", arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+
+  h1 {
+    font-family: "GDS Transport", arial, sans-serif;
+  }
+
+  .intro h2 {
+    font-family: "GDS Transport", arial, sans-serif;
+    display: block;
+    color: #0b0c0c;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    font-weight: 700;
+  }
+  input {
+    font-family: "GDS Transport", arial, sans-serif;
+    font-weight: 400;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 40ex;
+    height: 2.5rem;
+    margin-top: 0;
+    padding: 5px;
+    border: 2px solid #0b0c0c;
+    border-radius: 0;
+    appearance: none;
+  }
+
+  label {
+    display: block;
+    font-weight: 400;
+    margin-bottom: 5px;
+    color: #0b0c0c;
+  }
+
+  #forgotPassword {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .entry {
+    font-family: "GDS Transport", arial, sans-serif;
+
+    &-item {
+      margin-bottom: 20px;
+    }
+  }
+
+  .buttons {
+    margin-top: 10px;
+    margin-bottom: 30px;
+
+    button {
+      font-family: "GDS Transport", arial, sans-serif !important;
+      background-color: #00703c;
+      box-shadow: 0 2px 0 #002d18;
+      text-align: center;
+      color: #ffffff;
+      font-size: 1.125rem;
+      vertical-align: top;
+      cursor: pointer;
+      font-weight: 700;
+      display: inline-flex;
+      justify-content: center;
+      padding: 8px 10px 7px;
+      border: 2px solid transparent;
+      border-radius: 0;
+      width: 100%;
+
+      &:link,
+      &:hover {
+        background-color: #005a30;
+      }
+
+      &:active {
+        top: 2px;
+      }
+
+      &:focus {
+        border-color: #ffdd00;
+        outline: 3px solid transparent;
+        box-shadow: inset 0 0 0 1px #ffdd00;
+      }
+
+      &:focus:not(:active):not(:hover) {
+        border-color: #ffdd00;
+        color: #0b0c0c;
+        background-color: #ffdd00;
+        box-shadow: 0 2px 0 #0b0c0c;
+      }
+
+      // Temporary placeholder for chevron svg //
+      &:after {
+        content: "\232a";
+        transform: scaleY(0.5);
+        margin-left: 0.75rem;
+      }
+    }
+  }
+
+  .divider h2 {
+    text-align: center;
+  }
+
+  .create {
+    width: 400px ;
+    margin-left: auto ;
+    margin-right: auto ;
+  }
+
+  @media (min-width: 40.0625em) {
+    label, input {
+      font-size: 1.1875rem;
+      line-height: 1.31579;
+    }
+
+    .entry-item {
+      margin-bottom: 30px;
+    }
+
+    .buttons {
+      margin-bottom: 50px;
+
+      button {
+        font-size: 1.5rem;
+        line-height: 1;
+        width: auto;
+      }
+    }
+  }
+}
+
+.error_container {
+  h1 {
+    font-family: "GDS Transport", arial, sans-serif;
+  }
+}
+
+.error {
+  p {
+    display: block;
+    font-size: 1.1875rem;
+    font-weight: 700;
+    line-height: 1.31579;
+    color: #d4351c;
+    margin-bottom: 15px;
+  }
+}

@@ -5,3 +5,4 @@ export { formatValidationErrors } from './formatValidationErrors';
 export { matchRoutes } from './matchRoutes';
 export { sessionData } from './sessionData';
 export { GT_OSGB as default } from './geotools';
+export { assignReportStatus } from './assignReportStatus';

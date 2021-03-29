@@ -1,5 +1,6 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
+import { assignReportStatus } from '../../../utilities';
 
 export default function (app) {
   app.get(
@@ -30,6 +31,8 @@ export default function (app) {
             })
             .then((res) => {
               reportData = res.data.value[0];
+              const reportStatus = assignReportStatus(reportData.crf99_reportstatus);
+
               reportData.coordinates = `${reportData.crf99_latitude}° ${reportData.crf99_longitude}°`;
               reportData.dateReported = dayjs(
                 reportData.crf99_datereported
@@ -37,6 +40,11 @@ export default function (app) {
               reportData.dateFound = dayjs(reportData.crf99_datefound).format(
                 'DD MM YYYY'
               );
+              reportData['last-updated'] = dayjs(reportData.modifiedon).format(
+                'DD MM YYYY'
+              );
+              reportData.status = reportStatus[0];
+              reportData.statusColour = reportStatus[2];
 
               const wreckMaterialData = reportData.crf99_MCAWreckMaterial_WreckReport_crf99_;
               for (const wreckItem of wreckMaterialData) {

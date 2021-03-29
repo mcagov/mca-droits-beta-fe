@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import ensureAuthenticated from './ensureAuthenticated';
 const dotenv = require('dotenv');
 dotenv.config();
+import { assignReportStatus } from '../../../utilities';
 
 const url =
   process.env.DATAVERSE_API_BASE_URL + process.env.DATAVERSE_API_SERVICE_URL;
@@ -104,6 +105,7 @@ const fetchReportData = (accessToken, url, userReports, res) =>
 
 const formatReportData = (data, userReports) => {
   const wreckMaterialsData = data.crf99_MCAWreckMaterial_WreckReport_crf99_;
+  const statusCode = data.crf99_reportstatus;
 
   let reportItem = {};
 
@@ -118,6 +120,12 @@ const formatReportData = (data, userReports) => {
   wreckMaterialsData.forEach((item) => {
     reportItem['wreck-materials'].push(item.crf99_description);
   });
+
+  const reportStatus = assignReportStatus(statusCode);
+
+  reportItem['status'] = reportStatus[0];
+  reportItem['status-attr'] = reportStatus[1];
+  reportItem['status-colour'] = reportStatus[2];
 
   userReports.push(reportItem);
   return userReports;

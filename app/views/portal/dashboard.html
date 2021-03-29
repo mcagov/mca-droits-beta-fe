@@ -40,7 +40,7 @@
   <p>
     {{govukTag({
       text: "Closed",
-      classes: "govuk-tag--green govuk-!-margin-bottom-2"
+      classes: "govuk-tag--grey govuk-!-margin-bottom-2 portal-filter-item--closed"
     })}}
     <br/>The Receiver of Wreck has completed their enquiries and has determined the outcome of the report.
   </p>
@@ -75,7 +75,7 @@
             </a>
           </span>
           <span class="portal-filter-item-wrapper">
-            <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="response">
+            <a class="portal-filter-item govuk-!-margin-right-4" href="#" data-js="portal-filter-item" data-status="awaiting">
               {{govukTag({
                 text: "Awaiting your response",
                 classes: "govuk-tag--orange govuk-!-margin-bottom-2"
@@ -157,17 +157,28 @@
         <tbody class="govuk-table__body report-responsive-table__body" data-js="portal-dashboard">
         {% for item in userReports %}
           {% set convertedRef = item["report-ref"] | replace(r/\//ig,'-') %}
-          <tr class="govuk-table__row report-responsive-table__row report-responsive-table__row--portal-dashboard" data-status="received" data-js="report-listings-row">
-            <td class="govuk-table__cell report-responsive-table__cell" data-label="Reference">{{ item["report-ref"] }}</td>
-            <td class="govuk-table__cell report-responsive-table__cell" data-label="Date reported">{{ item["date-reported"] }}</td>
-            <td class="govuk-table__cell report-responsive-table__cell" data-label="Details">
+          {% if item['wreck-materials'] | length === 1 %}
+            {% set itemSummaryText = "item" %}
+          {% else %}
+             {% set itemSummaryText = "items" %}
+          {% endif %}
+          
+          <tr class="govuk-table__row report-responsive-table__row report-responsive-table__row--portal-dashboard" data-status="{{item['status-attr']}}" data-js="report-listings-row">
+            <td class="govuk-table__cell report-responsive-table__cell">
+            <span>Reference:</span>
+            {{ item["report-ref"] }}</td>
+            <td class="govuk-table__cell report-responsive-table__cell">
+            <span>Date reported:</span>
+            {{ item["date-reported"] }}</td>
+            <td class="govuk-table__cell report-responsive-table__cell">
+            <span>Details:</span>
               {% if item['vessel-name'] %}
               {{ item['vessel-name'] }}<br/>
               {% endif %}
               <details class="govuk-details" data-module="govuk-details">
                 <summary class="govuk-details__summary">
                   <span class="govuk-details__summary-text">
-                    {{ item['wreck-materials'] | length }} items of wreck material
+                    {{ item['wreck-materials'] | length }} {{ itemSummaryText }} of wreck material
                   </span>
                 </summary>
                 <div class="govuk-details__text">
@@ -181,8 +192,8 @@
             </td>
             <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--no-label">
               {{govukTag({
-                text: "Received",
-                classes: "govuk-tag--purple govuk-!-margin-bottom-2"
+                text: item['status'],
+                classes: "govuk-tag--" + item['status-colour'] + " govuk-!-margin-bottom-2"
               })}}<br/>
               <strong>Last&nbsp;update: </strong>{{ item["last-updated"] }}
             </td>

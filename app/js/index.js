@@ -18,3 +18,4 @@ import './components/portalSort.js';
 
 // Utilities
 import { windowPrint } from './utilities/printWindow';
+import { polyfills } from './utilities/polyfills';

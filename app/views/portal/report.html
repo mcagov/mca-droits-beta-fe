@@ -189,6 +189,26 @@ Report Details
                     {{ reportData.coordinates }}
                 </dd>
             </div>
+            {% if reportData.crf99_recoveredfrom %}
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Salvaged from
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ reportData.crf99_recoveredfrom }}
+                </dd>
+            </div>
+            {% endif %}
+            {% if reportData.crf99_depth %}
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Depth
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ reportData.crf99_depth }} metres
+                </dd>
+            </div>
+            {% endif %}
         </dl>
 
         <div data-js="static-map">
@@ -215,11 +235,24 @@ Report Details
             <tbody class="govuk-table__body">
               {% for item in reportData.crf99_MCAWreckMaterial_WreckReport_crf99_ %}
               <tr class="govuk-table__row report-responsive-table__row">
-                  <td class="govuk-table__cell report-responsive-table__cell" data-label="Description">{{ item.crf99_description }}</td>
-                  <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Quantity">{{ item.crf99_quantity }}</td>
-                  <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell" data-label="Value">£{{ item.crf99_value }}</td>
-                  <td class="govuk-table__cell report-responsive-table__cell" data-label="Image"><img src="{{ item.crf99_imageurl }}" width="250" /></td>
+                  <td class="govuk-table__cell report-responsive-table__cell">
+                      <span>Description:</span>
+                      {{ item.crf99_description }}
+                  </td>
+                  <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
+                      <span>Quantity:</span>
+                      {{ item.crf99_quantity }}
+                  </td>
+                  <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
+                      <span>Total value:</span>
+                      £{{ item.crf99_value }}
+                  </td>
+                  <td class="govuk-table__cell report-responsive-table__cell" data-label="Image">
+                      <span>Image:</span>
+                      <img src="{{ item.crf99_imageurl }}" width="250" />
+                  </td>
                   <td class="govuk-table__cell report-responsive-table__cell" data-label="Storage address">
+                      <span>Storage address:</span>
                       {% set addressLines = item.storageAddress %}
                       {{ address(addressLines) }}
                   </td>
@@ -260,16 +293,18 @@ Report Details
 {% set reportOutcome %}
 <h2 class="govuk-heading-m">Owner has waived their rights to the wreck material found</h2>
 
-<p class="govuk-body">The Receiver of Wreck has concluded their investigations into the report of wreck and salvage (reference (034/20). We have been able to successfully locate the current legal owner of the wreck of the <em>HMS Drake</em>.</p>
+<p class="govuk-body">The Receiver of Wreck has concluded their investigations into the report of wreck and salvage (reference (154/21). We have been able to successfully locate the current legal owner of the wreck of the <em>HMS Drake</em>.</p>
 
 <p class="govuk-body">Following the Receiver’s correspondence with the wreck owner, the owner has decided, on this occasion, to waive rights to the material recovered by you and listed below.</p>
 
 <p class="govuk-body">Therefore, in accordance with section 243 of the Merchant Shipping Act 1995, the Receiver of Wreck is able to offer you title to the material listed below in lieu of a salvage award.</p>
 
-<p class="govuk-body">Item as listed and described by you:</p>
+<p class="govuk-body">Items as listed and described by you:</p>
 
 <ul class="govuk-list govuk-list--bullet">
-    <li>1 x Porthole door, brass, 9” diameter, glass cracked but otherwise good condition.</li>
+    <li>2 x Dutch Navy cannon weighing 56kg and 1262mm in length.</li>
+    <li>1 x The bell of the SS Mendi. Includes the identifying marking 'Mendi'.</li>
+    <li>4 x German U-boat propellers measuring 60cm in diameter.</li>
 </ul>
 
 <h2 class="govuk-heading-m">What happens next?</h2>
@@ -278,6 +313,16 @@ Report Details
 <p class="govuk-body">Please look after this piece of Britain’s maritime heritage.</p>
 
 <p class="govuk-body">Although on this occasion you have been awarded this item in lieu of a salvage award, please note that you are still required to report all future recoveries from this (or any other) wreck.</p>
+
+<p>
+{{ govukButton({
+    text: "Print a copy of this outcome notice",
+    classes: "govuk-button--secondary hide-on-print",
+    attributes: {
+    "onClick": "window.print()"
+    }
+}) }}
+</p>
 {% endset -%}
 
 
@@ -309,11 +354,11 @@ Report Details
                 </dt>
                 <dd class="govuk-summary-list__value">
                     {{govukTag({
-                        text: "Awaiting your response",
-                        classes: "govuk-tag--orange govuk-!-margin-bottom-2"
+                        text: reportData.status,
+                        classes: "govuk-tag--" + reportData.statusColour + " govuk-!-margin-bottom-2"
                       })}}
                       <br />
-                      <a href="#correspondence" class="scroll-to-latest-message">(see latest message)</a>
+                      <!--<a href="#correspondence" class="scroll-to-latest-message">(see latest message)</a>-->
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
@@ -321,7 +366,7 @@ Report Details
                     Last update
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    29&nbsp;06&nbsp;2020
+                    {{ reportData['last-updated'] }}
                 </dd>
             </div>
         </dl>
@@ -329,11 +374,30 @@ Report Details
     </div>
 </div>
 
-        
-
-<div class="govuk-grid-row">        
-    <div class="govuk-grid-column-full">
-        {{ govukTabs({
+{% if reportData.status === 'closed' %}
+  {% set tabs %}
+    {{ govukTabs({
+        items: [
+            {
+                label: "Report details",
+                id: "detail",
+                    panel: {
+                        html: reportDetail
+                    }
+            },
+            {
+                label: "Outcome",
+                id: "outcome",
+                panel: {
+                    html: reportOutcome
+                }
+            }
+        ]
+      }) }}
+  {% endset %}
+  {% else %}
+  {% set tabs %}
+    {{ govukTabs({
         items: [
             {
                 label: "Report details",
@@ -343,7 +407,13 @@ Report Details
                     }
             }
         ]
-        }) }}
+      }) }}
+  {% endset %}
+  {% endif %}        
+
+<div class="govuk-grid-row">        
+    <div class="govuk-grid-column-full">
+        {{ tabs }}
 
     </div>
 </div>

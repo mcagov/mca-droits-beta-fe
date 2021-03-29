@@ -10,7 +10,7 @@ export class SpreadsheetUpload {
     if (!el) return;
 
     this.el = el;
-    
+
     this.fileInput = $1('[data-js=file-input]', this.el);
     this.fileInputWrapper = $1('[data-js=file-input-wrapper]', this.el);
     this.spreadsheetUploadBtn = $1('[data-js=spreadsheet-upload-btn]', this.el);
@@ -55,7 +55,7 @@ export class SpreadsheetUpload {
         } else {
           this.handleLoadingIndicator();
           this.errorBlock.forEach((i) => (i.classList.add('hidden')));
-          setTimeout(() => {     
+          setTimeout(() => {
             this.spreadsheetUploadBtn.classList.add('hidden');
             this.continueBtn.classList.remove('hidden');
           }, 1000);
@@ -67,8 +67,17 @@ export class SpreadsheetUpload {
   }
 
   fileInputListener() {
+    this.fileInput.addEventListener('click', () => {
+      this.fileInput.value = null;
+      if (!this.spreadsheetUploadBtn.disabled) {
+        this.spreadsheetUploadBtn.disabled = true;
+        this.spreadsheetUploadBtn.classList.add('govuk-button--disabled');
+        this.spreadsheetUploadBtn.addAttribute('aria-disabled');
+      }
+    })
+
     this.fileInput.addEventListener('input', () => {
-      if(this.spreadsheetUploadBtn.disabled) {
+      if (this.spreadsheetUploadBtn.disabled) {
         this.spreadsheetUploadBtn.disabled = false;
         this.spreadsheetUploadBtn.classList.remove('govuk-button--disabled');
         this.spreadsheetUploadBtn.removeAttribute('aria-disabled');
@@ -94,8 +103,8 @@ export class SpreadsheetUpload {
     this.uploadProgress.classList.add('file-upload-progress--visible');
 
     this.uploadProgressText.innerText = `Uploading file...`;
-    const uploadStatus = setInterval(() => { 
-      progress++; 
+    const uploadStatus = setInterval(() => {
+      progress++;
       this.uploadProgressPercent.innerText = `${progress}%`;
       this.uploadProgressBar.style.width = `${progress}%`;
       if (progress === 100) {

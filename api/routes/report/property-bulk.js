@@ -92,9 +92,9 @@ export default function (app) {
 
                   // Remove any non-numeric characters from the 'Total value' of the wreck item
                   item['value'] = obj['Total value'].replace(/\D/g, '');
-                  if (obj['Total value'] === '') {
+                  /*if (obj['Total value'] === '') {
                     item['value'] = 'Unknown';
-                  }
+                  }*/
                   if (obj['Total value']) {
                     item['value-known'] = 'yes';
                   } else {

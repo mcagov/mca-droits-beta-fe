@@ -184,13 +184,13 @@ Report Details
                     {{ reportData.coordinates }}
                 </dd>
             </div>
-            {% if reportData.crf99_recoveredfrom %}
+            {% if reportData['recovered-from'] %}
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
                     Salvaged from
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    {{ reportData.crf99_recoveredfrom }}
+                    {{ reportData['recovered-from'] }}
                 </dd>
             </div>
             {% endif %}

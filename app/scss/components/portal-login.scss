@@ -1,6 +1,6 @@
 // Custom styling for the AD B2C sign-in page
 
-.localAccount {
+#api {
   font-family: "GDS Transport", arial, sans-serif !important;
   -webkit-font-smoothing: antialiased;
 
@@ -28,6 +28,13 @@
     border: 2px solid #0b0c0c;
     border-radius: 0;
     appearance: none;
+
+    &:focus {
+      outline: 3px solid #ffdd00;
+      outline-offset: 0;
+      box-shadow: inset 0 0 0 2px;
+      border-radius: 0;
+    }
   }
 
   label {
@@ -72,21 +79,21 @@
       width: 100%;
 
       &:link,
-      &:hover {
+      &:hover:not([aria-disabled='true']) {
         background-color: #005a30;
       }
 
-      &:active {
+      &:active:not([aria-disabled='true']) {
         top: 2px;
       }
 
-      &:focus {
+      &:focus:not([aria-disabled='true']) {
         border-color: #ffdd00;
         outline: 3px solid transparent;
         box-shadow: inset 0 0 0 1px #ffdd00;
       }
 
-      &:focus:not(:active):not(:hover) {
+      &:focus:not(:active):not(:hover):not([aria-disabled='true']) {
         border-color: #ffdd00;
         color: #0b0c0c;
         background-color: #ffdd00;
@@ -99,6 +106,15 @@
         transform: scaleY(0.5);
         margin-left: 0.75rem;
       }
+
+      &[aria-disabled='true'] {
+        cursor: default;
+        opacity: 0.5;
+
+        &:hover, &:focus, &:active {
+          outline: none;
+        }
+      }
     }
   }
 
@@ -106,10 +122,23 @@
     text-align: center;
   }
 
-  .create {
-    width: 400px ;
-    margin-left: auto ;
-    margin-right: auto ;
+  .attr {
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    &Entry {
+      margin-bottom: 20px;
+    }
+  }
+
+  .helpLink {
+    display: none;
+  }
+
+  #cancel {
+    display: none;
   }
 
   @media (min-width: 40.0625em) {

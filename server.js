@@ -39,6 +39,7 @@ if (env === 'production') {
           'unpkg.com',
           'cdnjs.cloudflare.com',
         ],
+        styleSrc: ["'self'", 'cdn.jsdelivr.net'],
         imgSrc: [
           "'self'",
           'data:',

@@ -99,7 +99,7 @@ const fetchReportData = (accessToken, url, userReports, res) =>
       .catch((err) => {
         console.log('[Report data error]:' + err);
         if (err.response.status === 401) {
-          res.redirect('/portal/login');
+          res.redirect('/portal/start');
         }
         reject();
       });

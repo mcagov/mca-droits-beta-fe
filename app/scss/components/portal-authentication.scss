@@ -1,5 +1,9 @@
 // Custom styling for the AD B2C authentication pages
 
+body {
+  margin: 0;
+}
+
 #api {
   font-family: "GDS Transport", arial, sans-serif !important;
   -webkit-font-smoothing: antialiased;
@@ -103,9 +107,12 @@
 
       // Temporary placeholder for chevron svg //
       &:after {
-        content: "\232a";
-        transform: scaleY(0.5);
-        margin-left: 0.75rem;
+        content: "";
+        background-image: url('../images/chevron-right.svg');
+        width: 18px;
+        height: 19px;
+        margin: 3px 0;
+        margin-left: 0.5rem;
       }
 
       &[aria-disabled='true'] {

@@ -52,7 +52,9 @@ export default function (app) {
             .catch((reqError) => {
               console.log('User ID error');
               console.log(reqError);
+              const userError = true;
               reject();
+              return res.render('report/start', { userError: userError });
             });
         });
       }

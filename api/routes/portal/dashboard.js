@@ -52,7 +52,9 @@ export default function (app) {
             .catch((reqError) => {
               console.log('User ID error');
               console.log(reqError);
+              session.userNotFound = true;
               reject();
+              return res.redirect('logout');
             });
         });
       }

@@ -1,6 +1,6 @@
-// Custom styling for the AD B2C sign-in page
+// Custom styling for the AD B2C authentication pages
 
-.localAccount {
+#api {
   font-family: "GDS Transport", arial, sans-serif !important;
   -webkit-font-smoothing: antialiased;
 
@@ -16,6 +16,7 @@
     line-height: 1.25;
     font-weight: 700;
   }
+
   input {
     font-family: "GDS Transport", arial, sans-serif;
     font-weight: 400;
@@ -28,6 +29,13 @@
     border: 2px solid #0b0c0c;
     border-radius: 0;
     appearance: none;
+
+    &:focus {
+      outline: 3px solid #ffdd00;
+      outline-offset: 0;
+      box-shadow: inset 0 0 0 2px;
+      border-radius: 0;
+    }
   }
 
   label {
@@ -52,10 +60,10 @@
 
   .buttons {
     margin-top: 10px;
-    margin-bottom: 30px;
 
     button {
       font-family: "GDS Transport", arial, sans-serif !important;
+      display: inline-flex;
       background-color: #00703c;
       box-shadow: 0 2px 0 #002d18;
       text-align: center;
@@ -63,8 +71,8 @@
       font-size: 1.125rem;
       vertical-align: top;
       cursor: pointer;
+      margin-bottom: 30px;
       font-weight: 700;
-      display: inline-flex;
       justify-content: center;
       padding: 8px 10px 7px;
       border: 2px solid transparent;
@@ -72,21 +80,21 @@
       width: 100%;
 
       &:link,
-      &:hover {
+      &:hover:not([aria-disabled='true']) {
         background-color: #005a30;
       }
 
-      &:active {
+      &:active:not([aria-disabled='true']) {
         top: 2px;
       }
 
-      &:focus {
+      &:focus:not([aria-disabled='true']) {
         border-color: #ffdd00;
         outline: 3px solid transparent;
         box-shadow: inset 0 0 0 1px #ffdd00;
       }
 
-      &:focus:not(:active):not(:hover) {
+      &:focus:not(:active):not(:hover):not([aria-disabled='true']) {
         border-color: #ffdd00;
         color: #0b0c0c;
         background-color: #ffdd00;
@@ -99,6 +107,15 @@
         transform: scaleY(0.5);
         margin-left: 0.75rem;
       }
+
+      &[aria-disabled='true'] {
+        cursor: default;
+        opacity: 0.5;
+
+        &:hover, &:focus, &:active {
+          outline: none;
+        }
+      }
     }
   }
 
@@ -106,10 +123,23 @@
     text-align: center;
   }
 
-  .create {
-    width: 400px ;
-    margin-left: auto ;
-    margin-right: auto ;
+  .attr {
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    &Entry {
+      margin-bottom: 20px;
+    }
+  }
+
+  .helpLink {
+    display: none;
+  }
+
+  #cancel {
+    display: none;
   }
 
   @media (min-width: 40.0625em) {
@@ -123,8 +153,6 @@
     }
 
     .buttons {
-      margin-bottom: 50px;
-
       button {
         font-size: 1.5rem;
         line-height: 1;
@@ -141,12 +169,10 @@
 }
 
 .error {
-  p {
-    display: block;
-    font-size: 1.1875rem;
-    font-weight: 700;
-    line-height: 1.31579;
-    color: #d4351c;
-    margin-bottom: 15px;
-  }
+  display: block;
+  font-size: 1.1875rem;
+  font-weight: 700;
+  line-height: 1.31579;
+  color: #d4351c;
+  margin-bottom: 15px;
 }

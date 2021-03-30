@@ -1,4 +1,4 @@
-// Custom styling for the AD B2C sign-in page
+// Custom styling for the AD B2C authentication pages
 
 #api {
   font-family: "GDS Transport", arial, sans-serif !important;
@@ -16,6 +16,7 @@
     line-height: 1.25;
     font-weight: 700;
   }
+
   input {
     font-family: "GDS Transport", arial, sans-serif;
     font-weight: 400;
@@ -59,10 +60,10 @@
 
   .buttons {
     margin-top: 10px;
-    margin-bottom: 30px;
 
     button {
       font-family: "GDS Transport", arial, sans-serif !important;
+      display: inline-flex;
       background-color: #00703c;
       box-shadow: 0 2px 0 #002d18;
       text-align: center;
@@ -70,8 +71,8 @@
       font-size: 1.125rem;
       vertical-align: top;
       cursor: pointer;
+      margin-bottom: 30px;
       font-weight: 700;
-      display: inline-flex;
       justify-content: center;
       padding: 8px 10px 7px;
       border: 2px solid transparent;
@@ -152,8 +153,6 @@
     }
 
     .buttons {
-      margin-bottom: 50px;
-
       button {
         font-size: 1.5rem;
         line-height: 1;
@@ -170,12 +169,10 @@
 }
 
 .error {
-  p {
-    display: block;
-    font-size: 1.1875rem;
-    font-weight: 700;
-    line-height: 1.31579;
-    color: #d4351c;
-    margin-bottom: 15px;
-  }
+  display: block;
+  font-size: 1.1875rem;
+  font-weight: 700;
+  line-height: 1.31579;
+  color: #d4351c;
+  margin-bottom: 15px;
 }

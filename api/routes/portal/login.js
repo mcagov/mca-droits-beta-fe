@@ -43,7 +43,7 @@ export default function (app) {
         clientID: 'e0019a41-2229-4597-b3fe-53bae1bd3433',
         responseType: 'code id_token',
         responseMode: 'form_post',
-        redirectUrl: 'http://mca-d-web-1.azurewebsites.net/auth/openid/return',
+        redirectUrl: 'https://mca-d-web-1.azurewebsites.net/auth/openid/return',
         allowHttpForRedirectUrl: true,
         clientSecret: 'kl6CfT2WJcHI8RaW9u~f~a0GA_7K-kN-l-',
         validateIssuer: false,

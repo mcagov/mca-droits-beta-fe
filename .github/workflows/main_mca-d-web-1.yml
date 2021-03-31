@@ -31,6 +31,7 @@ jobs:
       env:
         AZURE_BLOB_IMAGE_URL: ${{secrets.AZURE_BLOB_IMAGE_URL}}
         AZURE_STORAGE_CONNECTION_STRING: ${{secrets.AZURE_STORAGE_CONNECTION_STRING}}
+        CLIENT_ID: ${{secrets.CLIENT_ID}}
         CLIENT_SECRET : ${{secrets.CLIENT_SECRET}}
         DATAVERSE_API_BASE_URL : ${{secrets.DATAVERSE_API_BASE_URL}}
         DATAVERSE_API_SERVICE_URL : ${{secrets.DATAVERSE_API_SERVICE_URL}}
@@ -42,6 +43,7 @@ jobs:
           touch .env
           echo AZURE_BLOB_IMAGE_URL="$AZURE_BLOB_IMAGE_URL" >> .env
           echo AZURE_STORAGE_CONNECTION_STRING="$AZURE_STORAGE_CONNECTION_STRING" >> .env
+          echo CLIENT_ID="$CLIENT_ID" >> .env
           echo CLIENT_SECRET="$CLIENT_SECRET" >> .env
           echo DATAVERSE_API_BASE_URL="$DATAVERSE_API_BASE_URL" >> .env
           echo DATAVERSE_API_SERVICE_URL="$DATAVERSE_API_SERVICE_URL" >> .env

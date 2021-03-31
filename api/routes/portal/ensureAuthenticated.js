@@ -2,5 +2,8 @@ export default function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/portal/start');
+  req.session.destroy(function (err) {
+    req.logOut();
+    res.redirect('/report/start');
+  });
 }

@@ -8,7 +8,7 @@ export default function (app) {
       function (req, res, next) {
         passport.authenticate('azuread-openidconnect', {
           response: res,
-          failureRedirect: '/portal/start',
+          failureRedirect: '/report/start',
         })(req, res, next);
       },
       function (req, res) {
@@ -20,7 +20,7 @@ export default function (app) {
       function (req, res, next) {
         passport.authenticate('azuread-openidconnect', {
           response: res,
-          failureRedirect: '/portal/start',
+          failureRedirect: '/report/removed-property-check',
         })(req, res, next);
       },
       function (req, res) {

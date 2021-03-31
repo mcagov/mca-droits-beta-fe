@@ -25,12 +25,12 @@ export default function (app) {
       },
       function (req, res) {
         const adalAuthContext = adal.AuthenticationContext;
-        const authorityHostUrl = 'https://login.microsoftonline.com/';
-        const tenant = process.env.TENANT_ID;
+        const authorityHostUrl = process.env.DATAVERSE_AUTHORITY_HOST_URL;
+        const tenant = process.env.DATAVERSE_TENANT_ID;
         const authorityUrl = authorityHostUrl + tenant;
-        const clientId = process.env.CLIENT_ID;
-        const clientSecret = process.env.CLIENT_SECRET;
-        const resource = process.env.DATAVERSE_API_BASE_URL;
+        const clientId = process.env.DATAVERSE_CLIENT_ID;
+        const clientSecret = process.env.DATAVERSE_CLIENT_SECRET;
+        const resource = process.env.DATAVERSE_BASE_URL;
         const context = new adalAuthContext(authorityUrl);
 
         const currentUserEmail = req.user.emails[0];

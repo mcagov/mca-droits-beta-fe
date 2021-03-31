@@ -60,7 +60,7 @@ export default function (app) {
         if (!profile.oid) {
           return done(new Error('No oid found'), null);
         }
-        // asynchronous verification, for effect...
+        // asynchronous verification
         process.nextTick(function () {
           findByOid(profile.oid, function (err, user) {
             if (err) {
@@ -82,7 +82,6 @@ export default function (app) {
   app.get(
     '/login',
     function (req, res, next) {
-      console.log("GET login");
       passport.authenticate('azuread-openidconnect', {
         response: res, // required
         failureRedirect: '/',

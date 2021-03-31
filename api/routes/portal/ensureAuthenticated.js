@@ -4,6 +4,6 @@ export default function ensureAuthenticated(req, res, next) {
   }
   req.session.destroy(function (err) {
     req.logOut();
-    res.redirect('/report/start');
+    res.redirect('/portal/start');
   });
 }

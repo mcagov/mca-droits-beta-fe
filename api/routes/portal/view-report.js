@@ -61,7 +61,7 @@ export default function (app) {
             .catch((err) => {
               console.log('Report data error: ' + err);
               if (err.response.status === 401) {
-                res.redirect('/login/?p=B2C_1_login');
+                res.redirect('/error');
               }
               reject();
             });

@@ -8,7 +8,7 @@ export default function (app) {
       function (req, res, next) {
         passport.authenticate('azuread-openidconnect', {
           response: res,
-          failureRedirect: '/report/start',
+          failureRedirect: '/error',
         })(req, res, next);
       },
       function (req, res) {
@@ -20,7 +20,7 @@ export default function (app) {
       function (req, res, next) {
         passport.authenticate('azuread-openidconnect', {
           response: res,
-          failureRedirect: '/report/removed-property-check',
+          failureRedirect: '/error',
         })(req, res, next);
       },
       function (req, res) {
@@ -42,6 +42,8 @@ export default function (app) {
           (err, tokenResponse) => {
             if (err) {
               console.log(`Token generation failed due to ${err}`);
+              req.logOut();
+              res.redirect('/error');
             } else {
               const accessToken = tokenResponse.accessToken;
               req.session.data.token = accessToken;

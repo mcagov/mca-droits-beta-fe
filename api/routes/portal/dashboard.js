@@ -53,7 +53,7 @@ export default function (app) {
               console.log(reqError);
               session.userNotFound = true;
               reject();
-              return res.redirect('logout');
+              return res.redirect('/logout');
             });
         });
       }
@@ -98,7 +98,7 @@ const fetchReportData = (accessToken, url, userReports, res) =>
       .catch((err) => {
         console.log('[Report data error]:' + err);
         if (err.response.status === 401) {
-          res.redirect('/portal/start');
+          res.redirect('/error');
         }
         reject();
       });

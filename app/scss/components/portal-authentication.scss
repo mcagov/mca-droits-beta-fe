@@ -1,8 +1,23 @@
-// Custom styling for the AD B2C authentication pages
+/* 
+  Custom styling for the AD B2C authentication pages.
+  Info on how the AD B2C interface has been customised: https://docs.microsoft.com/en-gb/azure/active-directory-b2c/customize-ui-with-html?pivots=b2c-user-flow
 
-body {
-  margin: 0;
-}
+  The B2C custom pages strip out css classes on the html and body tags so the
+  following class properties have been applied within the <head> of the 
+  html files for the login, sign-up and reset-password pages.
+
+    html {
+      background-color: #f3f2f1;
+    }
+
+    body {
+      margin: 0;
+      background-color: #ffffff;
+    }
+
+  All styles below are targeting the element or a selector 
+  from the AD B2C default content which is generated on page load
+*/
 
 #api {
   font-family: "GDS Transport", arial, sans-serif !important;
@@ -67,7 +82,8 @@ body {
 
     button {
       font-family: "GDS Transport", arial, sans-serif !important;
-      display: inline-flex;
+      display: flex !important;
+      justify-content: center;
       background-color: #00703c;
       box-shadow: 0 2px 0 #002d18;
       text-align: center;
@@ -77,7 +93,6 @@ body {
       cursor: pointer;
       margin-bottom: 30px;
       font-weight: 700;
-      justify-content: center;
       padding: 8px 10px 7px;
       border: 2px solid transparent;
       border-radius: 0;

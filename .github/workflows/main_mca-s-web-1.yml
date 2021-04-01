@@ -48,7 +48,7 @@ jobs:
       run: |
           touch .env
           echo AZURE_BLOB_IMAGE_URL="$AZURE_BLOB_IMAGE_URL" >> .env
-          echo AZURE_STORAGE_CONNECTION_STRING="$AZURE_STORAGE_CONNECTION_STRING" >> .env        
+          echo AZURE_STORAGE_CONNECTION_STRING="$AZURE_STORAGE_CONNECTION_STRING" >> .env
           echo REFERENCE_GENERATOR_KEY="$REFERENCE_GENERATOR_KEY" >> .env
           echo REFERENCE_GENERATOR_URL="$REFERENCE_GENERATOR_URL" >> .env
           echo DB_POST_URL="$DB_POST_URL" >> .env
@@ -59,12 +59,12 @@ jobs:
           echo DATAVERSE_TENANT_ID="$DATAVERSE_TENANT_ID" >> .env
           echo DATAVERSE_CLIENT_ID="$DATAVERSE_CLIENT_ID" >> .env
           echo B2C_IDENTITY_METADATA="$B2C_IDENTITY_METADATA" >> .env
-          echo B2C_CLIENT_ID"="$B2C_CLIENT_ID" >> .env
+          echo B2C_CLIENT_ID="$B2C_CLIENT_ID" >> .env
           echo B2C_CLIENT_SECRET="$B2C_CLIENT_SECRET" >> .env
           echo B2C_REDIRECT_URL="$B2C_REDIRECT_URL" >> .env
           echo ENV_BASE_URL="$ENV_BASE_URL" >> .env
           cat .env
-          
+    
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
       with:

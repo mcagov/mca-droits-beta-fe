@@ -28,7 +28,7 @@ jobs:
         npm run test --if-present
 
     - name: Create env file
-       env:
+      env:
         AZURE_BLOB_IMAGE_URL: ${{secrets.AZURE_BLOB_IMAGE_URL}}
         AZURE_STORAGE_CONNECTION_STRING: ${{secrets.AZURE_STORAGE_CONNECTION_STRING}}
         REFERENCE_GENERATOR_KEY : ${{secrets.REFERENCE_GENERATOR_KEY}}

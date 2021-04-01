@@ -38,14 +38,13 @@ export default function (app) {
   passport.use(
     new OIDCStrategy(
       {
-        identityMetadata:
-          'https://mcactitest.b2clogin.com/mcactitest.onmicrosoft.com/B2C_1_login/v2.0/.well-known/openid-configuration',
-        clientID: 'e0019a41-2229-4597-b3fe-53bae1bd3433',
+        identityMetadata: process.env.B2C_IDENTITY_METADATA,
+        clientID: process.env.B2C_CLIENT_ID,
         responseType: 'code id_token',
         responseMode: 'form_post',
-        redirectUrl: 'https://mca-d-web-1.azurewebsites.net/auth/openid/return',
+        redirectUrl: process.env.ENV_BASE_URL + process.env.B2C_REDIRECT_URL,
         allowHttpForRedirectUrl: true,
-        clientSecret: 'kl6CfT2WJcHI8RaW9u~f~a0GA_7K-kN-l-',
+        clientSecret: process.env.B2C_CLIENT_SECRET,
         validateIssuer: false,
         isB2C: true,
         validateIssuer: true,
@@ -54,7 +53,7 @@ export default function (app) {
         useCookieInsteadOfSession: false,
         cookieSameSite: false,
         loggingLevel: 'info',
-        scope: 'e0019a41-2229-4597-b3fe-53bae1bd3433',
+        scope: process.env.B2C_CLIENT_ID,
       },
       function (iss, sub, profile, accessToken, refreshToken, params, done) {
         if (!profile.oid) {

@@ -4,6 +4,6 @@ export default function ensureAuthenticated(req, res, next) {
   }
   req.session.destroy(function (err) {
     req.logOut();
-    res.redirect('/error');
+    res.redirect(`https://mcactitest.b2clogin.com/mcactitest.onmicrosoft.com/oauth2/v2.0/logout?p=B2C_1_signin&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`);
   });
 }

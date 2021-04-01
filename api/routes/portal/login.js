@@ -42,7 +42,7 @@ export default function (app) {
         clientID: process.env.B2C_CLIENT_ID,
         responseType: 'code id_token',
         responseMode: 'form_post',
-        redirectUrl: process.env.B2C_REDIRECT_URL,
+        redirectUrl: process.env.ENV_BASE_URL + process.env.B2C_REDIRECT_URL,
         allowHttpForRedirectUrl: true,
         clientSecret: process.env.B2C_CLIENT_SECRET,
         validateIssuer: false,

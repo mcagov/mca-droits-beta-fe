@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import clearSession from './clear-session';
 import removedPropertyCheck from './report/removed-property-check';
 import location from './report/location';
 import findDate from './report/find-date';
@@ -27,7 +26,6 @@ import portalViewReport from './portal/view-report';
 export default () => {
   const app = Router();
 
-  clearSession(app);
   removedPropertyCheck(app);
   location(app);
   findDate(app);

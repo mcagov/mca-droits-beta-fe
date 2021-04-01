@@ -25,12 +25,12 @@ export default function (app) {
       },
       function (req, res) {
         const adalAuthContext = adal.AuthenticationContext;
-        const authorityHostUrl = 'https://login.microsoftonline.com/';
-        const tenant = process.env.TENANT_ID;
+        const authorityHostUrl = process.env.DATAVERSE_AUTHORITY_HOST_URL;
+        const tenant = process.env.DATAVERSE_TENANT_ID;
         const authorityUrl = authorityHostUrl + tenant;
-        const clientId = process.env.CLIENT_ID;
-        const clientSecret = process.env.CLIENT_SECRET;
-        const resource = process.env.DATAVERSE_API_BASE_URL;
+        const clientId = process.env.DATAVERSE_CLIENT_ID;
+        const clientSecret = process.env.DATAVERSE_CLIENT_SECRET;
+        const resource = process.env.DATAVERSE_BASE_URL;
         const context = new adalAuthContext(authorityUrl);
 
         const currentUserEmail = req.user.emails[0];
@@ -43,7 +43,7 @@ export default function (app) {
             if (err) {
               console.log(`Token generation failed due to ${err}`);
               req.logOut();
-              res.redirect('/error');
+              res.redirect(`https://mcactitest.b2clogin.com/mcactitest.onmicrosoft.com/oauth2/v2.0/logout?p=B2C_1_signin&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`);
             } else {
               const accessToken = tokenResponse.accessToken;
               req.session.data.token = accessToken;

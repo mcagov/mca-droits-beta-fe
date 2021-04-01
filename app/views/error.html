@@ -7,17 +7,21 @@
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
       <h1 class="govuk-heading-xl">
         There was a problem
       </h1>
-      <p>An error occured when dealing with your request.</p>
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Error</span>
+          An error occured when dealing with your request.
+        </strong>
+      </div>
       <h2 class="govuk-heading-m">Please select one of two options:</h2>
-      <ul>
-        <li><a href="/report/start">Report wreck and salvage form</a></li>
-        <li><a href="/portal/start">Check the status of wreck material reported</a></li>
-      </ul>
-
+      <ul class="govuk-list govuk-list--bullet">
+      <li>To view the status of a report, you must first report your wreck and salvage using the
+      <a href="/report/start">Report Wreck and Salvage form</a></li><br>
+      <li>Or if you have previously submitted a report, sign in to your user account to <a href="/portal/start">check the status of wreck material reported</a></li>
     </div>
 
   </div>

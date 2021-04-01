@@ -53,7 +53,8 @@ export default function (app) {
               console.log(reqError);
               session.userNotFound = true;
               reject();
-              return res.redirect('/logout');
+              req.logOut();
+              return res.redirect(`https://mcactitest.b2clogin.com/mcactitest.onmicrosoft.com/oauth2/v2.0/logout?p=B2C_1_signin&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`);
             });
         });
       }

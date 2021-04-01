@@ -84,7 +84,7 @@ export default function (app) {
     function (req, res, next) {
       passport.authenticate('azuread-openidconnect', {
         response: res, // required
-        failureRedirect: '/',
+        failureRedirect: '/error',
       })(req, res, next);
     },
     function (req, res) {

@@ -82,7 +82,7 @@
 
     button {
       font-family: "GDS Transport", arial, sans-serif !important;
-      display: flex !important;
+      display: flex;
       justify-content: center;
       background-color: #00703c;
       box-shadow: 0 2px 0 #002d18;
@@ -137,6 +137,10 @@
         &:hover, &:focus, &:active {
           outline: none;
         }
+      }
+
+      &[aria-hidden='false'] {
+        display: flex !important;
       }
     }
   }
@@ -199,11 +203,11 @@
   margin-bottom: 15px;
 
   p {
-    display: block !important;
-    font-size: 1.1875rem !important;
+    display: block;
+    font-size: 1.1875rem;
     font-weight: 700 !important;
-    line-height: 1.31579 !important;
+    line-height: 1.31579;
     color: #d4351c !important;
-    margin-bottom: 15px !important;
+    margin-bottom: 15px;
   }
 }

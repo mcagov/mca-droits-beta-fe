@@ -17,6 +17,7 @@ dotenv.config();
 import helmet from 'helmet';
 
 import sessionInMemory from 'express-session';
+import { NONAME } from 'dns';
 
 const app = express();
 const PORT = process.env.PORT || config.PORT;
@@ -110,6 +111,7 @@ const sessionOptions = {
   cookie: {
     maxAge: 1000 * 60 * 60 * 4, // 4 hours
     secure: isSecure,
+    sameSite: 'none'
   },
 };
 if (env === 'development') {

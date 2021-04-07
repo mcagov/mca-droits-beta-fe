@@ -116,8 +116,7 @@ const sessionOptions = {
   secret: sessionName,
   cookie: {
     maxAge: 1000 * 60 * 60 * 4, // 4 hours
-    secure: isSecure,
-    sameSite: 'none'
+    secure: isSecure
   },
 };
 if (env === 'development') {

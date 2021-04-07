@@ -9,7 +9,7 @@ export const assignSalvageLocation = function (id) {
       recoveredFrom = "Seabed";
       break;
     case 614880002:
-      RecoveredFrom = "Afloat";
+      recoveredFrom = "Afloat";
       break;
     case 614880003:
       recoveredFrom = "Sea shore";

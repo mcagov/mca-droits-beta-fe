@@ -26,6 +26,9 @@ export default function (app) {
             return res.render('portal/dashboard', { userReports: userReports });
           }
         );
+      }).catch(() => {
+        req.logOut();
+        return res.redirect(`https://mcactitest.b2clogin.com/mcactitest.onmicrosoft.com/oauth2/v2.0/logout?p=B2C_1_signin&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`);
       });
 
       function getUserData(token) {
@@ -51,10 +54,7 @@ export default function (app) {
             .catch((reqError) => {
               console.log('User ID error');
               console.log(reqError);
-              session.userNotFound = true;
               reject();
-              req.logOut();
-              return res.redirect(`https://mcactitest.b2clogin.com/mcactitest.onmicrosoft.com/oauth2/v2.0/logout?p=B2C_1_signin&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`);
             });
         });
       }

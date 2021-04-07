@@ -21,14 +21,18 @@ export default function (app) {
           'Enter an email address in the correct format, like name@example.com'
         ),
       body('telephone-number')
-        .exists()
-        .not()
-        .isEmpty()
-        .withMessage('Enter your telephone number')
-        .isInt()
-        .withMessage(
-          'Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192'
-        ),
+        .optional({ nullable: true, checkFalsy: true })
+        .custom((value) => {
+          const format = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
+          const formatted = format.test(value);
+
+          if (!formatted) {
+            throw new Error(
+              'Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192'
+            );
+          }
+          return true;
+        }),
       body('address-line-1')
         .exists()
         .not()
@@ -50,7 +54,7 @@ export default function (app) {
         .isEmpty()
         .withMessage('Enter a real postcode')
         .isPostalCode(['GB'])
-        .withMessage('Please enter a valid postcode')
+        .withMessage('Please enter a valid postcode'),
     ],
     function (req, res) {
       const errors = formatValidationErrors(validationResult(req));
@@ -70,7 +74,7 @@ export default function (app) {
         return res.render('report/personal', {
           errors,
           errorSummary: Object.values(errors),
-          values: req.body
+          values: req.body,
         });
       }
     }

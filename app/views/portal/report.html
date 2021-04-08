@@ -240,7 +240,11 @@ Report Details
                   </td>
                   <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
                       <span>Total value:</span>
-                      £{{ item.crf99_value }}
+                      {% if item.crf99_value %}
+                        £{{ item.crf99_value }}
+                      {% else %}
+                        Unknown
+                      {% endif %}
                   </td>
                   <td class="govuk-table__cell report-responsive-table__cell" data-label="Image">
                       <span>Image:</span>

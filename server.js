@@ -51,6 +51,7 @@ if (env === 'production') {
           'data:',
           '*.tile.openstreetmap.org',
           'cdnjs.cloudflare.com',
+          'unpkg.com',
           process.env.AZURE_BLOB_IMAGE_URL,
         ],
         objectSrc: ["'none'"],

@@ -17,6 +17,9 @@ export default function (app) {
       let userReports = [];
 
       const contactsUrl = `${url}contacts?$filter=emailaddress1 eq '${currentUserEmail}'`;
+      // The query url converts any '+' symbols into whitespace, so we replace these
+      // with encoded characters incase currentUserEmail contains a '+' symbol
+      const encodedContactsUrl = contactsUrl.replace('+', '%2B');
 
       getUserData(accessToken).then(() => {
         const filteredReportUrl = `${url}crf99_mcawreckreports?$filter=_crf99_reporter_value eq ${currentUserID}&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_($select=crf99_description)&$orderby=crf99_datereported desc`;
@@ -34,7 +37,7 @@ export default function (app) {
       function getUserData(token) {
         return new Promise((resolve, reject) => {
           axios
-            .get(contactsUrl, {
+            .get(encodedContactsUrl, {
               headers: { Authorization: `bearer ${token}` },
             })
             .then((res) => {

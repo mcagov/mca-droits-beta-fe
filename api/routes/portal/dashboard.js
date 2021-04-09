@@ -49,6 +49,7 @@ export default function (app) {
               session.userEmail = data.emailaddress1;
               session.userTel = data.telephone1;
               session.userAddress1 = data.address1_line1;
+              session.userAddress2 = data.address1_line2;
               session.userCity = data.address1_city;
               session.userCounty = data.address1_county;
               session.userPostcode = data.address1_postalcode;

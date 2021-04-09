@@ -173,6 +173,16 @@ Report Details
                     {{ reportData.coordinates }}
                 </dd>
             </div>
+            {% if reportData.crf99_locationdescription %}
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Location description
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ reportData.crf99_locationdescription }}
+                </dd>
+            </div>
+            {% endif %}
             {% if reportData['recovered-from'] %}
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">

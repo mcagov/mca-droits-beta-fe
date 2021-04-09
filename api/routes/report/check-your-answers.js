@@ -60,7 +60,7 @@ export default function (app) {
           latitude: sd['location']['location-standard']['latitude'],
           longitude: sd['location']['location-standard']['longitude'],
           'location-radius': sd['location']['location-standard']['radius'],
-          'location-description': '',
+          'location-description': sd['location']['location-description'],
           'vessel-name': sd['vessel-information']['vessel-name'],
           'vessel-construction-year':
             sd['vessel-information']['vessel-construction-year'],

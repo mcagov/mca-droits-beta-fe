@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import clearSession from './clear-session';
 import removedPropertyCheck from './report/removed-property-check';
 import location from './report/location';
 import findDate from './report/find-date';
@@ -19,13 +18,14 @@ import propertyFormAddress from './report/property-form-address';
 import salvageAward from './report/salvage-award';
 import checkYourAnswers from './report/check-your-answers';
 import portalLogin from './portal/login';
+import portalLogout from './portal/logout';
+import portalLoginRedirectUrl from './portal/loginRedirectUrl';
 import portalDashboard from './portal/dashboard';
 import portalViewReport from './portal/view-report';
 
 export default () => {
   const app = Router();
 
-  clearSession(app);
   removedPropertyCheck(app);
   location(app);
   findDate(app);
@@ -45,6 +45,8 @@ export default () => {
   salvageAward(app);
   checkYourAnswers(app);
   portalLogin(app);
+  portalLogout(app);
+  portalLoginRedirectUrl(app);
   portalDashboard(app);
   portalViewReport(app);
 

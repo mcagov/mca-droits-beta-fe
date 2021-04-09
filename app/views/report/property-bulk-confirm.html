@@ -62,25 +62,32 @@
       <div class="form-wrapper" data-js="bulk-upload">
         <form class="form" action="/report/property-summary" method="post" data-js="bulk-form-element" data-js="image-upload">
 
-          <table class="govuk-table">
+          <table class="govuk-table report-responsive-table">
             <caption class="govuk-table__caption">Uploaded wreck material</caption>
-            <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
+            <thead class="govuk-table__head report-responsive-table__head">
+            <tr class="govuk-table__row report-responsive-table__row">
               <th scope="col" class="govuk-table__header">Information</th>
               <th scope="col" class="govuk-table__header">Image</th>
             </tr>
             </thead>
             <tbody class="govuk-table__body">
             {% for id, item in data[propertyName] %}
-              <tr class="govuk-table__row">
-                <td class="govuk-table__cell">
-                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Description:</strong> {{ item.description }}</p>
+              <tr class="govuk-table__row report-responsive-table__row">
+                <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--text-left report-responsive-table__cell--no-border">
+                  <p><strong class="govuk-!-font-weight-bold">Information</strong></p>
+                  <p class="govuk-body report-responsive-table__cell--text-left"><strong class="govuk-!-font-weight-bold">Description:</strong> {{ item.description }}</p>
                   <input type=hidden name=property[{{ id }}][description] value="{{ item.description }}">
 
                   <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Quantity:</strong> {{ item.quantity }}</p>
                   <input type=hidden name=property[{{ id }}][quantity] value="{{ item.quantity }}">
 
-                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Value:</strong> £{{ item.value }}</p>
+                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Value:</strong>
+                  {%if item.value === "" %}
+                    Unknown
+                  {% else %}
+                   £{{ item.value }}
+                  {% endif %}
+                  </p>
                   <input type=hidden name=property[{{ id }}][value] value="{{ item.value }}">
 
                   <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Address:</strong>
@@ -94,7 +101,8 @@
                   <input type=hidden name=property{{ id }}][address-details][address-county] value={{ item['address-details']['address-county'] }}>
                   <input type=hidden name=property[{{ id }}][address-details][address-postcode] value={{ item['address-details']['address-postcode'] }}>
                 </td>
-                <td class="govuk-table__cell">
+                <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--text-left">
+                  <p><strong class="govuk-!-font-weight-bold">Image</strong></p>
                   <div id="photo-upload-container-{{id}}" class="{{containerInitialClasses}}">
                     <div class="upload-progress">
                       <div class="upload-progress__bar"><span></span></div>

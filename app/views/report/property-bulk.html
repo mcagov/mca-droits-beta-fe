@@ -50,14 +50,14 @@
             <li>Quantity</li>
             <li>Total value</li>
             <li>Storage address line 1</li>
-            <li>Storage address line 2 (if applicable)</li>
             <li>Town</li>
             <li>County</li>
             <li>Postcode</li>
           </ul>
+          <p class="govuk-body">You must enter a description, quantity and address details for each item. If the 'Total value' of the item is unknown, then please leave blank.</p>
 
           {{ govukInsetText({
-            html: 'You can populate the <a href="/assets/downloads/ROW-bulk-upload-template.csv">bulk wreck material upload template</a> with your wreck material and then upload it to this form.'
+            html: 'If possible, we advise that you populate the <a href="/assets/downloads/ROW-bulk-upload-template.csv">bulk wreck material upload template</a> with your wreck material and then upload it to this form.'
           }) }}
           <span id="property-bulk-file-error" class="govuk-error-message upload-error">
             <span class="govuk-visually-hidden">Error:</span> <span class="upload-error__text"></span>

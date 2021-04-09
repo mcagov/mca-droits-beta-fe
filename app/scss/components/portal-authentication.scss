@@ -1,0 +1,216 @@
+/* 
+  Custom styling for the AD B2C authentication pages.
+  Info on how the AD B2C interface has been customised: https://docs.microsoft.com/en-gb/azure/active-directory-b2c/customize-ui-with-html?pivots=b2c-user-flow
+
+  The B2C custom pages strip out css classes on the html and body tags so the
+  following class properties have been applied within the <head> of the 
+  html files for the login, sign-up and reset-password pages.
+
+    html {
+      background-color: #f3f2f1;
+    }
+
+    body {
+      margin: 0;
+      background-color: #ffffff;
+    }
+
+  All styles below are targeting the element or a selector 
+  from the AD B2C default content which is generated on page load
+*/
+
+#api {
+  font-family: "GDS Transport", arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+
+  h1 {
+    font-family: "GDS Transport", arial, sans-serif;
+  }
+
+  .intro h2 {
+    font-family: "GDS Transport", arial, sans-serif;
+    display: block;
+    color: #0b0c0c;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    font-weight: 700;
+  }
+
+  input {
+    font-family: "GDS Transport", arial, sans-serif;
+    font-weight: 400;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 40ex;
+    height: 2.5rem;
+    margin-top: 0;
+    padding: 5px;
+    border: 2px solid #0b0c0c;
+    border-radius: 0;
+    appearance: none;
+
+    &:focus {
+      outline: 3px solid #ffdd00;
+      outline-offset: 0;
+      box-shadow: inset 0 0 0 2px;
+      border-radius: 0;
+    }
+  }
+
+  label {
+    display: block;
+    font-weight: 400;
+    margin-bottom: 5px;
+    color: #0b0c0c;
+  }
+
+  #forgotPassword {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .entry {
+    font-family: "GDS Transport", arial, sans-serif;
+
+    &-item {
+      margin-bottom: 20px;
+    }
+  }
+
+  .buttons {
+    margin-top: 10px;
+
+    button {
+      font-family: "GDS Transport", arial, sans-serif !important;
+      display: flex;
+      justify-content: center;
+      background-color: #00703c;
+      box-shadow: 0 2px 0 #002d18;
+      text-align: center;
+      color: #ffffff;
+      font-size: 1.125rem;
+      vertical-align: top;
+      cursor: pointer;
+      margin-bottom: 30px;
+      font-weight: 700;
+      padding: 8px 10px 7px;
+      border: 2px solid transparent;
+      border-radius: 0;
+      width: 100%;
+
+      &:link,
+      &:hover:not([aria-disabled='true']) {
+        background-color: #005a30;
+      }
+
+      &:active:not([aria-disabled='true']) {
+        top: 2px;
+      }
+
+      &:focus:not([aria-disabled='true']) {
+        border-color: #ffdd00;
+        outline: 3px solid transparent;
+        box-shadow: inset 0 0 0 1px #ffdd00;
+      }
+
+      &:focus:not(:active):not(:hover):not([aria-disabled='true']) {
+        border-color: #ffdd00;
+        color: #0b0c0c;
+        background-color: #ffdd00;
+        box-shadow: 0 2px 0 #0b0c0c;
+      }
+
+      &[aria-disabled='true'] {
+        cursor: default;
+        opacity: 0.5;
+
+        &:hover, &:focus, &:active {
+          outline: none;
+        }
+      }
+    }
+
+    #continue,
+    #next,
+    #signIn {
+      &:after {
+        content: "";
+        background-image: url('../images/chevron-right.svg');
+        width: 18px;
+        height: 19px;
+        margin: 3px 0;
+        margin-left: 0.5rem;
+      }
+    }
+  }
+
+  .divider h2 {
+    text-align: center;
+  }
+
+  .attr {
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    &Entry {
+      margin-bottom: 20px;
+    }
+  }
+
+  .helpLink {
+    display: none;
+  }
+
+  #cancel {
+    display: none;
+  }
+
+  @media (min-width: 40.0625em) {
+    label, input {
+      font-size: 1.1875rem;
+      line-height: 1.31579;
+    }
+
+    .entry-item {
+      margin-bottom: 30px;
+    }
+
+    .buttons {
+      button {
+        font-size: 1.5rem;
+        line-height: 1;
+        width: auto;
+
+        &.sendNewCode {
+          margin-left: 22px;
+        }
+      }
+    }
+  }
+}
+
+.error_container {
+  h1 {
+    font-family: "GDS Transport", arial, sans-serif;
+  }
+}
+
+.error {
+  display: block;
+  font-size: 1.1875rem;
+  font-weight: 700;
+  line-height: 1.31579;
+  color: #d4351c;
+  margin-bottom: 15px;
+
+  p {
+    display: block;
+    font-size: 1.1875rem;
+    font-weight: 700 !important;
+    line-height: 1.31579;
+    color: #d4351c !important;
+    margin-bottom: 15px;
+  }
+}

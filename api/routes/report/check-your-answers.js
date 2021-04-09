@@ -68,6 +68,7 @@ export default function (app) {
           'vessel-depth': sd['vessel-depth'],
           'removed-from': sd['removed-from'],
           'wreck-description': sd['wreck-description'],
+          'claim-salvage': sd['claim-salvage'],
           'salvage-services': sd['salvage-services'],
           personal: {
             'full-name': sd['personal']['full-name'],
@@ -109,8 +110,7 @@ export default function (app) {
             // Push image(s) to Azure
             Object.values(req.session.data.property).forEach((item) => {
               const imageData = fs.createReadStream(
-                `${path.resolve(__dirname + '../../../../uploads/')}/${
-                  item.image
+                `${path.resolve(__dirname + '../../../../uploads/')}/${item.image
                 }`
               );
 

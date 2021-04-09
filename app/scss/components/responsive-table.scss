@@ -1,7 +1,7 @@
 .report-responsive-table {
-  border:0;
+  border: 0;
   width: 100%;
-  padding:0;
+  padding: 0;
   border-collapse: collapse;
   border-spacing: 0;
 }
@@ -19,7 +19,7 @@
 
     &__change-link {
       display: block;
-      float: left !important;
+      float: left;
       padding-top: 10px;
       margin-bottom: 15px;
       width: 100%;
@@ -49,10 +49,14 @@
         border-bottom: none;
       }
 
-      &:before{
-        content: attr(data-label) ": \00a0";
+      span {
+        display: block;
         float: left;
         font-weight: bold;
+      }
+
+      img {
+        max-width: 100%;
       }
 
       &--no-label {
@@ -62,12 +66,34 @@
           content: none;
         }
       }
+
+      &--text-left {
+        text-align: left !important;
+      }
+
+      &--no-border {
+        border-bottom: none !important;
+      }
+
+      .photo-upload__container--uploaded {
+        max-width: 100%;
+      }
     }
 
-    // Added for GovUK component to ensure 'govuk-details' list 
+    // Added for GovUK component to ensure 'govuk-details' list
     // text remains left aligned within a mobile table layout
     .govuk-details__text {
       text-align: left;
     }
-  }	
+  }
+}
+@media screen and (min-width: 601px) {
+  .report-responsive-table {
+    &__cell span:not(.govuk-details__summary-text) {
+      display: none;
+    }
+    &__change-link {
+      float: right;
+    }
+  }
 }

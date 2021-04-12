@@ -24,6 +24,7 @@ export default function (app) {
         })(req, res, next);
       },
       function (req, res) {
+        console.log('Running Dataverse authentication');
         const adalAuthContext = adal.AuthenticationContext;
         const authorityHostUrl = process.env.DATAVERSE_AUTHORITY_HOST_URL;
         const tenant = process.env.DATAVERSE_TENANT_ID;
@@ -43,7 +44,7 @@ export default function (app) {
             if (err) {
               console.log(`Token generation failed due to ${err}`);
               req.logOut();
-              res.redirect(`https://mcactitest.b2clogin.com/mcactitest.onmicrosoft.com/oauth2/v2.0/logout?p=B2C_1_signin&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`);
+              res.redirect(`https://mcastaging.b2clogin.com/mcastaging.onmicrosoft.com/oauth2/v2.0/logout?p=B2C_1_login&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`);
             } else {
               const accessToken = tokenResponse.accessToken;
               req.session.data.token = accessToken;

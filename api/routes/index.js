@@ -22,6 +22,8 @@ import portalLogout from './portal/logout';
 import portalLoginRedirectUrl from './portal/loginRedirectUrl';
 import portalDashboard from './portal/dashboard';
 import portalViewReport from './portal/view-report';
+import error from './portal/error';
+import accountError from './portal/error';
 
 export default () => {
   const app = Router();
@@ -49,6 +51,8 @@ export default () => {
   portalLoginRedirectUrl(app);
   portalDashboard(app);
   portalViewReport(app);
+  error(app);
+  accountError(app);
 
   return app;
 };

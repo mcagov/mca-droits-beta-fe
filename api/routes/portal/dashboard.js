@@ -31,7 +31,7 @@ export default function (app) {
         );
       }).catch(() => {
         req.logOut();
-        return res.redirect(`${B2C_BASE_URL}/oauth2/v2.0/logout?p=B2C_1_login&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/account-error`);
+        return res.redirect(`${process.env.B2C_BASE_URL}/oauth2/v2.0/logout?p=B2C_1_login&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/account-error`);
       });
 
       function getUserData(token) {
@@ -104,7 +104,7 @@ const fetchReportData = (accessToken, url, userReports, res) =>
         console.log('[Report data error]:' + err);
         if (err.response.status === 401) {
           req.logOut();
-          res.redirect(`${B2C_BASE_URL}/oauth2/v2.0/logout?p=B2C_1_login&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`);
+          res.redirect(`${process.env.B2C_BASE_URL}/oauth2/v2.0/logout?p=B2C_1_login&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`);
         }
         reject();
       });

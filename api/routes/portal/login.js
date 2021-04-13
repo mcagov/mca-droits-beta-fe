@@ -83,7 +83,7 @@ export default function (app) {
     function (req, res, next) {
       passport.authenticate('azuread-openidconnect', {
         response: res, // required
-        failureRedirect: `${B2C_BASE_URL}/oauth2/v2.0/logout?p=B2C_1_login&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`,
+        failureRedirect: `${process.env.B2C_BASE_URL}/oauth2/v2.0/logout?p=B2C_1_login&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`,
       })(req, res, next);
     },
     function (req, res) {

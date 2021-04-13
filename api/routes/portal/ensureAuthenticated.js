@@ -4,6 +4,6 @@ export default function ensureAuthenticated(req, res, next) {
   }
   req.session.destroy(function (err) {
     req.logOut();
-    res.redirect(`https://mcastaging.b2clogin.com/mcastaging.onmicrosoft.com/oauth2/v2.0/logout?p=B2C_1_login&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`);
+    res.redirect(`${B2C_BASE_URL}/oauth2/v2.0/logout?p=B2C_1_login&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`);
   });
 }

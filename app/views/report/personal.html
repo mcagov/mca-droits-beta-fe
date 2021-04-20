@@ -17,17 +17,17 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      
+      {% if errorSummary.length > 0 %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errorSummary
+        }) }}
+      {% endif %}
 
       <h1 class="govuk-heading-xl">Your details</h1>
 
       <form class="form" action="/report/personal-answer" method="post" novalidate>
-        {% if errorSummary.length > 0 %}
-          {{ govukErrorSummary({
-              titleText: "There is a problem",
-              errorList: errorSummary
-          }) }}
-
-        {% endif %}
         {{ govukDetails({
           summaryText: "How this information will be used",
           text: "We will use this information to communicate with you about this report and administer the Merchant Shipping Act 1995, in relation to claims to wreck and salvage. We will not share your data with anyone other than for the purposes of processing your salvage claim or for the prevention and detection of crime or with your prior knowledge and agreement."

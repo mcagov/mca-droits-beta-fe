@@ -46,6 +46,13 @@
         </ul>
       {% endset -%}
 
+      {% if errorSummary.length > 0 %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errorSummary
+        }) }}
+      {% endif %}
+
       <h1 class="govuk-heading-xl">Details of wreck material recovered</h1>
 
       {% if addedFlash %}
@@ -165,12 +172,6 @@
 
       {% if itemsAdded > 0 %}
       <form class="form" action="/report/property-summary-confirmation" method="post" novalidate>
-        {% if errorSummary.length > 0 %}
-          {{ govukErrorSummary({
-              titleText: "There is a problem",
-              errorList: errorSummary
-          }) }}
-        {% endif %}
         <div class="declaration-wrapper govuk-!-padding-5 govuk-!-margin-bottom-6">
           {{ govukCheckboxes({
             idPrefix: "property-declaration",

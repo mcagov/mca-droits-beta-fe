@@ -32,7 +32,8 @@
           summaryText: "How this information will be used",
           text: "We will use this information to communicate with you about this report and administer the Merchant Shipping Act 1995, in relation to claims to wreck and salvage. We will not share your data with anyone other than for the purposes of processing your salvage claim or for the prevention and detection of crime or with your prior knowledge and agreement."
         }) }}
-
+        {# Anchor tags to return user to specific fields if they wish to change their answer #}
+        <span id="name-details"></span>
         {{ govukInput({
           label: {
             text: "Full name"
@@ -44,7 +45,7 @@
           value: data["personal"]["full-name"],
           errorMessage: errors["full-name"]
         }) }}
-
+        <span id="email-details"></span>
         {{ govukInput({
           label: {
             text: "Email address"
@@ -57,7 +58,7 @@
           value: data["personal"]["email"],
           errorMessage: errors["email"]
         }) }}
-
+        <span id="telephone-details"></span>
         {{ govukInput({
           label: {
             text: "Telephone number"
@@ -80,7 +81,7 @@
             classes: "govuk-fieldset__legend--l"
           }
         }) %}
-
+          <span id="address-details"></span>
           {{ govukInput({
             label: {
               text: 'Building and street (line 1)'

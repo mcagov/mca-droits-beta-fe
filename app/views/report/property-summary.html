@@ -33,12 +33,14 @@
         <ul class="govuk-summary-list__actions-list">
           <li class="govuk-summary-list__actions-list-item">
             <a class="govuk-link" href="/report/property-single">
-              Change<span class="govuk-visually-hidden"> item</span>
+              <span aria-hidden="true">Change</span>
+              <span class="govuk-visually-hidden">Change details for item described as {{ property["description"] }}</span>
             </a>
           </li>
           <li class="govuk-summary-list__actions-list-item">
             <a class="govuk-link" href="#">
-              Remove<span class="govuk-visually-hidden"> item</span>
+              <span aria-hidden="true">Remove</span>
+              <span class="govuk-visually-hidden">Remove item described as {{ property["description"] }}</span>
             </a>
           </li>
         </ul>

@@ -69,12 +69,16 @@ export default function (app) {
             //   `${path.resolve(__dirname + '/../../uploads/')}/${req.file.filename}`
             // );
             // azureUpload(data, req.file.filename);
-
             const id = req.params.prop_id;
+            const imageProps = {
+              uploadedFilename: req.file.filename,
+              originalFilename: req.file.originalname,
+            };
+
             req.session.data.property[id].image = req.file.filename;
             req.session.data.property[id].originalFilename = req.file.originalname;
             req.session.save();
-            res.json(req.file.filename);
+            res.json(imageProps);
           }
         });
       }

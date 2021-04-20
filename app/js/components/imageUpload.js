@@ -77,16 +77,17 @@ export class ImageUpload {
             i.classList.add('hidden');
             i.classList.remove('block');
           });
-          this.imageSelected(`/uploads/${res.data}`);
-          this.image = res.data;
+          this.imageSelected(`/uploads/${res.data.uploadedFilename}`, res.data.originalFilename);
+          this.image = res.data.uploadedFilename;
         }
       } catch (reqError) {
         console.error(reqError);
       }
     });
   }
-  imageSelected(src) {
+  imageSelected(src, alt) {
     this.photoResult.src = src;
+    this.photoResult.alt = `uploaded image ${alt}`;
   }
   selectAltImageEvent() {
     this.id = this.uploadButtonChange.dataset.id;

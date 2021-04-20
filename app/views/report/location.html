@@ -9,7 +9,7 @@
 
 
 {% block pageTitle %}
-  Shipwreck location
+  Geographic location of wreck material
 {% endblock %}
 
 {% block beforeContent %}
@@ -114,8 +114,7 @@
               value: data["location"]["location-latitude-decimal-minutes-degree"],
               classes: locationLatitudeDecimalMinutesDegreeClass,
               label: {
-                text: "Degree",
-                classes: "govuk-visually-hidden"
+                text: "Degree"
               },
               suffix: {
                 text: "°"
@@ -131,8 +130,7 @@
               value: data["location"]["location-latitude-decimal-minutes-minute"],
               classes: locationLatitudeDecimalMinutesMinuteClass,
               label: {
-                text: "Minute",
-                classes: "govuk-visually-hidden"
+                text: "Minute"
               },
               suffix: {
                 text: "'"
@@ -146,8 +144,7 @@
               id: "location-latitude-decimal-minutes-direction",
               name: "location-latitude-decimal-minutes-direction",
               label: {
-                text: "Direction",
-                classes: "govuk-visually-hidden"
+                text: "Direction"
               },
               items: [
                 {
@@ -177,8 +174,7 @@
               value: data["location"]["location-longitude-decimal-minutes-degree"],
               classes: locationLongitudeDecimalMinutesDegreeClass,
               label: {
-                text: "Degree",
-                classes: "govuk-visually-hidden"
+                text: "Degree"
               },
               suffix: {
                 text: "°"
@@ -194,8 +190,7 @@
               value: data["location"]["location-longitude-decimal-minutes-minute"],
               classes: locationLongitudeDecimalMinutesMinuteClass,
               label: {
-                text: "Minute",
-                classes: "govuk-visually-hidden"
+                text: "Minute"
               },
               suffix: {
                 text: "'"
@@ -209,8 +204,7 @@
               id: "location-longitude-decimal-minutes-direction",
               name: "location-longitude-decimal-minutes-direction",
               label: {
-                text: "Direction",
-                classes: "govuk-visually-hidden"
+                text: "Direction"
               },
               items: [
                 {
@@ -270,8 +264,7 @@
               value: data["location"]["location-latitude-degrees-degree"],
               classes: locationLatitudeDegreesDegreeClass,
               label: {
-                text: "Degree",
-                classes: "govuk-visually-hidden"
+                text: "Degree"
               },
               suffix: {
                 text: "°"
@@ -287,8 +280,7 @@
               value: data["location"]["location-latitude-degrees-minute"],
               classes: locationLatitudeDegreesMinuteClass,
               label: {
-                text: "Minute",
-                classes: "govuk-visually-hidden"
+                text: "Minute"
               },
               suffix: {
                 text: "'"
@@ -304,8 +296,7 @@
               value: data["location"]["location-latitude-degrees-second"],
               classes: locationLatitudeDegreesSecondClass,
               label: {
-                text: "Second",
-                classes: "govuk-visually-hidden"
+                text: "Second"
               },
               suffix: {
                 text: '"'
@@ -319,8 +310,7 @@
               id: "location-latitude-degrees-direction",
               name: "location-latitude-degrees-direction",
               label: {
-                text: "Direction",
-                classes: "govuk-visually-hidden"
+                text: "Direction"
               },
               items: [
                 {
@@ -350,8 +340,7 @@
               value: data["location"]["location-longitude-degrees-degree"],
               classes: locationLongitudeDegreesDegreeClass,
               label: {
-                text: "Degree",
-                classes: "govuk-visually-hidden"
+                text: "Degree"
               },
               suffix: {
                 text: "°"
@@ -367,8 +356,7 @@
               value: data["location"]["location-longitude-degrees-minute"],
               classes: locationLongitudeDegreesMinuteClass,
               label: {
-                text: "Minute",
-                classes: "govuk-visually-hidden"
+                text: "Minute"
               },
               suffix: {
                 text: "'"
@@ -384,8 +372,7 @@
               value: data["location"]["location-longitude-degrees-second"],
               classes: locationLongitudeDegreesSecondClass,
               label: {
-                text: "Second",
-                classes: "govuk-visually-hidden"
+                text: "Second"
               },
               suffix: {
                 text: '"'
@@ -399,8 +386,7 @@
               id: "location-longitude-degrees-direction",
               name: "location-longitude-degrees-direction",
               label: {
-                text: "Direction",
-                classes: "govuk-visually-hidden"
+                text: "Direction"
               },
               items: [
                 {
@@ -420,9 +406,9 @@
 
         {% endset -%}
 
-        {% set locationOsGridSquareClass = "govuk-input--width-2" %}
-        {% set locationOsGridEastingClass = "govuk-input--width-4" %}
-        {% set locationOsGridNorthingClass = "govuk-input--width-4" %}
+        {% set locationOsGridSquareClass = "govuk-input--width-4" %}
+        {% set locationOsGridEastingClass = "govuk-input--width-5" %}
+        {% set locationOsGridNorthingClass = "govuk-input--width-5" %}
 
         {% if errors["location-osgrid-square"] %}
           {% set locationOsGridSquareClass = locationOsGridSquareClass + " govuk-input--error" %}
@@ -447,8 +433,10 @@
               value: data["location"]["location-osgrid-square"],
               classes: locationOsGridSquareClass,
               label: {
-                text: "Square",
-                classes: "govuk-visually-hidden"
+                text: "Square"
+              },
+              attributes: {
+                inputmode: "text"
               }
             }) }}
 
@@ -458,8 +446,7 @@
               value: data["location"]["location-osgrid-easting"],
               classes: locationOsGridEastingClass,
               label: {
-                text: "Easting",
-                classes: "govuk-visually-hidden"
+                text: "Easting"
               },
               attributes: {
                 inputmode: "numeric"
@@ -472,8 +459,7 @@
               value: data["location"]["location-osgrid-northing"],
               classes: locationOsGridNorthingClass,
               label: {
-                text: "Northing",
-                classes: "govuk-visually-hidden"
+                text: "Northing"
               },
               attributes: {
                 inputmode: "numeric"

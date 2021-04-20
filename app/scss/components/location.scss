@@ -1,12 +1,7 @@
 .row-prototype-coordinate-input {
   .govuk-form-group {
     display: inline-block;
-    margin-bottom: 0;
-  }
-
-  @include govuk-media-query($from: tablet) {
-    display: inline-block;
-    margin-right: 1em;
+    margin-bottom: 1rem;
   }
 }
 

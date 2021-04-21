@@ -469,6 +469,9 @@
         {% endset -%}
 
         {% set mapInput %}
+          
+          <p class="govuk-hint">This is a mouse dependent feature. If you do not have access to a mouse then please provide details of your find in the 'Additional information' text area below.</p>
+          
           <div class="govuk-!-margin-bottom-5" data-js="editable-map">
             <span class="govuk-error-message">
               <span class="govuk-visually-hidden">Error:</span> {{ errors["location-map-input"].text }}
@@ -612,6 +615,10 @@
               hint: {
                 text: "Draw the area of the find on a map."
               },
+              attributes: {
+              "aria-label": "Draw the area of the find on a map. This is a mouse dependent feature. If you do not have access to a mouse then please provide details of your find in the 'Additional information' text area below."
+              },
+
                 checked: setCheckedMap
             }            
           ]

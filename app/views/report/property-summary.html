@@ -56,13 +56,11 @@
       <h1 class="govuk-heading-xl">Details of wreck material recovered</h1>
 
       {% if addedFlash %}
-        <div class="govuk-panel--confirmation row-form-action-confirmation">
-          <p class="govuk-body">The wreck material was successfully added to the report.</p>
-        </div>
+        {% set bodyText = "The wreck material was successfully added to the report." %}
+        {% include "includes/action-confirmation.njk" %}
       {% elseif removedFlash %}
-        <div class="govuk-panel--confirmation row-form-action-confirmation">
-          <p class="govuk-body">The wreck material was successfully removed from the report.</p>
-        </div>
+        {% set bodyText = "The wreck material was successfully removed from the report." %}
+        {% include "includes/action-confirmation.njk" %}
       {% endif %}
 
       {% set itemsAdded = data["property"] | length %}

@@ -3,6 +3,16 @@
   height: 400px;
 }
 
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out,
+.leaflet-draw-draw-circle,
+.leaflet-draw-edit-edit,
+.leaflet-draw-edit-remove  {
+  &:focus {
+    box-shadow: inset 0px 0px 0px 3px #e0be00;
+  }
+}
+
 .leaflet-legend {
   padding: 0;
   list-style: none;

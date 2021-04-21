@@ -228,6 +228,7 @@ export class BulkUpload {
       this.addButton.classList.remove('hidden');
       this.addButton.classList.remove('govuk-button--disabled');
       this.addButton.disabled = false;
+      this.addButton.focus();
     }
   }
 

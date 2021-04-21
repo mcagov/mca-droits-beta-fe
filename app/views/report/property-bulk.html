@@ -83,6 +83,17 @@
           </div>
 
           {{ govukButton({
+            text: "Upload",
+            disabled: true,
+            classes: 'govuk-button',
+            type: 'button',
+            attributes: {
+              'data-js': 'spreadsheet-upload-btn',
+              'data-module': 'govuk-button'
+            }
+          }) }}
+
+          {{ govukButton({
             text: "Continue",
             classes: 'govuk-button govuk-button--continue hidden',
             attributes: {
@@ -92,16 +103,6 @@
           }) }}
 
         </form>
-
-        {{ govukButton({
-            text: "Upload",
-            disabled: true,
-            classes: 'govuk-button',
-            attributes: {
-              'data-js': 'spreadsheet-upload-btn',
-              'data-module': 'govuk-button'
-            }
-          }) }}
 
       </div>
     </div>

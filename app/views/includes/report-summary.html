@@ -309,7 +309,8 @@
 
   {% if data['location']['location-standard']['latitude'] and data['location']['location-standard']['longitude'] %}
   <div data-js="static-map">
-    <div id="location-map" class="map-display hide-on-print" data-latitude="{{ data['location']['location-standard']['latitude'] }}" data-longitude="{{ data['location']['location-standard']['longitude'] }}" data-radius="{{ data['location']['location-standard']['radius'] }}"></div>
+    <div id="location-map" class="map-display hide-on-print" data-latitude="{{ data['location']['location-standard']['latitude'] }}" data-longitude="{{ data['location']['location-standard']['longitude'] }}" data-radius="{{ data['location']['location-standard']['radius'] }}" role="group" aria-label="interactive map showing where the wreck material was located: circle 
+centre located at latitude '{{ data['location']['location-given']['latitude'] }}', longitude '{{ data['location']['location-given']['longitude'] }}', with a radius of '{{ data['location']['location-standard']['radius'] }} metres'"></div>
   </div>
   {% endif %}
 </div>

@@ -51,36 +51,36 @@ export class BulkUpload {
       this.photoUploadInputs.forEach((input, index) => {
         let id = input.id;
         const data = new FormData();
-        
+
         // Append the image file data added to each input on the page, 
         // along with the total number of wreck item inputs
         data.append('image', input.files[0]);
         data.append('itemQuantity', numberOfItems);
 
         axios.post(
-            `/report/property-bulk-image-upload/${id}`,
-            data,
-            {
-              headers: { 'Content-Type': 'multipart/form-data' },
-              withCredentials: true,
-              onUploadProgress: (progressEvent) => {
-                const uploadFiles = input.files;
-                const uploadFile = uploadFiles[0];
-                if (
-                  uploadFiles.length &&
-                  (uploadFile.type === 'image/png' ||
-                    uploadFile.type === 'image/jpg' ||
-                    uploadFile.type === 'image/jpeg') &&
-                  uploadFile.size < 5000000
-                ) {
-                  let percentCompleted = Math.round(
-                    (progressEvent.loaded * 100) / progressEvent.total
-                  );             
-                  this.loadingIndicator(percentCompleted, id);
-                }
+          `/report/property-bulk-image-upload/${id}`,
+          data,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+            withCredentials: true,
+            onUploadProgress: (progressEvent) => {
+              const uploadFiles = input.files;
+              const uploadFile = uploadFiles[0];
+              if (
+                uploadFiles.length &&
+                (uploadFile.type === 'image/png' ||
+                  uploadFile.type === 'image/jpg' ||
+                  uploadFile.type === 'image/jpeg') &&
+                uploadFile.size < 5000000
+              ) {
+                let percentCompleted = Math.round(
+                  (progressEvent.loaded * 100) / progressEvent.total
+                );
+                this.loadingIndicator(percentCompleted, id);
               }
             }
-          )
+          }
+        )
           .then((res) => {
             this.errorText = $1(`#upload-error-text-${id}`, this.el);
             this.errorContainer = $1(`#error-container-${id}`, this.el)
@@ -94,8 +94,8 @@ export class BulkUpload {
               let anchor = document.createElement("a");
               anchor.innerText = res.data.error.text;
               anchor.href = `#photo-upload-container-${id}`;
-              listItem.append(anchor);     
-              listItem.id = `error-summary-${id}`;        
+              listItem.append(anchor);
+              listItem.id = `error-summary-${id}`;
               this.errorSummaryList.append(listItem);
 
               // Add the error text above the input
@@ -112,7 +112,10 @@ export class BulkUpload {
               // If upload is successful, hide error containers and display preview image
               this.errorContainer = $1(`#error-container-${id}`, this.el)
               this.errorContainer.classList.add('hidden');
-              this.photoResults[index].src = `/uploads/${res.data}`;
+
+              this.photoResults[index].src = `/uploads/${res.data.uploadedFilename}`;
+              this.photoResults[index].alt = `uploaded image ${res.data.originalFilename}`;
+
               this.containersUploaded[index].classList.remove(
                 'photo-upload__container--hide'
               );
@@ -120,7 +123,7 @@ export class BulkUpload {
                 'photo-upload__container--hide'
               );
 
-              this.handleAddButtonState(); 
+              this.handleAddButtonState();
 
             }
           })
@@ -128,7 +131,7 @@ export class BulkUpload {
             console.error(reqError);
           });
       });
-    }); 
+    });
   }
 
   singleImageUploadEvent() {
@@ -161,13 +164,13 @@ export class BulkUpload {
                 ) {
                   let percentCompleted = Math.round(
                     (progressEvent.loaded * 100) / progressEvent.total
-                  );             
+                  );
                   this.loadingIndicator(percentCompleted, id);
                 }
               }
             }
           );
-  
+
           if (res.data.error) {
             this.errorText.innerText = res.data.error.text;
             if (this.errorContainer.classList.contains('hidden')) {
@@ -179,7 +182,7 @@ export class BulkUpload {
             let imageSelected = $1(`#selected-photo-${id}`);
             const currentInitialContainer = $1(`#photo-upload-container-${id}`);
             const currentSelectedImageContainer = $1(`#photo-selected-container-${id}`);
-            
+
             if (errorSummaryItem !== null) {
               errorSummaryItem.remove();
             }
@@ -208,8 +211,8 @@ export class BulkUpload {
     this.photoUploadInputs.forEach((element) => {
       element.addEventListener('input', () => {
         if (element.value) {
-          this.chosenFiles++;         
-        } 
+          this.chosenFiles++;
+        }
 
         if (this.chosenFiles === this.photoUploadInputs.length) {
           this.bulkImageUploadButton.classList.remove('govuk-button--disabled');
@@ -219,7 +222,7 @@ export class BulkUpload {
     })
   }
 
-  handleAddButtonState() {  
+  handleAddButtonState() {
     if (this.successfulUploads === this.photoResults.length) {
       this.bulkImageUploadButton.classList.add('hidden');
       this.addButton.classList.remove('hidden');

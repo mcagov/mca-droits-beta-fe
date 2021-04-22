@@ -128,12 +128,15 @@ export class EditableMap {
     this.drawRemove = $1('.leaflet-draw-edit-remove', this.el);
 
     this.drawCircle.setAttribute('aria-label', 'Draw a circle on the map to indicate an area.');
+    this.drawCircle.innerHTML = '<span class="govuk-visually-hidden">Draw a circle on the map to indicate an area.</span>';
 
     this.drawEdit.setAttribute('aria-label', 'Edit an existing circle, e.g. to move it or change its radius.');
     this.drawEdit.setAttribute('aria-disabled', 'true');
+    this.drawEdit.innerHTML = '<span class="govuk-visually-hidden">Edit an existing circle, e.g. to move it or change its radius.</span>';
 
     this.drawRemove.setAttribute('aria-label', 'Delete a circle, to start again.');
     this.drawRemove.setAttribute('aria-disabled', 'true');
+    this.drawRemove.innerHTML = '<span class="govuk-visually-hidden">Delete a circle, to start again.</span>';
 
     const controls = [this.drawCircle, this.drawEdit, this.drawRemove];
 

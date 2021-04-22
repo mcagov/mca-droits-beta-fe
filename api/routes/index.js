@@ -17,11 +17,14 @@ import propertyFormImageDelete from './report/property-form-image-delete';
 import propertyFormAddress from './report/property-form-address';
 import salvageAward from './report/salvage-award';
 import checkYourAnswers from './report/check-your-answers';
+import portalStart from './portal/start';
 import portalLogin from './portal/login';
 import portalLogout from './portal/logout';
 import portalLoginRedirectUrl from './portal/loginRedirectUrl';
 import portalDashboard from './portal/dashboard';
 import portalViewReport from './portal/view-report';
+import error from './portal/error';
+import accountError from './portal/error';
 
 export default () => {
   const app = Router();
@@ -44,11 +47,14 @@ export default () => {
   propertyFormAddress(app);
   salvageAward(app);
   checkYourAnswers(app);
+  portalStart(app);
   portalLogin(app);
   portalLogout(app);
   portalLoginRedirectUrl(app);
   portalDashboard(app);
   portalViewReport(app);
+  error(app);
+  accountError(app);
 
   return app;
 };

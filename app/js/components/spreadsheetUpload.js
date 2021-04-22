@@ -55,6 +55,8 @@ export class SpreadsheetUpload {
         } else {
           this.handleLoadingIndicator();
           this.errorBlock.forEach((i) => (i.classList.add('hidden')));
+          // The upload can run very quickly so this timeout just allows a loading 
+          // bar to display for at least one second before revealing the continue button
           setTimeout(() => {
             this.spreadsheetUploadBtn.classList.add('hidden');
             this.continueBtn.classList.remove('hidden');
@@ -81,6 +83,7 @@ export class SpreadsheetUpload {
         this.spreadsheetUploadBtn.disabled = false;
         this.spreadsheetUploadBtn.classList.remove('govuk-button--disabled');
         this.spreadsheetUploadBtn.removeAttribute('aria-disabled');
+        this.spreadsheetUploadBtn.focus();
       }
 
       if (this.continueBtn.classList.contains('hidden')) {

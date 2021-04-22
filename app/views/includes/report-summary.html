@@ -24,7 +24,7 @@
             {
               href: "/report/find-date",
               text: "Change",
-              visuallyHiddenText: "date"
+              visuallyHiddenText: "find date"
             }
           ]
         }
@@ -52,7 +52,7 @@
             {
               href: "/report/removed-property-check",
               text: "Change",
-              visuallyHiddenText: "answer"
+              visuallyHiddenText: "answer for wreck material removed"
             }
           ]
         }
@@ -69,7 +69,7 @@
             {
               href: "/report/salvaged-from",
               text: "Change",
-              visuallyHiddenText: "answer"
+              visuallyHiddenText: "answer for where you found the wreck material"
             }
           ]
         }
@@ -92,7 +92,7 @@
                 {
                   href: "/report/depth",
                   text: "Change",
-                  visuallyHiddenText: "answer"
+                  visuallyHiddenText: "item depth answer"
                 }
               ]
             }
@@ -117,7 +117,7 @@
                 {
                   href: "/report/vessel-description",
                   text: "Change",
-                  visuallyHiddenText: "answer"
+                  visuallyHiddenText: "vessel description"
                 }
               ]
             }
@@ -145,7 +145,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/vessel-information">
-          Change<span class="govuk-visually-hidden"> name</span>
+          Change<span class="govuk-visually-hidden">vessel name</span>
         </a>
       </dd>
     </div>
@@ -160,7 +160,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/vessel-information">
-          Change<span class="govuk-visually-hidden"> construction year</span>
+          Change<span class="govuk-visually-hidden">vessel construction year</span>
         </a>
       </dd>
     </div>
@@ -175,7 +175,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/vessel-information">
-          Change<span class="govuk-visually-hidden"> sunk year</span>
+          Change<span class="govuk-visually-hidden">vessel sunk year</span>
         </a>
       </dd>
     </div>
@@ -211,9 +211,9 @@
         actions: {
         items: [
           {
-            href: "/report/personal",
+            href: "/report/personal#name-details",
             text: "Change",
-            visuallyHiddenText: "item"
+            visuallyHiddenText: "your name"
           }
         ]
       }
@@ -228,9 +228,9 @@
         actions: {
         items: [
           {
-            href: "/report/personal",
+            href: "/report/personal#email-details",
             text: "Change",
-            visuallyHiddenText: "item"
+            visuallyHiddenText: "your email address"
           }
         ]
       }
@@ -245,9 +245,9 @@
         actions: {
         items: [
           {
-            href: "/report/personal",
+            href: "/report/personal#telephone-details",
             text: "Change",
-            visuallyHiddenText: "item"
+            visuallyHiddenText: "your telephone number"
           }
         ]
       }
@@ -262,9 +262,9 @@
         actions: {
         items: [
           {
-            href: "/report/personal",
+            href: "/report/personal#address-details",
             text: "Change",
-            visuallyHiddenText: "item"
+            visuallyHiddenText: "your address details"
           }
         ]
       }
@@ -286,7 +286,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/location">
-          Change<span class="govuk-visually-hidden"> coordinates</span>
+          Change<span class="govuk-visually-hidden">location coordinates</span>
         </a>
       </dd>
     </div>
@@ -300,7 +300,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/location">
-          Change<span class="govuk-visually-hidden"> description</span>
+          Change<span class="govuk-visually-hidden">location description</span>
         </a>
       </dd>
     </div>
@@ -309,7 +309,8 @@
 
   {% if data['location']['location-standard']['latitude'] and data['location']['location-standard']['longitude'] %}
   <div data-js="static-map">
-    <div id="location-map" class="map-display hide-on-print" data-latitude="{{ data['location']['location-standard']['latitude'] }}" data-longitude="{{ data['location']['location-standard']['longitude'] }}" data-radius="{{ data['location']['location-standard']['radius'] }}"></div>
+    <div id="location-map" class="map-display hide-on-print" data-latitude="{{ data['location']['location-standard']['latitude'] }}" data-longitude="{{ data['location']['location-standard']['longitude'] }}" data-radius="{{ data['location']['location-standard']['radius'] }}" role="group" aria-label="interactive map showing where the wreck material was located: circle 
+centre located at latitude '{{ data['location']['location-given']['latitude'] }}', longitude '{{ data['location']['location-given']['longitude'] }}', with a radius of '{{ data['location']['location-standard']['radius'] }} metres'"></div>
   </div>
   {% endif %}
 </div>
@@ -319,7 +320,7 @@
 
   <table class="govuk-table report-responsive-table">
     <caption class="govuk-table__caption report-responsive-table__caption">Items of wreck material reported
-      <a class="govuk-link govuk-!-font-weight-regular report-responsive-table__change-link hide-on-print" href="/report/property-summary">Change<div class="govuk-visually-hidden"> details</div></a></caption>
+      <a class="govuk-link govuk-!-font-weight-regular report-responsive-table__change-link hide-on-print" href="/report/property-summary">Change<div class="govuk-visually-hidden"> items of wreck material</div></a></caption>
         <thead class="govuk-table__head report-responsive-table__head">
         <tr class="govuk-table__row report-responsive-table__row">
           <th scope="col" class="govuk-table__header govuk-!-width-one-half">Description</th>
@@ -416,7 +417,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/salvage-award">
-          Change<span class="govuk-visually-hidden"> claim of expenses</span>
+          Change<span class="govuk-visually-hidden"> claim of salvage expenses</span>
         </a>
       </dd>
     </div>
@@ -430,7 +431,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/salvage-award">
-          Change<span class="govuk-visually-hidden"> description</span>
+          Change<span class="govuk-visually-hidden"> salvage award services rendered</span>
         </a>
       </dd>
     </div>

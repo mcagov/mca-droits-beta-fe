@@ -6,7 +6,7 @@
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% block pageTitle %}
-  Upload wreck material
+  Upload wreck material - Report wreck material – GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -83,6 +83,17 @@
           </div>
 
           {{ govukButton({
+            text: "Upload",
+            disabled: true,
+            classes: 'govuk-button',
+            type: 'button',
+            attributes: {
+              'data-js': 'spreadsheet-upload-btn',
+              'data-module': 'govuk-button'
+            }
+          }) }}
+
+          {{ govukButton({
             text: "Continue",
             classes: 'govuk-button govuk-button--continue hidden',
             attributes: {
@@ -92,16 +103,6 @@
           }) }}
 
         </form>
-
-        {{ govukButton({
-            text: "Upload",
-            disabled: true,
-            classes: 'govuk-button',
-            attributes: {
-              'data-js': 'spreadsheet-upload-btn',
-              'data-module': 'govuk-button'
-            }
-          }) }}
 
       </div>
     </div>

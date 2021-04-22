@@ -4,7 +4,7 @@
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 
 {% block pageTitle %}
-  Description of wreck material
+  Description of wreck material - Report wreck material – GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -33,7 +33,7 @@
           name: propertyNamePrefix + "[description]",
           value: data[propertyName][propertyID]["description"],
           label: {
-            text: "Please describe the item",
+            text: "Describe the item",
             classes: "govuk-label--l",
             isPageHeading: true
           },
@@ -63,7 +63,7 @@
           name: propertyNamePrefix + "[value]",
           value: data[propertyName][propertyID]["value"],
           label: {
-            text: "Approximate total value"
+            text: "Approximate total value, in pounds sterling"
           },
           prefix: {
             text: "£"

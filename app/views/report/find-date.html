@@ -3,6 +3,7 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 
 {% block pageTitle %}
+  {{ errorPrefix(errorSummary) }}
   When did you find the wreck material? - Report wreck material – GOV.UK
 {% endblock %}
 

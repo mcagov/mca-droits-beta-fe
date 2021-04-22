@@ -4,6 +4,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% block pageTitle %}
+  {{ errorPrefix(errorSummary) }}
   Do you wish to claim a salvage award? - Report wreck material – GOV.UK
 {% endblock %}
 

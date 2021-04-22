@@ -6,6 +6,7 @@
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% block pageTitle %}
+  {{ errorPrefix(errorSummary) }}
   Upload wreck material - Report wreck material – GOV.UK
 {% endblock %}
 

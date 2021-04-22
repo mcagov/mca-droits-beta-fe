@@ -3,6 +3,7 @@
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 
 {% block pageTitle %}
+  {{ errorPrefix(errorSummary) }}
   Confirm upload - Report wreck material – GOV.UK
 {% endblock %}
 

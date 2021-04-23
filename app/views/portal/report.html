@@ -3,7 +3,7 @@
 {%- from "govuk/components/tag/macro.njk" import govukTag -%}
 
 {% block pageTitle %}
-Report Details - Report wreck material – GOV.UK
+Report Details - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -327,10 +327,7 @@ Report Details - Report wreck material – GOV.UK
 <p>
 {{ govukButton({
     text: "Print a copy of this outcome notice",
-    classes: "govuk-button--secondary hide-on-print",
-    attributes: {
-    "onClick": "window.print()"
-    }
+    classes: "govuk-button--secondary hide-on-print print-page"
 }) }}
 </p>
 {% endset -%}
@@ -387,6 +384,7 @@ Report Details - Report wreck material – GOV.UK
 {% if reportData.status === 'closed' %}
   {% set tabs %}
     {{ govukTabs({
+        classes: "hide-on-print",
         items: [
             {
                 label: "Report details",
@@ -424,7 +422,9 @@ Report Details - Report wreck material – GOV.UK
 <div class="govuk-grid-row">        
     <div class="govuk-grid-column-full">
         {{ tabs }}
-
+        <div class="show-on-print">
+            {{ reportOutcome | safe }}
+        </div>
     </div>
 </div>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />

@@ -1,7 +1,7 @@
 {
   "name": "@ctidigital/mca-droits-beta",
   "version": "1.0.0",
-  "engines": {"node" : "0.12.13"},
+  "engines": {"node" : "12.13.0"},
   "description": "Maritime and Coastguard Agency - Receiver of Wreck web application for reporting wreck material recovered from the sea and shores of the UK",
   "scripts": {
     "start": "cross-env NODE_ENV=production node -r esm server.js",

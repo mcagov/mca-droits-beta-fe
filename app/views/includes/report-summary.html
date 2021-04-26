@@ -9,7 +9,7 @@
   {% endset -%}
 
   
-
+  <!-- NOTE: Some screen readers ignore whitespaces when visually hidden text is added inline, so these are replaced with html space entities --> 
   {{ govukSummaryList({
     rows: [
       {
@@ -24,7 +24,7 @@
             {
               href: "/report/find-date",
               text: "Change",
-              visuallyHiddenText: "find date"
+              visuallyHiddenText: "&nbsp;find&nbsp;date"
             }
           ]
         }
@@ -52,7 +52,7 @@
             {
               href: "/report/removed-property-check",
               text: "Change",
-              visuallyHiddenText: "answer for wreck material removed"
+              visuallyHiddenText: "&nbsp;answer&nbsp;for&nbsp;wreck&nbsp;material&nbsp;removed"
             }
           ]
         }
@@ -69,7 +69,7 @@
             {
               href: "/report/salvaged-from",
               text: "Change",
-              visuallyHiddenText: "answer for where you found the wreck material"
+              visuallyHiddenText: "&nbsp;answer&nbsp;for&nbsp;where&nbsp;you&nbsp;found&nbsp;the&nbsp;wreck&nbsp;material"
             }
           ]
         }
@@ -92,7 +92,7 @@
                 {
                   href: "/report/depth",
                   text: "Change",
-                  visuallyHiddenText: "item depth answer"
+                  visuallyHiddenText: "&nbsp;item&nbsp;depth&nbsp;answer"
                 }
               ]
             }
@@ -117,7 +117,7 @@
                 {
                   href: "/report/vessel-description",
                   text: "Change",
-                  visuallyHiddenText: "vessel description"
+                  visuallyHiddenText: "&nbsp;vessel&nbsp;description"
                 }
               ]
             }
@@ -145,7 +145,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/vessel-information">
-          Change<span class="govuk-visually-hidden">vessel name</span>
+          Change<span class="govuk-visually-hidden">&nbsp;vessel&nbsp;name</span>
         </a>
       </dd>
     </div>
@@ -160,7 +160,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/vessel-information">
-          Change<span class="govuk-visually-hidden">vessel construction year</span>
+          Change<span class="govuk-visually-hidden">&nbsp;vessel&nbsp;construction&nbsp;year</span>
         </a>
       </dd>
     </div>
@@ -175,7 +175,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/vessel-information">
-          Change<span class="govuk-visually-hidden">vessel sunk year</span>
+          Change<span class="govuk-visually-hidden">&nbsp;vessel&nbsp;sunk&nbsp;year</span>
         </a>
       </dd>
     </div>
@@ -213,7 +213,7 @@
           {
             href: "/report/personal#name-details",
             text: "Change",
-            visuallyHiddenText: "your name"
+            visuallyHiddenText: "&nbsp;your&nbsp;name"
           }
         ]
       }
@@ -230,7 +230,7 @@
           {
             href: "/report/personal#email-details",
             text: "Change",
-            visuallyHiddenText: "your email address"
+            visuallyHiddenText: "&nbsp;your&nbsp;email&nbsp;address"
           }
         ]
       }
@@ -247,7 +247,7 @@
           {
             href: "/report/personal#telephone-details",
             text: "Change",
-            visuallyHiddenText: "your telephone number"
+            visuallyHiddenText: "&nbsp;your&nbsp;telephone&nbsp;number"
           }
         ]
       }
@@ -264,7 +264,7 @@
           {
             href: "/report/personal#address-details",
             text: "Change",
-            visuallyHiddenText: "your address details"
+            visuallyHiddenText: "&nbsp;your&nbsp;address&nbsp;details"
           }
         ]
       }
@@ -286,7 +286,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/location">
-          Change<span class="govuk-visually-hidden">location coordinates</span>
+          Change<span class="govuk-visually-hidden">&nbsp;location&nbsp;coordinates</span>
         </a>
       </dd>
     </div>
@@ -300,7 +300,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/location">
-          Change<span class="govuk-visually-hidden">location description</span>
+          Change<span class="govuk-visually-hidden">&nbsp;location&nbsp;description</span>
         </a>
       </dd>
     </div>
@@ -320,7 +320,7 @@ centre located at latitude '{{ data['location']['location-given']['latitude'] }}
 
   <table class="govuk-table report-responsive-table">
     <caption class="govuk-table__caption report-responsive-table__caption">Items of wreck material reported
-      <a class="govuk-link govuk-!-font-weight-regular report-responsive-table__change-link hide-on-print" href="/report/property-summary">Change<div class="govuk-visually-hidden"> items of wreck material</div></a></caption>
+      <a class="govuk-link govuk-!-font-weight-regular report-responsive-table__change-link hide-on-print" href="/report/property-summary">Change<div class="govuk-visually-hidden">&nbsp;items&nbsp;of&nbsp;wreck&nbsp;material</div></a></caption>
         <thead class="govuk-table__head report-responsive-table__head">
         <tr class="govuk-table__row report-responsive-table__row">
           <th scope="col" class="govuk-table__header govuk-!-width-one-half">Description</th>
@@ -417,7 +417,7 @@ centre located at latitude '{{ data['location']['location-given']['latitude'] }}
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/salvage-award">
-          Change<span class="govuk-visually-hidden"> claim of salvage expenses</span>
+          Change<span class="govuk-visually-hidden">&nbsp;claim&nbsp;of&nbsp;salvage&nbsp;expenses</span>
         </a>
       </dd>
     </div>
@@ -431,7 +431,7 @@ centre located at latitude '{{ data['location']['location-given']['latitude'] }}
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/salvage-award">
-          Change<span class="govuk-visually-hidden"> salvage award services rendered</span>
+          Change<span class="govuk-visually-hidden">&nbsp;salvage&nbsp;award&nbsp;services&nbsp;rendered</span>
         </a>
       </dd>
     </div>

@@ -64,17 +64,13 @@
             <span class="govuk-visually-hidden">Error:</span> <span class="upload-error__text"></span>
           </span>
           
-          <div data-js="file-input-wrapper">
-            {{ govukFileUpload({
-              id: "bulk-upload-file",
-              name: "bulk-upload-file",
-              label: {
-                text: "Upload a file"
-              },
-              attributes: {
-                'data-js': 'file-input'
-              }
-            }) }}
+          <div class="bulk-csv-upload" data-js="file-input-wrapper">
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="file-name" data-js="file-input-label">Upload a file</label>
+              <input class="govuk-file-upload" id="bulk-upload-file" name="bulk-upload-file" type="file" data-js="file-input" style="display: none;">
+              <button class="govuk-button govuk-button--secondary" type="button" data-module="govuk-button" data-js="file-upload-btn">Choose File</button>
+              <input class="bulk-csv-upload__file-display" type="text" disabled readonly id="file-name" value="No file chosen">
+            </div>
           </div>
 
           <div class="file-upload-progress">

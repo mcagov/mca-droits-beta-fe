@@ -82,6 +82,8 @@ export class ImageUpload {
           });
           this.imageSelected(`/uploads/${res.data.uploadedFilename}`, res.data.originalFilename);
           this.image = res.data.uploadedFilename;
+          this.continueButton.disabled = false;
+          this.continueButton.focus();
         }
       } catch (reqError) {
         console.error(reqError);
@@ -108,6 +110,7 @@ export class ImageUpload {
           this.photoUpload.value = '';
           this.continueButton.classList.add('govuk-button--disabled');
           this.continueButton.disabled = true;
+          this.photoUpload.focus();
         }
       } catch (err) {
         console.error(err);

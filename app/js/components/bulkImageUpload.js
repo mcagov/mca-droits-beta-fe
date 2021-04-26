@@ -220,6 +220,7 @@ export class BulkUpload {
         if (this.chosenFiles === this.photoUploadInputs.length) {
           this.bulkImageUploadButton.classList.remove('govuk-button--disabled');
           this.bulkImageUploadButton.disabled = false;
+          this.bulkImageUploadButton.setAttribute('aria-disabled', false);
         }
       })
     })

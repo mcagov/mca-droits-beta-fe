@@ -278,6 +278,7 @@
 
   <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
+    {% if data['location']['location-given']['latitude'] %}
       <dt class="govuk-summary-list__key">
         Coordinates
       </dt>
@@ -289,18 +290,32 @@
           Change<span class="govuk-visually-hidden">&nbsp;location&nbsp;coordinates</span>
         </a>
       </dd>
+    {% endif %}
+    {% if data['location']['text-location']|length %}
+      <dt class="govuk-summary-list__key">
+        Location description
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{ data['location']['text-location'] }}
+      </dd>
+      <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="/report/location">
+          Change<span class="govuk-visually-hidden">&nbsp;location&nbsp;description&nbsp;text</span>
+        </a>
+      </dd>
+    {% endif %}
     </div>
     {% if data['location']['location-description']|length %}
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
-        Description
+        Additional information
       </dt>
       <dd class="govuk-summary-list__value">
         {{ data['location']['location-description'] }}
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/location">
-          Change<span class="govuk-visually-hidden">&nbsp;location&nbsp;description</span>
+          Change<span class="govuk-visually-hidden">&nbsp;additional&nbsp;location&nbsp;information</span>
         </a>
       </dd>
     </div>

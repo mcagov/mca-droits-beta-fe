@@ -469,10 +469,7 @@
           {% endcall %}
         {% endset -%}
 
-        {% set mapInput %}
-          
-          <p class="govuk-hint">This is a mouse dependent feature. If you do not have access to a mouse then please provide details of your find in the 'Additional information' text area below.</p>
-          
+        {% set mapInput %}         
           <div class="govuk-!-margin-bottom-5" data-js="editable-map">
             <span class="govuk-error-message">
               <span class="govuk-visually-hidden">Error:</span> {{ errors["location-map-input"].text }}
@@ -481,8 +478,7 @@
             <h2 class="govuk-visually-hidden">Key to explain images visually indicating map controls</h2>
             <dl class="leaflet-legend govuk-!-margin-top-0">
               <dt class="leaflet-legend__item">
-                <img src="/assets/images/leaflet-legend/draw.png" class="leaflet-legend__icon" alt="Map tool 'Draw a circle on the map to 
- indicate an area.' icon, dark grey circle">
+                <img src="/assets/images/leaflet-legend/draw.png" class="leaflet-legend__icon" alt="Map tool 'Draw a circle on the map to indicate an area.' icon, dark grey circle">
               </dt>
               <dd class="govuk-!-margin-left-0">
                 <p class="govuk-!-margin-2 govuk-body-s leaflet-legend__description">Draw a circle on the map to indicate an area.</p>
@@ -508,6 +504,19 @@
           <input type=hidden name="map-radius-input" id="map-radius-input" value="{{ data['location']['map-radius-input'] }}">
         {% endset -%}
 
+        {% set textInput %}
+          {{ govukTextarea({
+            name: "text-location",
+            id: "text-location",
+            classes: "govuk-!-width-two-thirds",
+            value: data["location"]["text-location"],
+            label: {
+              text: "Location description"
+            }
+          }) }}
+        {% endset %}
+
+
         {# Fixes issue where if the user selects a radio, doesn't fill in any info
            and submits the form it will reopen the correct radio option when the page
            is rerendered with errors #}
@@ -516,6 +525,7 @@
         {% set setCheckedCoordsSexagesimal = checked("['location']['location-type']", "coords-sexagesimal") %}
         {% set setCheckedOsGrid = checked("['location']['location-type']", "coords-osgrid") %}
         {% set setCheckedMap = checked("['location']['location-type']", "map") %}
+        {% set setCheckedOther = checked("['location']['location-type']", "text-location") %}
         {% set setCheckedDesc = checked("['location']['location-type']", "description") %}
 
         {% if 
@@ -554,6 +564,10 @@
           (errors['map-longitude-input']|length) or
           (errors['map-radius-input']|length)  %}
             {% set setCheckedMap = "map" %}
+        {% endif %}
+
+        {% if (errors['text-location']|length) %}
+            {% set setCheckedOther = "text-location" %}
         {% endif %}
 
         {{ govukRadios({
@@ -624,11 +638,25 @@
                 text: "Draw the area of the find on a map."
               },
               attributes: {
-              "aria-label": "Draw the area of the find on a map. This is a mouse dependent feature. If you do not have access to a mouse then please provide details of your find in the 'Additional information' text area below."
+              "aria-label": "Draw the area of the find on a map. This is a mouse dependent feature."
               },
 
                 checked: setCheckedMap
-            }            
+            },
+            {
+              value: "text-location",
+              text: "Other",
+              conditional: {
+                html: textInput
+              },
+              hint: {
+                text: "Provide a text description of the location where the wreck material was found. You should provide as much detail as possible, including any known distances and directions."
+              },
+              attributes: {
+              "aria-label": "Other - Text description of location"
+              },
+                checked: setCheckedOther
+            }                        
           ]
         }) }}
 
@@ -638,7 +666,7 @@
           classes: "govuk-!-width-two-thirds",
           value: data["location"]["location-description"],
           label: {
-            text: "Additional information"
+            text: "Additional information (optional)"
           },
           hint: {
             text: "Please provide any further information you have about the location the wreck material was found. You should include any known distances and directions.",

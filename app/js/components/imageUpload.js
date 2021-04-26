@@ -11,6 +11,7 @@ export class ImageUpload {
     this.el = el;
     this.id;
     this.image;
+    this.pageTitle = document.title;
     this.containerInitial = $1('.photo-upload__container--initial', this.el);
     this.containerUploaded = $1('.photo-upload__container--uploaded', this.el);
     this.uploadButton = $1('.photo-upload__button', this.el);
@@ -66,6 +67,7 @@ export class ImageUpload {
         );
 
         if (res.data.error) {
+          document.title = "Error: " + this.pageTitle;
           this.errorText.forEach((i) => (i.innerText = res.data.error.text));
           this.scrollToTop();
           this.errorBlock.forEach((i) => {
@@ -73,6 +75,7 @@ export class ImageUpload {
             i.classList.remove('hidden');
           });
         } else {
+          document.title = this.pageTitle;
           this.errorBlock.forEach((i) => {
             i.classList.add('hidden');
             i.classList.remove('block');

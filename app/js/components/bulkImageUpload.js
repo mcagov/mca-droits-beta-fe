@@ -10,6 +10,7 @@ export class BulkUpload {
     if (!el) return;
 
     this.el = el;
+    this.pageTitle = document.title;
     this.form = $1('[data-js=bulk-form-element]', this.el);
     this.photoUploadInputs = [...$('.photo-upload__upload')];
     this.containersInitial = [...$('.photo-upload__container--initial', this.el)];
@@ -86,6 +87,7 @@ export class BulkUpload {
             this.errorContainer = $1(`#error-container-${id}`, this.el)
 
             if (res.data.error) {
+              document.title = "Error: " + this.pageTitle;
               const currentInput = input;
               const currentUploadBtn = $1(`[data-id=${id}]`, this.el);
 
@@ -172,6 +174,7 @@ export class BulkUpload {
           );
 
           if (res.data.error) {
+            document.title = "Error: " + this.pageTitle;
             this.errorText.innerText = res.data.error.text;
             if (this.errorContainer.classList.contains('hidden')) {
               this.errorContainer.classList.remove('hidden');
@@ -194,7 +197,7 @@ export class BulkUpload {
             this.errorContainer.classList.add('hidden');
             this.errorText.innerHTML = "";
 
-            imageSelected.src = `/uploads/${res.data}`;
+            imageSelected.src = `/uploads/${res.data.uploadedFilename}`;
             currentInitialContainer.classList.add('photo-upload__container--hide');
             currentSelectedImageContainer.classList.remove('photo-upload__container--hide');
 
@@ -224,6 +227,7 @@ export class BulkUpload {
 
   handleAddButtonState() {
     if (this.successfulUploads === this.photoResults.length) {
+      document.title = this.pageTitle;
       this.bulkImageUploadButton.classList.add('hidden');
       this.addButton.classList.remove('hidden');
       this.addButton.classList.remove('govuk-button--disabled');

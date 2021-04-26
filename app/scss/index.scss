@@ -6,6 +6,7 @@ $govuk-global-styles: true;
 
 //Utilities
 @import './utilities/display';
+@import './utilities/borders';
 
 // Components
 @import './components/location';
@@ -18,3 +19,4 @@ $govuk-global-styles: true;
 @import './components/filters';
 @import './components/dashboard';
 @import './components/portal-authentication';
+@import './components/bulk-upload';

@@ -2,6 +2,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { assignReportStatus } from '../../../utilities';
 import { assignSalvageLocation } from '../../../utilities';
+import { assignOutcome } from '../../../utilities';
 
 const url = process.env.DATAVERSE_BASE_URL + process.env.DATAVERSE_SERVICE_URL;
 
@@ -52,12 +53,16 @@ export default function (app) {
               reportData['recovered-from'] = recoveredFromLocation;
 
               const wreckMaterialData = reportData.crf99_MCAWreckMaterial_WreckReport_crf99_;
+              console.log(wreckMaterialData);
               for (const wreckItem of wreckMaterialData) {
                 // Add apostrophies before pushing to the storageAddressIDs array.
                 // This is required to pass the array straight into the storageAddressUrl to filter the storage address data.
                 const formattedValue = "'" + wreckItem._crf99_storageaddress_value + "'";
                 storageAddressIDs.push(formattedValue);
+                wreckItem.selectedOutcome = assignOutcome(wreckItem.crf99_outcome);
+                console.log(wreckItem.selectedOutcome);
               }
+              console.log(reportData);
               resolve();
             })
             .catch((err) => {

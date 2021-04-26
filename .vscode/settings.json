@@ -1,4 +1,3 @@
 {
-    "appService.deploySubpath": ".",
-    "appService.defaultWebAppToDeploy": "/subscriptions/d17c9b4d-e95c-4941-aff5-f600a70a110b/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/mca-d-web-1"
+    "appService.deploySubpath": "."
 }

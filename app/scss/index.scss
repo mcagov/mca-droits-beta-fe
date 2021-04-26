@@ -6,6 +6,7 @@ $govuk-global-styles: true;
 
 //Utilities
 @import './utilities/display';
+@import './utilities/borders';
 
 // Components
 @import './components/location';

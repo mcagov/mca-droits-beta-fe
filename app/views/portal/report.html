@@ -3,7 +3,7 @@
 {%- from "govuk/components/tag/macro.njk" import govukTag -%}
 
 {% block pageTitle %}
-Report Details
+Report Details - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -77,6 +77,7 @@ Report Details
         {% set addressHtml %}
         {% set addressLines = [
                 data.userAddress1,
+                data.userAddress2,
                 data.userCity,
                 data.userCounty,
                 data.userPostcode
@@ -85,54 +86,42 @@ Report Details
         {{ address(addressLines) }}
         {% endset -%}
 
-        {{ govukSummaryList({
-            rows: [
-                {
-                key: {
-                text: "Full name"
-                },
-                value: {
-                text: data['userName']
-                },
-                actions: {
-                    items: []
-                }
-                },
-                {
-                key: {
-                text: "Email address"
-                },
-                value: {
-                text: data['userEmail']
-                },
-                actions: {
-                    items: []
-                }
-                },
-                {
-                key: {
-                text: "Telephone number"
-                },
-                value: {
-                text: data['userTel']
-                },
-                actions: {
-                items: []
-                }
-                },
-                {
-                key: {
-                text: "Address"
-                },
-                value: {
-                html: addressHtml
-                },
-                actions: {
-                items: []
-                }
-                }
-            ]
-            }) }}
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Full name
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ data['userName'] }}
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Email address
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ data['userEmail'] }}
+                </dd>
+            </div>
+            {% if data['userTel'] %}
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Telephone number
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ data['userTel'] }}
+                </dd>
+            </div>
+            {% endif %}
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Address
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ addressHtml }}
+                </dd>
+            </div>
+        </dl>
     </div>
 
     {% if reportData.crf99_vesselname %}
@@ -184,6 +173,16 @@ Report Details
                     {{ reportData.coordinates }}
                 </dd>
             </div>
+            {% if reportData.crf99_locationdescription %}
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Location description
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ reportData.crf99_locationdescription }}
+                </dd>
+            </div>
+            {% endif %}
             {% if reportData['recovered-from'] %}
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
@@ -201,6 +200,16 @@ Report Details
                 </dt>
                 <dd class="govuk-summary-list__value">
                     {{ reportData.crf99_depth }} metres
+                </dd>
+            </div>
+            {% endif %}
+            {% if reportData.crf99_wreckconstructiondetails %}
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Vessel description
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ reportData.crf99_wreckconstructiondetails }}
                 </dd>
             </div>
             {% endif %}
@@ -292,38 +301,31 @@ Report Details
 {% endset -%}
 
 {% set reportOutcome %}
-<h2 class="govuk-heading-m">Owner has waived their rights to the wreck material found</h2>
-
-<p class="govuk-body">The Receiver of Wreck has concluded their investigations into the report of wreck and salvage (reference (154/21). We have been able to successfully locate the current legal owner of the wreck of the <em>HMS Drake</em>.</p>
-
-<p class="govuk-body">Following the Receiver’s correspondence with the wreck owner, the owner has decided, on this occasion, to waive rights to the material recovered by you and listed below.</p>
-
-<p class="govuk-body">Therefore, in accordance with section 243 of the Merchant Shipping Act 1995, the Receiver of Wreck is able to offer you title to the material listed below in lieu of a salvage award.</p>
-
-<p class="govuk-body">Items as listed and described by you:</p>
-
-<ul class="govuk-list govuk-list--bullet">
-    <li>2 x Dutch Navy cannon weighing 56kg and 1262mm in length.</li>
-    <li>1 x The bell of the SS Mendi. Includes the identifying marking 'Mendi'.</li>
-    <li>4 x German U-boat propellers measuring 60cm in diameter.</li>
+<ul class="report-overview__outcome-item-list">
+  {% for item in reportData.crf99_MCAWreckMaterial_WreckReport_crf99_ %}
+  <li class="report-overview__outcome-item">
+    <div class="govuk-summary-list__row report-overview__outcome-content">
+      <h2 class="govuk-heading-m">Wreck item</h2>
+      <p>{{ item.crf99_quantity }} x {{item.crf99_description }}</p>
+      <h2 class="govuk-heading-m">Outcome for this item<h2>
+      {% if item.selectedOutcome %}
+        <h3 class="govuk-heading-s">{{ item.selectedOutcome }}</h3>
+      {% endif %}
+      {% if item.crf99_outcomeremarks %}
+        <p>{{ item.crf99_outcomeremarks }}</p>
+      {% endif %}
+        <h2 class="govuk-heading-m">What happens next?</h2>
+        <p>The Receiver of Wreck’s responsibility for this item is now discharged and our investigation is now officially closed.<p>
+      {% if item.selectedOutcome === "You have been awarded this item in lieu of a salvage award" %}
+        <p>Please look after this piece of Britain’s maritime heritage.</p>
+        <p>Although on this occasion you have been awarded this item in lieu of a salvage award, please note that you are still required to report all future recoveries from this (or any other) wreck.</p>
+      {% else %}
+        <p>Please note that you are still required to report all future recoveries from this (or any other) wreck.</p>
+      {% endif %}
+    </div>
+  </li>
+  {% endfor %}
 </ul>
-
-<h2 class="govuk-heading-m">What happens next?</h2>
-<p class="govuk-body">The Receiver of Wreck’s responsibility for this item is now discharged and our investigation is now officially closed.</p>
-
-<p class="govuk-body">Please look after this piece of Britain’s maritime heritage.</p>
-
-<p class="govuk-body">Although on this occasion you have been awarded this item in lieu of a salvage award, please note that you are still required to report all future recoveries from this (or any other) wreck.</p>
-
-<p>
-{{ govukButton({
-    text: "Print a copy of this outcome notice",
-    classes: "govuk-button--secondary hide-on-print",
-    attributes: {
-    "onClick": "window.print()"
-    }
-}) }}
-</p>
 {% endset -%}
 
 
@@ -378,6 +380,7 @@ Report Details
 {% if reportData.status === 'closed' %}
   {% set tabs %}
     {{ govukTabs({
+        classes: "hide-on-print",
         items: [
             {
                 label: "Report details",
@@ -415,7 +418,9 @@ Report Details
 <div class="govuk-grid-row">        
     <div class="govuk-grid-column-full">
         {{ tabs }}
-
+        <div class="show-on-print">
+            {{ reportOutcome | safe }}
+        </div>
     </div>
 </div>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />

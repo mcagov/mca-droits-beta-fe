@@ -43,7 +43,7 @@ export default function (app) {
             if (err) {
               console.log(`Token generation failed due to ${err}`);
               req.logOut();
-              res.redirect(`https://mcactitest.b2clogin.com/mcactitest.onmicrosoft.com/oauth2/v2.0/logout?p=B2C_1_signin&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`);
+              res.redirect('/error');
             } else {
               const accessToken = tokenResponse.accessToken;
               req.session.data.token = accessToken;

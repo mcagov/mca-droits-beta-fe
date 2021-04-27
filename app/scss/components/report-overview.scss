@@ -1,0 +1,17 @@
+.report-overview {
+  &__outcome-item-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__outcome-item {
+    border-bottom: 1px solid #b1b4b6;
+    margin-bottom: 1rem;
+
+    &:last-child {
+      border: none;
+      margin-bottom: 0;
+    }
+  }
+}

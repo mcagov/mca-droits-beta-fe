@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Account notification - {{ serviceName }} – GOV.UK
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Account notification
+      </h1>
+      <p>Your account does not currently contain any wreck and salvage reports.</p>
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Account notification</span>
+          Make sure that you have reported your wreck and salvage before you check a report status.
+        </strong>
+      </div>
+      <p>Report your wreck and salvage using the <a href="/report/start">Report Wreck Material service</a></p>
+    </div>
+
+  </div>
+{% endblock %}

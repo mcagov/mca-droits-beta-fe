@@ -7,7 +7,8 @@
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% block pageTitle %}
-  Description of wreck material
+  {{ errorPrefix(errorSummary) }}
+  Provide a photo of the item - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -72,10 +73,9 @@
             <div class="upload-progress__percent govuk-body"></div>
           </div>
           <div class="govuk-form-group">
-            <label class="govuk-label govuk-label--l" for="{{ propertyNamePrefix }}[image]">
+            <h2 class="govuk-heading-l">
               Select a photo
-            </label>
-
+            </h2>
             <p class="govuk-body">Make sure your photo meets the guidelines below before submitting. If it does not, this may delay the closure of this report.</p>
 
             {{ govukDetails({
@@ -88,13 +88,16 @@
             {{ govukFileUpload({
               id: "property-image",
               name: "property-image",
+              label: {
+                text: "Choose your file"
+              },
               hint: {
                   text: "Accepted file types: jpg, jpeg, png.<br/>Maximum file size: 5MB"
               },
               classes: "photo-upload__upload"
             }) }}
           </div>
-          <a href="#" class="photo-upload__button govuk-button" data-module="govuk-button" data-id={{ propertyID }}>Upload file</a>
+          <a href="#" role="button" aria-label="Click to upload your chosen file" class="photo-upload__button govuk-button" data-module="govuk-button" data-id={{ propertyID }}>Upload file</a>
         </div>
 
         <div class="{{containerUploadedClass}}">
@@ -111,7 +114,7 @@
             <img class="photo-upload__result govuk-!-margin-bottom-6" src="{{ imagePath }}" width="300px" />
           </div>
           
-          <a href="#" class="photo-upload__button-change govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button" data-id={{ propertyID }}>Upload a different image</a>
+          <a href="#" role="button" aria-label="Click to choose a different image" class="photo-upload__button-change govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button" data-id={{ propertyID }}>Upload a different image</a>
         </div>
 
         {{ govukButton({

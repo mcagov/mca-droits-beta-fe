@@ -38,7 +38,7 @@ export default function (app) {
   passport.use(
     new OIDCStrategy(
       {
-        identityMetadata: process.env.B2C_IDENTITY_METADATA,
+        identityMetadata: process.env.B2C_BASE_URL + process.env.B2C_IDENTITY_METADATA,
         clientID: process.env.B2C_CLIENT_ID,
         responseType: 'code id_token',
         responseMode: 'form_post',
@@ -83,7 +83,7 @@ export default function (app) {
     function (req, res, next) {
       passport.authenticate('azuread-openidconnect', {
         response: res, // required
-        failureRedirect: 'https://mcactitest.b2clogin.com/mcactitest.onmicrosoft.com/oauth2/v2.0/logout?p=B2C_1_signin&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error',
+        failureRedirect: `${process.env.B2C_BASE_URL}/oauth2/v2.0/logout?p=B2C_1_login&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`,
       })(req, res, next);
     },
     function (req, res) {

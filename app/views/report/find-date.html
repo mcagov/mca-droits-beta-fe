@@ -3,7 +3,8 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 
 {% block pageTitle %}
-  Date of find
+  {{ errorPrefix(errorSummary) }}
+  When did you find the wreck material? - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 {% block beforeContent %}

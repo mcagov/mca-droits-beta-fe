@@ -2,6 +2,9 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { assignReportStatus } from '../../../utilities';
 import { assignSalvageLocation } from '../../../utilities';
+import { assignOutcome } from '../../../utilities';
+
+const url = process.env.DATAVERSE_BASE_URL + process.env.DATAVERSE_SERVICE_URL;
 
 export default function (app) {
   app.get(
@@ -11,14 +14,14 @@ export default function (app) {
       let reportRef = req.params.report;
       reportRef = reportRef.replace('-', '/');
 
-      const reportUrl = `https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/crf99_mcawreckreports?$filter=crf99_reportreference eq '${reportRef}'&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_`;
+      const reportUrl = `${url}crf99_mcawreckreports?$filter=crf99_reportreference eq '${reportRef}'&$expand=crf99_MCAWreckMaterial_WreckReport_crf99_`;
       const token = req.session.data.token;
       let storageAddressUrl;
       let reportData;
       let storageAddressIDs = [];
 
       fetchReportData(token, reportUrl).then(() => {
-        storageAddressUrl = `https://mca-sandbox.crm11.dynamics.com/api/data/v9.1/crf99_mcastorageaddresses?$filter=Microsoft.Dynamics.CRM.In(PropertyName='crf99_mcastorageaddressid',PropertyValues=[${storageAddressIDs}])`;
+        storageAddressUrl = `${url}crf99_mcastorageaddresses?$filter=Microsoft.Dynamics.CRM.In(PropertyName='crf99_mcastorageaddressid',PropertyValues=[${storageAddressIDs}])`;
         fetchStorageAddresses(token, storageAddressUrl).then(() => {
           res.render('portal/report', { reportData: reportData });
         });
@@ -55,6 +58,7 @@ export default function (app) {
                 // This is required to pass the array straight into the storageAddressUrl to filter the storage address data.
                 const formattedValue = "'" + wreckItem._crf99_storageaddress_value + "'";
                 storageAddressIDs.push(formattedValue);
+                wreckItem.selectedOutcome = assignOutcome(wreckItem.crf99_outcome);
               }
               resolve();
             })

@@ -4,7 +4,7 @@
 
 module.exports = {
   // Service name used in header.
-  SERVICE_NAME: 'Report wreck and salvage',
+  SERVICE_NAME: 'Report Wreck Material',
 
   // Default port that app runs on
   PORT: '5000',

@@ -7,7 +7,8 @@
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 
 {% block pageTitle %}
-  Wreck material
+  {{ errorPrefix(errorSummary) }}
+  Details of wreck material recovered - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -33,27 +34,34 @@
         <ul class="govuk-summary-list__actions-list">
           <li class="govuk-summary-list__actions-list-item">
             <a class="govuk-link" href="/report/property-single">
-              Change<span class="govuk-visually-hidden"> item</span>
+              <span aria-hidden="true">Change</span>
+              <span class="govuk-visually-hidden">Change details for item described as {{ property["description"] }}</span>
             </a>
           </li>
           <li class="govuk-summary-list__actions-list-item">
             <a class="govuk-link" href="#">
-              Remove<span class="govuk-visually-hidden"> item</span>
+              <span aria-hidden="true">Remove</span>
+              <span class="govuk-visually-hidden">Remove item described as {{ property["description"] }}</span>
             </a>
           </li>
         </ul>
       {% endset -%}
 
+      {% if errorSummary.length > 0 %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errorSummary
+        }) }}
+      {% endif %}
+
       <h1 class="govuk-heading-xl">Details of wreck material recovered</h1>
 
       {% if addedFlash %}
-        <div class="govuk-panel--confirmation row-form-action-confirmation">
-          <p class="govuk-body">The wreck material was successfully added to the report.</p>
-        </div>
+        {% set bodyText = "The wreck material was successfully added to the report." %}
+        {% include "includes/action-confirmation.njk" %}
       {% elseif removedFlash %}
-        <div class="govuk-panel--confirmation row-form-action-confirmation">
-          <p class="govuk-body">The wreck material was successfully removed from the report.</p>
-        </div>
+        {% set bodyText = "The wreck material was successfully removed from the report." %}
+        {% include "includes/action-confirmation.njk" %}
       {% endif %}
 
       {% set itemsAdded = data["property"] | length %}
@@ -163,12 +171,6 @@
 
       {% if itemsAdded > 0 %}
       <form class="form" action="/report/property-summary-confirmation" method="post" novalidate>
-        {% if errorSummary.length > 0 %}
-          {{ govukErrorSummary({
-              titleText: "There is a problem",
-              errorList: errorSummary
-          }) }}
-        {% endif %}
         <div class="declaration-wrapper govuk-!-padding-5 govuk-!-margin-bottom-6">
           {{ govukCheckboxes({
             idPrefix: "property-declaration",

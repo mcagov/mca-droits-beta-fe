@@ -31,7 +31,7 @@ export default function (app) {
         );
       }).catch(() => {
         req.logOut();
-        return res.redirect(`https://mcactitest.b2clogin.com/mcactitest.onmicrosoft.com/oauth2/v2.0/logout?p=B2C_1_signin&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/account-error`);
+        return res.redirect('/account-error');
       });
 
       function getUserData(token) {
@@ -49,6 +49,7 @@ export default function (app) {
               session.userEmail = data.emailaddress1;
               session.userTel = data.telephone1;
               session.userAddress1 = data.address1_line1;
+              session.userAddress2 = data.address1_line2;
               session.userCity = data.address1_city;
               session.userCounty = data.address1_county;
               session.userPostcode = data.address1_postalcode;
@@ -102,6 +103,7 @@ const fetchReportData = (accessToken, url, userReports, res) =>
       .catch((err) => {
         console.log('[Report data error]:' + err);
         if (err.response.status === 401) {
+          req.logOut();
           res.redirect('/error');
         }
         reject();

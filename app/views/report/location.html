@@ -9,7 +9,8 @@
 
 
 {% block pageTitle %}
-  Shipwreck location
+  {{ errorPrefix(errorSummary) }}
+  Where was the wreck material located? - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -114,8 +115,7 @@
               value: data["location"]["location-latitude-decimal-minutes-degree"],
               classes: locationLatitudeDecimalMinutesDegreeClass,
               label: {
-                text: "Degree",
-                classes: "govuk-visually-hidden"
+                text: "Degree"
               },
               suffix: {
                 text: "°"
@@ -131,8 +131,7 @@
               value: data["location"]["location-latitude-decimal-minutes-minute"],
               classes: locationLatitudeDecimalMinutesMinuteClass,
               label: {
-                text: "Minute",
-                classes: "govuk-visually-hidden"
+                text: "Minute"
               },
               suffix: {
                 text: "'"
@@ -146,8 +145,7 @@
               id: "location-latitude-decimal-minutes-direction",
               name: "location-latitude-decimal-minutes-direction",
               label: {
-                text: "Direction",
-                classes: "govuk-visually-hidden"
+                text: "Direction"
               },
               items: [
                 {
@@ -177,8 +175,7 @@
               value: data["location"]["location-longitude-decimal-minutes-degree"],
               classes: locationLongitudeDecimalMinutesDegreeClass,
               label: {
-                text: "Degree",
-                classes: "govuk-visually-hidden"
+                text: "Degree"
               },
               suffix: {
                 text: "°"
@@ -194,8 +191,7 @@
               value: data["location"]["location-longitude-decimal-minutes-minute"],
               classes: locationLongitudeDecimalMinutesMinuteClass,
               label: {
-                text: "Minute",
-                classes: "govuk-visually-hidden"
+                text: "Minute"
               },
               suffix: {
                 text: "'"
@@ -209,8 +205,7 @@
               id: "location-longitude-decimal-minutes-direction",
               name: "location-longitude-decimal-minutes-direction",
               label: {
-                text: "Direction",
-                classes: "govuk-visually-hidden"
+                text: "Direction"
               },
               items: [
                 {
@@ -270,8 +265,7 @@
               value: data["location"]["location-latitude-degrees-degree"],
               classes: locationLatitudeDegreesDegreeClass,
               label: {
-                text: "Degree",
-                classes: "govuk-visually-hidden"
+                text: "Degree"
               },
               suffix: {
                 text: "°"
@@ -287,8 +281,7 @@
               value: data["location"]["location-latitude-degrees-minute"],
               classes: locationLatitudeDegreesMinuteClass,
               label: {
-                text: "Minute",
-                classes: "govuk-visually-hidden"
+                text: "Minute"
               },
               suffix: {
                 text: "'"
@@ -304,8 +297,7 @@
               value: data["location"]["location-latitude-degrees-second"],
               classes: locationLatitudeDegreesSecondClass,
               label: {
-                text: "Second",
-                classes: "govuk-visually-hidden"
+                text: "Second"
               },
               suffix: {
                 text: '"'
@@ -319,8 +311,7 @@
               id: "location-latitude-degrees-direction",
               name: "location-latitude-degrees-direction",
               label: {
-                text: "Direction",
-                classes: "govuk-visually-hidden"
+                text: "Direction"
               },
               items: [
                 {
@@ -350,8 +341,7 @@
               value: data["location"]["location-longitude-degrees-degree"],
               classes: locationLongitudeDegreesDegreeClass,
               label: {
-                text: "Degree",
-                classes: "govuk-visually-hidden"
+                text: "Degree"
               },
               suffix: {
                 text: "°"
@@ -367,8 +357,7 @@
               value: data["location"]["location-longitude-degrees-minute"],
               classes: locationLongitudeDegreesMinuteClass,
               label: {
-                text: "Minute",
-                classes: "govuk-visually-hidden"
+                text: "Minute"
               },
               suffix: {
                 text: "'"
@@ -384,8 +373,7 @@
               value: data["location"]["location-longitude-degrees-second"],
               classes: locationLongitudeDegreesSecondClass,
               label: {
-                text: "Second",
-                classes: "govuk-visually-hidden"
+                text: "Second"
               },
               suffix: {
                 text: '"'
@@ -399,8 +387,7 @@
               id: "location-longitude-degrees-direction",
               name: "location-longitude-degrees-direction",
               label: {
-                text: "Direction",
-                classes: "govuk-visually-hidden"
+                text: "Direction"
               },
               items: [
                 {
@@ -420,9 +407,9 @@
 
         {% endset -%}
 
-        {% set locationOsGridSquareClass = "govuk-input--width-2" %}
-        {% set locationOsGridEastingClass = "govuk-input--width-4" %}
-        {% set locationOsGridNorthingClass = "govuk-input--width-4" %}
+        {% set locationOsGridSquareClass = "govuk-input--width-4" %}
+        {% set locationOsGridEastingClass = "govuk-input--width-5" %}
+        {% set locationOsGridNorthingClass = "govuk-input--width-5" %}
 
         {% if errors["location-osgrid-square"] %}
           {% set locationOsGridSquareClass = locationOsGridSquareClass + " govuk-input--error" %}
@@ -447,8 +434,10 @@
               value: data["location"]["location-osgrid-square"],
               classes: locationOsGridSquareClass,
               label: {
-                text: "Square",
-                classes: "govuk-visually-hidden"
+                text: "Square"
+              },
+              attributes: {
+                inputmode: "text"
               }
             }) }}
 
@@ -458,8 +447,7 @@
               value: data["location"]["location-osgrid-easting"],
               classes: locationOsGridEastingClass,
               label: {
-                text: "Easting",
-                classes: "govuk-visually-hidden"
+                text: "Easting"
               },
               attributes: {
                 inputmode: "numeric"
@@ -472,8 +460,7 @@
               value: data["location"]["location-osgrid-northing"],
               classes: locationOsGridNorthingClass,
               label: {
-                text: "Northing",
-                classes: "govuk-visually-hidden"
+                text: "Northing"
               },
               attributes: {
                 inputmode: "numeric"
@@ -482,34 +469,53 @@
           {% endcall %}
         {% endset -%}
 
-        {% set mapInput %}
+        {% set mapInput %}         
           <div class="govuk-!-margin-bottom-5" data-js="editable-map">
             <span class="govuk-error-message">
               <span class="govuk-visually-hidden">Error:</span> {{ errors["location-map-input"].text }}
             </span>
             <div id="location-map-input" class="row-prototype-map-select govuk-!-margin-bottom-1"></div>
-            <ul class="leaflet-legend govuk-!-margin-top-0">
-              <li class="leaflet-legend__item">
-                <img src="/assets/images/leaflet-legend/draw.png" class="leaflet-legend__icon" alt="Map tool 'draw' icon, dark grey circle">
+            <h2 class="govuk-visually-hidden">Key to explain images visually indicating map controls</h2>
+            <dl class="leaflet-legend govuk-!-margin-top-0">
+              <dt class="leaflet-legend__item">
+                <img src="/assets/images/leaflet-legend/draw.png" class="leaflet-legend__icon" alt="Map tool 'Draw a circle on the map to indicate an area.' icon, dark grey circle">
+              </dt>
+              <dd class="govuk-!-margin-left-0">
                 <p class="govuk-!-margin-2 govuk-body-s leaflet-legend__description">Draw a circle on the map to indicate an area.</p>
-              </li>
-
-              <li class="leaflet-legend__item">
-                <img src="/assets/images/leaflet-legend/edit.png" class="leaflet-legend__icon" alt="Map tool 'edit' icon, pencil">
+              </dd>
+              <dt class="leaflet-legend__item">
+                <img src="/assets/images/leaflet-legend/edit.png" class="leaflet-legend__icon" alt="Map tool 'Edit an existing circle, e.g. to move it or change its radius.' icon, pencil">
+              </dt>
+              <dd class="govuk-!-margin-left-0">
                 <p class="govuk-!-margin-2 govuk-body-s leaflet-legend__description">Edit an existing circle, e.g. to move it or change its radius.</p>
-              </li>
+              </dd>
 
-              <li class="leaflet-legend__item">
-                <img src="/assets/images/leaflet-legend/delete.png" class="leaflet-legend__icon" alt="Map tool 'delete' icon, trash can/rubbish bin">
+              <dt class="leaflet-legend__item">
+                <img src="/assets/images/leaflet-legend/delete.png" class="leaflet-legend__icon" alt="Map tool 'Delete a circle, to start again.' icon, trash can/rubbish bin">
+              </dt>
+              <dd class="govuk-!-margin-left-0">
                 <p class="govuk-!-margin-2 govuk-body-s leaflet-legend-__description">Delete a circle, to start again.</p>
-                </dt>
-            </ul>
+              </dd>
+            </dl>
           </div>
 
           <input type=hidden name="map-latitude-input" id="map-latitude-input" value="{{ data['location']['map-latitude-input'] }}">
           <input type=hidden name="map-longitude-input" id="map-longitude-input" value="{{ data['location']['map-longitude-input'] }}">
           <input type=hidden name="map-radius-input" id="map-radius-input" value="{{ data['location']['map-radius-input'] }}">
         {% endset -%}
+
+        {% set textInput %}
+          {{ govukTextarea({
+            name: "text-location",
+            id: "text-location",
+            classes: "govuk-!-width-two-thirds",
+            value: data["location"]["text-location"],
+            label: {
+              text: "Location description"
+            }
+          }) }}
+        {% endset %}
+
 
         {# Fixes issue where if the user selects a radio, doesn't fill in any info
            and submits the form it will reopen the correct radio option when the page
@@ -519,6 +525,7 @@
         {% set setCheckedCoordsSexagesimal = checked("['location']['location-type']", "coords-sexagesimal") %}
         {% set setCheckedOsGrid = checked("['location']['location-type']", "coords-osgrid") %}
         {% set setCheckedMap = checked("['location']['location-type']", "map") %}
+        {% set setCheckedOther = checked("['location']['location-type']", "text-location") %}
         {% set setCheckedDesc = checked("['location']['location-type']", "description") %}
 
         {% if 
@@ -559,6 +566,10 @@
             {% set setCheckedMap = "map" %}
         {% endif %}
 
+        {% if (errors['text-location']|length) %}
+            {% set setCheckedOther = "text-location" %}
+        {% endif %}
+
         {{ govukRadios({
           idPrefix: "location-type",
           name: "location-type",
@@ -567,7 +578,7 @@
           },
           fieldset: {
             legend: {
-              text: "Where was the wreck material found?",
+              text: "Where was the wreck material located?",
               isPageHeading: true,
               classes: "govuk-fieldset__legend--l"
             }
@@ -626,8 +637,26 @@
               hint: {
                 text: "Draw the area of the find on a map."
               },
+              attributes: {
+              "aria-label": "Draw the area of the find on a map. This is a mouse dependent feature."
+              },
+
                 checked: setCheckedMap
-            }            
+            },
+            {
+              value: "text-location",
+              text: "Other",
+              conditional: {
+                html: textInput
+              },
+              hint: {
+                text: "Provide a text description of the location where the wreck material was found. You should provide as much detail as possible, including any known distances and directions."
+              },
+              attributes: {
+              "aria-label": "Other - Text description of location"
+              },
+                checked: setCheckedOther
+            }                        
           ]
         }) }}
 
@@ -637,7 +666,7 @@
           classes: "govuk-!-width-two-thirds",
           value: data["location"]["location-description"],
           label: {
-            text: "Additional information"
+            text: "Additional information (optional)"
           },
           hint: {
             text: "Please provide any further information you have about the location the wreck material was found. You should include any known distances and directions.",

@@ -447,6 +447,37 @@ export default function (app) {
 
           break;
 
+        case 'text-location':
+          session['location-standard'].latitude = null;
+          session['location-standard'].longitude = null;
+          session['location-standard'].radius = null;
+
+          session['location-given'].latitude = null;
+          session['location-given'].longitude = null;
+
+          session['text-location'] = reqBody['text-location'];
+
+          await body('text-location')
+            .exists()
+            .not()
+            .isEmpty()
+            .withMessage('Please enter a detailed description of the location')
+            .run(req);
+
+          errors = formatValidationErrors(validationResult(req));
+          errorSummary = Object.values(errors);
+          if (errors) {
+            errorSummary[0].id = 'text-location';
+            errorSummary[0].href = '#text-location';
+            errors['text-location'] = {
+              id: 'text-location',
+              href: '#text-location',
+              text: 'Please enter a detailed description of the location'
+            };
+          }
+
+          break;
+
         default:
           errors = formatValidationErrors(validationResult(req));
           errorSummary = Object.values(errors);

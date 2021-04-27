@@ -31,13 +31,14 @@
 {% from 'govuk/components/phase-banner/macro.njk'     import govukPhaseBanner %}
 {% from 'includes/address.njk'                        import address %}
 {% from 'includes/address-object.njk'                 import addressObject %}
+{% from 'includes/error-prefix.njk'                 import errorPrefix %}
 
 {% block head %}
   {% include "includes/head.html" %}
 {% endblock %}
 
 {% block pageTitle %}
-  GOV.UK Prototype Kit
+   Maritime and Coastguard Agency - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 {% block header %}
@@ -60,11 +61,7 @@
         items: [
           {
             href: "/",
-            text: "MCA Reporting of Wreck"
-          },
-          {
-            href: "/prototype-admin/clear-data",
-            text: "Clear data"
+            text: "Report wreck material"
           },
           {
             href: "/accessibility-statement",

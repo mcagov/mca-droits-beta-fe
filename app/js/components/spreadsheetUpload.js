@@ -10,9 +10,13 @@ export class SpreadsheetUpload {
     if (!el) return;
 
     this.el = el;
+    this.pageTitle = document.title;
 
-    this.fileInput = $1('[data-js=file-input]', this.el);
     this.fileInputWrapper = $1('[data-js=file-input-wrapper]', this.el);
+    this.fileInput = $1('[data-js=file-input]', this.el);
+    this.fileInputLabel = $1('[data-js=file-input-label]', this.el);
+    this.readonlyFileInput = $1('#file-name', this.el);
+    this.fileUploadButton = $1('[data-js=file-upload-btn]', this.el);
     this.spreadsheetUploadBtn = $1('[data-js=spreadsheet-upload-btn]', this.el);
     this.continueBtn = $1('[data-js=bulk-continue-btn]', this.el);
 
@@ -28,10 +32,16 @@ export class SpreadsheetUpload {
   }
 
   init() {
-    this.spreadsheetUploadEvent();
     this.fileInputListener();
+    this.chooseFileEvent();
+    this.spreadsheetUploadEvent();
   }
 
+  chooseFileEvent() {
+    this.fileUploadButton.addEventListener('click', () => {
+      this.fileInput.click();
+    })
+  }
 
   spreadsheetUploadEvent() {
     this.spreadsheetUploadBtn.addEventListener('click', async () => {
@@ -49,12 +59,16 @@ export class SpreadsheetUpload {
         );
 
         if (res.data.error) {
+          document.title = "Error: " + this.pageTitle;
           this.errorText.forEach((i) => (i.innerText = res.data.error.text));
           this.scrollToTop();
           this.errorBlock.forEach((i) => (i.classList.remove('hidden')));
         } else {
+          document.title = this.pageTitle;
           this.handleLoadingIndicator();
           this.errorBlock.forEach((i) => (i.classList.add('hidden')));
+          // The upload can run very quickly so this timeout just allows a loading 
+          // bar to display for at least one second before revealing the continue button
           setTimeout(() => {
             this.spreadsheetUploadBtn.classList.add('hidden');
             this.continueBtn.classList.remove('hidden');
@@ -77,10 +91,15 @@ export class SpreadsheetUpload {
     })
 
     this.fileInput.addEventListener('input', () => {
+      this.readonlyFileInput.value = this.fileInput.value;
+      const displayText = this.fileInput.value.replace("C:\\fakepath\\", "");
+      this.readonlyFileInput.value = displayText
+
       if (this.spreadsheetUploadBtn.disabled) {
         this.spreadsheetUploadBtn.disabled = false;
         this.spreadsheetUploadBtn.classList.remove('govuk-button--disabled');
         this.spreadsheetUploadBtn.removeAttribute('aria-disabled');
+        this.spreadsheetUploadBtn.focus();
       }
 
       if (this.continueBtn.classList.contains('hidden')) {
@@ -110,7 +129,7 @@ export class SpreadsheetUpload {
       if (progress === 100) {
         this.uploadProgressText.innerText = `File uploaded`;
         this.uploadProgress.classList.remove('file-upload-progress--visible');
-        this.fileInput.labels[0].innerText = 'File uploaded'
+        this.fileInputLabel.innerText = 'File uploaded'
         this.fileInputWrapper.classList.remove('hidden');
         clearInterval(uploadStatus);
       }

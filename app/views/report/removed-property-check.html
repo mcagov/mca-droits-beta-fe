@@ -3,7 +3,8 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block pageTitle %}
-  Wreck material removed
+  {{ errorPrefix(errorSummary) }}
+  Have you removed the wreck material from the location found? - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 

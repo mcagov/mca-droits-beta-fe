@@ -4,7 +4,8 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% block pageTitle %}
-  Salvage
+  {{ errorPrefix(errorSummary) }}
+  Do you wish to claim a salvage award? - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 {% block beforeContent %}

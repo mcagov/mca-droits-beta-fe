@@ -301,27 +301,52 @@ Report Details - {{ serviceName }} – GOV.UK
 {% endset -%}
 
 {% set reportOutcome %}
+<ul class="report-overview__outcome-item-list">
   {% for item in reportData.crf99_MCAWreckMaterial_WreckReport_crf99_ %}
-  <div class="govuk-summary-list__row">
-    <h2 class="govuk-heading-m">Wreck item</h2>
-    <p>{{ item.crf99_quantity }} x {{item.crf99_description }}</p>
-    <h2 class="govuk-heading-m">Outcome for this item<h2>
-    {% if item.selectedOutcome %}
-      <h3 class="govuk-heading-s">{{ item.selectedOutcome }}</h3>
-    {% endif %}
-    {% if item.crf99_outcomeremarks %}
-      <p>{{ item.crf99_outcomeremarks }}</p>
-    {% endif %}
-      <h2 class="govuk-heading-m">What happens next?</h2>
-      <p>The Receiver of Wreck’s responsibility for this item is now discharged and our investigation is now officially closed.<p>
-    {% if item.selectedOutcome === "You have been awarded this item in lieu of a salvage award" %}
-      <p>Please look after this piece of Britain’s maritime heritage.</p>
-      <p>Although on this occasion you have been awarded this item in lieu of a salvage award, please note that you are still required to report all future recoveries from this (or any other) wreck.</p>
-    {% else %}
-      <p>Please note that you are still required to report all future recoveries from this (or any other) wreck.</p>
-    {% endif %}
-  </div>
+  <li class="report-overview__outcome-item">
+    <div class="govuk-summary-list__row report-overview__outcome-content">
+      <h2 class="govuk-heading-m">Wreck item</h2>
+      <p>{{ item.crf99_quantity }} x {{item.crf99_description }}</p>
+      <h2 class="govuk-heading-m">Outcome for this item<h2>
+      {% if item.selectedOutcome %}
+        <h3 class="govuk-heading-s">{{ item.selectedOutcome }}</h3>
+      {% endif %}
+      {% if item.crf99_outcomeremarks %}
+        <p>{{ item.crf99_outcomeremarks }}</p>
+      {% endif %}
+        <h2 class="govuk-heading-m">What happens next?</h2>
+        <p>The Receiver of Wreck’s responsibility for this item is now discharged and our investigation is now officially closed.<p>
+      {% if item.selectedOutcome === "You have been awarded this item in lieu of a salvage award" %}
+        <p>Please look after this piece of Britain’s maritime heritage.</p>
+        <p>Although on this occasion you have been awarded this item in lieu of a salvage award, please note that you are still required to report all future recoveries from this (or any other) wreck.</p>
+      {% else %}
+        <p>Please note that you are still required to report all future recoveries from this (or any other) wreck.</p>
+      {% endif %}
+    </div>
+  </li>
+  <li class="report-overview__outcome-item">
+    <div class="govuk-summary-list__row report-overview__outcome-content">
+      <h2 class="govuk-heading-m">Wreck item</h2>
+      <p>{{ item.crf99_quantity }} x {{item.crf99_description }}</p>
+      <h2 class="govuk-heading-m">Outcome for this item<h2>
+      {% if item.selectedOutcome %}
+        <h3 class="govuk-heading-s">{{ item.selectedOutcome }}</h3>
+      {% endif %}
+      {% if item.crf99_outcomeremarks %}
+        <p>{{ item.crf99_outcomeremarks }}</p>
+      {% endif %}
+        <h2 class="govuk-heading-m">What happens next?</h2>
+        <p>The Receiver of Wreck’s responsibility for this item is now discharged and our investigation is now officially closed.<p>
+      {% if item.selectedOutcome === "You have been awarded this item in lieu of a salvage award" %}
+        <p>Please look after this piece of Britain’s maritime heritage.</p>
+        <p>Although on this occasion you have been awarded this item in lieu of a salvage award, please note that you are still required to report all future recoveries from this (or any other) wreck.</p>
+      {% else %}
+        <p>Please note that you are still required to report all future recoveries from this (or any other) wreck.</p>
+      {% endif %}
+    </div>
+  </li>
   {% endfor %}
+</ul>
 {% endset -%}
 
 

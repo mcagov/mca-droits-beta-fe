@@ -11,6 +11,7 @@ export class ImageUpload {
     this.el = el;
     this.id;
     this.image;
+    this.pageTitle = document.title;
     this.containerInitial = $1('.photo-upload__container--initial', this.el);
     this.containerUploaded = $1('.photo-upload__container--uploaded', this.el);
     this.uploadButton = $1('.photo-upload__button', this.el);
@@ -66,6 +67,7 @@ export class ImageUpload {
         );
 
         if (res.data.error) {
+          document.title = "Error: " + this.pageTitle;
           this.errorText.forEach((i) => (i.innerText = res.data.error.text));
           this.scrollToTop();
           this.errorBlock.forEach((i) => {
@@ -73,12 +75,15 @@ export class ImageUpload {
             i.classList.remove('hidden');
           });
         } else {
+          document.title = this.pageTitle;
           this.errorBlock.forEach((i) => {
             i.classList.add('hidden');
             i.classList.remove('block');
           });
           this.imageSelected(`/uploads/${res.data.uploadedFilename}`, res.data.originalFilename);
           this.image = res.data.uploadedFilename;
+          this.continueButton.disabled = false;
+          this.continueButton.focus();
         }
       } catch (reqError) {
         console.error(reqError);
@@ -105,6 +110,7 @@ export class ImageUpload {
           this.photoUpload.value = '';
           this.continueButton.classList.add('govuk-button--disabled');
           this.continueButton.disabled = true;
+          this.photoUpload.focus();
         }
       } catch (err) {
         console.error(err);

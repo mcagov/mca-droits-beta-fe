@@ -52,6 +52,18 @@ export default function (app) {
           console.error(err);
         }
 
+        // Check if values exist in session
+        let textLocation = sd['location']['text-location'].length ? sd['location']['text-location'] : '';
+        let locationDescription = sd['location']['location-description'].length ? sd['location']['location-description'] : '';
+        let formattedTextLocation;
+        // If user has chosen to provide the location in text form rather than coordinates, 
+        // format the text so it can be concatenated with any (optional) additional details/description text
+        if (textLocation.length) {
+          formattedTextLocation = textLocation.endsWith(".") ? textLocation : textLocation + ".";
+        }
+        let concatenatedText = formattedTextLocation + " " + locationDescription;
+        const locationDetails = formattedTextLocation.length ? concatenatedText : locationDescription;
+
         // Data obj to send to db
         const data = {
           reference,
@@ -60,7 +72,7 @@ export default function (app) {
           latitude: sd['location']['location-standard']['latitude'],
           longitude: sd['location']['location-standard']['longitude'],
           'location-radius': sd['location']['location-standard']['radius'],
-          'location-description': sd['location']['location-description'],
+          'location-description': locationDetails,
           'vessel-name': sd['vessel-information']['vessel-name'],
           'vessel-construction-year':
             sd['vessel-information']['vessel-construction-year'],

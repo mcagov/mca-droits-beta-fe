@@ -75,35 +75,34 @@
             {% for id, item in data[propertyName] %}
               <tr class="govuk-table__row report-responsive-table__row">
                 <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--text-left report-responsive-table__cell--no-border">
-                  <p><strong class="govuk-!-font-weight-bold">Information</strong></p>
-                  <p class="govuk-body report-responsive-table__cell--text-left"><strong class="govuk-!-font-weight-bold">Description:</strong> {{ item.description }}</p>
-                  <input type=hidden name=property[{{ id }}][description] value="{{ item.description }}">
-
-                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Quantity:</strong> {{ item.quantity }}</p>
-                  <input type=hidden name=property[{{ id }}][quantity] value="{{ item.quantity }}">
-
-                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Value:</strong>
-                  {%if item.value === "" %}
-                    Unknown
-                  {% else %}
-                   £{{ item.value }}
-                  {% endif %}
-                  </p>
-                  <input type=hidden name=property[{{ id }}][value] value="{{ item.value }}">
-
-                  <p class="govuk-body"><strong class="govuk-!-font-weight-bold">Address:</strong>
-                    {{ addressObject(item['address-details']) }}
-                  </p>
-
-                  <input type=hidden name=property[{{ id }}][address-details] value="custom">
-                  <input type=hidden name=property[{{ id }}][address-details][address-line-1] value={{ item['address-details']['address-line-1'] }}>
-                  <input type=hidden name=property[{{ id }}][address-details][address-line-2] value={{ item['address-details']['address-line-2'] }}>
-                  <input type=hidden name=property{{ id }}][address-details][address-town] value={{ item['address-details']['address-town'] }}>
-                  <input type=hidden name=property{{ id }}][address-details][address-county] value={{ item['address-details']['address-county'] }}>
-                  <input type=hidden name=property[{{ id }}][address-details][address-postcode] value={{ item['address-details']['address-postcode'] }}>
+                  <p><strong class="govuk-!-font-weight-bold report-responsive-table__mobile-heading">Information</strong></p>
+                  <dl class="govuk-!-margin-bottom-0">
+                    <div class="govuk-summary-list__row border-none">
+                      <dt class="govuk-summary-list__key govuk-!-padding-bottom-0 govuk-!-padding-top-0 border-none">Description:</dt>
+                      <dd class="govuk-summary-list__value govuk-!-padding-bottom-0 govuk-!-padding-top-0 border-none">{{ item.description }}</dd>
+                    </div>
+                    <div class="govuk-summary-list__row border-none">
+                      <dt class="govuk-summary-list__key govuk-!-padding-bottom-0 border-none">Quantity:</dt>
+                      <dd class="govuk-summary-list__value govuk-!-padding-bottom-0 border-none">{{ item.quantity }}</dd>
+                    </div>
+                    <div class="govuk-summary-list__row border-none">
+                      <dt class="govuk-summary-list__key govuk-!-padding-bottom-0 border-none">Value:</dt>
+                      <dd class="govuk-summary-list__value govuk-!-padding-bottom-0 border-none">
+                        {%if item.value === "" %}
+                          Unknown
+                        {% else %}
+                          £{{ item.value }}
+                        {% endif %}
+                      </dd>
+                    </div>
+                    <div class="govuk-summary-list__row border-none">
+                      <dt class="govuk-summary-list__key govuk-!-padding-bottom-0 border-none">Address:</dt>
+                      <dd class="govuk-summary-list__value govuk-!-padding-bottom-0 border-none">{{ addressObject(item['address-details']) }}</dd>
+                    </div>
+                  </dl>
                 </td>
                 <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--text-left">
-                  <p><strong class="govuk-!-font-weight-bold">Image</strong></p>
+                  <p><strong class="govuk-!-font-weight-bold report-responsive-table__mobile-heading">Image</strong></p>
                   <div id="photo-upload-container-{{id}}" class="{{containerInitialClasses}}">
                     <div class="upload-progress">
                       <div class="upload-progress__bar"><span></span></div>

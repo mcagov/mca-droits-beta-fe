@@ -89,7 +89,7 @@
               id: "property-image",
               name: "property-image",
               label: {
-                text: "Upload your file"
+                text: "Choose your file"
               },
               hint: {
                   text: "Accepted file types: jpg, jpeg, png.<br/>Maximum file size: 5MB"
@@ -97,7 +97,7 @@
               classes: "photo-upload__upload"
             }) }}
           </div>
-          <a href="#" class="photo-upload__button govuk-button" data-module="govuk-button" data-id={{ propertyID }}>Upload file</a>
+          <a href="#" role="button" aria-label="Click to upload your chosen file" class="photo-upload__button govuk-button" data-module="govuk-button" data-id={{ propertyID }}>Upload file</a>
         </div>
 
         <div class="{{containerUploadedClass}}">
@@ -114,7 +114,7 @@
             <img class="photo-upload__result govuk-!-margin-bottom-6" src="{{ imagePath }}" width="300px" />
           </div>
           
-          <a href="#" class="photo-upload__button-change govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button" data-id={{ propertyID }}>Upload a different image</a>
+          <a href="#" role="button" aria-label="Click to choose a different image" class="photo-upload__button-change govuk-button govuk-button--secondary govuk-button--secondary-dark" data-module="govuk-button" data-id={{ propertyID }}>Upload a different image</a>
         </div>
 
         {{ govukButton({

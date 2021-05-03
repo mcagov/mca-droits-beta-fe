@@ -126,7 +126,7 @@
               {% else %}
                 <td class="govuk-table__cell report-responsive-table__cell">
                   <span>Image:</span>
-                  <img src="{{imagePath}}" width="100" loading="lazy"/>
+                  <img src="{{imagePath}}" width="100" loading="lazy" alt="uploaded image {{ property['originalFilename'] }}" />
                 </td>
               {% endif %}
               {% if property['storage-address'] == "personal" %}

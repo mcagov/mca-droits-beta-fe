@@ -83,7 +83,6 @@ export class ImageUpload {
           this.imageSelected(`/uploads/${res.data.uploadedFilename}`, res.data.originalFilename);
           this.image = res.data.uploadedFilename;
           this.continueButton.disabled = false;
-          this.continueButton.focus();
         }
       } catch (reqError) {
         console.error(reqError);

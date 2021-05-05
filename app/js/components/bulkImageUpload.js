@@ -106,6 +106,7 @@ export class BulkUpload {
               this.errorSummaryBlock.classList.remove('hidden');
 
               this.bulkImageUploadButton.disabled = true;
+              this.bulkImageUploadButton.setAttribute('aria-disabled', true);
               this.scrollToTop();
               this.handleErrorReplacement(currentInput, currentUploadBtn);
 
@@ -233,6 +234,7 @@ export class BulkUpload {
       this.addButton.classList.remove('hidden');
       this.addButton.classList.remove('govuk-button--disabled');
       this.addButton.disabled = false;
+      this.bulkImageUploadButton.setAttribute('aria-disabled', false);
     }
   }
 
@@ -247,7 +249,7 @@ export class BulkUpload {
     input.addEventListener('input', () => {
       uploadBtn.disabled = false;
       uploadBtn.classList.remove('govuk-button--disabled');
-      uploadBtn.removeAttribute('aria-disabled');
+      uploadBtn.setAttribute('aria-disabled', 'false');
     })
   }
 
@@ -275,6 +277,7 @@ export class BulkUpload {
             this.chosenFiles--;
             this.addButton.classList.add('govuk-button--disabled');
             this.addButton.disabled = true;
+            this.addButton.setAttribute('aria-disabled', 'true')
           }
         } catch (err) {
           console.error(err);

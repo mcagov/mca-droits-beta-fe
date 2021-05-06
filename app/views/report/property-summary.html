@@ -33,13 +33,12 @@
       {% set actionsHtml %}
         <ul class="govuk-summary-list__actions-list">
           <li class="govuk-summary-list__actions-list-item">
-            <a class="govuk-link" href="/report/property-single">
+            <a class="govuk-link" href="/report/property-form/{{ id }}">
               <span aria-hidden="true">Change</span>
-              <span class="govuk-visually-hidden">Change details for item described as {{ property["description"] }}</span>
-            </a>
+              <span class="govuk-visually-hidden">Change details for item described as {{ property["description"] }}</span></a>
           </li>
           <li class="govuk-summary-list__actions-list-item">
-            <a class="govuk-link" href="#">
+            <a class="govuk-link" href="/report/property-delete/{{ id }}">
               <span aria-hidden="true">Remove</span>
               <span class="govuk-visually-hidden">Remove item described as {{ property["description"] }}</span>
             </a>
@@ -126,7 +125,7 @@
               {% else %}
                 <td class="govuk-table__cell report-responsive-table__cell">
                   <span>Image:</span>
-                  <img src="{{imagePath}}" width="100" loading="lazy"/>
+                  <img src="{{imagePath}}" width="100" loading="lazy" alt="uploaded image {{ property['originalFilename'] }}" />
                 </td>
               {% endif %}
               {% if property['storage-address'] == "personal" %}
@@ -144,14 +143,7 @@
                 </td>
               {% endif %}
               <td class="govuk-table__cell report-responsive-table__cell" data-label="Actions">
-                <ul class="govuk-summary-list__actions-list">
-                  <li class="govuk-summary-list__actions-list-item">
-                    <a class="govuk-link" href="/report/property-form/{{ id }}">Change<span class="govuk-visually-hidden"> item</span></a>
-                  </li>
-                  <li class="govuk-summary-list__actions-list-item">
-                    <a class="govuk-link" href="/report/property-delete/{{ id }}">Remove<span class="govuk-visually-hidden"> item</span></a>
-                  </li>
-                </ul>
+                {{ actionsHtml }}
               </td>
             </tr>
           {% endfor %}

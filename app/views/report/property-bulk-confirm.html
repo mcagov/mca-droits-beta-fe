@@ -123,6 +123,9 @@
                         hint: {
                             text: "Accepted file types: jpg, jpeg, png.<br/>Maximum file size: 5MB"
                         },
+                        attributes: {
+                          "accept" : ".jpg, .jpeg, .png"
+                        },
                         classes: "photo-upload__upload"
                       }) }}
                     </div>
@@ -147,6 +150,17 @@
           <input type="hidden" name="property-added-flash" value=true>
 
           {{ govukButton({
+            text: "Upload images",
+            disabled: true,
+            classes: 'govuk-button',
+            type: 'button',
+            attributes: {
+              'data-module': 'govuk-button',
+              'data-js': 'bulk-image-upload'
+            }
+          }) }}
+
+          {{ govukButton({
             text: "Add items to report",
             disabled: continueButtonDisabled,
             classes: 'govuk-button--continue hidden',
@@ -156,16 +170,6 @@
           }) }}
 
         </form>
-
-        {{ govukButton({
-          text: "Upload images",
-          disabled: true,
-          classes: 'govuk-button',
-          attributes: {
-            'data-module': 'govuk-button',
-            'data-js': 'bulk-image-upload'
-          }
-        }) }}
       </div>
     </div>
   </div>

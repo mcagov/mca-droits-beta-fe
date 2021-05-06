@@ -39,7 +39,13 @@
         {% endif %}
         {% if errors["location-longitude-decimal"] %}
           {% set locationLongitudeDecimalClass = locationLongitudeDecimalClass + " govuk-input--error" %}
-        {% endif %}     
+        {% endif %}    
+
+        {% if errors["map-radius-input"] %}
+          {% set mapErrorDisplayClasses = "govuk-error-message block" %}
+        {% else %}
+          {% set mapErrorDisplayClasses = "govuk-error-message hidden" %}
+        {% endif %} 
         
         {# Coordinates (Decimal degrees) #}
         {% set decimalInput %}
@@ -470,8 +476,9 @@
         {% endset -%}
 
         {% set mapInput %}         
-          <div class="govuk-!-margin-bottom-5" data-js="editable-map">
-            <span class="govuk-error-message">
+          <div class="govuk-!-margin-bottom-5" data-js="editable-map" role="group" aria-label="Map to draw the area of the find. This is a mouse dependent
+feature.">
+            <span class="{{mapErrorDisplayClasses}}">
               <span class="govuk-visually-hidden">Error:</span> {{ errors["location-map-input"].text }}
             </span>
             <div id="location-map-input" class="row-prototype-map-select govuk-!-margin-bottom-1"></div>
@@ -638,7 +645,7 @@
                 text: "Draw the area of the find on a map."
               },
               attributes: {
-              "aria-label": "Draw the area of the find on a map. This is a mouse dependent feature."
+              "aria-label": "Draw on a map"
               },
 
                 checked: setCheckedMap

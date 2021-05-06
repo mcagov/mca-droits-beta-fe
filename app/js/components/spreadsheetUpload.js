@@ -99,7 +99,7 @@ export class SpreadsheetUpload {
         this.spreadsheetUploadBtn.disabled = false;
         this.spreadsheetUploadBtn.classList.remove('govuk-button--disabled');
         this.spreadsheetUploadBtn.removeAttribute('aria-disabled');
-        this.spreadsheetUploadBtn.focus();
+        this.fileUploadBtn.focus();
       }
 
       if (this.continueBtn.classList.contains('hidden')) {

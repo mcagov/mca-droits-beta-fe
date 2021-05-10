@@ -301,31 +301,24 @@ Report Details - {{ serviceName }} – GOV.UK
 {% endset -%}
 
 {% set reportOutcome %}
-<ul class="report-overview__outcome-item-list">
-  {% for item in reportData.crf99_MCAWreckMaterial_WreckReport_crf99_ %}
-  <li class="report-overview__outcome-item">
-    <div class="govuk-summary-list__row report-overview__outcome-content">
-      <h2 class="govuk-heading-m">Wreck item</h2>
-      <p>{{ item.crf99_quantity }} x {{item.crf99_description }}</p>
-      <h2 class="govuk-heading-m">Outcome for this item<h2>
-      {% if item.selectedOutcome %}
-        <h3 class="govuk-heading-s">{{ item.selectedOutcome }}</h3>
-      {% endif %}
-      {% if item.crf99_outcomeremarks %}
-        <p>{{ item.crf99_outcomeremarks }}</p>
-      {% endif %}
-        <h2 class="govuk-heading-m">What happens next?</h2>
-        <p>The Receiver of Wreck’s responsibility for this item is now discharged and our investigation is now officially closed.<p>
-      {% if item.selectedOutcome === "You have been awarded this item in lieu of a salvage award" %}
-        <p>Please look after this piece of Britain’s maritime heritage.</p>
-        <p>Although on this occasion you have been awarded this item in lieu of a salvage award, please note that you are still required to report all future recoveries from this (or any other) wreck.</p>
-      {% else %}
-        <p>Please note that you are still required to report all future recoveries from this (or any other) wreck.</p>
-      {% endif %}
-    </div>
-  </li>
-  {% endfor %}
-</ul>
+  <h2 class="govuk-heading-m">Items as listed and described by you:</h2>
+  <ul class="govuk-list govuk-list--bullet">
+    {% for item in reportData.crf99_MCAWreckMaterial_WreckReport_crf99_ %}
+    <li class="report-overview__outcome-item">
+        {{ item.crf99_quantity }} x {{item.crf99_description }}
+    </li>
+    {% endfor %}
+  </ul>
+  <h2 class="govuk-heading-m">What happens next?</h2>
+  <p class="govuk-body">You will have received a closure email or letter confirming that the case is closed and notifying you of the outcome, please retain this communication as it is your proof that you have correctly fulfilled your duties as a finder of wreck under section 236 of the Merchant Shipping Act 1995.</p>
+  <p class="govuk-body">The Receiver of Wreck’s responsibility for this item is now discharged and our investigation into ownership of the item is now officially closed. If you have been holding the item on indemnity to the Receiver of Wreck you are no longer required to do so.</p>
+  <p class="govuk-body">Please note that you are still required to report all future recoveries from this (or any other) wreck within 28 days of finding wreck material.</p>
+  <p>
+    {{ govukButton({
+      text: "Print a copy of this outcome notice",
+      classes: "govuk-button--secondary hide-on-print print-page"
+    }) }}
+  </p>
 {% endset -%}
 
 

@@ -53,7 +53,7 @@ export default function (app) {
         }
 
         // Check if values exist in session
-        let textLocation = sd['location']['text-location'];
+        let textLocation = sd['location']['text-location'].trimEnd();
         let locationDescription = sd['location']['location-description'];
         let formattedTextLocation;
         // If user has chosen to provide the location in text form rather than coordinates, 

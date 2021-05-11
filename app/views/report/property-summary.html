@@ -29,23 +29,7 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-
-      {% set actionsHtml %}
-        <ul class="govuk-summary-list__actions-list">
-          <li class="govuk-summary-list__actions-list-item">
-            <a class="govuk-link" href="/report/property-form/{{ id }}">
-              <span aria-hidden="true">Change</span>
-              <span class="govuk-visually-hidden">Change details for item described as {{ property["description"] }}</span></a>
-          </li>
-          <li class="govuk-summary-list__actions-list-item">
-            <a class="govuk-link" href="/report/property-delete/{{ id }}">
-              <span aria-hidden="true">Remove</span>
-              <span class="govuk-visually-hidden">Remove item described as {{ property["description"] }}</span>
-            </a>
-          </li>
-        </ul>
-      {% endset -%}
-
+    
       {% if errorSummary.length > 0 %}
         {{ govukErrorSummary({
             titleText: "There is a problem",
@@ -99,43 +83,43 @@
           {% endif %}
             <tr class="govuk-table__row report-responsive-table__row">
               <td class="govuk-table__cell report-responsive-table__cell">
-                <span>Description:</span>
+                <span class="report-responsive-table__mobile-label">Description:</span>
                 {{ property["description"] }}
               </td>
               <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
-                <span>Quantity:</span>
+                <span class="report-responsive-table__mobile-label">Quantity:</span>
                 {{ property["quantity"] }}
               </td>
               {% if property['value'] === "" %}
                 <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
-                  <span>Value:</span>
+                  <span class="report-responsive-table__mobile-label">Value:</span>
                   Unknown
                 </td>
               {% else %}
                 <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
-                  <span>Value:</span>
+                  <span class="report-responsive-table__mobile-label">Value:</span>
                   £{{ property["value"] }}
                 </td>
               {% endif %}
               {% if not property['image'] %}
                 <td class="govuk-table__cell report-responsive-table__cell">
-                  <span>Image:</span>
+                  <span class="report-responsive-table__mobile-label">Image:</span>
                   <strong class="govuk-tag govuk-tag--blue">Not provided</strong>
                 </td>
               {% else %}
                 <td class="govuk-table__cell report-responsive-table__cell">
-                  <span>Image:</span>
+                  <span class="report-responsive-table__mobile-label">Image:</span>
                   <img src="{{imagePath}}" width="100" loading="lazy" alt="uploaded image {{ property['originalFilename'] }}" />
                 </td>
               {% endif %}
               {% if property['storage-address'] == "personal" %}
                 <td class="govuk-table__cell report-responsive-table__cell">
-                  <span>Storage Postcode:</span>
+                  <span class="report-responsive-table__mobile-label">Storage Postcode:</span>
                   {{ data["personal"]["address-postcode"] }}
                 </td>
               {% elseif property['storage-address'] == "custom" %}
                 <td class="govuk-table__cell report-responsive-table__cell">
-                  <span>Storage Postcode:</span>
+                  <span class="report-responsive-table__mobile-label">Storage Postcode:</span>
                   {{ data["property"][id]["address-details"]["address-postcode"] }}
                 </td>
               {% else %}
@@ -143,7 +127,19 @@
                 </td>
               {% endif %}
               <td class="govuk-table__cell report-responsive-table__cell" data-label="Actions">
-                {{ actionsHtml }}
+                <ul class="govuk-summary-list__actions-list report-responsive-table__actions-list">
+                  <li class="govuk-summary-list__actions-list-item">
+                    <a class="govuk-link" href="/report/property-form/{{ id }}">
+                      <span aria-hidden="true">Change</span>
+                      <span class="govuk-visually-hidden">Change details for item described as {{ property["description"] }}</span></a>
+                  </li>
+                  <li class="govuk-summary-list__actions-list-item">
+                    <a class="govuk-link" href="/report/property-delete/{{ id }}">
+                      <span aria-hidden="true">Remove</span>
+                      <span class="govuk-visually-hidden">Remove item described as {{ property["description"] }}</span>
+                    </a>
+                  </li>
+                </ul>
               </td>
             </tr>
           {% endfor %}

@@ -34,7 +34,12 @@ export default {
     'address-county': '',
     'address-postcode': ''
   },
-  location: { 'location-standard': {}, 'location-given': {} },
+  location: {
+    'location-standard': {},
+    'location-given': {},
+    'text-location': '',
+    'location-description': ''
+  },
   property: {},
   'vessel-information': {
     'vessel-name': '',

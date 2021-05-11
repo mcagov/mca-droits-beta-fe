@@ -49,12 +49,6 @@
         border-bottom: none;
       }
 
-      span {
-        display: block;
-        float: left;
-        font-weight: bold;
-      }
-
       img {
         max-width: 100%;
       }
@@ -80,6 +74,16 @@
       }
     }
 
+    &__mobile-label {
+      display: block;
+      float: left;
+      font-weight: bold;
+    }
+
+    &__actions-list {
+      text-align: left;
+    }
+
     // Added for GovUK component to ensure 'govuk-details' list
     // text remains left aligned within a mobile table layout
     .govuk-details__text {
@@ -89,7 +93,7 @@
 }
 @media screen and (min-width: 601px) {
   .report-responsive-table {
-    &__cell span:not(.govuk-details__summary-text) {
+    &__mobile-label {
       display: none;
     }
     &__change-link {

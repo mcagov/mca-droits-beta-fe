@@ -38,7 +38,12 @@ export default function (app) {
               const reportStatus = assignReportStatus(reportData.crf99_reportstatus);
               const recoveredFromLocation = assignSalvageLocation(reportData.crf99_recoveredfrom);
 
-              reportData.coordinates = `${reportData.crf99_latitude}° ${reportData.crf99_longitude}°`;
+              if (reportData.crf99_latitude && reportData.crf99_longitude) {
+                reportData.coordinates = `${reportData.crf99_latitude}° ${reportData.crf99_longitude}°`;
+              } else {
+                reportData.coordinates = null;
+              }
+
               reportData.dateReported = dayjs(
                 reportData.crf99_datereported
               ).format('DD MM YYYY');

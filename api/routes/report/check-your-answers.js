@@ -53,8 +53,8 @@ export default function (app) {
         }
 
         // Check if values exist in session
-        let textLocation = sd['location']['text-location'].length ? sd['location']['text-location'] : '';
-        let locationDescription = sd['location']['location-description'].length ? sd['location']['location-description'] : '';
+        let textLocation = sd['location']['text-location'].trimEnd();
+        let locationDescription = sd['location']['location-description'];
         let formattedTextLocation;
         // If user has chosen to provide the location in text form rather than coordinates, 
         // format the text so it can be concatenated with any (optional) additional details/description text
@@ -62,7 +62,7 @@ export default function (app) {
           formattedTextLocation = textLocation.endsWith(".") ? textLocation : textLocation + ".";
         }
         let concatenatedText = formattedTextLocation + " " + locationDescription;
-        const locationDetails = formattedTextLocation.length ? concatenatedText : locationDescription;
+        const locationDetails = formattedTextLocation !== undefined ? concatenatedText : locationDescription;
 
         // Data obj to send to db
         const data = {

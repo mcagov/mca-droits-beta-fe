@@ -350,40 +350,40 @@ centre located at latitude '{{ data['location']['location-given']['latitude'] }}
         {% for id, property in data["property"] %}
           <tr class="govuk-table__row report-responsive-table__row">
             <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--description">
-              <span>Description:</span>
+              <span class="report-responsive-table__mobile-label">Description:</span>
               {{ property["description"] }}
             </td>
             <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
-              <span>Quantity:</span>
+              <span class="report-responsive-table__mobile-label">Quantity:</span>
               {{ property["quantity"] }}
             </td>
             
             {% if property['value'] == "" %}
               <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
-                <span>Value:</span>
+                <span class="report-responsive-table__mobile-label">Value:</span>
                 Unknown
               </td>
             {% else %}
               <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
-                <span>Value:</span>
+                <span class="report-responsive-table__mobile-label">Value:</span>
                 £{{ property["value"] }}
               </td>
             {% endif %}
 
             {% if property['image'] %}
               <td class="govuk-table__cell report-responsive-table__cell">
-                <span>Image:</span>
+                <span class="report-responsive-table__mobile-label">Image:</span>
                 <img src="/uploads/{{ property['image'] }}" width="100"/>
               </td>
             {% else %}
               <td class="govuk-table__cell report-responsive-table__cell">
-                <span>Image:</span>
+                <span class="report-responsive-table__mobile-label">Image:</span>
                 <strong class="govuk-tag govuk-tag--blue">Not provided</strong>
               </td>
             {% endif %}
             {% if property['storage-address'] == "personal" %}
               <td class="govuk-table__cell report-responsive-table__cell">
-                <span>Storage Address:</span>
+                <span class="report-responsive-table__mobile-label">Storage Address:</span>
                 <div class="hide-on-print">
                   {{ data["personal"]["address-postcode"] }}
                 </div>
@@ -400,7 +400,7 @@ centre located at latitude '{{ data['location']['location-given']['latitude'] }}
               </td>
             {% elseif property['storage-address'] == "custom" %}
               <td class="govuk-table__cell report-responsive-table__cell">
-                <span>Storage Address:</span>
+                <span class="report-responsive-table__mobile-label">Storage Address:</span>
                 <div class="hide-on-print">
                   {{ data["property"][id]["address-details"]["address-postcode"] }}
                 </div>
@@ -410,7 +410,7 @@ centre located at latitude '{{ data['location']['location-given']['latitude'] }}
               </td>
             {% else %}
               <td class="govuk-table__cell report-responsive-table__cell">
-                <span>Storage Address:</span>
+                <span class="report-responsive-table__mobile-label">Storage Address:</span>
               </td>
             {% endif %}
           </tr>

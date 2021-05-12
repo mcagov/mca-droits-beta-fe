@@ -170,7 +170,11 @@ Report Details - {{ serviceName }} – GOV.UK
                     Coordinates
                 </dt>
                 <dd class="govuk-summary-list__value">
+                {% if reportData.coordinates %}
                     {{ reportData.coordinates }}
+                {% else %}
+                    Unknown
+                {% endif %}
                 </dd>
             </div>
             {% if reportData.crf99_locationdescription %}
@@ -214,11 +218,12 @@ Report Details - {{ serviceName }} – GOV.UK
             </div>
             {% endif %}
         </dl>
-
+        {% if reportData.coordinates %}
         <div data-js="static-map">
           <div id="location-map" class="map-display hide-on-print" data-latitude="{{ reportData.crf99_latitude }}" data-longitude="{{ reportData.crf99_longitude }}"
               data-radius="{{ reportData.crf99_locationradius }}"></div>
         </div>
+        {% endif %}
     </div>
 
     <div class="govuk-grid-column-full">
@@ -240,15 +245,15 @@ Report Details - {{ serviceName }} – GOV.UK
               {% for item in reportData.crf99_MCAWreckMaterial_WreckReport_crf99_ %}
               <tr class="govuk-table__row report-responsive-table__row">
                   <td class="govuk-table__cell report-responsive-table__cell">
-                      <span>Description:</span>
+                      <span class="report-responsive-table__mobile-label">Description:</span>
                       {{ item.crf99_description }}
                   </td>
                   <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
-                      <span>Quantity:</span>
+                      <span class="report-responsive-table__mobile-label">Quantity:</span>
                       {{ item.crf99_quantity }}
                   </td>
                   <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
-                      <span>Total value:</span>
+                      <span class="report-responsive-table__mobile-label">Total value:</span>
                       {% if item.crf99_value %}
                         £{{ item.crf99_value }}
                       {% else %}
@@ -256,13 +261,13 @@ Report Details - {{ serviceName }} – GOV.UK
                       {% endif %}
                   </td>
                   <td class="govuk-table__cell report-responsive-table__cell" data-label="Image">
-                      <span>Image:</span>
+                      <span class="report-responsive-table__mobile-label">Image:</span>
                       <a class="glightbox" href="{{ item.crf99_imageurl }}">
-                        <img src="{{ item.crf99_imageurl }}" width="250"/>
+                        <img src="{{ item.crf99_imageurl }}" width="250" alt="Wreck material image described as '{{ item.crf99_description }}'"/>
                       </a>
                   </td>
                   <td class="govuk-table__cell report-responsive-table__cell" data-label="Storage address">
-                      <span>Storage address:</span>
+                      <span class="report-responsive-table__mobile-label">Storage address:</span>
                       {% set addressLines = item.storageAddress %}
                       {{ address(addressLines) }}
                   </td>
@@ -301,31 +306,25 @@ Report Details - {{ serviceName }} – GOV.UK
 {% endset -%}
 
 {% set reportOutcome %}
-<ul class="report-overview__outcome-item-list">
-  {% for item in reportData.crf99_MCAWreckMaterial_WreckReport_crf99_ %}
-  <li class="report-overview__outcome-item">
-    <div class="govuk-summary-list__row report-overview__outcome-content">
-      <h2 class="govuk-heading-m">Wreck item</h2>
-      <p>{{ item.crf99_quantity }} x {{item.crf99_description }}</p>
-      <h2 class="govuk-heading-m">Outcome for this item<h2>
-      {% if item.selectedOutcome %}
-        <h3 class="govuk-heading-s">{{ item.selectedOutcome }}</h3>
-      {% endif %}
-      {% if item.crf99_outcomeremarks %}
-        <p>{{ item.crf99_outcomeremarks }}</p>
-      {% endif %}
-        <h2 class="govuk-heading-m">What happens next?</h2>
-        <p>The Receiver of Wreck’s responsibility for this item is now discharged and our investigation is now officially closed.<p>
-      {% if item.selectedOutcome === "You have been awarded this item in lieu of a salvage award" %}
-        <p>Please look after this piece of Britain’s maritime heritage.</p>
-        <p>Although on this occasion you have been awarded this item in lieu of a salvage award, please note that you are still required to report all future recoveries from this (or any other) wreck.</p>
-      {% else %}
-        <p>Please note that you are still required to report all future recoveries from this (or any other) wreck.</p>
-      {% endif %}
-    </div>
-  </li>
-  {% endfor %}
-</ul>
+  <h2 class="govuk-heading-m">Outcome</h2>
+  <p class="govuk-body">You will have received a closure email or letter confirming that the case is closed and notifying you of the outcome. Please retain this communication as it is your proof that you have correctly fulfilled your duties as a finder of wreck under section 236 of the Merchant Shipping Act 1995.</p>
+  <h2 class="govuk-heading-m">Items as listed and described by you:</h2>
+  <ul class="govuk-list govuk-list--bullet">
+    {% for item in reportData.crf99_MCAWreckMaterial_WreckReport_crf99_ %}
+    <li class="report-overview__outcome-item">
+        {{ item.crf99_quantity }} x {{item.crf99_description }}
+    </li>
+    {% endfor %}
+  </ul>
+  <h2 class="govuk-heading-m">What happens next?</h2>
+  <p class="govuk-body">The Receiver of Wreck’s responsibility for these items is now discharged and our investigation into ownership of the items is now officially closed. If you have been holding these items on indemnity to the Receiver of Wreck you are no longer required to do so.</p>
+  <p class="govuk-body">Please note that you are still required to report all future recoveries from this (or any other) wreck within 28 days of finding wreck material.</p>
+  <p>
+    {{ govukButton({
+      text: "Print a copy of this outcome notice",
+      classes: "govuk-button--secondary hide-on-print print-page"
+    }) }}
+  </p>
 {% endset -%}
 
 

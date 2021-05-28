@@ -1,21 +1,23 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
-name: Build and deploy Node.js app to Azure Web App - mca-d-web-1
+
+name: Build and deploy Node.js app to Azure Web App - mca-production
+
 on:
-  push:
-    branches:
-      - develop
   workflow_dispatch:
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: Dev
+    environment: UAT
     steps:
-    - uses: actions/checkout@master    
+    - uses: actions/checkout@master
+
     - name: Set up Node.js version
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
+
     - name: npm install, build, and test
       run: |
         npm install
@@ -43,7 +45,7 @@ jobs:
       run: |
           touch .env
           echo AZURE_BLOB_IMAGE_URL="$AZURE_BLOB_IMAGE_URL" >> .env
-          echo AZURE_STORAGE_CONNECTION_STRING="$AZURE_STORAGE_CONNECTION_STRING" >> .env        
+          echo AZURE_STORAGE_CONNECTION_STRING="$AZURE_STORAGE_CONNECTION_STRING" >> .env
           echo REFERENCE_GENERATOR_KEY="$REFERENCE_GENERATOR_KEY" >> .env
           echo REFERENCE_GENERATOR_URL="$REFERENCE_GENERATOR_URL" >> .env
           echo DB_POST_URL="$DB_POST_URL" >> .env
@@ -60,12 +62,12 @@ jobs:
           echo B2C_REDIRECT_URL="$B2C_REDIRECT_URL" >> .env
           echo ENV_BASE_URL="$ENV_BASE_URL" >> .env
           cat .env
+          
     - name: 'Deploy to Azure Web App'
+      id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'mca-d-web-1'
+        app-name: 'Report-wreck-material-App-Linux'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_513dee18fa4b4460879379b66b0cacf2 }}
+        publish-profile: ${{ secrets.AZURE_WEB_APP_PUBLISH_PROFILE }}
         package: .
-      env:
-        AZURE_STORAGE_CONNECTION_STRING: ${{secrets.AZURE_STORAGE_CONNECTION_STRING}}

@@ -8,7 +8,7 @@ import {
   addCheckedFunction,
   matchRoutes,
   addNunjucksFilters,
-  forceHttps,
+  forceHttps
 } from './utilities';
 import routes from './api/routes';
 import config from './app/config.js';
@@ -161,7 +161,13 @@ app.use('/report/check-your-answers', function (req, res, next) {
 });
 
 app.get(/^([^.]+)$/, function (req, res, next) {
-  matchRoutes(req, res, next);
+  if (config.SERVICE_UNAVAILABLE === 'true') {
+    console.log('Service Unavailable.');
+    res.status('503');
+    res.render('service-unavailable');
+  } else {
+    matchRoutes(req, res, next);
+  }
 });
 // Redirect all POSTs to GETs
 app.post(/^\/([^.]+)$/, function (req, res) {

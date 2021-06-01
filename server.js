@@ -161,10 +161,10 @@ app.use('/report/check-your-answers', function (req, res, next) {
 });
 
 app.get(/^([^.]+)$/, function (req, res, next) {
-  if (config.SERVICE_UNAVAILABLE === 'true') {
+  if (config.SERVICE_UNAVAILABLE === true) {
     console.log('Service Unavailable.');
     res.status('503');
-    res.render('service-unavailable');
+    res.sendFile(path.join(__dirname, '/app/static/service-unavailable.html'));
   } else {
     matchRoutes(req, res, next);
   }

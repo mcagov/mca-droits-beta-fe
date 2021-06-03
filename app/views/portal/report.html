@@ -311,7 +311,7 @@ Report Details - {{ serviceName }} – GOV.UK
   <h2 class="govuk-heading-m">Items as listed and described by you:</h2>
   <ul class="govuk-list govuk-list--bullet">
     {% for item in reportData.crf99_MCAWreckMaterial_WreckReport_crf99_ %}
-    <li class="report-overview__outcome-item">
+    <li class="report-overview__outcome-item govuk-!-margin-bottom-2">
         {{ item.crf99_quantity }} x {{item.crf99_description }}
     </li>
     {% endfor %}

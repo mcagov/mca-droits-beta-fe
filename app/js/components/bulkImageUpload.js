@@ -179,6 +179,7 @@ export class BulkUpload {
             this.errorText.innerText = res.data.error.text;
             if (this.errorContainer.classList.contains('hidden')) {
               this.errorContainer.classList.remove('hidden');
+              this.errorContainer.focus();
             }
           } else {
             this.successfulUploads++;

@@ -1,0 +1,37 @@
+{% if data['location']['location-type'] === 'coords-osgrid' %}
+  <dt class="govuk-summary-list__key">
+    UK grid reference
+  </dt>
+  <dd class="govuk-summary-list__value">
+    {{ data['location']['location-osgrid-square'] }}&nbsp;&nbsp;{{ data['location']['location-osgrid-easting'] }}&nbsp;&nbsp;{{ data['location']['location-osgrid-northing'] }}
+  </dd>
+  <dd class="govuk-summary-list__actions">
+    <a class="govuk-link" href="/report/location">
+      Change<span class="govuk-visually-hidden">&nbsp;location&nbsp;grid&nbsp;reference</span>
+    </a>
+  </dd>
+{% elif data['location']['location-type'] === 'text-location' %}
+  <dt class="govuk-summary-list__key">
+    Location description
+  </dt>
+  <dd class="govuk-summary-list__value">
+    {{ data['location']['text-location'] }}
+  </dd>
+  <dd class="govuk-summary-list__actions">
+    <a class="govuk-link" href="/report/location">
+      Change<span class="govuk-visually-hidden">&nbsp;location&nbsp;description&nbsp;text</span>
+    </a>
+  </dd>
+{% elif data['location']['location-given']['latitude'] %}
+  <dt class="govuk-summary-list__key">
+    Coordinates
+  </dt>
+  <dd class="govuk-summary-list__value">
+    {{ data['location']['location-given']['latitude'] }}&nbsp;&nbsp;{{ data['location']['location-given']['longitude'] }}
+  </dd>
+  <dd class="govuk-summary-list__actions">
+    <a class="govuk-link" href="/report/location">
+      Change<span class="govuk-visually-hidden">&nbsp;location&nbsp;coordinates</span>
+    </a>
+  </dd>
+{% endif %}

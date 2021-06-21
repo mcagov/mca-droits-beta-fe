@@ -6,6 +6,21 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 
+{% set declarationHtml %}
+  <p class="govuk-!-margin-top-0">I confirm that I hold in my possession the items detailed in this form and under the Merchant Shipping Act 1995 I confirm I agree to:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>Take all reasonable care of the recovered wreck material and understand that the Maritime and Coastguard Agency and the Receiver of Wreck may recover any costs associated with loss or damage of the items whilst in my possession.</li>
+    <li>Allow the Receiver of Wreck, or any other person appointed by the Receiver, access to the wreck material at all reasonable times and will inform the Receiver if the wreck material changes location.</li>
+    <li>Not remove the wreck material from the United Kingdom.</li>
+    <li>Surrender the wreck material to the Receiver of Wreck at any time I am requested to.</li>
+    <li>Not hold the Maritime and Coastguard Agency and the Receiver of Wreck responsible for any costs involved in the storage or care of the recovered wreck material.</li>
+  </ul>
+
+  <p>You may not assume title or ownership of any of the declared wreck material until advised by the Receiver of Wreck.</p>
+
+  <p>This undertaking has no influence on any decision the Receiver of Wreck may take in respect of claims to ownership of the wreck material recovered.</p>
+{% endset %}
+
 {% block pageTitle %}
   {{ errorPrefix(errorSummary) }}
   Details of wreck material recovered - {{ serviceName }} – GOV.UK
@@ -166,31 +181,21 @@
             items: [
               {
                 value: "true",
-                text: "I confirm that I hold in my possession the items detailed in this form and under the Merchant Shipping Act 1995 I confirm I agree to:"
+                id: "propertyDeclaration",
+                html: declarationHtml
               }
             ],
             errorMessage: errors["property-declaration"]
           }) }}
-          <p></p>
-            <ul class="govuk-list govuk-list--bullet">
-              <li>Take all reasonable care of the recovered wreck material and understand that the Maritime and Coastguard Agency and the Receiver of Wreck may recover any costs associated with loss or damage of the items whilst in my possession</li>
-              <li>Allow the Receiver of Wreck, or any other person appointed by the Receiver, access to the wreck material at all reasonable times and will inform the Receiver if the wreck material changes location</li>
-              <li>Not remove the wreck material from the United Kingdom</li>
-              <li>Surrender the wreck material to the Receiver of Wreck at any time I am requested to</li>
-              <li>Not hold the Maritime and Coastguard Agency and the Receiver of Wreck responsible for any costs involved in the storage or care of the recovered wreck material</li>
-            </ul>
 
-            <p>You may not assume title or ownership of any of the declared wreck material until advised by the Receiver of Wreck.</p>
+        </div>
 
-            <p>This undertaking has no influence on any decision the Receiver of Wreck may take in respect of claims to ownership of the wreck material recovered.</p>
-          </div>
+        {{ govukButton({
+          text: "Accept and continue",
+          classes: "govuk-!-margin-right-1"
+        }) }}
 
-          {{ govukButton({
-            text: "Accept and continue",
-            classes: "govuk-!-margin-right-1"
-          }) }}
-
-        </form>
+      </form>
       {% endif %}
 
     </div>

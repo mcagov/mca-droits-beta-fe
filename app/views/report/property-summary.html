@@ -6,7 +6,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 
-{% set declarationHtml %}
+{% set propertyDeclarationHtml %}
   <p class="govuk-!-margin-top-0">I confirm that I hold in my possession the items detailed in this form and under the Merchant Shipping Act 1995 I confirm I agree to:</p>
   <ul class="govuk-list govuk-list--bullet">
     <li>Take all reasonable care of the recovered wreck material and understand that the Maritime and Coastguard Agency and the Receiver of Wreck may recover any costs associated with loss or damage of the items whilst in my possession.</li>
@@ -173,6 +173,7 @@
 
 
       {% if itemsAdded > 0 %}
+      <h3 class="govuk-heading-m" id="declarationHeading">Declaration</h3>
       <form class="form" action="/report/property-summary-confirmation" method="post" novalidate>
         <div class="declaration-wrapper govuk-!-padding-5 govuk-!-margin-bottom-6">
           {{ govukCheckboxes({
@@ -182,7 +183,7 @@
               {
                 value: "true",
                 id: "propertyDeclaration",
-                html: declarationHtml
+                html: propertyDeclarationHtml
               }
             ],
             errorMessage: errors["property-declaration"]

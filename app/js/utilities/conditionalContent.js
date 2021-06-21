@@ -17,20 +17,15 @@ export class ConditionalContent {
   }
 
   init() {
-    console.log(this.items);
     this.items.forEach((item) => {
       item.addEventListener('click', (e) => {
-        console.log(e.currentTarget.dataset);
         const target = e.currentTarget;
         if (target.dataset.js.includes('toggler')) {
-          console.log('toggler');
-          if (!this.hiddenContent.classList.contains('hidden')) {
-            this.hiddenContent.classList.add('hidden');
+          if (this.hiddenContent.classList.contains('hidden')) {
+            this.hiddenContent.classList.remove('hidden');
           }
         } else {
-          console.log('not toggler');
           if (!this.hiddenContent.classList.contains('hidden')) {
-            console.log('click - hidden found');
             this.hiddenContent.classList.add('hidden');
           }
         }

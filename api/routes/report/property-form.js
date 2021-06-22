@@ -32,7 +32,7 @@ export default function (app) {
     res.render('report/property-form', { propertyID: propertyID });
   });
 
-  app.post('/report/property-form/:prop_id', async (req, res, next) => {
+  app.post('/report/property-form-image/:prop_id', async (req, res, next) => {
     var rawPropertyID = req.params.prop_id;
 
     if (!req.session.data.property[rawPropertyID]) {
@@ -46,12 +46,8 @@ export default function (app) {
       req.body.property[rawPropertyID].quantity;
     req.session.data.property[rawPropertyID]['value-known'] =
       req.body['value-known'];
-    /*if (req.body.property[rawPropertyID].value === "") {
-      req.session.data.property[rawPropertyID]['value'] = "Unknown"
-    } else {*/
     req.session.data.property[rawPropertyID]['value'] =
       req.body.property[rawPropertyID].value;
-    //}
 
     var property = req.session.data.property;
     var propertyID;

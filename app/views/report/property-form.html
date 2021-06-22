@@ -21,7 +21,7 @@
       {% set propertyName = "property" %}
       {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
 
-      <form class="form" action="/report/property-form/{{ propertyID }}" method="post">
+      <form class="form" action="/report/property-form-image/{{ propertyID }}" method="post">
         {% if errorSummary.length > 0 %}
           {{ govukErrorSummary({
               titleText: "There is a problem",

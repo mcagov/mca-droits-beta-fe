@@ -8,7 +8,7 @@ export default function (app) {
       function (req, res, next) {
         passport.authenticate('azuread-openidconnect', {
           response: res,
-          failureRedirect: `${process.env.B2C_BASE_URL}/oauth2/v2.0/logout?p=B2C_1_login&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`,
+          failureRedirect: '/error',
         })(req, res, next);
       },
       function (req, res) {
@@ -20,7 +20,7 @@ export default function (app) {
       function (req, res, next) {
         passport.authenticate('azuread-openidconnect', {
           response: res,
-          failureRedirect: `${process.env.B2C_BASE_URL}/oauth2/v2.0/logout?p=B2C_1_login&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`,
+          failureRedirect: '/error',
         })(req, res, next);
       },
       function (req, res) {
@@ -43,7 +43,7 @@ export default function (app) {
             if (err) {
               console.log(`Token generation failed due to ${err}`);
               req.logOut();
-              res.redirect(`${process.env.B2C_BASE_URL}/oauth2/v2.0/logout?p=B2C_1_login&post_logout_redirect_uri=${process.env.ENV_BASE_URL}/error`);
+              res.redirect('/error');
             } else {
               const accessToken = tokenResponse.accessToken;
               req.session.data.token = accessToken;

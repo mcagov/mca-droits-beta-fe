@@ -10,6 +10,7 @@ export class BulkUpload {
     if (!el) return;
 
     this.el = el;
+    this.pageTitle = document.title;
     this.form = $1('[data-js=bulk-form-element]', this.el);
     this.photoUploadInputs = [...$('.photo-upload__upload')];
     this.containersInitial = [...$('.photo-upload__container--initial', this.el)];
@@ -51,41 +52,42 @@ export class BulkUpload {
       this.photoUploadInputs.forEach((input, index) => {
         let id = input.id;
         const data = new FormData();
-        
+
         // Append the image file data added to each input on the page, 
         // along with the total number of wreck item inputs
         data.append('image', input.files[0]);
         data.append('itemQuantity', numberOfItems);
 
         axios.post(
-            `/report/property-bulk-image-upload/${id}`,
-            data,
-            {
-              headers: { 'Content-Type': 'multipart/form-data' },
-              withCredentials: true,
-              onUploadProgress: (progressEvent) => {
-                const uploadFiles = input.files;
-                const uploadFile = uploadFiles[0];
-                if (
-                  uploadFiles.length &&
-                  (uploadFile.type === 'image/png' ||
-                    uploadFile.type === 'image/jpg' ||
-                    uploadFile.type === 'image/jpeg') &&
-                  uploadFile.size < 5000000
-                ) {
-                  let percentCompleted = Math.round(
-                    (progressEvent.loaded * 100) / progressEvent.total
-                  );             
-                  this.loadingIndicator(percentCompleted, id);
-                }
+          `/report/property-bulk-image-upload/${id}`,
+          data,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+            withCredentials: true,
+            onUploadProgress: (progressEvent) => {
+              const uploadFiles = input.files;
+              const uploadFile = uploadFiles[0];
+              if (
+                uploadFiles.length &&
+                (uploadFile.type === 'image/png' ||
+                  uploadFile.type === 'image/jpg' ||
+                  uploadFile.type === 'image/jpeg') &&
+                uploadFile.size < 5000000
+              ) {
+                let percentCompleted = Math.round(
+                  (progressEvent.loaded * 100) / progressEvent.total
+                );
+                this.loadingIndicator(percentCompleted, id);
               }
             }
-          )
+          }
+        )
           .then((res) => {
             this.errorText = $1(`#upload-error-text-${id}`, this.el);
             this.errorContainer = $1(`#error-container-${id}`, this.el)
 
             if (res.data.error) {
+              document.title = "Error: " + this.pageTitle;
               const currentInput = input;
               const currentUploadBtn = $1(`[data-id=${id}]`, this.el);
 
@@ -94,8 +96,8 @@ export class BulkUpload {
               let anchor = document.createElement("a");
               anchor.innerText = res.data.error.text;
               anchor.href = `#photo-upload-container-${id}`;
-              listItem.append(anchor);     
-              listItem.id = `error-summary-${id}`;        
+              listItem.append(anchor);
+              listItem.id = `error-summary-${id}`;
               this.errorSummaryList.append(listItem);
 
               // Add the error text above the input
@@ -104,6 +106,7 @@ export class BulkUpload {
               this.errorSummaryBlock.classList.remove('hidden');
 
               this.bulkImageUploadButton.disabled = true;
+              this.bulkImageUploadButton.setAttribute('aria-disabled', true);
               this.scrollToTop();
               this.handleErrorReplacement(currentInput, currentUploadBtn);
 
@@ -112,7 +115,10 @@ export class BulkUpload {
               // If upload is successful, hide error containers and display preview image
               this.errorContainer = $1(`#error-container-${id}`, this.el)
               this.errorContainer.classList.add('hidden');
-              this.photoResults[index].src = `/uploads/${res.data}`;
+
+              this.photoResults[index].src = `/uploads/${res.data.uploadedFilename}`;
+              this.photoResults[index].alt = `uploaded image ${res.data.originalFilename}`;
+
               this.containersUploaded[index].classList.remove(
                 'photo-upload__container--hide'
               );
@@ -120,7 +126,7 @@ export class BulkUpload {
                 'photo-upload__container--hide'
               );
 
-              this.handleAddButtonState(); 
+              this.handleAddButtonState();
 
             }
           })
@@ -128,7 +134,7 @@ export class BulkUpload {
             console.error(reqError);
           });
       });
-    }); 
+    });
   }
 
   singleImageUploadEvent() {
@@ -161,17 +167,19 @@ export class BulkUpload {
                 ) {
                   let percentCompleted = Math.round(
                     (progressEvent.loaded * 100) / progressEvent.total
-                  );             
+                  );
                   this.loadingIndicator(percentCompleted, id);
                 }
               }
             }
           );
-  
+
           if (res.data.error) {
+            document.title = "Error: " + this.pageTitle;
             this.errorText.innerText = res.data.error.text;
             if (this.errorContainer.classList.contains('hidden')) {
               this.errorContainer.classList.remove('hidden');
+              this.errorContainer.focus();
             }
           } else {
             this.successfulUploads++;
@@ -179,7 +187,7 @@ export class BulkUpload {
             let imageSelected = $1(`#selected-photo-${id}`);
             const currentInitialContainer = $1(`#photo-upload-container-${id}`);
             const currentSelectedImageContainer = $1(`#photo-selected-container-${id}`);
-            
+
             if (errorSummaryItem !== null) {
               errorSummaryItem.remove();
             }
@@ -191,7 +199,7 @@ export class BulkUpload {
             this.errorContainer.classList.add('hidden');
             this.errorText.innerHTML = "";
 
-            imageSelected.src = `/uploads/${res.data}`;
+            imageSelected.src = `/uploads/${res.data.uploadedFilename}`;
             currentInitialContainer.classList.add('photo-upload__container--hide');
             currentSelectedImageContainer.classList.remove('photo-upload__container--hide');
 
@@ -208,23 +216,26 @@ export class BulkUpload {
     this.photoUploadInputs.forEach((element) => {
       element.addEventListener('input', () => {
         if (element.value) {
-          this.chosenFiles++;         
-        } 
+          this.chosenFiles++;
+        }
 
         if (this.chosenFiles === this.photoUploadInputs.length) {
           this.bulkImageUploadButton.classList.remove('govuk-button--disabled');
           this.bulkImageUploadButton.disabled = false;
+          this.bulkImageUploadButton.setAttribute('aria-disabled', false);
         }
       })
     })
   }
 
-  handleAddButtonState() {  
+  handleAddButtonState() {
     if (this.successfulUploads === this.photoResults.length) {
+      document.title = this.pageTitle;
       this.bulkImageUploadButton.classList.add('hidden');
       this.addButton.classList.remove('hidden');
       this.addButton.classList.remove('govuk-button--disabled');
       this.addButton.disabled = false;
+      this.bulkImageUploadButton.setAttribute('aria-disabled', false);
     }
   }
 
@@ -239,7 +250,7 @@ export class BulkUpload {
     input.addEventListener('input', () => {
       uploadBtn.disabled = false;
       uploadBtn.classList.remove('govuk-button--disabled');
-      uploadBtn.removeAttribute('aria-disabled');
+      uploadBtn.setAttribute('aria-disabled', 'false');
     })
   }
 
@@ -267,6 +278,8 @@ export class BulkUpload {
             this.chosenFiles--;
             this.addButton.classList.add('govuk-button--disabled');
             this.addButton.disabled = true;
+            this.addButton.setAttribute('aria-disabled', 'true')
+            currentUploadInput.focus();
           }
         } catch (err) {
           console.error(err);

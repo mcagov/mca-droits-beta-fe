@@ -3,7 +3,8 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block pageTitle %}
-  Wreck material removed
+  {{ errorPrefix(errorSummary) }}
+  Have you removed the wreck material from the location found? - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 
@@ -30,7 +31,7 @@
           name: "removed-property",
           fieldset: {
             legend: {
-              text: "Have you removed the wreck material from the location found?",
+              text: "Have you removed the wreck material from the location you found it in?",
               isPageHeading: true,
               classes: "govuk-fieldset__legend--l"
             }

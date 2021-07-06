@@ -5,7 +5,8 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% block pageTitle %}
-  Personal information
+  {{ errorPrefix(errorSummary) }}
+  Your details - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -17,22 +18,23 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      
+      {% if errorSummary.length > 0 %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errorSummary
+        }) }}
+      {% endif %}
 
       <h1 class="govuk-heading-xl">Your details</h1>
 
       <form class="form" action="/report/personal-answer" method="post" novalidate>
-        {% if errorSummary.length > 0 %}
-          {{ govukErrorSummary({
-              titleText: "There is a problem",
-              errorList: errorSummary
-          }) }}
-
-        {% endif %}
         {{ govukDetails({
           summaryText: "How this information will be used",
           text: "We will use this information to communicate with you about this report and administer the Merchant Shipping Act 1995, in relation to claims to wreck and salvage. We will not share your data with anyone other than for the purposes of processing your salvage claim or for the prevention and detection of crime or with your prior knowledge and agreement."
         }) }}
-
+        {# Anchor tags to return user to specific fields if they wish to change their answer #}
+        <span id="name-details"></span>
         {{ govukInput({
           label: {
             text: "Full name"
@@ -44,7 +46,7 @@
           value: data["personal"]["full-name"],
           errorMessage: errors["full-name"]
         }) }}
-
+        <span id="email-details"></span>
         {{ govukInput({
           label: {
             text: "Email address"
@@ -57,10 +59,10 @@
           value: data["personal"]["email"],
           errorMessage: errors["email"]
         }) }}
-
+        <span id="telephone-details"></span>
         {{ govukInput({
           label: {
-            text: "Telephone number"
+            text: "Telephone number (optional)"
           },
           hint: {
             text: "For international numbers include the country code"
@@ -80,7 +82,7 @@
             classes: "govuk-fieldset__legend--l"
           }
         }) %}
-
+          <span id="address-details"></span>
           {{ govukInput({
             label: {
               text: 'Building and street (line 1)'
@@ -94,7 +96,7 @@
 
           {{ govukInput({
             label: {
-              text: 'Building and street (line 2)'
+              text: 'Building and street (line 2) (optional)'
             },
             id: "address-line-2",
             name: "address-line-2",

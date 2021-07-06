@@ -15,8 +15,10 @@ import './components/spreadsheetUpload.js';
 import './components/bulkImageUpload.js';
 import './components/reportFilter.js';
 import './components/portalSort.js';
+import './components/actionConfirmation.js';
 import { lightbox } from './components/lightbox';
 
 // Utilities
 import { windowPrint } from './utilities/printWindow';
 import { polyfills } from './utilities/polyfills';
+import './utilities/conditionalContent';

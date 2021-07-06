@@ -6,8 +6,24 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 
+{% set propertyDeclarationHtml %}
+  <p class="govuk-!-margin-top-0">I confirm that I hold in my possession the items detailed in this form and under the Merchant Shipping Act 1995 I confirm I agree to:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>Take all reasonable care of the recovered wreck material and understand that the Maritime and Coastguard Agency and the Receiver of Wreck may recover any costs associated with loss or damage of the items whilst in my possession.</li>
+    <li>Allow the Receiver of Wreck, or any other person appointed by the Receiver, access to the wreck material at all reasonable times and will inform the Receiver if the wreck material changes location.</li>
+    <li>Not remove the wreck material from the United Kingdom.</li>
+    <li>Surrender the wreck material to the Receiver of Wreck at any time I am requested to.</li>
+    <li>Not hold the Maritime and Coastguard Agency and the Receiver of Wreck responsible for any costs involved in the storage or care of the recovered wreck material.</li>
+  </ul>
+
+  <p>You may not assume title or ownership of any of the declared wreck material until advised by the Receiver of Wreck.</p>
+
+  <p>This undertaking has no influence on any decision the Receiver of Wreck may take in respect of claims to ownership of the wreck material recovered.</p>
+{% endset %}
+
 {% block pageTitle %}
-  Wreck material
+  {{ errorPrefix(errorSummary) }}
+  Details of wreck material recovered - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -28,32 +44,22 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-
-      {% set actionsHtml %}
-        <ul class="govuk-summary-list__actions-list">
-          <li class="govuk-summary-list__actions-list-item">
-            <a class="govuk-link" href="/report/property-single">
-              Change<span class="govuk-visually-hidden"> item</span>
-            </a>
-          </li>
-          <li class="govuk-summary-list__actions-list-item">
-            <a class="govuk-link" href="#">
-              Remove<span class="govuk-visually-hidden"> item</span>
-            </a>
-          </li>
-        </ul>
-      {% endset -%}
+    
+      {% if errorSummary.length > 0 %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errorSummary
+        }) }}
+      {% endif %}
 
       <h1 class="govuk-heading-xl">Details of wreck material recovered</h1>
 
       {% if addedFlash %}
-        <div class="govuk-panel--confirmation row-form-action-confirmation">
-          <p class="govuk-body">The wreck material was successfully added to the report.</p>
-        </div>
+        {% set bodyText = "The wreck material was successfully added to the report." %}
+        {% include "includes/action-confirmation.njk" %}
       {% elseif removedFlash %}
-        <div class="govuk-panel--confirmation row-form-action-confirmation">
-          <p class="govuk-body">The wreck material was successfully removed from the report.</p>
-        </div>
+        {% set bodyText = "The wreck material was successfully removed from the report." %}
+        {% include "includes/action-confirmation.njk" %}
       {% endif %}
 
       {% set itemsAdded = data["property"] | length %}
@@ -92,43 +98,43 @@
           {% endif %}
             <tr class="govuk-table__row report-responsive-table__row">
               <td class="govuk-table__cell report-responsive-table__cell">
-                <span>Description:</span>
+                <span class="report-responsive-table__mobile-label">Description:</span>
                 {{ property["description"] }}
               </td>
               <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
-                <span>Quantity:</span>
+                <span class="report-responsive-table__mobile-label">Quantity:</span>
                 {{ property["quantity"] }}
               </td>
               {% if property['value'] === "" %}
                 <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
-                  <span>Value:</span>
+                  <span class="report-responsive-table__mobile-label">Value:</span>
                   Unknown
                 </td>
               {% else %}
                 <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
-                  <span>Value:</span>
+                  <span class="report-responsive-table__mobile-label">Value:</span>
                   £{{ property["value"] }}
                 </td>
               {% endif %}
               {% if not property['image'] %}
                 <td class="govuk-table__cell report-responsive-table__cell">
-                  <span>Image:</span>
+                  <span class="report-responsive-table__mobile-label">Image:</span>
                   <strong class="govuk-tag govuk-tag--blue">Not provided</strong>
                 </td>
               {% else %}
                 <td class="govuk-table__cell report-responsive-table__cell">
-                  <span>Image:</span>
-                  <img src="{{imagePath}}" width="100" loading="lazy"/>
+                  <span class="report-responsive-table__mobile-label">Image:</span>
+                  <img src="{{imagePath}}" width="100" loading="lazy" alt="uploaded image {{ property['originalFilename'] }}" />
                 </td>
               {% endif %}
               {% if property['storage-address'] == "personal" %}
                 <td class="govuk-table__cell report-responsive-table__cell">
-                  <span>Storage Postcode:</span>
+                  <span class="report-responsive-table__mobile-label">Storage Postcode:</span>
                   {{ data["personal"]["address-postcode"] }}
                 </td>
               {% elseif property['storage-address'] == "custom" %}
                 <td class="govuk-table__cell report-responsive-table__cell">
-                  <span>Storage Postcode:</span>
+                  <span class="report-responsive-table__mobile-label">Storage Postcode:</span>
                   {{ data["property"][id]["address-details"]["address-postcode"] }}
                 </td>
               {% else %}
@@ -136,12 +142,17 @@
                 </td>
               {% endif %}
               <td class="govuk-table__cell report-responsive-table__cell" data-label="Actions">
-                <ul class="govuk-summary-list__actions-list">
+                <ul class="govuk-summary-list__actions-list report-responsive-table__actions-list">
                   <li class="govuk-summary-list__actions-list-item">
-                    <a class="govuk-link" href="/report/property-form/{{ id }}">Change<span class="govuk-visually-hidden"> item</span></a>
+                    <a class="govuk-link" href="/report/property-form/{{ id }}">
+                      <span aria-hidden="true">Change</span>
+                      <span class="govuk-visually-hidden">Change details for item described as {{ property["description"] }}</span></a>
                   </li>
                   <li class="govuk-summary-list__actions-list-item">
-                    <a class="govuk-link" href="/report/property-delete/{{ id }}">Remove<span class="govuk-visually-hidden"> item</span></a>
+                    <a class="govuk-link" href="/report/property-delete/{{ id }}">
+                      <span aria-hidden="true">Remove</span>
+                      <span class="govuk-visually-hidden">Remove item described as {{ property["description"] }}</span>
+                    </a>
                   </li>
                 </ul>
               </td>
@@ -162,13 +173,8 @@
 
 
       {% if itemsAdded > 0 %}
+      <h3 class="govuk-heading-m" id="declarationHeading">Declaration</h3>
       <form class="form" action="/report/property-summary-confirmation" method="post" novalidate>
-        {% if errorSummary.length > 0 %}
-          {{ govukErrorSummary({
-              titleText: "There is a problem",
-              errorList: errorSummary
-          }) }}
-        {% endif %}
         <div class="declaration-wrapper govuk-!-padding-5 govuk-!-margin-bottom-6">
           {{ govukCheckboxes({
             idPrefix: "property-declaration",
@@ -176,31 +182,21 @@
             items: [
               {
                 value: "true",
-                text: "I confirm that I hold in my possession the items detailed in this form and under the Merchant Shipping Act 1995 I confirm I agree to:"
+                id: "propertyDeclaration",
+                html: propertyDeclarationHtml
               }
             ],
             errorMessage: errors["property-declaration"]
           }) }}
-          <p></p>
-            <ul class="govuk-list govuk-list--bullet">
-              <li>Take all reasonable care of the recovered wreck material and understand that the Maritime and Coastguard Agency and the Receiver of Wreck may recover any costs associated with loss or damage of the items whilst in my possession</li>
-              <li>Allow the Receiver of Wreck, or any other person appointed by the Receiver, access to the wreck material at all reasonable times and will inform the Receiver if the wreck material changes location</li>
-              <li>Not remove the wreck material from the United Kingdom</li>
-              <li>Surrender the wreck material to the Receiver of Wreck at any time I am requested to</li>
-              <li>Not hold the Maritime and Coastguard Agency and the Receiver of Wreck responsible for any costs involved in the storage or care of the recovered wreck material</li>
-            </ul>
 
-            <p>You may not assume title or ownership of any of the declared wreck material until advised by the Receiver of Wreck.</p>
+        </div>
 
-            <p>This undertaking has no influence on any decision the Receiver of Wreck may take in respect of claims to ownership of the wreck material recovered.</p>
-          </div>
+        {{ govukButton({
+          text: "Accept and continue",
+          classes: "govuk-!-margin-right-1"
+        }) }}
 
-          {{ govukButton({
-            text: "Accept and continue",
-            classes: "govuk-!-margin-right-1"
-          }) }}
-
-        </form>
+      </form>
       {% endif %}
 
     </div>

@@ -3,7 +3,7 @@
 {%- from "govuk/components/tag/macro.njk" import govukTag -%}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% block pageTitle %}
-  Your reports of wreck material
+  Your reports of wreck material - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -165,13 +165,13 @@
           
           <tr class="govuk-table__row report-responsive-table__row report-responsive-table__row--portal-dashboard" data-status="{{item['status-attr']}}" data-js="report-listings-row">
             <td class="govuk-table__cell report-responsive-table__cell">
-            <span>Reference:</span>
+            <span class="report-responsive-table__mobile-label">Reference:</span>
             {{ item["report-ref"] }}</td>
             <td class="govuk-table__cell report-responsive-table__cell">
-            <span>Date reported:</span>
+            <span class="report-responsive-table__mobile-label">Date reported:</span>
             {{ item["date-reported"] }}</td>
             <td class="govuk-table__cell report-responsive-table__cell">
-            <span>Details:</span>
+            <span class="report-responsive-table__mobile-label">Details:</span>
               {% if item['vessel-name'] %}
               {{ item['vessel-name'] }}<br/>
               {% endif %}

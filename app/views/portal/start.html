@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-Check the status of wreck material you have reported
+Check the status of wreck material you have reported - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 {% block header %}
@@ -11,7 +11,8 @@ Check the status of wreck material you have reported
 
 {% block beforeContent %}
 {% include "includes/phase-banner.html" %}
-  <div class="govuk-breadcrumbs">
+<a class="govuk-back-link" href="/">Back</a>
+  <!--<div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
       <li class="govuk-breadcrumbs__list-item">
         <a class="govuk-breadcrumbs__link" href="https://www.gov.uk">Home</a>
@@ -28,7 +29,7 @@ Check the status of wreck material you have reported
         <a class="govuk-breadcrumbs__link">Check the status of wreck material you have reported</a>
       </li>
     </ol>
-  </div>
+  </div>-->
 {% endblock %}
 
 {% block content %}

@@ -2,6 +2,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { assignReportStatus } from '../../../utilities';
 import { assignSalvageLocation } from '../../../utilities';
+import { assignOutcome } from '../../../utilities';
 
 const url = process.env.DATAVERSE_BASE_URL + process.env.DATAVERSE_SERVICE_URL;
 
@@ -37,7 +38,12 @@ export default function (app) {
               const reportStatus = assignReportStatus(reportData.crf99_reportstatus);
               const recoveredFromLocation = assignSalvageLocation(reportData.crf99_recoveredfrom);
 
-              reportData.coordinates = `${reportData.crf99_latitude}° ${reportData.crf99_longitude}°`;
+              if (reportData.crf99_latitude && reportData.crf99_longitude) {
+                reportData.coordinates = `${reportData.crf99_latitude}° ${reportData.crf99_longitude}°`;
+              } else {
+                reportData.coordinates = null;
+              }
+
               reportData.dateReported = dayjs(
                 reportData.crf99_datereported
               ).format('DD MM YYYY');
@@ -57,6 +63,7 @@ export default function (app) {
                 // This is required to pass the array straight into the storageAddressUrl to filter the storage address data.
                 const formattedValue = "'" + wreckItem._crf99_storageaddress_value + "'";
                 storageAddressIDs.push(formattedValue);
+                wreckItem.selectedOutcome = assignOutcome(wreckItem.crf99_outcome);
               }
               resolve();
             })

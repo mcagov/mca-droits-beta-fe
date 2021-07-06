@@ -4,12 +4,13 @@
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 
 {% block pageTitle %}
-  Description of wreck material
+  {{ errorPrefix(errorSummary) }}
+  Storage address - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
   {% include "includes/phase-banner.html" %}
-  <a class="govuk-back-link" href="/report/property-summary">Back</a>
+  <a class="govuk-back-link" href="/report/property-form-image/{{ propertyID }}">Back</a>
 {% endblock %}
 
 {% block content %}
@@ -61,7 +62,7 @@
 
             {{ govukInput({
               label: {
-                text: 'Building and street (line 2)'
+                text: 'Building and street (line 2) (optional)'
               },
               id: "address-line-2",
               autocomplete: "address-line2",

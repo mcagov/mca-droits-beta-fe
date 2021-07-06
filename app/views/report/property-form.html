@@ -4,7 +4,8 @@
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 
 {% block pageTitle %}
-  Description of wreck material
+  {{ errorPrefix(errorSummary) }}
+  Description of wreck material - {{ serviceName }} – GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -20,7 +21,7 @@
       {% set propertyName = "property" %}
       {% set propertyNamePrefix = propertyName + "[" + propertyID + "]" %}
 
-      <form class="form" action="/report/property-form/{{ propertyID }}" method="post">
+      <form class="form" action="/report/property-form-image/{{ propertyID }}" method="post">
         {% if errorSummary.length > 0 %}
           {{ govukErrorSummary({
               titleText: "There is a problem",
@@ -33,7 +34,7 @@
           name: propertyNamePrefix + "[description]",
           value: data[propertyName][propertyID]["description"],
           label: {
-            text: "Please describe the item",
+            text: "Describe the item",
             classes: "govuk-label--l",
             isPageHeading: true
           },
@@ -63,7 +64,7 @@
           name: propertyNamePrefix + "[value]",
           value: data[propertyName][propertyID]["value"],
           label: {
-            text: "Approximate total value"
+            text: "Approximate total value, in pounds sterling"
           },
           prefix: {
             text: "£"

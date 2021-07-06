@@ -9,7 +9,7 @@
   {% endset -%}
 
   
-
+  <!-- NOTE: Some screen readers ignore whitespaces when visually hidden text is added inline, so these are replaced with html space entities --> 
   {{ govukSummaryList({
     rows: [
       {
@@ -24,7 +24,7 @@
             {
               href: "/report/find-date",
               text: "Change",
-              visuallyHiddenText: "date"
+              visuallyHiddenText: "&nbsp;find&nbsp;date"
             }
           ]
         }
@@ -52,7 +52,7 @@
             {
               href: "/report/removed-property-check",
               text: "Change",
-              visuallyHiddenText: "answer"
+              visuallyHiddenText: "&nbsp;answer&nbsp;for&nbsp;wreck&nbsp;material&nbsp;removed"
             }
           ]
         }
@@ -69,7 +69,7 @@
             {
               href: "/report/salvaged-from",
               text: "Change",
-              visuallyHiddenText: "answer"
+              visuallyHiddenText: "&nbsp;answer&nbsp;for&nbsp;where&nbsp;you&nbsp;found&nbsp;the&nbsp;wreck&nbsp;material"
             }
           ]
         }
@@ -92,7 +92,7 @@
                 {
                   href: "/report/depth",
                   text: "Change",
-                  visuallyHiddenText: "answer"
+                  visuallyHiddenText: "&nbsp;item&nbsp;depth&nbsp;answer"
                 }
               ]
             }
@@ -117,7 +117,7 @@
                 {
                   href: "/report/vessel-description",
                   text: "Change",
-                  visuallyHiddenText: "answer"
+                  visuallyHiddenText: "&nbsp;vessel&nbsp;description"
                 }
               ]
             }
@@ -145,7 +145,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/vessel-information">
-          Change<span class="govuk-visually-hidden"> name</span>
+          Change<span class="govuk-visually-hidden">&nbsp;vessel&nbsp;name</span>
         </a>
       </dd>
     </div>
@@ -160,7 +160,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/vessel-information">
-          Change<span class="govuk-visually-hidden"> construction year</span>
+          Change<span class="govuk-visually-hidden">&nbsp;vessel&nbsp;construction&nbsp;year</span>
         </a>
       </dd>
     </div>
@@ -175,7 +175,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/vessel-information">
-          Change<span class="govuk-visually-hidden"> sunk year</span>
+          Change<span class="govuk-visually-hidden">&nbsp;vessel&nbsp;sunk&nbsp;year</span>
         </a>
       </dd>
     </div>
@@ -211,9 +211,9 @@
         actions: {
         items: [
           {
-            href: "/report/personal",
+            href: "/report/personal#name-details",
             text: "Change",
-            visuallyHiddenText: "item"
+            visuallyHiddenText: "&nbsp;your&nbsp;name"
           }
         ]
       }
@@ -228,9 +228,9 @@
         actions: {
         items: [
           {
-            href: "/report/personal",
+            href: "/report/personal#email-details",
             text: "Change",
-            visuallyHiddenText: "item"
+            visuallyHiddenText: "&nbsp;your&nbsp;email&nbsp;address"
           }
         ]
       }
@@ -245,9 +245,9 @@
         actions: {
         items: [
           {
-            href: "/report/personal",
+            href: "/report/personal#telephone-details",
             text: "Change",
-            visuallyHiddenText: "item"
+            visuallyHiddenText: "&nbsp;your&nbsp;telephone&nbsp;number"
           }
         ]
       }
@@ -262,9 +262,9 @@
         actions: {
         items: [
           {
-            href: "/report/personal",
+            href: "/report/personal#address-details",
             text: "Change",
-            visuallyHiddenText: "item"
+            visuallyHiddenText: "&nbsp;your&nbsp;address&nbsp;details"
           }
         ]
       }
@@ -278,29 +278,19 @@
 
   <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Coordinates
-      </dt>
-      <dd class="govuk-summary-list__value">
-        {{ data['location']['location-given']['latitude'] }}&nbsp;&nbsp;{{ data['location']['location-given']['longitude'] }}
-      </dd>
-      <dd class="govuk-summary-list__actions">
-        <a class="govuk-link" href="/report/location">
-          Change<span class="govuk-visually-hidden"> coordinates</span>
-        </a>
-      </dd>
+      {% include 'includes/location-data.html' %}
     </div>
     {% if data['location']['location-description']|length %}
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
-        Description
+        Additional information
       </dt>
       <dd class="govuk-summary-list__value">
         {{ data['location']['location-description'] }}
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/location">
-          Change<span class="govuk-visually-hidden"> description</span>
+          Change<span class="govuk-visually-hidden">&nbsp;additional&nbsp;location&nbsp;information</span>
         </a>
       </dd>
     </div>
@@ -309,7 +299,8 @@
 
   {% if data['location']['location-standard']['latitude'] and data['location']['location-standard']['longitude'] %}
   <div data-js="static-map">
-    <div id="location-map" class="map-display hide-on-print" data-latitude="{{ data['location']['location-standard']['latitude'] }}" data-longitude="{{ data['location']['location-standard']['longitude'] }}" data-radius="{{ data['location']['location-standard']['radius'] }}"></div>
+    <div id="location-map" class="map-display hide-on-print" data-latitude="{{ data['location']['location-standard']['latitude'] }}" data-longitude="{{ data['location']['location-standard']['longitude'] }}" data-radius="{{ data['location']['location-standard']['radius'] }}" role="group" aria-label="interactive map showing where the wreck material was located: circle 
+centre located at latitude '{{ data['location']['location-given']['latitude'] }}', longitude '{{ data['location']['location-given']['longitude'] }}', with a radius of '{{ data['location']['location-standard']['radius'] }} metres'"></div>
   </div>
   {% endif %}
 </div>
@@ -319,7 +310,7 @@
 
   <table class="govuk-table report-responsive-table">
     <caption class="govuk-table__caption report-responsive-table__caption">Items of wreck material reported
-      <a class="govuk-link govuk-!-font-weight-regular report-responsive-table__change-link hide-on-print" href="/report/property-summary">Change<div class="govuk-visually-hidden"> details</div></a></caption>
+      <a class="govuk-link govuk-!-font-weight-regular report-responsive-table__change-link hide-on-print" href="/report/property-summary">Change<div class="govuk-visually-hidden">&nbsp;items&nbsp;of&nbsp;wreck&nbsp;material</div></a></caption>
         <thead class="govuk-table__head report-responsive-table__head">
         <tr class="govuk-table__row report-responsive-table__row">
           <th scope="col" class="govuk-table__header govuk-!-width-one-half">Description</th>
@@ -334,40 +325,40 @@
         {% for id, property in data["property"] %}
           <tr class="govuk-table__row report-responsive-table__row">
             <td class="govuk-table__cell report-responsive-table__cell report-responsive-table__cell--description">
-              <span>Description:</span>
+              <span class="report-responsive-table__mobile-label">Description:</span>
               {{ property["description"] }}
             </td>
             <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
-              <span>Quantity:</span>
+              <span class="report-responsive-table__mobile-label">Quantity:</span>
               {{ property["quantity"] }}
             </td>
             
             {% if property['value'] == "" %}
               <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
-                <span>Value:</span>
+                <span class="report-responsive-table__mobile-label">Value:</span>
                 Unknown
               </td>
             {% else %}
               <td class="govuk-table__cell govuk-table__cell--numeric report-responsive-table__cell">
-                <span>Value:</span>
+                <span class="report-responsive-table__mobile-label">Value:</span>
                 £{{ property["value"] }}
               </td>
             {% endif %}
 
             {% if property['image'] %}
               <td class="govuk-table__cell report-responsive-table__cell">
-                <span>Image:</span>
+                <span class="report-responsive-table__mobile-label">Image:</span>
                 <img src="/uploads/{{ property['image'] }}" width="100"/>
               </td>
             {% else %}
               <td class="govuk-table__cell report-responsive-table__cell">
-                <span>Image:</span>
+                <span class="report-responsive-table__mobile-label">Image:</span>
                 <strong class="govuk-tag govuk-tag--blue">Not provided</strong>
               </td>
             {% endif %}
             {% if property['storage-address'] == "personal" %}
               <td class="govuk-table__cell report-responsive-table__cell">
-                <span>Storage Address:</span>
+                <span class="report-responsive-table__mobile-label">Storage Address:</span>
                 <div class="hide-on-print">
                   {{ data["personal"]["address-postcode"] }}
                 </div>
@@ -384,7 +375,7 @@
               </td>
             {% elseif property['storage-address'] == "custom" %}
               <td class="govuk-table__cell report-responsive-table__cell">
-                <span>Storage Address:</span>
+                <span class="report-responsive-table__mobile-label">Storage Address:</span>
                 <div class="hide-on-print">
                   {{ data["property"][id]["address-details"]["address-postcode"] }}
                 </div>
@@ -394,7 +385,7 @@
               </td>
             {% else %}
               <td class="govuk-table__cell report-responsive-table__cell">
-                <span>Storage Address:</span>
+                <span class="report-responsive-table__mobile-label">Storage Address:</span>
               </td>
             {% endif %}
           </tr>
@@ -416,7 +407,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/salvage-award">
-          Change<span class="govuk-visually-hidden"> claim of expenses</span>
+          Change<span class="govuk-visually-hidden">&nbsp;claim&nbsp;of&nbsp;salvage&nbsp;expenses</span>
         </a>
       </dd>
     </div>
@@ -430,7 +421,7 @@
       </dd>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="/report/salvage-award">
-          Change<span class="govuk-visually-hidden"> description</span>
+          Change<span class="govuk-visually-hidden">&nbsp;salvage&nbsp;award&nbsp;services&nbsp;rendered</span>
         </a>
       </dd>
     </div>

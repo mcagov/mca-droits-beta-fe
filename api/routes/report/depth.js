@@ -25,6 +25,7 @@ export default function (app) {
     [
       body('vessel-depth')
         .exists()
+        .escape()
         .notEmpty()
         .isDecimal()
         .withMessage('Please enter a number')

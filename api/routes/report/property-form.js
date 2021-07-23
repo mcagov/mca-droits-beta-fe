@@ -59,12 +59,14 @@ export default function (app) {
 
       await body('property' + '[' + propertyID + '][description]')
         .exists()
+        .escape()
         .not()
         .isEmpty()
         .withMessage('Enter a description of the item')
         .run(req);
       await body('property' + '[' + propertyID + '][quantity]')
         .exists()
+        .escape()
         .isNumeric()
         .withMessage('Enter a number')
         .not()
@@ -75,6 +77,7 @@ export default function (app) {
         .run(req);
       await body('value-known')
         .exists()
+        .escape()
         .not()
         .isEmpty()
         .withMessage(
@@ -85,6 +88,7 @@ export default function (app) {
       if (req.body['value-known'] === 'yes') {
         await body('property' + '[' + propertyID + '][value]')
           .exists()
+          .escape()
           .isNumeric()
           .withMessage('Enter a number')
           .not()

@@ -1,5 +1,16 @@
+const { body } = require('express-validator');
+
 export default function (app) {
-  app.post('/report/vessel-information-answer', function (req, res) {
+  app.post('/report/vessel-information-answer',
+  [
+    body('vessel-name')
+      .escape(),
+    body('vessel-construction-year')
+      .escape(),
+    body('vessel-sunk-year')
+      .escape(),
+  ],
+  function (req, res) {
     req.session.data['vessel-information']['vessel-name'] =
       req.body['vessel-name'];
 

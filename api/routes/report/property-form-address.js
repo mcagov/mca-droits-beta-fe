@@ -36,11 +36,65 @@ export default function (app) {
 
       req.session.data.property[rawPropertyID]['address-details'] = {};
 
-      if (bodyProperty['storage-address'] === 'custom') {
-        /*for (let key in bodyProperty) {
-        property[rawPropertyID][key] = bodyProperty[key];
-      }*/
+      var propertyID;
+      var propertyItem;
 
+      property[rawPropertyID]['storage-address'] =
+        req.body.property[rawPropertyID]['storage-address'];
+
+      if (property[rawPropertyID] !== undefined) {
+        propertyID = rawPropertyID;
+      }
+
+      if (!req.body.property[rawPropertyID]['storage-address']) {
+        await body('property' + '[' + propertyID + ']["storage-address"]')
+          .exists()
+          .escape()
+          .not()
+          .isEmpty()
+          .withMessage('Choose an option')
+          .run(req);
+      }
+
+      if (req.body.property[rawPropertyID]['storage-address'] === 'custom') {
+        await body('property' + '[' + propertyID + ']["address-line-1"]')
+          .exists()
+          .escape()
+          .not()
+          .isEmpty()
+          .withMessage('Enter your building and street')
+          .run(req);
+        await body('property' + '[' + propertyID + ']["address-line-2"]')
+          .escape()
+          .run(req);
+        await body('property' + '[' + propertyID + ']["address-town"]')
+          .exists()
+          .escape()
+          .not()
+          .isEmpty()
+          .withMessage('Enter your town or city')
+          .run(req);
+        await body('property' + '[' + propertyID + ']["address-county"]')
+          .exists()
+          .escape()
+          .not()
+          .isEmpty()
+          .withMessage('Enter your county')
+          .run(req);
+        await body('property' + '[' + propertyID + ']["address-postcode"]')
+          .exists()
+          .escape()
+          .not()
+          .isEmpty()
+          .withMessage('Enter a real postcode')
+          .isPostalCode(['GB'])
+          .withMessage('Please enter a valid postcode')
+          .run(req);
+      }
+
+      const errors = formatValidationErrors(validationResult(req));
+
+      if (bodyProperty['storage-address'] === 'custom') {
         req.session.data.property[rawPropertyID]['address-details'][
           'address-line-1'
         ] = req.body.property[rawPropertyID]['address-line-1'];
@@ -73,55 +127,6 @@ export default function (app) {
           'address-postcode'
         ] = req.session.data.personal['address-postcode'];
       }
-
-      var propertyID;
-      var propertyItem;
-
-      property[rawPropertyID]['storage-address'] =
-        req.body.property[rawPropertyID]['storage-address'];
-
-      if (property[rawPropertyID] !== undefined) {
-        propertyID = rawPropertyID;
-      }
-
-      if (!req.body.property[rawPropertyID]['storage-address']) {
-        await body('property' + '[' + propertyID + ']["storage-address"]')
-          .exists()
-          .not()
-          .isEmpty()
-          .withMessage('Choose an option')
-          .run(req);
-      }
-
-      if (req.body.property[rawPropertyID]['storage-address'] === 'custom') {
-        await body('property' + '[' + propertyID + ']["address-line-1"]')
-          .exists()
-          .not()
-          .isEmpty()
-          .withMessage('Enter your building and street')
-          .run(req);
-        await body('property' + '[' + propertyID + ']["address-town"]')
-          .exists()
-          .not()
-          .isEmpty()
-          .withMessage('Enter your town or city')
-          .run(req);
-        await body('property' + '[' + propertyID + ']["address-county"]')
-          .exists()
-          .not()
-          .isEmpty()
-          .withMessage('Enter your county')
-          .run(req);
-        await body('property' + '[' + propertyID + ']["address-postcode"]')
-          .exists()
-          .not()
-          .isEmpty()
-          .withMessage('Enter a real postcode')
-          .isPostalCode(['GB'])
-          .withMessage('Please enter a valid postcode')
-          .run(req);
-      }
-      const errors = formatValidationErrors(validationResult(req));
 
       /**
        * Replacing decimals with dashes so the error summary

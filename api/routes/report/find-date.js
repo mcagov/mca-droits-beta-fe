@@ -12,6 +12,7 @@ export default function (app) {
     [
       body('wreck-find-date-day')
         .exists()
+        .escape()
         .custom((val) => {
           if (!dayRange(val)) {
             throw new Error('Day must be between 1 and 31');
@@ -24,7 +25,8 @@ export default function (app) {
         .isEmpty()
         .withMessage('Enter your find day'),
       body('wreck-find-date-month')
-        .exists()
+        .exists()        
+        .escape()
         .custom((val) => {
           if (!monthRange(val)) {
             throw new Error('Month must be between 1 and 12');
@@ -38,6 +40,7 @@ export default function (app) {
         .withMessage('Enter your find month'),
       body('wreck-find-date-year')
         .exists()
+        .escape()
         .isNumeric()
         .withMessage('Enter a number')
         .custom((val) => {
@@ -55,18 +58,21 @@ export default function (app) {
       let errorSummary;
       const session = req.session.data['wreck-find-date'];
       const body = req.body;
+      const dayValue = body['wreck-find-date-day'];
+      const monthValue = body['wreck-find-date-month'];
+      const yearValue = body['wreck-find-date-year'];
 
       // Checking whether date submitted is after todays date
       const allValsEntered =
-        body['wreck-find-date-day'].length > 0 &&
-        body['wreck-find-date-month'].length > 0 &&
-        body['wreck-find-date-year'].length > 0;
+        dayValue.length > 0 &&
+        monthValue.length > 0 &&
+        yearValue.length > 0;
 
       // If all input boxes have content
       if (allValsEntered) {
         const now = dayjs();
         const submitted = dayjs(
-          `${body['wreck-find-date-year']}-${body['wreck-find-date-month']}-${body['wreck-find-date-day']}`
+          `${yearValue}-${monthValue}-${dayValue}`
         );
 
         // If date (parsed by dayjs) is after current date

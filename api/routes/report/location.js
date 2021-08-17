@@ -53,6 +53,7 @@ export default function (app) {
 
           await body('location-latitude-decimal')
             .exists()
+            .escape()
             .custom((val) => {
               if (!latitudeDegressRange(val)) {
                 throw new Error('Enter a latitude between -90 and 90');
@@ -67,6 +68,7 @@ export default function (app) {
             .run(req);
           await body('location-longitude-decimal')
             .exists()
+            .escape()
             .custom((val) => {
               if (!longitudeDegressRange(val)) {
                 throw new Error('Enter a longitude between -180 and 180');
@@ -86,6 +88,73 @@ export default function (app) {
           break;
 
         case 'coords-decimal-minutes':
+          // handle errors
+          await body('location-latitude-decimal-minutes-degree')
+            .exists()
+            .escape()
+            .custom((val) => {
+              if (!latitudeDegressRange(val)) {
+                throw new Error('Enter a latitude degree between -90 and 90');
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
+            .not()
+            .isEmpty()
+            .withMessage('Enter a latitude degree')
+            .run(req);
+          await body('location-latitude-decimal-minutes-minute')
+            .exists()
+            .escape()
+            .custom((val) => {
+              if (!minutesSecondsRange(val)) {
+                throw new Error('Enter latitude minutes between 0 and 60');
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
+            .not()
+            .isEmpty()
+            .withMessage('Enter latitude minutes')
+            .run(req);
+          await body('location-longitude-decimal-minutes-degree')
+            .exists()
+            .escape()
+            .custom((val) => {
+              if (!latitudeDegressRange(val)) {
+                throw new Error(
+                  'Enter a longitude degree between -180 and 180'
+                );
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
+            .not()
+            .isEmpty()
+            .withMessage('Enter a longitude degree')
+            .run(req);
+          await body('location-longitude-decimal-minutes-minute')
+            .exists()
+            .escape()
+            .custom((val) => {
+              if (!minutesSecondsRange(val)) {
+                throw new Error('Enter longitude minutes between 0 and 60');
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
+            .not()
+            .isEmpty()
+            .withMessage('Enter longitude minutes')
+            .run(req);
+
+          errors = formatValidationErrors(validationResult(req));
+          errorSummary = Object.values(errors);
+
           session['location-latitude-decimal-minutes-degree'] =
             reqBody['location-latitude-decimal-minutes-degree'];
           session['location-latitude-decimal-minutes-minute'] =
@@ -131,9 +200,12 @@ export default function (app) {
           session['location-given'].latitude = `${latD}° ${latM}' ${latDir}`;
           session['location-given'].longitude = `${lonD}° ${lonM}' ${lonDir}`;
 
+          break;
+        case 'coords-sexagesimal':
           // handle errors
-          await body('location-latitude-decimal-minutes-degree')
+          await body('location-latitude-degrees-degree')
             .exists()
+            .escape()
             .custom((val) => {
               if (!latitudeDegressRange(val)) {
                 throw new Error('Enter a latitude degree between -90 and 90');
@@ -146,8 +218,9 @@ export default function (app) {
             .isEmpty()
             .withMessage('Enter a latitude degree')
             .run(req);
-          await body('location-latitude-decimal-minutes-minute')
+          await body('location-latitude-degrees-minute')
             .exists()
+            .escape()
             .custom((val) => {
               if (!minutesSecondsRange(val)) {
                 throw new Error('Enter latitude minutes between 0 and 60');
@@ -160,8 +233,24 @@ export default function (app) {
             .isEmpty()
             .withMessage('Enter latitude minutes')
             .run(req);
-          await body('location-longitude-decimal-minutes-degree')
+          await body('location-latitude-degrees-second')
             .exists()
+            .escape()
+            .custom((val) => {
+              if (!minutesSecondsRange(val)) {
+                throw new Error('Enter latitude seconds between 0 and 60');
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
+            .not()
+            .isEmpty()
+            .withMessage('Enter longitude seconds')
+            .run(req);
+          await body('location-longitude-degrees-degree')
+            .exists()
+            .escape()
             .custom((val) => {
               if (!latitudeDegressRange(val)) {
                 throw new Error(
@@ -176,8 +265,9 @@ export default function (app) {
             .isEmpty()
             .withMessage('Enter a longitude degree')
             .run(req);
-          await body('location-longitude-decimal-minutes-minute')
+          await body('location-longitude-degrees-minute')
             .exists()
+            .escape()
             .custom((val) => {
               if (!minutesSecondsRange(val)) {
                 throw new Error('Enter longitude minutes between 0 and 60');
@@ -190,12 +280,25 @@ export default function (app) {
             .isEmpty()
             .withMessage('Enter longitude minutes')
             .run(req);
+          await body('location-longitude-degrees-second')
+            .exists()
+            .escape()
+            .custom((val) => {
+              if (!minutesSecondsRange(val)) {
+                throw new Error('Enter longitude seconds between 0 and 60');
+              }
+              return true;
+            })
+            .isNumeric()
+            .withMessage('Enter a number')
+            .not()
+            .isEmpty()
+            .withMessage('Enter longitude seconds')
+            .run(req);
 
           errors = formatValidationErrors(validationResult(req));
           errorSummary = Object.values(errors);
 
-          break;
-        case 'coords-sexagesimal':
           session['location-latitude-degrees-degree'] =
             reqBody['location-latitude-degrees-degree'];
           session['location-latitude-degrees-minute'] =
@@ -257,100 +360,41 @@ export default function (app) {
             'location-given'
           ].longitude = `${lonD}° ${lonM}' ${lonS}" ${lonDir}`;
 
-          // handle errors
-          await body('location-latitude-degrees-degree')
+          break;
+
+        case 'coords-osgrid':
+          await body('location-osgrid-square')
             .exists()
-            .custom((val) => {
-              if (!latitudeDegressRange(val)) {
-                throw new Error('Enter a latitude degree between -90 and 90');
-              }
-              return true;
-            })
+            .escape()
+            .not()
             .isNumeric()
-            .withMessage('Enter a number')
+            .withMessage('Grid reference must be letters')
             .not()
             .isEmpty()
-            .withMessage('Enter a latitude degree')
+            .withMessage('Enter grid reference')
             .run(req);
-          await body('location-latitude-degrees-minute')
+          await body('location-osgrid-easting')
             .exists()
-            .custom((val) => {
-              if (!minutesSecondsRange(val)) {
-                throw new Error('Enter latitude minutes between 0 and 60');
-              }
-              return true;
-            })
+            .escape()
             .isNumeric()
-            .withMessage('Enter a number')
+            .withMessage('Must be a number')
             .not()
             .isEmpty()
-            .withMessage('Enter latitude minutes')
+            .withMessage('Enter easting')
             .run(req);
-          await body('location-latitude-degrees-second')
+          await body('location-osgrid-northing')
             .exists()
-            .custom((val) => {
-              if (!minutesSecondsRange(val)) {
-                throw new Error('Enter latitude seconds between 0 and 60');
-              }
-              return true;
-            })
+            .escape()
             .isNumeric()
-            .withMessage('Enter a number')
+            .withMessage('Must be a number')
             .not()
             .isEmpty()
-            .withMessage('Enter longitude seconds')
-            .run(req);
-          await body('location-longitude-degrees-degree')
-            .exists()
-            .custom((val) => {
-              if (!latitudeDegressRange(val)) {
-                throw new Error(
-                  'Enter a longitude degree between -180 and 180'
-                );
-              }
-              return true;
-            })
-            .isNumeric()
-            .withMessage('Enter a number')
-            .not()
-            .isEmpty()
-            .withMessage('Enter a longitude degree')
-            .run(req);
-          await body('location-longitude-degrees-minute')
-            .exists()
-            .custom((val) => {
-              if (!minutesSecondsRange(val)) {
-                throw new Error('Enter longitude minutes between 0 and 60');
-              }
-              return true;
-            })
-            .isNumeric()
-            .withMessage('Enter a number')
-            .not()
-            .isEmpty()
-            .withMessage('Enter longitude minutes')
-            .run(req);
-          await body('location-longitude-degrees-second')
-            .exists()
-            .custom((val) => {
-              if (!minutesSecondsRange(val)) {
-                throw new Error('Enter longitude seconds between 0 and 60');
-              }
-              return true;
-            })
-            .isNumeric()
-            .withMessage('Enter a number')
-            .not()
-            .isEmpty()
-            .withMessage('Enter longitude seconds')
+            .withMessage('Enter northing')
             .run(req);
 
           errors = formatValidationErrors(validationResult(req));
           errorSummary = Object.values(errors);
 
-          break;
-
-        case 'coords-osgrid':
           session['location-osgrid-square'] = reqBody['location-osgrid-square'];
           session['location-osgrid-easting'] =
             reqBody['location-osgrid-easting'];
@@ -376,38 +420,37 @@ export default function (app) {
             'location-given'
           ].longitude = `${session['location-standard'].longitude}°`;
 
-          await body('location-osgrid-square')
+          break;
+
+        case 'map':
+          await body('map-radius-input')
             .exists()
-            .not()
-            .isNumeric()
-            .withMessage('Grid reference must be letters')
+            .escape()
             .not()
             .isEmpty()
-            .withMessage('Enter grid reference')
+            .withMessage('Draw a circle on the map')
             .run(req);
-          await body('location-osgrid-easting')
-            .exists()
-            .isNumeric()
-            .withMessage('Must be a number')
-            .not()
-            .isEmpty()
-            .withMessage('Enter easting')
+
+          await body('map-latitude-input')
+            .escape()
             .run(req);
-          await body('location-osgrid-northing')
-            .exists()
-            .isNumeric()
-            .withMessage('Must be a number')
-            .not()
-            .isEmpty()
-            .withMessage('Enter northing')
+
+          await body('map-radius-input')
+            .escape()
             .run(req);
 
           errors = formatValidationErrors(validationResult(req));
           errorSummary = Object.values(errors);
+          if (errors) {
+            errorSummary[0].id = 'location-map-input';
+            errorSummary[0].href = '#location-map-input';
+            errors['location-map-input'] = {
+              id: 'location-map-input',
+              href: '#location-map-input',
+              text: 'Draw the area of the find on the map'
+            };
+          }
 
-          break;
-
-        case 'map':
           session['map-latitude-input'] = reqBody['map-latitude-input'];
           session['map-longitude-input'] = reqBody['map-longitude-input'];
           session['map-radius-input'] = reqBody['map-radius-input'];
@@ -426,39 +469,12 @@ export default function (app) {
           session['location-given'].latitude = `${latitude}° N `;
           session['location-given'].longitude = `${longitude}° W`;
 
-          await body('map-radius-input')
-            .exists()
-            .not()
-            .isEmpty()
-            .withMessage('Draw a circle on the map')
-            .run(req);
-
-          errors = formatValidationErrors(validationResult(req));
-          errorSummary = Object.values(errors);
-          if (errors) {
-            errorSummary[0].id = 'location-map-input';
-            errorSummary[0].href = '#location-map-input';
-            errors['location-map-input'] = {
-              id: 'location-map-input',
-              href: '#location-map-input',
-              text: 'Draw the area of the find on the map'
-            };
-          }
-
           break;
 
         case 'text-location':
-          session['location-standard'].latitude = null;
-          session['location-standard'].longitude = null;
-          session['location-standard'].radius = null;
-
-          session['location-given'].latitude = null;
-          session['location-given'].longitude = null;
-
-          session['text-location'] = reqBody['text-location'];
-
           await body('text-location')
             .exists()
+            .escape()
             .not()
             .isEmpty()
             .withMessage('Please enter a detailed description of the location')
@@ -475,6 +491,15 @@ export default function (app) {
               text: 'Please enter a detailed description of the location'
             };
           }
+
+          session['location-standard'].latitude = null;
+          session['location-standard'].longitude = null;
+          session['location-standard'].radius = null;
+
+          session['location-given'].latitude = null;
+          session['location-given'].longitude = null;
+
+          session['text-location'] = reqBody['text-location'];
 
           break;
 

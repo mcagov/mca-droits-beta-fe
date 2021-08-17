@@ -32,7 +32,7 @@ export default function (app) {
     res.render('report/property-form', { propertyID: propertyID });
   });
 
-  app.post('/report/property-form/:prop_id', async (req, res, next) => {
+  app.post('/report/property-form-image/:prop_id', async (req, res, next) => {
     var rawPropertyID = req.params.prop_id;
 
     if (!req.session.data.property[rawPropertyID]) {
@@ -46,12 +46,8 @@ export default function (app) {
       req.body.property[rawPropertyID].quantity;
     req.session.data.property[rawPropertyID]['value-known'] =
       req.body['value-known'];
-    /*if (req.body.property[rawPropertyID].value === "") {
-      req.session.data.property[rawPropertyID]['value'] = "Unknown"
-    } else {*/
     req.session.data.property[rawPropertyID]['value'] =
       req.body.property[rawPropertyID].value;
-    //}
 
     var property = req.session.data.property;
     var propertyID;
@@ -63,12 +59,14 @@ export default function (app) {
 
       await body('property' + '[' + propertyID + '][description]')
         .exists()
+        .escape()
         .not()
         .isEmpty()
         .withMessage('Enter a description of the item')
         .run(req);
       await body('property' + '[' + propertyID + '][quantity]')
         .exists()
+        .escape()
         .isNumeric()
         .withMessage('Enter a number')
         .not()
@@ -79,6 +77,7 @@ export default function (app) {
         .run(req);
       await body('value-known')
         .exists()
+        .escape()
         .not()
         .isEmpty()
         .withMessage(
@@ -89,6 +88,7 @@ export default function (app) {
       if (req.body['value-known'] === 'yes') {
         await body('property' + '[' + propertyID + '][value]')
           .exists()
+          .escape()
           .isNumeric()
           .withMessage('Enter a number')
           .not()

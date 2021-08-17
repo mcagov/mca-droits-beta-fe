@@ -20,7 +20,7 @@
 
 {% block content %}
 
-  <div class="govuk-grid-row">
+  <div class="govuk-grid-row" data-js="conditional-content">
     <div class="govuk-grid-column-full">
 
       <form class="form" action="/report/location-answer" method="post" autocomplete="off" >
@@ -49,6 +49,10 @@
         
         {# Coordinates (Decimal degrees) #}
         {% set decimalInput %}
+          <div id="location-type-2-item-hint" class="govuk-hint">
+            For example <em>53.76385° &nbsp;&nbsp; -3.73904°</em>.
+          </div>
+
           {% call govukFieldset({
             classes: "row-prototype-coordinate-input"
           }) %}
@@ -108,6 +112,9 @@
 
         {# Coordinates (Degrees and decimal minutes) #}
         {% set decimalMinuteInput %}
+          <div id="location-type-2-item-hint" class="govuk-hint">
+            For example <em>53° 45.831' N &nbsp;&nbsp; 3° 44.342' W</em>.
+          </div>
           {% call govukFieldset({
             legend: {
               text: "Latitude"
@@ -258,6 +265,9 @@
 
         {# Coordinates (Degrees, minutes and seconds) #}
         {% set degreeInput %}
+          <div id="location-type-3-item-hint" class="govuk-hint">
+            For example <em>53° 45′ 49″ N &nbsp;&nbsp; 3° 44′ 20″ W</em>.
+          </div>
           {% call govukFieldset({
             legend: {
               text: "Latitude"
@@ -427,7 +437,11 @@
           {% set locationOsGridNorthingClass = locationOsGridNorthingClass + " govuk-input--error" %}
         {% endif %}
 
+        {# Grid Reference #}
         {% set osgridInput %}
+          <div id="location-type-4-item-hint" class="govuk-hint">
+            For example <em>TQ 3003 8038</em>.
+          </div>
           {% call govukFieldset({
             legend: {
               text: "Grid reference"
@@ -581,7 +595,7 @@ feature.">
           idPrefix: "location-type",
           name: "location-type",
           hint: {
-            html: "Choose the most appropriate format. This information will only be used in relation to this report and will not be made public."
+            html: "Choose one of the following options. This information will only be used in relation to this report and will not be made public."
           },
           fieldset: {
             legend: {
@@ -597,8 +611,8 @@ feature.">
               conditional: {
                 html: decimalInput
               },
-              hint: {
-                html: "For example <em>53.76385° &nbsp;&nbsp; -3.73904°</em>."
+              attributes: {
+                'data-js': 'toggleCheck toggler'
               },
               checked: setCheckedCoordsDecimal
             },
@@ -608,8 +622,8 @@ feature.">
               conditional: {
                 html: decimalMinuteInput
               },
-              hint: {
-                html: "For example <em>53° 45.831' N &nbsp;&nbsp; 3° 44.342' W</em>."
+              attributes: {
+                'data-js': 'toggleCheck toggler'
               },
               checked: setCheckedCoordsDecimalMinutes
             },
@@ -619,10 +633,10 @@ feature.">
               conditional: {
                 html: degreeInput
               },
-              hint: {
-                html: "For example <em>53° 45′ 49″ N &nbsp;&nbsp; 3° 44′ 20″ W</em>."
+              attributes: {
+                'data-js': 'toggleCheck toggler'
               },
-              checked: setCheckedSexagesimal
+              checked: setCheckedCoordsSexagesimal
             },
             {
               value: "coords-osgrid",
@@ -630,8 +644,8 @@ feature.">
               conditional: {
                 html: osgridInput
               },
-              hint: {
-                html: "For example <em>TQ 3003 8038</em>."
+              attributes: {
+                'data-js': 'toggleCheck toggler'
               },
               checked: setCheckedOsGrid
             },
@@ -645,9 +659,9 @@ feature.">
                 text: "Draw the area of the find on a map."
               },
               attributes: {
-              "aria-label": "Draw on a map"
+                "aria-label": "Draw on a map",
+                "data-js": "toggleCheck toggler"
               },
-
                 checked: setCheckedMap
             },
             {
@@ -660,26 +674,23 @@ feature.">
                 text: "Provide a text description of the location where the wreck material was found. You should provide as much detail as possible, including any known distances and directions."
               },
               attributes: {
-              "aria-label": "Other - Text description of location"
+              "aria-label": "Other - Text description of location",
+              'data-js': 'toggleCheck'
               },
                 checked: setCheckedOther
             }                        
           ]
         }) }}
 
-        {{ govukTextarea({
-          name: "location-description",
-          id: "location-description",
-          classes: "govuk-!-width-two-thirds",
-          value: data["location"]["location-description"],
-          label: {
-            text: "Additional information (optional)"
-          },
-          hint: {
-            text: "Please provide any further information you have about the location the wreck material was found. You should include any known distances and directions.",
-            classes: "govuk-!-width-two-thirds"
-          }
-        }) }}
+        <div class="govuk-form-group hidden" data-js="hidden-content">
+          <label class="govuk-label" for="location-description">
+            Additional information (optional)
+          </label>       
+          <div id="location-description-hint" class="govuk-hint govuk-!-width-two-thirds">
+            Please provide any further information you have about the location the wreck material was found. You should include any known distances and directions.
+          </div>
+          <textarea class="govuk-textarea govuk-!-width-two-thirds additional-information-input" id="location-description" name="location-description" rows="5" aria-describedby="location-description-hint"></textarea>
+        </div>
 
         {{ govukButton({
           text: "Continue"

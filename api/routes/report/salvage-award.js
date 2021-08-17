@@ -18,6 +18,7 @@ export default function (app) {
         req.session.data['salvage-services'] = req.body['salvage-services'];
         await body('salvage-services')
           .exists()
+          .escape()
           .not()
           .isEmpty()
           .withMessage('Describe the services rendered')

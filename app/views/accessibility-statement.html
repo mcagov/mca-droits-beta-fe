@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Report Wreck Material homepage - {{ serviceName }} – GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{% include "includes/phase-banner.html" %}
+  <nav aria-label="breadcrumb" class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="https://www.gov.uk">Home</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item">
+        <a href="/accessibility-statement" class="govuk-breadcrumbs__link">Accessibility Statement</a>
+      </li>
+    </ol>
+  </nav>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Accessibility statement
+      </h1>
+      <p  class="govuk-body">This website is run by the Receiver of Wreck with support from CTI Digital. It is designed to be used by as many people as possible. The text should be clear and simple to understand. You should be able to:</p>
+      <ul  class="govuk-list govuk-list--bullet">
+          <li>zoom in up to 300% without problems</li>
+          <li>navigate most of the website using just a keyboard</li>
+          <li>navigate most of the website using speech recognition software</li>
+          <li>use most of the website using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver)</li>
+      </ul>
+      <p  class="govuk-body">We have also made the website text as simple as possible to understand.</p>
+      <p  class="govuk-body">AbilityNet has advice on making your device easier to use if you have a disability.<strong>&nbsp;</strong></p>
+      <h2 class="govuk-heading-m">Feedback and contact information</h2>
+      <p  class="govuk-body">If you need information on this website in a different format like accessible PDF, large print, easy read, audio recording or braille:</p>
+      <ul  class="govuk-list govuk-list--bullet">
+          <li>email us at <a href="mailto:row@mcga.gov.uk" class="govuk-link">row@mcga.gov.uk</a></li>
+          <li>call us on <a href="tel:+442038172575" class="govuk-link">020 3817 2575</a></li>
+      </ul>
+      <p  class="govuk-body">In your message, include:</p>
+      <ul  class="govuk-list govuk-list--bullet">
+          <li>the web address (URL) of the content</li>
+          <li>your email address and name</li>
+          <li>the format you need - for example, plain text, braille, BSL, large print or audio CD</li>
+      </ul>
+      <p  class="govuk-body">We&rsquo;ll consider your request and get back to you in 5 working days.</p>
+      <h2 class="govuk-heading-m">Reporting accessibility problems with this website</h2>
+      <p  class="govuk-body">If you have any accessibility query including:</p>
+      <ul  class="govuk-list govuk-list--bullet">
+          <li>Issues with accessing information or using this website</li>
+          <li>An accessibility problem not listed on this statement</li>
+          <li>Any positive feedback about this website&rsquo;s accessibility</li>
+      </ul>
+      <p  class="govuk-body">We&rsquo;re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we&rsquo;re not meeting accessibility requirements, contact: row@mcga.gov.uk</p>
+      <h2 class="govuk-heading-m">Enforcement procedure</h2>
+      <p  class="govuk-body">The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the &lsquo;accessibility regulations&rsquo;). If you&rsquo;re not happy with how we respond to your complaint, contact the Equality Advisory and Support Service (EASS).</p>
+      <h2 class="govuk-heading-m">Technical information about this website&rsquo;s accessibility</h2>
+      <p  class="govuk-body">The Receiver of Wreck is committed to making its website accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.</p>
+      <h2 class="govuk-heading-m">Compliance status</h2>
+      <p  class="govuk-body">This website is fully compliant with the Web Content Accessibility Guidelines version 2.1 AA standard.</p>
+      <h2 class="govuk-heading-m"><strong>Usability Restrictions&nbsp;</strong></h2>
+      <p  class="govuk-body">The features listed below have restricted usability for the following reasons.</p>
+      <ol class="govuk-list govuk-list--number">
+          <li>When asked &lsquo;Where was the wreck material located?&rsquo; on the Report Wreck Material service, the &lsquo;Draw on a Map&rsquo; feature is not accessible for navigation by keyboard. In order for this functionality to be available a third-party plugin has been used. Best efforts have been made to provide additional accessible labels to the map, however some elements such as images and icons cannot be altered without changing the fundamental structure of the component. An open text field to provide a detailed location description has been provided as an alternative option.</li>
+          <li>The expandable &lsquo;Details&rsquo; component as the &lsquo;known issue&rsquo; is that the command &ldquo;open link&rdquo; doesn&rsquo;t always work, users might have to use al alternative &ldquo;open button&rdquo; but it doesn&rsquo;t mean it&rsquo;s unavailable to Assisted Technologies.</li>
+      </ol>
+      <h2 class="govuk-heading-m">What we&rsquo;re doing to improve accessibility</h2>
+      <p  class="govuk-body">Content and features will be regularly reviewed and improved to ensure continued accessibility.</p>
+      <h2 class="govuk-heading-m">Preparation of this accessibility statement</h2>
+      <p  class="govuk-body">This statement was prepared on 10th August 2021.</p>
+      <p  class="govuk-body">This website was last tested on 21st June 2021. The test and review was carried out by the Digital Accessibility Centre.</p>
+    </div>
+  </div>
+
+{% endblock %}

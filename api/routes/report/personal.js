@@ -8,11 +8,13 @@ export default function (app) {
     [
       body('full-name')
         .exists()
+        .escape()
         .not()
         .isEmpty()
         .withMessage('Enter your full name'),
       body('email')
         .exists()
+        .escape()
         .not()
         .isEmpty()
         .withMessage('Enter your email address')
@@ -22,6 +24,7 @@ export default function (app) {
         ),
       body('telephone-number')
         .optional({ nullable: true, checkFalsy: true })
+        .escape()
         .custom((value) => {
           const format = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
           const formatted = format.test(value);
@@ -35,21 +38,27 @@ export default function (app) {
         }),
       body('address-line-1')
         .exists()
+        .escape()
         .not()
         .isEmpty()
         .withMessage('Enter your building and street'),
+      body('address-line-2')
+        .escape(),
       body('address-town')
         .exists()
+        .escape()
         .not()
         .isEmpty()
         .withMessage('Enter your town or city'),
       body('address-county')
         .exists()
+        .escape()
         .not()
         .isEmpty()
         .withMessage('Enter your county'),
       body('address-postcode')
         .exists()
+        .escape()
         .not()
         .isEmpty()
         .withMessage('Enter a real postcode')

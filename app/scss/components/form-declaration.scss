@@ -1,0 +1,20 @@
+.declaration-wrapper {
+  .govuk-form-group {
+    margin-bottom: 0;
+  }
+}
+
+.govuk-checkboxes {
+  &__input[name=property-declaration] {
+    top: 0.6rem;
+  }
+  &__label[for=propertyDeclaration] {
+    &:before {
+      top: 0.75rem;
+    }
+
+    &:after {
+      top: 1.5rem;
+    }
+  }
+}

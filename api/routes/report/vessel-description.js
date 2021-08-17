@@ -22,6 +22,7 @@ export default function (app) {
     [
       body('wreck-description')
         .exists()
+        .escape()
         .notEmpty()
         .withMessage('Enter a description')
     ],

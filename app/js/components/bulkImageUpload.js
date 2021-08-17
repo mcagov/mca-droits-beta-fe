@@ -179,6 +179,7 @@ export class BulkUpload {
             this.errorText.innerText = res.data.error.text;
             if (this.errorContainer.classList.contains('hidden')) {
               this.errorContainer.classList.remove('hidden');
+              this.errorContainer.focus();
             }
           } else {
             this.successfulUploads++;
@@ -278,6 +279,7 @@ export class BulkUpload {
             this.addButton.classList.add('govuk-button--disabled');
             this.addButton.disabled = true;
             this.addButton.setAttribute('aria-disabled', 'true')
+            currentUploadInput.focus();
           }
         } catch (err) {
           console.error(err);

@@ -15,4 +15,6 @@ module.exports = {
   // Cookie warning - update link to service's cookie page.
   COOKIE_TEXT:
     'GOV.UK uses cookies to make the site simpler. <a href="#">Find out more about cookies</a>',
+
+  SERVICE_UNAVAILABLE: false
 };

@@ -311,7 +311,7 @@ Report Details - {{ serviceName }} – GOV.UK
   <h2 class="govuk-heading-m">Items as listed and described by you:</h2>
   <ul class="govuk-list govuk-list--bullet">
     {% for item in reportData.crf99_MCAWreckMaterial_WreckReport_crf99_ %}
-    <li class="report-overview__outcome-item">
+    <li class="report-overview__outcome-item govuk-!-margin-bottom-2">
         {{ item.crf99_quantity }} x {{item.crf99_description }}
     </li>
     {% endfor %}
@@ -422,5 +422,8 @@ Report Details - {{ serviceName }} – GOV.UK
         </div>
     </div>
 </div>
+
+{% include 'includes/back-to-top-link.html' %}
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
 {% endblock %}

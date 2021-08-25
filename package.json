@@ -10,6 +10,7 @@
     "watch": "webpack --watch",
     "build": "webpack --env.production",
     "dev": "cross-env NODE_ENV=development concurrently \"nodemon -r esm server.js\" \"npm run watch\"",
+    "uat": "cross-env NODE_ENV=UAT concurrently \"nodemon -r esm server.js\" \"npm run build\"",
     "prod": "cross-env NODE_ENV=production concurrently \"node -r esm server.js\" \"npm run build\""
   },
   "repository": {

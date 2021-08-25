@@ -43,6 +43,7 @@ jobs:
         B2C_REDIRECT_URL : ${{secrets.B2C_REDIRECT_URL}}
         ENV_BASE_URL : ${{secrets.ENV_BASE_URL}}
         USE_HTTPS : ${{secrets.USE_HTTPS}}
+        ROOT_URL : ${{secrets.ROOT_URL}}
       run: |
           touch .env
           echo AZURE_BLOB_IMAGE_URL="$AZURE_BLOB_IMAGE_URL" >> .env
@@ -63,6 +64,7 @@ jobs:
           echo B2C_REDIRECT_URL="$B2C_REDIRECT_URL" >> .env
           echo ENV_BASE_URL="$ENV_BASE_URL" >> .env
           echo USE_HTTPS="$USE_HTTPS" >> .env
+          echo ROOT_URL="$ROOT_URL" >> .env
           cat .env
           
     - name: 'Deploy to Azure Web App'

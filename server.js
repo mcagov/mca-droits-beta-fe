@@ -28,7 +28,7 @@ app.locals.serviceName = config.SERVICE_NAME;
 // Local vars
 const env = process.env.NODE_ENV;
 
-if (env === 'production') {
+if (env === 'production' || env === 'uat') {
   app.use(helmet());
   app.use(
     helmet.contentSecurityPolicy({
@@ -69,7 +69,7 @@ useHttps = useHttps.toLowerCase();
 const session = require('express-session');
 const AzureTablesStoreFactory = require('connect-azuretables')(session);
 
-const isSecure = env === 'production' && useHttps === 'true';
+const isSecure = (env === 'production' || env === 'uat') && useHttps === 'true';
 if (isSecure) {
   app.use(forceHttps);
 }

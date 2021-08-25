@@ -28,7 +28,7 @@ app.locals.serviceName = config.SERVICE_NAME;
 // Local vars
 const env = process.env.NODE_ENV;
 
-if (env === 'production' || env === 'uat') {
+if (env === 'production') {
   app.use(helmet());
   app.use(
     helmet.contentSecurityPolicy({
@@ -69,7 +69,7 @@ useHttps = useHttps.toLowerCase();
 const session = require('express-session');
 const AzureTablesStoreFactory = require('connect-azuretables')(session);
 
-const isSecure = (env === 'production' || env === 'uat') && useHttps === 'true';
+const isSecure = env === 'production' && useHttps === 'true';
 if (isSecure) {
   app.use(forceHttps);
 }
@@ -152,10 +152,10 @@ if (env === 'development') edt(app, { panels: ['session'] });
 app.use('/', routes());
 
 if (env === 'production') {
-  app.get('/', function (req, res) {
-    res.redirect('https://www.gov.uk/report-wreck-material/reporting-wreck-material');
-  });
-}
+app.get('/', function (req, res) {
+  res.redirect('https://www.gov.uk/report-wreck-material/reporting-wreck-material');
+});
+
 
 // Disables caching when user clicks back button on confirmation page
 app.use('/report/check-your-answers', function (req, res, next) {

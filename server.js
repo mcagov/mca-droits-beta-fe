@@ -151,9 +151,11 @@ if (env === 'development') edt(app, { panels: ['session'] });
 // Load API routes
 app.use('/', routes());
 
-app.get('/', function (req, res) {
-  res.redirect('https://www.gov.uk/report-wreck-material/reporting-wreck-material');
-});
+if (env === 'production') {
+  app.get('/', function (req, res) {
+    res.redirect('https://www.gov.uk/report-wreck-material/reporting-wreck-material');
+  });
+}
 
 // Disables caching when user clicks back button on confirmation page
 app.use('/report/check-your-answers', function (req, res, next) {

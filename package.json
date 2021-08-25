@@ -10,19 +10,18 @@
     "watch": "webpack --watch",
     "build": "webpack --env.production",
     "dev": "cross-env NODE_ENV=development concurrently \"nodemon -r esm server.js\" \"npm run watch\"",
-    "uat": "cross-env NODE_ENV=development concurrently \"nodemon -r esm server.js\" \"npm run watch\"",
     "prod": "cross-env NODE_ENV=production concurrently \"node -r esm server.js\" \"npm run build\""
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mcagov/mca-droits-beta-fe"
+    "url": "https://github.com/ctidigital/mca-droits-beta.git"
   },
   "author": "CTI Digital",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mcagov/mca-droits-beta-fe/issues"
+    "url": "https://github.com/ctidigital/mca-droits-beta/issues"
   },
-  "homepage": "https://github.com/mcagov/mca-droits-beta-fe#readme",
+  "homepage": "https://github.com/ctidigital/mca-droits-beta#readme",
   "dependencies": {
     "@azure/msal-node": "^1.0.1",
     "@azure/storage-blob": "^12.4.0",

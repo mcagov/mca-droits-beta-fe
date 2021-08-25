@@ -152,10 +152,10 @@ if (env === 'development') edt(app, { panels: ['session'] });
 app.use('/', routes());
 
 if (env === 'production') {
-app.get('/', function (req, res) {
-  res.redirect('https://www.gov.uk/report-wreck-material/reporting-wreck-material');
-});
-
+  app.get('/', function (req, res) {
+    res.redirect('https://www.gov.uk/report-wreck-material/reporting-wreck-material');
+  });
+}
 
 // Disables caching when user clicks back button on confirmation page
 app.use('/report/check-your-answers', function (req, res, next) {

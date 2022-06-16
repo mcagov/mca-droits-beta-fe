@@ -44,6 +44,8 @@ jobs:
         ENV_BASE_URL : ${{secrets.ENV_BASE_URL}}
         USE_HTTPS : ${{secrets.USE_HTTPS}}
         ROOT_URL : ${{secrets.ROOT_URL}}
+        APP_NAME: ${{secrets.AZURE_WEB_APP_NAME}}
+        PUBLISH_PROFILE: ${{ secrets.AZURE_WEB_APP_PUBLISH_PROFILE }}
       run: |
           touch .env
           echo AZURE_BLOB_IMAGE_URL="$AZURE_BLOB_IMAGE_URL" >> .env
@@ -65,6 +67,8 @@ jobs:
           echo ENV_BASE_URL="$ENV_BASE_URL" >> .env
           echo USE_HTTPS="$USE_HTTPS" >> .env
           echo ROOT_URL="$ROOT_URL" >> .env
+          echo APP_NAME="$APP_NAME" >> .env
+          echo PUBLISH_PROFILE="$PUBLISH_PROFILE" >> .env
           cat .env
           
     - name: 'Deploy to Azure Web App'

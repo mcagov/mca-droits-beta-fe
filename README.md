@@ -63,4 +63,4 @@ npm run build
 
 ## Access the back office component
 - Arrange access to the MCGA test tenant in Azure
-- (Log in to Microsoft Power Automate Flow)[https://unitedkingdom.flow.microsoft.com/manage/environments/93b4f1ed-cbc0-4b5a-b71c-8465c4d011b7/flows/shared]
+- [Log in to Microsoft Power Automate Flow](https://unitedkingdom.flow.microsoft.com/manage/environments/93b4f1ed-cbc0-4b5a-b71c-8465c4d011b7/flows/shared)

@@ -7,6 +7,7 @@ The application shows a form that members of the public fill out and submit in o
 
 # Ubiquitous Language
 - Wreck: a piece of sea wreckage washed up on land. In the code, this is referred to as 'property'
+- Droit: a report of a piece of sea wreckage submitted by the public using this app
 - Receivers of wreck: Marine and Coastguard Agency employees who receive the reports of wreckage submitted via this app and decide what to do with it
 
 # Tools and Technologies Used
@@ -29,7 +30,7 @@ The system uses the following components:
 
 # Known Issues
 - Inconsistent domain language (wreck /= property)
-- The name 'DROITS' has no significance relating to the application itself
+- The name 'DROITS' has no direct significance relating to the application itself
 
 # How to run the app 🚀
 

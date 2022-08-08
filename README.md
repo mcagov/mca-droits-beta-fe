@@ -27,6 +27,9 @@ The system uses the following components:
     - it sends the public user's report of a piece of wreckage to Microsoft Power Automate Flows in a POST request. 
 - This sets off a sequence of automated tasks in MS Power Automate Flow, which allows the receivers of wreck to examine the public user's report.
 
+# Infrastructure
+- The system uses 
+
 
 # Known Issues
 - Inconsistent domain language (wreck /= property)
@@ -63,5 +66,4 @@ npm run build
 ```
 
 ## Access the back office component
-- Arrange access to the MCGA test tenant in Azure
 - [Log in to Microsoft Power Automate Flow](https://unitedkingdom.flow.microsoft.com/manage/environments/93b4f1ed-cbc0-4b5a-b71c-8465c4d011b7/flows/shared)

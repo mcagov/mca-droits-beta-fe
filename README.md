@@ -28,7 +28,11 @@ The system uses the following components:
 - This sets off a sequence of automated tasks in MS Power Automate Flow, which allows the receivers of wreck to examine the public user's report.
 
 # Infrastructure
-- The system uses 
+- The system uses an Azure app service (web app) served by an app service plan in the report-wreck-material-prod-rg resource group in the MCA production tenant.
+- In UAT, the setup is the same, but the resources inhabit the Report-wreck-material-RG resource group in the same tenant.
+- The production Power Automate Flow environment is called Report-Wreck-Material: the cloud flow that this application triggers is Wreck-Report-Submission.
+- In UAT, the environment is called Report-Wreck-Material-UAT and its equivalent cloud flow is also called Wreck-Report-Submission. 
+- Both Power Automate Flow environments reside in the same MCA production tenant.
 
 
 # Known Issues

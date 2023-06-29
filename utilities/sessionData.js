@@ -16,11 +16,11 @@ export const sessionData = (req, res, next) => {
 
   // // Send session data to all views
 
-  // res.locals.data = {};
+  res.locals.data = {};
 
-  // for (var j in req.session.data) {
-  //   res.locals.data[j] = req.session.data[j];
-  // }
+  for (var j in req.session.data) {
+    res.locals.data[j] = req.session.data[j];
+  }
 
   next();
 };

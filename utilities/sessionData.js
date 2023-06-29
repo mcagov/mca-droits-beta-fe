@@ -1,7 +1,7 @@
 import sessionDataDefaults from '../api/data/session-data-defaults';
 
 export const sessionData = (req, res, next) => {
-  req.session.data = {};
+  req.session.data = sessionDataDefaults;
 
   // if (!req.session.data) {
   //   req.session.data = {};

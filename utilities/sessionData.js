@@ -1,20 +1,24 @@
 import sessionDataDefaults from '../api/data/session-data-defaults';
 
 export const sessionData = (req, res, next) => {
-  req.session.data = sessionDataDefaults;
+  if (!req.session.data) {
+    req.session.data = {};
+  }
 
-  // if (!req.session.data) {
-  //   req.session.data = {};
-  // }
-  // req.session.data = Object.assign(
-  //   {},
-  //   req.path.indexOf('report') > -1 && req.path.indexOf('portal') === -1
-  //     ? sessionDataDefaults
-  //     : null,
-  //   req.session.data
-  // );
+  console.dir("running...");
+  console.dir(req.session.data);
+  console.dir(req.session);
+  console.dir(req.sessionID);
 
-  // // Send session data to all views
+  req.session.data = Object.assign(
+    {},
+    req.path.indexOf('report') > -1 && req.path.indexOf('portal') === -1
+      ? sessionDataDefaults
+      : null,
+    req.session.data
+  );
+
+  // Send session data to all views
 
   res.locals.data = {};
 

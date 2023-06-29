@@ -120,17 +120,17 @@ const sessionOptions = {
     secure: isSecure
   },
 };
-if (env === 'development') {
-  app.use(
-    sessionInMemory(
-      Object.assign(sessionOptions, {
-        name: sessionName,
-        resave: false,
-        saveUninitialized: false,
-      })
-    )
-  );
-} else {
+// if (env === 'development') {
+//   app.use(
+//     sessionInMemory(
+//       Object.assign(sessionOptions, {
+//         name: sessionName,
+//         resave: false,
+//         saveUninitialized: false,
+//       })
+//     )
+//   );
+// } else {
   app.use(
     session(
       Object.assign(sessionOptions, {
@@ -140,7 +140,7 @@ if (env === 'development') {
       })
     )
   );
-}
+// }
 
 // Manage session data. Assigns default values to data
 app.use(sessionData);

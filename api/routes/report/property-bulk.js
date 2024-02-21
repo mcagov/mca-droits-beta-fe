@@ -74,7 +74,7 @@ export default function (app) {
                   return res.json({ error: err });
                 }
                 // 'fileRows' is an array of objects. Each object represents a row in the csv file, with each obj element a column
-                // Process "fileRows" and respond  
+                // Process "fileRows" and respond
                 let fileUpload = fileRows;
 
                 req.session.data['bulk-upload'] = {};
@@ -117,6 +117,8 @@ export default function (app) {
                 for (const prop in sessionBulkUpload) {
                   req.session.data['property'][prop] = sessionBulkUpload[prop];
                 }
+
+                req.session.save();
 
                 res.json({ status: 200 });
               });
